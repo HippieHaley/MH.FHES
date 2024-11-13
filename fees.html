@@ -65,10 +65,10 @@
             const paystub1 = parseFloat(document.getElementById('paystub1').value) || 0;
             const paystub2 = parseFloat(document.getElementById('paystub2').value) || 0;
             
-            // Calculate Total, Average, and Annual based on Biweekly income
+            // Calculate Total and Average Biweekly income
             const total = paystub1 + paystub2;
             const average = total / 2;
-            const annual = total * 26; // Assuming 26 pay periods in a year
+            const annual = average * 26; // Using the average biweekly amount multiplied by 26 pay periods
 
             // Update HTML content
             document.getElementById('biweeklyTotal').textContent = total.toFixed(2);
@@ -130,4 +130,5 @@
     </script>
 </body>
 </html>
+
 
