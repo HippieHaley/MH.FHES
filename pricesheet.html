@@ -83,6 +83,20 @@
             font-weight: bold;
         }
 
+        /* Service/Procedure with CPT styling */
+        .service-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .cpt-code {
+            font-size: 0.8rem;
+            color: #333;
+            margin-top: 0.3rem;
+            display: block;
+            font-style: italic;
+        }
+
         /* Hide all tables by default */
         .price-table {
             display: none;
@@ -129,19 +143,22 @@
                     <thead>
                         <tr>
                             <th>Service/Procedure</th>
-                            <th>CPT</th>
                             <th>Fee</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Limited-New</td>
-                            <td>99202</td>
+                            <td>
+                                <span class="service-name">Limited-New</span>
+                                <span class="cpt-code">99202</span>
+                            </td>
                             <td><button class="price-button" onclick="addToTotal('Limited-New', 170)">$170.00</button></td>
                         </tr>
                         <tr>
-                            <td>Intermediate-New</td>
-                            <td>99203</td>
+                            <td>
+                                <span class="service-name">Intermediate-New</span>
+                                <span class="cpt-code">99203</span>
+                            </td>
                             <td><button class="price-button" onclick="addToTotal('Intermediate-New', 240)">$240.00</button></td>
                         </tr>
                         <!-- Add more rows as needed -->
@@ -153,19 +170,22 @@
                     <thead>
                         <tr>
                             <th>Service/Procedure</th>
-                            <th>CPT</th>
                             <th>Fee</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Limited-New</td>
-                            <td>99202</td>
+                            <td>
+                                <span class="service-name">Limited-New</span>
+                                <span class="cpt-code">99202</span>
+                            </td>
                             <td><button class="price-button" onclick="addToTotal('Limited-New', 127.5)">$127.50</button></td>
                         </tr>
                         <tr>
-                            <td>Intermediate-New</td>
-                            <td>99203</td>
+                            <td>
+                                <span class="service-name">Intermediate-New</span>
+                                <span class="cpt-code">99203</span>
+                            </td>
                             <td><button class="price-button" onclick="addToTotal('Intermediate-New', 180)">$180.00</button></td>
                         </tr>
                         <!-- Add more rows as needed -->
