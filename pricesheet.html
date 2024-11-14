@@ -17,13 +17,33 @@
             background-color: #f4f4f4;
             color: #333;
             padding: 20px;
-            text-align: center;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Container for left-aligned layout */
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* Left Side - Price Sheet (2/3 of the screen) */
+        .left-side {
+            flex: 2;
+            padding-right: 20px;
+        }
+
+        /* Right Side - Empty or Optional Content (1/3 of the screen) */
+        .right-side {
+            flex: 1;
+            /* You can add content here in the future if needed */
         }
 
         /* Button Styling */
         .fee-button {
             display: inline-block;
-            padding: 1rem 2rem;
+            padding: 0.5rem 1.5rem;
             margin: 10px;
             background-color: #f8c9f9;
             border: 1px solid #000;
@@ -32,14 +52,19 @@
             color: #333;
             font-weight: bold;
             font-size: 1rem;
-            text-transform: uppercase;
             cursor: pointer;
         }
 
-        /* Table Styling */
+        /* Price Table Styling */
+        .price-sheet-container {
+            border: 2px solid #0000FF;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #ffffff;
+        }
+
         table {
-            width: 90%;
-            margin: 20px auto;
+            width: 100%;
             border-collapse: collapse;
             background-color: #fff;
         }
@@ -62,136 +87,149 @@
 </head>
 <body>
 
-    <h1>Price Sheet</h1>
+    <div class="container">
+        <!-- Left Side: Price Sheet -->
+        <div class="left-side">
+            <h1>Price Sheet</h1>
 
-    <!-- Buttons for Selecting Percentage -->
-    <div>
-        <button class="fee-button" onclick="showTable('table100')">100%</button>
-        <button class="fee-button" onclick="showTable('table75')">75%</button>
-        <button class="fee-button" onclick="showTable('table50')">50%</button>
-        <button class="fee-button" onclick="showTable('table25')">25%</button>
-        <button class="fee-button" onclick="showTable('table0')">0%</button>
+            <!-- Buttons for Selecting Percentage -->
+            <div>
+                <button class="fee-button" onclick="showTable('table100')">100%</button>
+                <button class="fee-button" onclick="showTable('table75')">75%</button>
+                <button class="fee-button" onclick="showTable('table50')">50%</button>
+                <button class="fee-button" onclick="showTable('table25')">25%</button>
+                <button class="fee-button" onclick="showTable('table0')">0%</button>
+            </div>
+
+            <!-- Price Sheet Container with Border -->
+            <div class="price-sheet-container">
+                <!-- Price List for 100% -->
+                <table id="table100" class="price-table">
+                    <thead>
+                        <tr>
+                            <th>Service/Procedure</th>
+                            <th>CPT</th>
+                            <th>Fee</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Limited-New</td>
+                            <td>99202</td>
+                            <td>$170.00</td>
+                        </tr>
+                        <tr>
+                            <td>Intermediate-New</td>
+                            <td>99203</td>
+                            <td>$240.00</td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+
+                <!-- Price List for 75% -->
+                <table id="table75" class="price-table">
+                    <thead>
+                        <tr>
+                            <th>Service/Procedure</th>
+                            <th>CPT</th>
+                            <th>Fee</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Limited-New</td>
+                            <td>99202</td>
+                            <td>$127.50</td>
+                        </tr>
+                        <tr>
+                            <td>Intermediate-New</td>
+                            <td>99203</td>
+                            <td>$180.00</td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+
+                <!-- Price List for 50% -->
+                <table id="table50" class="price-table">
+                    <thead>
+                        <tr>
+                            <th>Service/Procedure</th>
+                            <th>CPT</th>
+                            <th>Fee</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Limited-New</td>
+                            <td>99202</td>
+                            <td>$85.00</td>
+                        </tr>
+                        <tr>
+                            <td>Intermediate-New</td>
+                            <td>99203</td>
+                            <td>$120.00</td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+
+                <!-- Price List for 25% -->
+                <table id="table25" class="price-table">
+                    <thead>
+                        <tr>
+                            <th>Service/Procedure</th>
+                            <th>CPT</th>
+                            <th>Fee</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Limited-New</td>
+                            <td>99202</td>
+                            <td>$42.50</td>
+                        </tr>
+                        <tr>
+                            <td>Intermediate-New</td>
+                            <td>99203</td>
+                            <td>$60.00</td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+
+                <!-- Price List for 0% -->
+                <table id="table0" class="price-table">
+                    <thead>
+                        <tr>
+                            <th>Service/Procedure</th>
+                            <th>CPT</th>
+                            <th>Fee</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Limited-New</td>
+                            <td>99202</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Intermediate-New</td>
+                            <td>99203</td>
+                            <td>-</td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Right Side (1/3 of the screen, currently empty) -->
+        <div class="right-side">
+            <!-- Optional: Add any content here for the right side of the screen -->
+        </div>
     </div>
-
-    <!-- Price List for 100% -->
-    <table id="table100" class="price-table">
-        <thead>
-            <tr>
-                <th>Service/Procedure</th>
-                <th>CPT</th>
-                <th>Fee</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Limited-New</td>
-                <td>99202</td>
-                <td>$170.00</td>
-            </tr>
-            <tr>
-                <td>Intermediate-New</td>
-                <td>99203</td>
-                <td>$240.00</td>
-            </tr>
-            <!-- Add more rows as needed -->
-        </tbody>
-    </table>
-
-    <!-- Price List for 75% -->
-    <table id="table75" class="price-table">
-        <thead>
-            <tr>
-                <th>Service/Procedure</th>
-                <th>CPT</th>
-                <th>Fee</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Limited-New</td>
-                <td>99202</td>
-                <td>$127.50</td>
-            </tr>
-            <tr>
-                <td>Intermediate-New</td>
-                <td>99203</td>
-                <td>$180.00</td>
-            </tr>
-            <!-- Add more rows as needed -->
-        </tbody>
-    </table>
-
-    <!-- Price List for 50% -->
-    <table id="table50" class="price-table">
-        <thead>
-            <tr>
-                <th>Service/Procedure</th>
-                <th>CPT</th>
-                <th>Fee</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Limited-New</td>
-                <td>99202</td>
-                <td>$85.00</td>
-            </tr>
-            <tr>
-                <td>Intermediate-New</td>
-                <td>99203</td>
-                <td>$120.00</td>
-            </tr>
-            <!-- Add more rows as needed -->
-        </tbody>
-    </table>
-
-    <!-- Price List for 25% -->
-    <table id="table25" class="price-table">
-        <thead>
-            <tr>
-                <th>Service/Procedure</th>
-                <th>CPT</th>
-                <th>Fee</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Limited-New</td>
-                <td>99202</td>
-                <td>$42.50</td>
-            </tr>
-            <tr>
-                <td>Intermediate-New</td>
-                <td>99203</td>
-                <td>$60.00</td>
-            </tr>
-            <!-- Add more rows as needed -->
-        </tbody>
-    </table>
-
-    <!-- Price List for 0% -->
-    <table id="table0" class="price-table">
-        <thead>
-            <tr>
-                <th>Service/Procedure</th>
-                <th>CPT</th>
-                <th>Fee</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Limited-New</td>
-                <td>99202</td>
-                <td>-</td>
-            </tr>
-            <tr>
-                <td>Intermediate-New</td>
-                <td>99203</td>
-                <td>-</td>
-            </tr>
-            <!-- Add more rows as needed -->
-        </tbody>
-    </table>
 
     <script>
         // Function to show only the selected price table
@@ -210,4 +248,3 @@
 
 </body>
 </html>
-
