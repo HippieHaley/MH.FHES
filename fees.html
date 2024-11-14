@@ -12,11 +12,15 @@
         }
         .container {
             display: flex;
-            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             gap: 20px;
         }
         .section {
-            flex: 1 1 calc(33% - 20px); /* Each section takes up 1/3 of the width */
             padding: 15px;
             border: 1px solid #ddd;
             box-sizing: border-box;
@@ -37,68 +41,72 @@
     <h1>Income Calculator</h1>
     
     <div class="container">
-        <!-- Biweekly Income Section -->
-        <div class="section">
-            <h2>Biweekly Income</h2>
-            <p class="example">Example: Every other Friday</p>
-            <label>Paystub one: $<input type="number" id="paystub1" value="0" onchange="calculateBiweeklyTotal()"></label><br>
-            <label>Paystub two: $<input type="number" id="paystub2" value="0" onchange="calculateBiweeklyTotal()"></label><br>
-            <p>Total: $<span id="biweeklyTotal">0</span></p>
-            <p>Average: $<span id="biweeklyAverage">0</span></p>
-            <p>Annual: $<span id="biweeklyAnnual">0</span></p>
-        </div>
-
-        <!-- Weekly Income Section -->
-        <div class="section">
-            <h2>Weekly Income</h2>
-            <p class="example">Example: Every Friday</p>
-            <label>Paystub one: $<input type="number" id="weeklyPaystub1" value="0" onchange="calculateWeeklyTotal()"></label><br>
-            <label>Paystub two: $<input type="number" id="weeklyPaystub2" value="0" onchange="calculateWeeklyTotal()"></label><br>
-            <p>Total: $<span id="weeklyTotal">0</span></p>
-            <p>Average: $<span id="weeklyAverage">0</span></p>
-            <p>Annual: $<span id="weeklyAnnual">0</span></p>
-        </div>
-
-        <!-- Twice a Month Income Section -->
-        <div class="section">
-            <h2>Twice a Month Income</h2>
-            <p class="example">Example: 1st and 15th</p>
-            <label>Paystub one: $<input type="number" id="twiceMonthPaystub1" value="0" onchange="calculateTwiceMonthTotal()"></label><br>
-            <label>Paystub two: $<input type="number" id="twiceMonthPaystub2" value="0" onchange="calculateTwiceMonthTotal()"></label><br>
-            <p>Total: $<span id="twiceMonthTotal">0</span></p>
-            <p>Average: $<span id="twiceMonthAverage">0</span></p>
-            <p>Annual: $<span id="twiceMonthAnnual">0</span></p>
-        </div>
-
-        <!-- Weekly Verbal Income Section -->
-        <div class="section">
-            <h2>Weekly Verbal Income</h2>
-            <p class="example">Example: Freelance or hourly work</p>
-            <label>Hours worked: <input type="number" id="verbalHours" value="0" onchange="calculateVerbalIncome()"></label><br>
-            <label>Hourly Pay Rate: $<input type="number" id="verbalRate" value="0" onchange="calculateVerbalIncome()"></label><br>
-            <p>Total: $<span id="verbalWeeklyTotal">0</span></p>
-            <p>Average: $<span id="verbalWeeklyAverage">0</span></p>
-            <p>Annual: $<span id="verbalAnnual">0</span></p>
-        </div>
-
-        <!-- Grand Total Section -->
-        <div class="section grand-total-section">
-            <h2>Grand Total</h2>
-            <p>Biweekly Annual: $<span id="grandBiweeklyAnnual">0</span></p>
-            <p>Weekly Annual: $<span id="grandWeeklyAnnual">0</span></p>
-            <p>Twice a Month Annual: $<span id="grandTwiceMonthAnnual">0</span></p>
-            <p>Weekly Verbal Annual: $<span id="grandVerbalAnnual">0</span></p>
+        <!-- Column 1: Biweekly and Weekly Income Sections -->
+        <div class="column">
+            <div class="section">
+                <h2>Biweekly Income</h2>
+                <p class="example">Example: Every other Friday</p>
+                <label>Paystub one: $<input type="number" id="paystub1" value="0" onchange="calculateBiweeklyTotal()"></label><br>
+                <label>Paystub two: $<input type="number" id="paystub2" value="0" onchange="calculateBiweeklyTotal()"></label><br>
+                <p>Total: $<span id="biweeklyTotal">0</span></p>
+                <p>Average: $<span id="biweeklyAverage">0</span></p>
+                <p>Annual: $<span id="biweeklyAnnual">0</span></p>
+            </div>
             
-            <!-- New Tips and Other Income Fields for Grand Total -->
-            <label>Additional Tips: $<input type="number" id="grandTips" value="0" onchange="calculateGrandTotal()"></label><br>
-            <label>Other Income Sources: $<input type="number" id="grandOther" value="0" onchange="calculateGrandTotal()"></label><br>
+            <div class="section">
+                <h2>Weekly Income</h2>
+                <p class="example">Example: Every Friday</p>
+                <label>Paystub one: $<input type="number" id="weeklyPaystub1" value="0" onchange="calculateWeeklyTotal()"></label><br>
+                <label>Paystub two: $<input type="number" id="weeklyPaystub2" value="0" onchange="calculateWeeklyTotal()"></label><br>
+                <p>Total: $<span id="weeklyTotal">0</span></p>
+                <p>Average: $<span id="weeklyAverage">0</span></p>
+                <p>Annual: $<span id="weeklyAnnual">0</span></p>
+            </div>
+        </div>
 
-            <p><strong>Grand Total Annual Income: $<span id="grandTotalAnnual">0</span></strong></p>
+        <!-- Column 2: Twice a Month and Weekly Verbal Income Sections -->
+        <div class="column">
+            <div class="section">
+                <h2>Twice a Month Income</h2>
+                <p class="example">Example: 1st and 15th</p>
+                <label>Paystub one: $<input type="number" id="twiceMonthPaystub1" value="0" onchange="calculateTwiceMonthTotal()"></label><br>
+                <label>Paystub two: $<input type="number" id="twiceMonthPaystub2" value="0" onchange="calculateTwiceMonthTotal()"></label><br>
+                <p>Total: $<span id="twiceMonthTotal">0</span></p>
+                <p>Average: $<span id="twiceMonthAverage">0</span></p>
+                <p>Annual: $<span id="twiceMonthAnnual">0</span></p>
+            </div>
+
+            <div class="section">
+                <h2>Weekly Verbal Income</h2>
+                <p class="example">Example: Freelance or hourly work</p>
+                <label>Hours worked: <input type="number" id="verbalHours" value="0" onchange="calculateVerbalIncome()"></label><br>
+                <label>Hourly Pay Rate: $<input type="number" id="verbalRate" value="0" onchange="calculateVerbalIncome()"></label><br>
+                <p>Total: $<span id="verbalWeeklyTotal">0</span></p>
+                <p>Average: $<span id="verbalWeeklyAverage">0</span></p>
+                <p>Annual: $<span id="verbalAnnual">0</span></p>
+            </div>
+        </div>
+
+        <!-- Column 3: Grand Total Section -->
+        <div class="column">
+            <div class="section grand-total-section">
+                <h2>Grand Total</h2>
+                <p>Biweekly Annual: $<span id="grandBiweeklyAnnual">0</span></p>
+                <p>Weekly Annual: $<span id="grandWeeklyAnnual">0</span></p>
+                <p>Twice a Month Annual: $<span id="grandTwiceMonthAnnual">0</span></p>
+                <p>Weekly Verbal Annual: $<span id="grandVerbalAnnual">0</span></p>
+
+                <!-- Additional Tips and Other Income for Grand Total -->
+                <label>Additional Tips: $<input type="number" id="grandTips" value="0" onchange="calculateGrandTotal()"></label><br>
+                <label>Other Income Sources: $<input type="number" id="grandOther" value="0" onchange="calculateGrandTotal()"></label><br>
+
+                <p><strong>Grand Total Annual Income: $<span id="grandTotalAnnual">0</span></strong></p>
+            </div>
         </div>
     </div>
 
     <script>
-        // Calculate Biweekly Total
+        // Biweekly Calculation Function
         function calculateBiweeklyTotal() {
             const paystub1 = parseFloat(document.getElementById('paystub1').value) || 0;
             const paystub2 = parseFloat(document.getElementById('paystub2').value) || 0;
@@ -114,7 +122,7 @@
             calculateGrandTotal();
         }
 
-        // Calculate Weekly Total
+        // Weekly Calculation Function
         function calculateWeeklyTotal() {
             const paystub1 = parseFloat(document.getElementById('weeklyPaystub1').value) || 0;
             const paystub2 = parseFloat(document.getElementById('weeklyPaystub2').value) || 0;
@@ -130,7 +138,7 @@
             calculateGrandTotal();
         }
 
-        // Calculate Twice a Month Total
+        // Twice a Month Calculation Function
         function calculateTwiceMonthTotal() {
             const paystub1 = parseFloat(document.getElementById('twiceMonthPaystub1').value) || 0;
             const paystub2 = parseFloat(document.getElementById('twiceMonthPaystub2').value) || 0;
@@ -146,7 +154,7 @@
             calculateGrandTotal();
         }
 
-        // Calculate Verbal Income Total
+        // Verbal Income Calculation Function
         function calculateVerbalIncome() {
             const hoursPerWeek = parseFloat(document.getElementById('verbalHours').value) || 0;
             const hourlyRate = parseFloat(document.getElementById('verbalRate').value) || 0;
@@ -168,7 +176,6 @@
             const twiceMonthAnnual = parseFloat(document.getElementById('twiceMonthAnnual').textContent) || 0;
             const verbalAnnual = parseFloat(document.getElementById('verbalAnnual').textContent) || 0;
 
-            // Add additional tips and other income in the grand total calculation
             const tips = parseFloat(document.getElementById('grandTips').value) || 0;
             const otherIncome = parseFloat(document.getElementById('grandOther').value) || 0;
             const grandTotal = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + tips + otherIncome;
@@ -184,5 +191,6 @@
     </script>
 </body>
 </html>
+
 
 
