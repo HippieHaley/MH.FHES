@@ -21,7 +21,7 @@
         }
 
         /* Button Styling */
-        .section-button {
+        .fee-button {
             display: inline-block;
             padding: 1rem 2rem;
             margin: 10px;
@@ -33,6 +33,7 @@
             font-weight: bold;
             font-size: 1rem;
             text-transform: uppercase;
+            cursor: pointer;
         }
 
         /* Table Styling */
@@ -52,8 +53,10 @@
             color: #000;
             font-weight: bold;
         }
-        .fee-level {
-            display: none; /* Hide all fee levels initially */
+
+        /* Hide all tables by default */
+        .price-table {
+            display: none;
         }
     </style>
 </head>
@@ -61,84 +64,150 @@
 
     <h1>Price Sheet</h1>
 
-    <!-- Buttons to Filter by Section or Fee Level -->
+    <!-- Buttons for Selecting Percentage -->
     <div>
-        <button class="section-button" onclick="showSection('service')">Service/ Procedure</button>
-        <button class="section-button" onclick="showSection('procedure')">Procedures</button>
-        <button class="section-button" onclick="setFeeLevel(0)">100%</button>
-        <button class="section-button" onclick="setFeeLevel(1)">75%</button>
-        <button class="section-button" onclick="setFeeLevel(2)">50%</button>
-        <button class="section-button" onclick="setFeeLevel(3)">25%</button>
-        <button class="section-button" onclick="setFeeLevel(4)">0%</button>
+        <button class="fee-button" onclick="showTable('table100')">100%</button>
+        <button class="fee-button" onclick="showTable('table75')">75%</button>
+        <button class="fee-button" onclick="showTable('table50')">50%</button>
+        <button class="fee-button" onclick="showTable('table25')">25%</button>
+        <button class="fee-button" onclick="showTable('table0')">0%</button>
     </div>
 
-    <!-- Price Table -->
-    <table>
+    <!-- Price List for 100% -->
+    <table id="table100" class="price-table">
         <thead>
             <tr>
                 <th>Service/Procedure</th>
                 <th>CPT</th>
-                <th class="fee-level" id="fee1">100%</th>
-                <th class="fee-level" id="fee2">75%</th>
-                <th class="fee-level" id="fee3">50%</th>
-                <th class="fee-level" id="fee4">25%</th>
-                <th class="fee-level" id="fee5">0%</th>
+                <th>Fee</th>
             </tr>
         </thead>
         <tbody>
-            <!-- Example Row for Services -->
-            <tr class="service-row">
+            <tr>
                 <td>Limited-New</td>
                 <td>99202</td>
-                <td class="fee-level" data-fee="0">$170.00</td>
-                <td class="fee-level" data-fee="1">$127.50</td>
-                <td class="fee-level" data-fee="2">$85.00</td>
-                <td class="fee-level" data-fee="3">$42.50</td>
-                <td class="fee-level" data-fee="4">-</td>
+                <td>$170.00</td>
             </tr>
-            <!-- Example Row for Procedures -->
-            <tr class="procedure-row">
-                <td>IUD Insertion</td>
-                <td>58300</td>
-                <td class="fee-level" data-fee="0">$178.00</td>
-                <td class="fee-level" data-fee="1">$133.50</td>
-                <td class="fee-level" data-fee="2">$89.00</td>
-                <td class="fee-level" data-fee="3">$44.50</td>
-                <td class="fee-level" data-fee="4">-</td>
+            <tr>
+                <td>Intermediate-New</td>
+                <td>99203</td>
+                <td>$240.00</td>
             </tr>
-            <!-- Add more rows as needed for each service/procedure -->
+            <!-- Add more rows as needed -->
+        </tbody>
+    </table>
+
+    <!-- Price List for 75% -->
+    <table id="table75" class="price-table">
+        <thead>
+            <tr>
+                <th>Service/Procedure</th>
+                <th>CPT</th>
+                <th>Fee</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Limited-New</td>
+                <td>99202</td>
+                <td>$127.50</td>
+            </tr>
+            <tr>
+                <td>Intermediate-New</td>
+                <td>99203</td>
+                <td>$180.00</td>
+            </tr>
+            <!-- Add more rows as needed -->
+        </tbody>
+    </table>
+
+    <!-- Price List for 50% -->
+    <table id="table50" class="price-table">
+        <thead>
+            <tr>
+                <th>Service/Procedure</th>
+                <th>CPT</th>
+                <th>Fee</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Limited-New</td>
+                <td>99202</td>
+                <td>$85.00</td>
+            </tr>
+            <tr>
+                <td>Intermediate-New</td>
+                <td>99203</td>
+                <td>$120.00</td>
+            </tr>
+            <!-- Add more rows as needed -->
+        </tbody>
+    </table>
+
+    <!-- Price List for 25% -->
+    <table id="table25" class="price-table">
+        <thead>
+            <tr>
+                <th>Service/Procedure</th>
+                <th>CPT</th>
+                <th>Fee</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Limited-New</td>
+                <td>99202</td>
+                <td>$42.50</td>
+            </tr>
+            <tr>
+                <td>Intermediate-New</td>
+                <td>99203</td>
+                <td>$60.00</td>
+            </tr>
+            <!-- Add more rows as needed -->
+        </tbody>
+    </table>
+
+    <!-- Price List for 0% -->
+    <table id="table0" class="price-table">
+        <thead>
+            <tr>
+                <th>Service/Procedure</th>
+                <th>CPT</th>
+                <th>Fee</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Limited-New</td>
+                <td>99202</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>Intermediate-New</td>
+                <td>99203</td>
+                <td>-</td>
+            </tr>
+            <!-- Add more rows as needed -->
         </tbody>
     </table>
 
     <script>
-        // Function to Show Fee Levels Based on Selected Discount Level
-        function setFeeLevel(level) {
-            const feeLevels = document.querySelectorAll('.fee-level');
-            feeLevels.forEach(el => el.style.display = 'none'); // Hide all fee columns
-            document.querySelectorAll(`[data-fee="${level}"]`).forEach(el => el.style.display = 'table-cell');
-            document.getElementById(`fee${level + 1}`).style.display = 'table-cell'; // Show header
+        // Function to show only the selected price table
+        function showTable(tableId) {
+            // Hide all tables
+            const tables = document.querySelectorAll('.price-table');
+            tables.forEach(table => table.style.display = 'none');
+
+            // Show the selected table
+            document.getElementById(tableId).style.display = 'table';
         }
 
-        // Function to Show Specific Section (Service or Procedure)
-        function showSection(section) {
-            const serviceRows = document.querySelectorAll('.service-row');
-            const procedureRows = document.querySelectorAll('.procedure-row');
-
-            if (section === 'service') {
-                serviceRows.forEach(row => row.style.display = 'table-row');
-                procedureRows.forEach(row => row.style.display = 'none');
-            } else if (section === 'procedure') {
-                serviceRows.forEach(row => row.style.display = 'none');
-                procedureRows.forEach(row => row.style.display = 'table-row');
-            }
-        }
-
-        // Initialize to show 100% fees and all services
-        setFeeLevel(0);
-        showSection('service');
+        // Initialize to show the 100% table by default
+        showTable('table100');
     </script>
 
 </body>
 </html>
-
 
