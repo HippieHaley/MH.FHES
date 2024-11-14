@@ -96,8 +96,8 @@
                 <p>Twice a Month Annual: $<span id="grandTwiceMonthAnnual">0</span></p>
                 <p>Weekly Verbal Annual: $<span id="grandVerbalAnnual">0</span></p>
 
-                <!-- Additional Tips and Other Income for Grand Total -->
-                <label>Additional Tips: $<input type="number" id="grandTips" value="0" onchange="calculateGrandTotal()"></label><br>
+                <!-- Updated Tips per Week and Other Income for Grand Total -->
+                <label>Tips per week: $<input type="number" id="grandTips" value="0" onchange="calculateGrandTotal()"></label><br>
                 <label>Other Income Sources: $<input type="number" id="grandOther" value="0" onchange="calculateGrandTotal()"></label><br>
 
                 <p><strong>Grand Total Annual Income: $<span id="grandTotalAnnual">0</span></strong></p>
@@ -176,10 +176,12 @@
             const twiceMonthAnnual = parseFloat(document.getElementById('twiceMonthAnnual').textContent) || 0;
             const verbalAnnual = parseFloat(document.getElementById('verbalAnnual').textContent) || 0;
 
-            const tips = parseFloat(document.getElementById('grandTips').value) || 0;
+            // Multiply weekly tips by 52 for annual calculation
+            const weeklyTips = parseFloat(document.getElementById('grandTips').value) || 0;
+            const annualTips = weeklyTips * 52;
             const otherIncome = parseFloat(document.getElementById('grandOther').value) || 0;
-            const grandTotal = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + tips + otherIncome;
 
+            const grandTotal = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + annualTips + otherIncome;
             document.getElementById('grandTotalAnnual').textContent = grandTotal.toFixed(2);
         }
 
@@ -191,6 +193,7 @@
     </script>
 </body>
 </html>
+
 
 
 
