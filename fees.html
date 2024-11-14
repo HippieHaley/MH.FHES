@@ -10,10 +10,16 @@
             max-width: 800px;
             margin: 0 auto;
         }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
         .section {
-            margin-bottom: 20px;
+            flex: 1 1 calc(50% - 20px); /* Each section takes 50% width with space between columns */
             padding: 15px;
             border: 1px solid #ddd;
+            box-sizing: border-box;
         }
         .example {
             font-style: italic;
@@ -26,44 +32,46 @@
 <body>
     <h1>Income Calculator</h1>
     
-    <!-- Biweekly Income Section -->
-    <div class="section">
-        <h2>Biweekly Income</h2>
-        <p class="example">Example: Every other Friday</p>
-        <label>Paystub one: $<input type="number" id="paystub1" value="0" onchange="calculateBiweeklyTotal()"></label><br>
-        <label>Paystub two: $<input type="number" id="paystub2" value="0" onchange="calculateBiweeklyTotal()"></label><br>
-        <p>Average: $<span id="biweeklyAverage">0</span></p>
-        <p>Annual: $<span id="biweeklyAnnual">0</span></p>
-    </div>
+    <div class="container">
+        <!-- Biweekly Income Section -->
+        <div class="section">
+            <h2>Biweekly Income</h2>
+            <p class="example">Example: Every other Friday</p>
+            <label>Paystub one: $<input type="number" id="paystub1" value="0" onchange="calculateBiweeklyTotal()"></label><br>
+            <label>Paystub two: $<input type="number" id="paystub2" value="0" onchange="calculateBiweeklyTotal()"></label><br>
+            <p>Average: $<span id="biweeklyAverage">0</span></p>
+            <p>Annual: $<span id="biweeklyAnnual">0</span></p>
+        </div>
 
-    <!-- Weekly Income Section -->
-    <div class="section">
-        <h2>Weekly Income</h2>
-        <p class="example">Example: Every Friday</p>
-        <label>Paystub one: $<input type="number" id="weeklyPaystub1" value="0" onchange="calculateWeeklyTotal()"></label><br>
-        <label>Paystub two: $<input type="number" id="weeklyPaystub2" value="0" onchange="calculateWeeklyTotal()"></label><br>
-        <p>Average: $<span id="weeklyAverage">0</span></p>
-        <p>Annual: $<span id="weeklyAnnual">0</span></p>
-    </div>
+        <!-- Weekly Income Section -->
+        <div class="section">
+            <h2>Weekly Income</h2>
+            <p class="example">Example: Every Friday</p>
+            <label>Paystub one: $<input type="number" id="weeklyPaystub1" value="0" onchange="calculateWeeklyTotal()"></label><br>
+            <label>Paystub two: $<input type="number" id="weeklyPaystub2" value="0" onchange="calculateWeeklyTotal()"></label><br>
+            <p>Average: $<span id="weeklyAverage">0</span></p>
+            <p>Annual: $<span id="weeklyAnnual">0</span></p>
+        </div>
 
-    <!-- Twice a Month Income Section -->
-    <div class="section">
-        <h2>Twice a Month Income</h2>
-        <p class="example">Example: 1st and 15th</p>
-        <label>Paystub one: $<input type="number" id="twiceMonthPaystub1" value="0" onchange="calculateTwiceMonthTotal()"></label><br>
-        <label>Paystub two: $<input type="number" id="twiceMonthPaystub2" value="0" onchange="calculateTwiceMonthTotal()"></label><br>
-        <p>Average: $<span id="twiceMonthAverage">0</span></p>
-        <p>Annual: $<span id="twiceMonthAnnual">0</span></p>
-    </div>
+        <!-- Twice a Month Income Section -->
+        <div class="section">
+            <h2>Twice a Month Income</h2>
+            <p class="example">Example: 1st and 15th</p>
+            <label>Paystub one: $<input type="number" id="twiceMonthPaystub1" value="0" onchange="calculateTwiceMonthTotal()"></label><br>
+            <label>Paystub two: $<input type="number" id="twiceMonthPaystub2" value="0" onchange="calculateTwiceMonthTotal()"></label><br>
+            <p>Average: $<span id="twiceMonthAverage">0</span></p>
+            <p>Annual: $<span id="twiceMonthAnnual">0</span></p>
+        </div>
 
-    <!-- Verbal Income Section -->
-    <div class="section">
-        <h2>Verbal Income</h2>
-        <p class="example">Example: Freelance or hourly work</p>
-        <label>Hours Worked per Week: <input type="number" id="verbalHours" value="0" onchange="calculateVerbalIncome()"></label><br>
-        <label>Hourly Pay Rate: $<input type="number" id="verbalRate" value="0" onchange="calculateVerbalIncome()"></label><br>
-        <p>Weekly Income: $<span id="verbalWeeklyTotal">0</span></p>
-        <p>Annual: $<span id="verbalAnnual">0</span></p>
+        <!-- Verbal Income Section -->
+        <div class="section">
+            <h2>Verbal Income</h2>
+            <p class="example">Example: Freelance or hourly work</p>
+            <label>Hours Worked per Week: <input type="number" id="verbalHours" value="0" onchange="calculateVerbalIncome()"></label><br>
+            <label>Hourly Pay Rate: $<input type="number" id="verbalRate" value="0" onchange="calculateVerbalIncome()"></label><br>
+            <p>Weekly Income: $<span id="verbalWeeklyTotal">0</span></p>
+            <p>Annual: $<span id="verbalAnnual">0</span></p>
+        </div>
     </div>
 
     <script>
@@ -72,12 +80,10 @@
             const paystub1 = parseFloat(document.getElementById('paystub1').value) || 0;
             const paystub2 = parseFloat(document.getElementById('paystub2').value) || 0;
             
-            // Calculate Average and Annual Biweekly income
             const total = paystub1 + paystub2;
             const average = total / 2;
-            const annual = average * 26; // Using the average biweekly amount multiplied by 26 pay periods
+            const annual = average * 26;
 
-            // Update HTML content
             document.getElementById('biweeklyAverage').textContent = average.toFixed(2);
             document.getElementById('biweeklyAnnual').textContent = annual.toFixed(2);
         }
@@ -87,12 +93,10 @@
             const paystub1 = parseFloat(document.getElementById('weeklyPaystub1').value) || 0;
             const paystub2 = parseFloat(document.getElementById('weeklyPaystub2').value) || 0;
 
-            // Calculate Average and Annual based on Weekly income
             const total = paystub1 + paystub2;
             const average = total / 2;
-            const annual = average * 52; // Using the average weekly amount multiplied by 52 weeks
+            const annual = average * 52;
 
-            // Update HTML content
             document.getElementById('weeklyAverage').textContent = average.toFixed(2);
             document.getElementById('weeklyAnnual').textContent = annual.toFixed(2);
         }
@@ -102,12 +106,10 @@
             const paystub1 = parseFloat(document.getElementById('twiceMonthPaystub1').value) || 0;
             const paystub2 = parseFloat(document.getElementById('twiceMonthPaystub2').value) || 0;
 
-            // Calculate Average and Annual based on Twice a Month income
             const total = paystub1 + paystub2;
             const average = total / 2;
-            const annual = average * 24; // Using the average twice-a-month amount multiplied by 24 pay periods
+            const annual = average * 24;
 
-            // Update HTML content
             document.getElementById('twiceMonthAverage').textContent = average.toFixed(2);
             document.getElementById('twiceMonthAnnual').textContent = annual.toFixed(2);
         }
@@ -117,11 +119,9 @@
             const hoursPerWeek = parseFloat(document.getElementById('verbalHours').value) || 0;
             const hourlyRate = parseFloat(document.getElementById('verbalRate').value) || 0;
 
-            // Calculate Weekly and Annual Verbal Income
             const weeklyIncome = hoursPerWeek * hourlyRate;
-            const annualIncome = weeklyIncome * 52; // Assuming 52 weeks per year
+            const annualIncome = weeklyIncome * 52;
 
-            // Update HTML content
             document.getElementById('verbalWeeklyTotal').textContent = weeklyIncome.toFixed(2);
             document.getElementById('verbalAnnual').textContent = annualIncome.toFixed(2);
         }
