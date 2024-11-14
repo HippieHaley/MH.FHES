@@ -25,15 +25,15 @@
             border: 1px solid #ddd;
             box-sizing: border-box;
         }
-        .example {
-            font-style: italic;
-            font-size: 1em;
-            color: #333;
-            margin-top: -10px;
-        }
         .grand-total-section {
             background-color: #f4f4f4;
             border: 2px solid #333;
+        }
+        .lookup-section {
+            padding: 10px;
+            background-color: #e8f4e5;
+            border: 1px solid #666;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -87,7 +87,7 @@
             </div>
         </div>
 
-        <!-- Column 3: Grand Total Section -->
+        <!-- Column 3: Grand Total and Coverage Section -->
         <div class="column">
             <div class="section grand-total-section">
                 <h2>Grand Total</h2>
@@ -96,88 +96,77 @@
                 <p>Twice a Month Annual: $<span id="grandTwiceMonthAnnual">0</span></p>
                 <p>Weekly Verbal Annual: $<span id="grandVerbalAnnual">0</span></p>
 
-                <!-- Updated Tips per Week, Other Income per Month, and Other Income by Year for Grand Total -->
+                <!-- Tips and Other Income for Grand Total -->
                 <label>Tips per week: $<input type="number" id="grandTips" value="0" onchange="calculateGrandTotal()"></label><br>
                 <label>Other Income per month: $<input type="number" id="grandOtherMonthly" value="0" onchange="calculateGrandTotal()"></label><br>
                 <label>Other Income by year: $<input type="number" id="grandOtherAnnual" value="0" onchange="calculateGrandTotal()"></label><br>
 
                 <p><strong>Grand Total Annual Income: $<span id="grandTotalAnnual">0</span></strong></p>
             </div>
+
+            <!-- Coverage Level Section -->
+            <div class="lookup-section">
+                <h3>Household Information</h3>
+                <label>People per Household: <input type="number" id="householdSize" min="1" value="1" onchange="updateHouseholdIncome()"></label><br>
+                <p>Yearly Income: $<span id="yearlyIncomeDisplay">0</span></p>
+                <p><strong>Coverage Level: <span id="coverageLevel">N/A</span></strong></p>
+            </div>
         </div>
     </div>
 
     <script>
-        // Biweekly Calculation Function
-        function calculateBiweeklyTotal() {
-            const paystub1 = parseFloat(document.getElementById('paystub1').value) || 0;
-            const paystub2 = parseFloat(document.getElementById('paystub2').value) || 0;
-            const total = paystub1 + paystub2;
-            const average = total / 2;
-            const annual = average * 26;
+        // Chart data based on family size and coverage levels
+        const coverageChart = {
+            1: [15060, 22589, 30119, 37649, 37650],
+            2: [20440, 30659, 40879, 51099, 51100],
+            3: [25820, 38729, 51639, 64549, 64550],
+            4: [31200, 46799, 62399, 77999, 78000],
+            5: [36860, 54869, 73159, 91449, 91450],
+            6: [41960, 62939, 83919, 104899, 104900],
+            7: [47340, 71009, 94679, 118349, 118350],
+            8: [52720, 79079, 105439, 131789, 131800],
+            9: [58100, 87149, 116199, 145249, 145250],
+            10: [63480, 95159, 126959, 158699, 158700],
+            11: [68860, 103289, 137719, 172149, 172150],
+            12: [74240, 111359, 148479, 185599, 185600],
+            13: [79620, 119429, 159239, 199049, 199050],
+            14: [85000, 127499, 169999, 212499, 212500],
+            15: [90380, 135569, 180759, 225949, 225950]
+        };
 
-            document.getElementById('biweeklyTotal').textContent = total.toFixed(2);
-            document.getElementById('biweeklyAverage').textContent = average.toFixed(2);
-            document.getElementById('biweeklyAnnual').textContent = annual.toFixed(2);
+        const coverageLevels = ["100%", "75%", "50%", "25%", "0%"];
 
-            document.getElementById('grandBiweeklyAnnual').textContent = annual.toFixed(2);
-            calculateGrandTotal();
+        // Function to determine coverage level based on household size and yearly income
+        function determineCoverageLevel(householdSize, yearlyIncome) {
+            if (!coverageChart[householdSize]) {
+                return "N/A"; // If household size is not in the chart
+            }
+            const incomeBrackets = coverageChart[householdSize];
+            for (let i = 0; i < incomeBrackets.length; i++) {
+                if (yearlyIncome <= incomeBrackets[i]) {
+                    return coverageLevels[i];
+                }
+            }
+            return "0%"; // Default to 0% if above the highest threshold
         }
 
-        // Weekly Calculation Function
-        function calculateWeeklyTotal() {
-            const paystub1 = parseFloat(document.getElementById('weeklyPaystub1').value) || 0;
-            const paystub2 = parseFloat(document.getElementById('weeklyPaystub2').value) || 0;
-            const total = paystub1 + paystub2;
-            const average = total / 2;
-            const annual = average * 52;
+        // Display the grand total as Yearly Income and update coverage level
+        function updateHouseholdIncome() {
+            const householdSize = parseInt(document.getElementById('householdSize').value) || 1;
+            const yearlyIncome = parseFloat(document.getElementById('grandTotalAnnual').textContent) || 0;
+            document.getElementById('yearlyIncomeDisplay').textContent = yearlyIncome.toFixed(2);
 
-            document.getElementById('weeklyTotal').textContent = total.toFixed(2);
-            document.getElementById('weeklyAverage').textContent = average.toFixed(2);
-            document.getElementById('weeklyAnnual').textContent = annual.toFixed(2);
-
-            document.getElementById('grandWeeklyAnnual').textContent = annual.toFixed(2);
-            calculateGrandTotal();
+            // Determine and display coverage level based on household size and yearly income
+            const coverageLevel = determineCoverageLevel(householdSize, yearlyIncome);
+            document.getElementById('coverageLevel').textContent = coverageLevel;
         }
 
-        // Twice a Month Calculation Function
-        function calculateTwiceMonthTotal() {
-            const paystub1 = parseFloat(document.getElementById('twiceMonthPaystub1').value) || 0;
-            const paystub2 = parseFloat(document.getElementById('twiceMonthPaystub2').value) || 0;
-            const total = paystub1 + paystub2;
-            const average = total / 2;
-            const annual = average * 24;
-
-            document.getElementById('twiceMonthTotal').textContent = total.toFixed(2);
-            document.getElementById('twiceMonthAverage').textContent = average.toFixed(2);
-            document.getElementById('twiceMonthAnnual').textContent = annual.toFixed(2);
-
-            document.getElementById('grandTwiceMonthAnnual').textContent = annual.toFixed(2);
-            calculateGrandTotal();
-        }
-
-        // Verbal Income Calculation Function
-        function calculateVerbalIncome() {
-            const hoursPerWeek = parseFloat(document.getElementById('verbalHours').value) || 0;
-            const hourlyRate = parseFloat(document.getElementById('verbalRate').value) || 0;
-            const weeklyIncome = hoursPerWeek * hourlyRate;
-            const annualIncome = weeklyIncome * 52;
-
-            document.getElementById('verbalWeeklyTotal').textContent = weeklyIncome.toFixed(2);
-            document.getElementById('verbalWeeklyAverage').textContent = weeklyIncome.toFixed(2);
-            document.getElementById('verbalAnnual').textContent = annualIncome.toFixed(2);
-
-            document.getElementById('grandVerbalAnnual').textContent = annualIncome.toFixed(2);
-            calculateGrandTotal();
-        }
-
-        // Calculate Grand Total Annual Income
+        // Calculate Grand Total and update coverage level
         function calculateGrandTotal() {
             const biweeklyAnnual = parseFloat(document.getElementById('biweeklyAnnual').textContent) || 0;
             const weeklyAnnual = parseFloat(document.getElementById('weeklyAnnual').textContent) || 0;
             const twiceMonthAnnual = parseFloat(document.getElementById('twiceMonthAnnual').textContent) || 0;
             const verbalAnnual = parseFloat(document.getElementById('verbalAnnual').textContent) || 0;
-
-            // Multiply weekly tips by 52 and monthly other income by 12 for annual calculations
             const weeklyTips = parseFloat(document.getElementById('grandTips').value) || 0;
             const annualTips = weeklyTips * 52;
             const otherMonthlyIncome = parseFloat(document.getElementById('grandOtherMonthly').value) || 0;
@@ -186,16 +175,17 @@
 
             const grandTotal = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + annualTips + annualOtherMonthlyIncome + otherAnnualIncome;
             document.getElementById('grandTotalAnnual').textContent = grandTotal.toFixed(2);
+
+            // Update Yearly Income and Coverage Level display
+            updateHouseholdIncome();
         }
 
         // Initialize all calculations
-        calculateBiweeklyTotal();
-        calculateWeeklyTotal();
-        calculateTwiceMonthTotal();
-        calculateVerbalIncome();
+        calculateGrandTotal();
     </script>
 </body>
 </html>
+
 
 
 
