@@ -133,6 +133,7 @@
                 <button class="fee-button" onclick="showTable('table75')">75%</button>
                 <button class="fee-button" onclick="showTable('table50')">50%</button>
                 <button class="fee-button" onclick="showTable('table25')">25%</button>
+                <button class="fee-button" onclick="showTable('table0')">0%</button>
             </div>
 
             <!-- Price Sheet Container -->
@@ -147,47 +148,39 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <!-- Services/Procedures at 100% -->
                         <tr>
-                            <td>
-                                <span class="service-name">Limited-Established</span>
-                                <span class="cpt-code">99212</span>
-                            </td>
-                            <td><button class="price-button" onclick="addToTotal('Limited-Established', 101)">$101.00</button></td>
+                            <td><span class="service-name">Limited-New</span><span class="cpt-code">99202</span></td>
+                            <td><button class="price-button" onclick="addToTotal('Limited-New', 170)">$170.00</button></td>
                         </tr>
                         <tr>
-                            <td>
-                                <span class="service-name">Intermediate-Established</span>
-                                <span class="cpt-code">99213</span>
-                            </td>
-                            <td><button class="price-button" onclick="addToTotal('Intermediate-Established', 166)">$166.00</button></td>
+                            <td><span class="service-name">Intermediate-New</span><span class="cpt-code">99203</span></td>
+                            <td><button class="price-button" onclick="addToTotal('Intermediate-New', 240)">$240.00</button></td>
                         </tr>
                         <tr>
-                            <td>
-                                <span class="service-name">Comprehensive-Established</span>
-                                <span class="cpt-code">99214</span>
-                            </td>
-                            <td><button class="price-button" onclick="addToTotal('Comprehensive-Established', 243)">$243.00</button></td>
+                            <td><span class="service-name">Comprehensive-New</span><span class="cpt-code">99204</span></td>
+                            <td><button class="price-button" onclick="addToTotal('Comprehensive-New', 365)">$365.00</button></td>
                         </tr>
                         <tr>
-                            <td>
-                                <span class="service-name">Preventive 12-17 Established</span>
-                                <span class="cpt-code">99394</span>
-                            </td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 12-17 Established', 262)">$262.00</button></td>
+                            <td><span class="service-name">Preventive 12-17 New</span><span class="cpt-code">99384</span></td>
+                            <td><button class="price-button" onclick="addToTotal('Preventive 12-17 New', 306)">$306.00</button></td>
                         </tr>
                         <tr>
-                            <td>
-                                <span class="service-name">Preventive 18-39 Established</span>
-                                <span class="cpt-code">99395</span>
-                            </td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 18-39 Established', 267)">$267.00</button></td>
+                            <td><span class="service-name">Preventive 18-39 New</span><span class="cpt-code">99385</span></td>
+                            <td><button class="price-button" onclick="addToTotal('Preventive 18-39 New', 296)">$296.00</button></td>
                         </tr>
                         <tr>
-                            <td>
-                                <span class="service-name">Preventive 40-64 Established</span>
-                                <span class="cpt-code">99396</span>
-                            </td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 40-64 Established', 285)">$285.00</button></td>
+                            <td><span class="service-name">Preventive 40-64 New</span><span class="cpt-code">99386</span></td>
+                            <td><button class="price-button" onclick="addToTotal('Preventive 40-64 New', 343)">$343.00</button></td>
+                        </tr>
+                        <!-- Procedures at 100% -->
+                        <tr>
+                            <td><span class="service-name">IUD Insertion</span><span class="cpt-code">58300</span></td>
+                            <td><button class="price-button" onclick="addToTotal('IUD Insertion', 178)">$178.00</button></td>
+                        </tr>
+                        <tr>
+                            <td><span class="service-name">IUD Removal</span><span class="cpt-code">58301</span></td>
+                            <td><button class="price-button" onclick="addToTotal('IUD Removal', 211)">$211.00</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -201,52 +194,68 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <!-- Services/Procedures at 75% -->
                         <tr>
-                            <td>
-                                <span class="service-name">Limited-Established</span>
-                                <span class="cpt-code">99212</span>
-                            </td>
-                            <td><button class="price-button" onclick="addToTotal('Limited-Established', 75.75)">$75.75</button></td>
+                            <td><span class="service-name">Limited-New</span><span class="cpt-code">99202</span></td>
+                            <td><button class="price-button" onclick="addToTotal('Limited-New', 127.5)">$127.50</button></td>
                         </tr>
                         <tr>
-                            <td>
-                                <span class="service-name">Intermediate-Established</span>
-                                <span class="cpt-code">99213</span>
-                            </td>
-                            <td><button class="price-button" onclick="addToTotal('Intermediate-Established', 124.5)">$124.50</button></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="service-name">Comprehensive-Established</span>
-                                <span class="cpt-code">99214</span>
-                            </td>
-                            <td><button class="price-button" onclick="addToTotal('Comprehensive-Established', 182.25)">$182.25</button></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="service-name">Preventive 12-17 Established</span>
-                                <span class="cpt-code">99394</span>
-                            </td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 12-17 Established', 196.5)">$196.50</button></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="service-name">Preventive 18-39 Established</span>
-                                <span class="cpt-code">99395</span>
-                            </td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 18-39 Established', 200.25)">$200.25</button></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="service-name">Preventive 40-64 Established</span>
-                                <span class="cpt-code">99396</span>
-                            </td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 40-64 Established', 213.75)">$213.75</button></td>
+                            <td><span class="service-name">Intermediate-New</span><span class="cpt-code">99203</span></td>
+                            <td><button class="price-button" onclick="addToTotal('Intermediate-New', 180)">$180.00</button></td>
                         </tr>
                     </tbody>
                 </table>
 
-                <!-- Similar tables for 50% and 25% with appropriate prices can be added here -->
+                <!-- Price List for 50% -->
+                <table id="table50" class="price-table">
+                    <thead>
+                        <tr>
+                            <th>Service/Procedure</th>
+                            <th>Fee</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Services/Procedures at 50% -->
+                        <tr>
+                            <td><span class="service-name">Limited-New</span><span class="cpt-code">99202</span></td>
+                            <td><button class="price-button" onclick="addToTotal('Limited-New', 85)">$85.00</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Price List for 25% -->
+                <table id="table25" class="price-table">
+                    <thead>
+                        <tr>
+                            <th>Service/Procedure</th>
+                            <th>Fee</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Services/Procedures at 25% -->
+                        <tr>
+                            <td><span class="service-name">Limited-New</span><span class="cpt-code">99202</span></td>
+                            <td><button class="price-button" onclick="addToTotal('Limited-New', 42.5)">$42.50</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Price List for 0% -->
+                <table id="table0" class="price-table">
+                    <thead>
+                        <tr>
+                            <th>Service/Procedure</th>
+                            <th>Fee</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Services/Procedures at 0% -->
+                        <tr>
+                            <td><span class="service-name">Limited-New</span><span class="cpt-code">99202</span></td>
+                            <td><button class="price-button" onclick="addToTotal('Limited-New', 0)">$0.00</button></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -310,4 +319,3 @@
 
 </body>
 </html>
-
