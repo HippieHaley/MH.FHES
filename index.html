@@ -15,7 +15,7 @@
         /* Background and Layout */
         body {
             font-family: Arial, sans-serif;
-            background-color: #acdbf9; /* Updated light blue background */
+            background-color: #acdbf9; /* Light blue background */
             color: #333;
             display: flex;
             align-items: center;
@@ -44,12 +44,18 @@
             font-weight: bold;
             line-height: 1.2;
             letter-spacing: 2px;
+            color: #fff; /* Font color set to white */
+            -webkit-text-stroke: 1px #000; /* Black outline around text */
+            text-stroke: 1px #000; /* For non-webkit browsers */
         }
         .left-section h1::after {
             content: "BY H";
             display: block;
             font-size: 1.2rem;
             margin-top: 1rem;
+            color: #fff;
+            -webkit-text-stroke: 1px #000;
+            text-stroke: 1px #000;
         }
 
         /* Right Section - Buttons */
@@ -66,7 +72,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background-color: #f8c9f9; /* Updated soft pink button background */
+            background-color: #f8c9f9; /* Soft pink button background */
             color: #333;
             padding: 1rem 2rem;
             font-size: 1.5rem;
@@ -75,6 +81,7 @@
             border-radius: 30px;
             min-width: 200px;
             text-align: center;
+            border: 1px solid #000; /* Thin black border around buttons */
         }
         .button:hover {
             background-color: #e8b8e8; /* Slightly darker pink for hover effect */
