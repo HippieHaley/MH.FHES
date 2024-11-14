@@ -85,9 +85,9 @@
 
         /* Service/Procedure with CPT styling */
         .service-name {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
-            text-transform: uppercase;
+            text-transform: capitalize;
         }
         .cpt-code {
             font-size: 0.8rem;
@@ -161,38 +161,40 @@
                             </td>
                             <td><button class="price-button" onclick="addToTotal('Intermediate-New', 240)">$240.00</button></td>
                         </tr>
-                        <!-- Add more rows as needed -->
-                    </tbody>
-                </table>
-
-                <!-- Price List for 75% -->
-                <table id="table75" class="price-table">
-                    <thead>
-                        <tr>
-                            <th>Service/Procedure</th>
-                            <th>Fee</th>
-                        </tr>
-                    </thead>
-                    <tbody>
                         <tr>
                             <td>
-                                <span class="service-name">Limited-New</span>
-                                <span class="cpt-code">99202</span>
+                                <span class="service-name">Comprehensive-New</span>
+                                <span class="cpt-code">99204</span>
                             </td>
-                            <td><button class="price-button" onclick="addToTotal('Limited-New', 127.5)">$127.50</button></td>
+                            <td><button class="price-button" onclick="addToTotal('Comprehensive-New', 365)">$365.00</button></td>
                         </tr>
                         <tr>
                             <td>
-                                <span class="service-name">Intermediate-New</span>
-                                <span class="cpt-code">99203</span>
+                                <span class="service-name">Preventive 18-39 New</span>
+                                <span class="cpt-code">99384</span>
                             </td>
-                            <td><button class="price-button" onclick="addToTotal('Intermediate-New', 180)">$180.00</button></td>
+                            <td><button class="price-button" onclick="addToTotal('Preventive 18-39 New', 296)">$296.00</button></td>
                         </tr>
-                        <!-- Add more rows as needed -->
+                        <tr>
+                            <td>
+                                <span class="service-name">Preventive 40-64 New</span>
+                                <span class="cpt-code">99386</span>
+                            </td>
+                            <td><button class="price-button" onclick="addToTotal('Preventive 40-64 New', 343)">$343.00</button></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="service-name">Minimal-Established</span>
+                                <span class="cpt-code">99211</span>
+                            </td>
+                            <td><button class="price-button" onclick="addToTotal('Minimal-Established', 51)">$51.00</button></td>
+                        </tr>
+                        <!-- Add more services and procedures from your screenshot as needed -->
                     </tbody>
                 </table>
 
-                <!-- Add more tables for 50%, 25%, and 0% as needed -->
+                <!-- Additional tables for 75%, 50%, 25%, and 0% coverage would be similar, with adjusted fees -->
+
             </div>
         </div>
 
@@ -256,3 +258,4 @@
 
 </body>
 </html>
+
