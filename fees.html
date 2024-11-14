@@ -16,7 +16,7 @@
             gap: 20px;
         }
         .section {
-            flex: 1 1 calc(50% - 20px); /* Each section takes 50% width with space between columns */
+            flex: 1 1 calc(50% - 20px);
             padding: 15px;
             border: 1px solid #ddd;
             box-sizing: border-box;
@@ -39,6 +39,9 @@
             <p class="example">Example: Every other Friday</p>
             <label>Paystub one: $<input type="number" id="paystub1" value="0" onchange="calculateBiweeklyTotal()"></label><br>
             <label>Paystub two: $<input type="number" id="paystub2" value="0" onchange="calculateBiweeklyTotal()"></label><br>
+            <label>Tips: $<input type="number" id="biweeklyTips" value="0"></label><br>
+            <label>Other Income Sources: $<input type="number" id="biweeklyOther" value="0"></label><br>
+            <p>Total: $<span id="biweeklyTotal">0</span></p>
             <p>Average: $<span id="biweeklyAverage">0</span></p>
             <p>Annual: $<span id="biweeklyAnnual">0</span></p>
         </div>
@@ -49,6 +52,9 @@
             <p class="example">Example: Every Friday</p>
             <label>Paystub one: $<input type="number" id="weeklyPaystub1" value="0" onchange="calculateWeeklyTotal()"></label><br>
             <label>Paystub two: $<input type="number" id="weeklyPaystub2" value="0" onchange="calculateWeeklyTotal()"></label><br>
+            <label>Tips: $<input type="number" id="weeklyTips" value="0"></label><br>
+            <label>Other Income Sources: $<input type="number" id="weeklyOther" value="0"></label><br>
+            <p>Total: $<span id="weeklyTotal">0</span></p>
             <p>Average: $<span id="weeklyAverage">0</span></p>
             <p>Annual: $<span id="weeklyAnnual">0</span></p>
         </div>
@@ -59,6 +65,9 @@
             <p class="example">Example: 1st and 15th</p>
             <label>Paystub one: $<input type="number" id="twiceMonthPaystub1" value="0" onchange="calculateTwiceMonthTotal()"></label><br>
             <label>Paystub two: $<input type="number" id="twiceMonthPaystub2" value="0" onchange="calculateTwiceMonthTotal()"></label><br>
+            <label>Tips: $<input type="number" id="twiceMonthTips" value="0"></label><br>
+            <label>Other Income Sources: $<input type="number" id="twiceMonthOther" value="0"></label><br>
+            <p>Total: $<span id="twiceMonthTotal">0</span></p>
             <p>Average: $<span id="twiceMonthAverage">0</span></p>
             <p>Annual: $<span id="twiceMonthAnnual">0</span></p>
         </div>
@@ -69,7 +78,10 @@
             <p class="example">Example: Freelance or hourly work</p>
             <label>Hours worked: <input type="number" id="verbalHours" value="0" onchange="calculateVerbalIncome()"></label><br>
             <label>Hourly Pay Rate: $<input type="number" id="verbalRate" value="0" onchange="calculateVerbalIncome()"></label><br>
-            <p>Weekly Verbal Income: $<span id="verbalWeeklyTotal">0</span></p>
+            <label>Tips: $<input type="number" id="verbalTips" value="0"></label><br>
+            <label>Other Income Sources: $<input type="number" id="verbalOther" value="0"></label><br>
+            <p>Total: $<span id="verbalWeeklyTotal">0</span></p>
+            <p>Average: $<span id="verbalWeeklyAverage">0</span></p>
             <p>Annual: $<span id="verbalAnnual">0</span></p>
         </div>
     </div>
@@ -79,11 +91,11 @@
         function calculateBiweeklyTotal() {
             const paystub1 = parseFloat(document.getElementById('paystub1').value) || 0;
             const paystub2 = parseFloat(document.getElementById('paystub2').value) || 0;
-            
             const total = paystub1 + paystub2;
             const average = total / 2;
             const annual = average * 26;
 
+            document.getElementById('biweeklyTotal').textContent = total.toFixed(2);
             document.getElementById('biweeklyAverage').textContent = average.toFixed(2);
             document.getElementById('biweeklyAnnual').textContent = annual.toFixed(2);
         }
@@ -92,11 +104,11 @@
         function calculateWeeklyTotal() {
             const paystub1 = parseFloat(document.getElementById('weeklyPaystub1').value) || 0;
             const paystub2 = parseFloat(document.getElementById('weeklyPaystub2').value) || 0;
-
             const total = paystub1 + paystub2;
             const average = total / 2;
             const annual = average * 52;
 
+            document.getElementById('weeklyTotal').textContent = total.toFixed(2);
             document.getElementById('weeklyAverage').textContent = average.toFixed(2);
             document.getElementById('weeklyAnnual').textContent = annual.toFixed(2);
         }
@@ -105,11 +117,11 @@
         function calculateTwiceMonthTotal() {
             const paystub1 = parseFloat(document.getElementById('twiceMonthPaystub1').value) || 0;
             const paystub2 = parseFloat(document.getElementById('twiceMonthPaystub2').value) || 0;
-
             const total = paystub1 + paystub2;
             const average = total / 2;
             const annual = average * 24;
 
+            document.getElementById('twiceMonthTotal').textContent = total.toFixed(2);
             document.getElementById('twiceMonthAverage').textContent = average.toFixed(2);
             document.getElementById('twiceMonthAnnual').textContent = annual.toFixed(2);
         }
@@ -118,11 +130,11 @@
         function calculateVerbalIncome() {
             const hoursPerWeek = parseFloat(document.getElementById('verbalHours').value) || 0;
             const hourlyRate = parseFloat(document.getElementById('verbalRate').value) || 0;
-
             const weeklyIncome = hoursPerWeek * hourlyRate;
             const annualIncome = weeklyIncome * 52;
 
             document.getElementById('verbalWeeklyTotal').textContent = weeklyIncome.toFixed(2);
+            document.getElementById('verbalWeeklyAverage').textContent = (weeklyIncome).toFixed(2); // Keeping as weekly
             document.getElementById('verbalAnnual').textContent = annualIncome.toFixed(2);
         }
 
@@ -134,4 +146,5 @@
     </script>
 </body>
 </html>
+
 
