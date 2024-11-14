@@ -150,6 +150,54 @@
             return "0%"; // Default to 0% if above the highest threshold
         }
 
+        // Calculate Biweekly Income
+        function calculateBiweeklyTotal() {
+            const paystub1 = parseFloat(document.getElementById('paystub1').value) || 0;
+            const paystub2 = parseFloat(document.getElementById('paystub2').value) || 0;
+            const total = paystub1 + paystub2;
+            const average = total / 2;
+            const annual = average * 26;
+
+            document.getElementById('biweeklyTotal').textContent = total.toFixed(2);
+            document.getElementById('biweeklyAverage').textContent = average.toFixed(2);
+            document.getElementById('biweeklyAnnual').textContent = annual.toFixed(2);
+
+            document.getElementById('grandBiweeklyAnnual').textContent = annual.toFixed(2);
+            calculateGrandTotal();
+        }
+
+        // Calculate Weekly Income
+        function calculateWeeklyTotal() {
+            const paystub1 = parseFloat(document.getElementById('weeklyPaystub1').value) || 0;
+            const paystub2 = parseFloat(document.getElementById('weeklyPaystub2').value) || 0;
+            const total = paystub1 + paystub2;
+            const average = total / 2;
+            const annual = average * 52;
+
+            document.getElementById('weeklyTotal').textContent = total.toFixed(2);
+            document.getElementById('weeklyAverage').textContent = average.toFixed(2);
+            document.getElementById('weeklyAnnual').textContent = annual.toFixed(2);
+
+            document.getElementById('grandWeeklyAnnual').textContent = annual.toFixed(2);
+            calculateGrandTotal();
+        }
+
+        // Calculate Twice a Month Income
+        function calculateTwiceMonthTotal() {
+            const paystub1 = parseFloat(document.getElementById('twiceMonthPaystub1').value) || 0;
+            const paystub2 = parseFloat(document.getElementById('twiceMonthPaystub2').value) || 0;
+            const total = paystub1 + paystub2;
+            const average = total / 2;
+            const annual = average * 24;
+
+            document.getElementById('twiceMonthTotal').textContent = total.toFixed(2);
+            document.getElementById('twiceMonthAverage').textContent = average.toFixed(2);
+            document.getElementById('twiceMonthAnnual').textContent = annual.toFixed(2);
+
+            document.getElementById('grandTwiceMonthAnnual').textContent = annual.toFixed(2);
+            calculateGrandTotal();
+        }
+
         // Calculate Weekly Verbal Income
         function calculateVerbalIncome() {
             const hoursPerWeek = parseFloat(document.getElementById('verbalHours').value) || 0;
