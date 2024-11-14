@@ -136,18 +136,19 @@
 
         const coverageLevels = ["100%", "75%", "50%", "25%", "0%"];
 
-        // Function to determine coverage level based on household size and yearly income
-        function determineCoverageLevel(householdSize, yearlyIncome) {
-            if (!coverageChart[householdSize]) {
-                return "N/A"; // If household size is not in the chart
-            }
-            const incomeBrackets = coverageChart[householdSize];
-            for (let i = 0; i < incomeBrackets.length; i++) {
-                if (yearlyIncome <= incomeBrackets[i]) {
-                    return coverageLevels[i];
-                }
-            }
-            return "0%"; // Default to 0% if above the highest threshold
+        // Function to calculate Weekly Verbal Income
+        function calculateVerbalIncome() {
+            const hoursPerWeek = parseFloat(document.getElementById('verbalHours').value) || 0;
+            const hourlyRate = parseFloat(document.getElementById('verbalRate').value) || 0;
+            const weeklyIncome = hoursPerWeek * hourlyRate;
+            const annualIncome = weeklyIncome * 52;
+
+            document.getElementById('verbalWeeklyTotal').textContent = weeklyIncome.toFixed(2);
+            document.getElementById('verbalWeeklyAverage').textContent = weeklyIncome.toFixed(2);
+            document.getElementById('verbalAnnual').textContent = annualIncome.toFixed(2);
+
+            document.getElementById('grandVerbalAnnual').textContent = annualIncome.toFixed(2);
+            calculateGrandTotal();
         }
 
         // Display the grand total as Yearly Income and update coverage level
@@ -185,6 +186,7 @@
     </script>
 </body>
 </html>
+
 
 
 
