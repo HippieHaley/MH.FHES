@@ -363,7 +363,9 @@
             const listItem = document.createElement('div');
             listItem.className = 'list-item';
             listItem.textContent = `${service}: $${price.toFixed(2)}`;
-
+        function updatePrice(service, price) {
+            // Add to the itemized list and update the grand total with the new price
+            addToTotal(service, price);
             // Create a remove button for each item
             const removeButton = document.createElement('button');
             removeButton.textContent = "X";
@@ -386,7 +388,56 @@
             document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
         }
     </script>
+        let grandTotal = 0;
 
+            // Function to show only the selected price table
+            function showTable(tableId) {
+                // Hide all tables
+                const tables = document.querySelectorAll('.price-table');
+                tables.forEach(table => table.style.display = 'none');
+
+                // Show the selected table
+                document.getElementById(tableId).style.display = 'table';
+            }
+
+            // Initialize to show the 100% table by default
+            showTable('table100');
+        
+            // Function to add a service and price to the itemized list and grand total
+            function addToTotal(service, price) {
+                // Create a new div for the item
+                const itemizedList = document.getElementById('itemizedList');
+                const listItem = document.createElement('div');
+                listItem.className = 'list-item';
+                listItem.textContent = `${service}: $${price.toFixed(2)}`;
+
+                // Create a remove button for each item
+                const removeButton = document.createElement('button');
+                removeButton.textContent = "X";
+                removeButton.className = 'remove-button';
+                removeButton.onclick = function() {
+                    // Remove the item from the itemized list
+                    itemizedList.removeChild(listItem);
+
+                    // Subtract the price from the grand total
+                    grandTotal -= price;
+                    document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+                };
+
+                // Add the remove button to the list item, then add the item to the list
+                listItem.prepend(removeButton);
+                itemizedList.appendChild(listItem);
+
+                // Update the grand total
+                grandTotal += price;
+                document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+            }
+
+            // Function to update price for times 2 and times 3 buttons
+            function updatePrice(service, price) {
+                // Add the updated price to the itemized list and update the grand total
+                addToTotal(service, price);
+            }
 </body>
 </html>
 
