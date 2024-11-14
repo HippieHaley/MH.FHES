@@ -1,1 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Sheet</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Button Styling */
+        .section-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            margin: 10px;
+            background-color: #f8c9f9;
+            border: 1px solid #000;
+            border-radius: 20px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            font-size: 1rem;
+            text-transform: uppercase;
+        }
+
+        /* Table Styling */
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #333;
+            text-align: center;
+        }
+        th {
+            background-color: #acdbf9;
+            color: #000;
+            font-weight: bold;
+        }
+        .fee-level {
+            display: none; /* Hide all fee levels initially */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Price Sheet</h1>
+
+    <!-- Buttons to Filter by Section or Fee Level -->
+    <div>
+        <button class="section-button" onclick="showSection('service')">Service/ Procedure</button>
+        <button class="section-button" onclick="showSection('procedure')">Procedures</button>
+        <button class="section-button" onclick="setFeeLevel(0)">100%</button>
+        <button class="section-button" onclick="setFeeLevel(1)">75%</button>
+        <button class="section-button" onclick="setFeeLevel(2)">50%</button>
+        <button class="section-button" onclick="setFeeLevel(3)">25%</button>
+        <button class="section-button" onclick="setFeeLevel(4)">0%</button>
+    </div>
+
+    <!-- Price Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Service/Procedure</th>
+                <th>CPT</th>
+                <th class="fee-level" id="fee1">100%</th>
+                <th class="fee-level" id="fee2">75%</th>
+                <th class="fee-level" id="fee3">50%</th>
+                <th class="fee-level" id="fee4">25%</th>
+                <th class="fee-level" id="fee5">0%</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Example Row for Services -->
+            <tr class="service-row">
+                <td>Limited-New</td>
+                <td>99202</td>
+                <td class="fee-level" data-fee="0">$170.00</td>
+                <td class="fee-level" data-fee="1">$127.50</td>
+                <td class="fee-level" data-fee="2">$85.00</td>
+                <td class="fee-level" data-fee="3">$42.50</td>
+                <td class="fee-level" data-fee="4">-</td>
+            </tr>
+            <!-- Example Row for Procedures -->
+            <tr class="procedure-row">
+                <td>IUD Insertion</td>
+                <td>58300</td>
+                <td class="fee-level" data-fee="0">$178.00</td>
+                <td class="fee-level" data-fee="1">$133.50</td>
+                <td class="fee-level" data-fee="2">$89.00</td>
+                <td class="fee-level" data-fee="3">$44.50</td>
+                <td class="fee-level" data-fee="4">-</td>
+            </tr>
+            <!-- Add more rows as needed for each service/procedure -->
+        </tbody>
+    </table>
+
+    <script>
+        // Function to Show Fee Levels Based on Selected Discount Level
+        function setFeeLevel(level) {
+            const feeLevels = document.querySelectorAll('.fee-level');
+            feeLevels.forEach(el => el.style.display = 'none'); // Hide all fee columns
+            document.querySelectorAll(`[data-fee="${level}"]`).forEach(el => el.style.display = 'table-cell');
+            document.getElementById(`fee${level + 1}`).style.display = 'table-cell'; // Show header
+        }
+
+        // Function to Show Specific Section (Service or Procedure)
+        function showSection(section) {
+            const serviceRows = document.querySelectorAll('.service-row');
+            const procedureRows = document.querySelectorAll('.procedure-row');
+
+            if (section === 'service') {
+                serviceRows.forEach(row => row.style.display = 'table-row');
+                procedureRows.forEach(row => row.style.display = 'none');
+            } else if (section === 'procedure') {
+                serviceRows.forEach(row => row.style.display = 'none');
+                procedureRows.forEach(row => row.style.display = 'table-row');
+            }
+        }
+
+        // Initialize to show 100% fees and all services
+        setFeeLevel(0);
+        showSection('service');
+    </script>
+
+</body>
+</html>
+
 
