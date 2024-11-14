@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monument Health Family Health Education Services</title>
+    <title>Family Health Education Services</title>
     <style>
         body {
             font-family: "Times New Roman", Times, serif;
@@ -17,42 +17,60 @@
             color: #fff;
             padding: 1rem;
             text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem;
+        }
+        nav a:hover {
+            text-decoration: underline;
         }
         main {
             padding: 2rem;
+            text-align: center;
+        }
+        .button {
+            display: inline-block;
+            background-color: #1cb299;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            text-align: center;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+        .button:hover {
+            background-color: #17a586;
         }
         footer {
             background-color: #1cb299;
             color: #fff;
             text-align: center;
             padding: 1rem;
-            position: fixed;
-            bottom: 0;
             width: 100%;
+            position: static;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Monument Health Family Health Education Services</h1>
+        <h1>Family Health Education Services</h1>
         <nav>
-            <a href="index.html">Home</a> |
-            <a href="fees.html">Fee Scale</a>
+            <a href="index.html">Home</a>
         </nav>
     </header>
     <main>
-        <section>
-            <h2>About Us</h2>
-            <p>Monument Health Family Health Education Services, located in Spearfish, South Dakota, provides a full range of reproductive health services tailored to support individuals and families in our community. Our income-based services include access to birth control options, STI screenings, pregnancy testing, and comprehensive annual exams. We are dedicated to offering compassionate, affordable care and empowering our patients with health education that meets their unique needs.</p>
-        </section>
-        <section>
-            <h2>Contact</h2>
-            <p>For more information or to schedule an appointment, please reach out to us:</p>
-            <p><strong>Phone:</strong> <a href="tel:+16057178920">605-717-8920</a></p>
-        </section>
+        <!-- Button linking to the Fee Scale page -->
+        <a href="fees.html" class="button">View Fee Scale</a>
     </main>
     <footer>
-        <p>&copy; 2024 Monument Health Family Health Education Services. All rights reserved.</p>
+        <p>&copy; 2024 Family Health Education Services. All rights reserved.</p>
     </footer>
 </body>
 </html>
