@@ -43,8 +43,6 @@
             <p class="example">Example: Every other Friday</p>
             <label>Paystub one: $<input type="number" id="paystub1" value="0" onchange="calculateBiweeklyTotal()"></label><br>
             <label>Paystub two: $<input type="number" id="paystub2" value="0" onchange="calculateBiweeklyTotal()"></label><br>
-            <label>Tips: $<input type="number" id="biweeklyTips" value="0"></label><br>
-            <label>Other Income Sources: $<input type="number" id="biweeklyOther" value="0"></label><br>
             <p>Total: $<span id="biweeklyTotal">0</span></p>
             <p>Average: $<span id="biweeklyAverage">0</span></p>
             <p>Annual: $<span id="biweeklyAnnual">0</span></p>
@@ -56,8 +54,6 @@
             <p class="example">Example: Every Friday</p>
             <label>Paystub one: $<input type="number" id="weeklyPaystub1" value="0" onchange="calculateWeeklyTotal()"></label><br>
             <label>Paystub two: $<input type="number" id="weeklyPaystub2" value="0" onchange="calculateWeeklyTotal()"></label><br>
-            <label>Tips: $<input type="number" id="weeklyTips" value="0"></label><br>
-            <label>Other Income Sources: $<input type="number" id="weeklyOther" value="0"></label><br>
             <p>Total: $<span id="weeklyTotal">0</span></p>
             <p>Average: $<span id="weeklyAverage">0</span></p>
             <p>Annual: $<span id="weeklyAnnual">0</span></p>
@@ -69,8 +65,6 @@
             <p class="example">Example: 1st and 15th</p>
             <label>Paystub one: $<input type="number" id="twiceMonthPaystub1" value="0" onchange="calculateTwiceMonthTotal()"></label><br>
             <label>Paystub two: $<input type="number" id="twiceMonthPaystub2" value="0" onchange="calculateTwiceMonthTotal()"></label><br>
-            <label>Tips: $<input type="number" id="twiceMonthTips" value="0"></label><br>
-            <label>Other Income Sources: $<input type="number" id="twiceMonthOther" value="0"></label><br>
             <p>Total: $<span id="twiceMonthTotal">0</span></p>
             <p>Average: $<span id="twiceMonthAverage">0</span></p>
             <p>Annual: $<span id="twiceMonthAnnual">0</span></p>
@@ -82,8 +76,6 @@
             <p class="example">Example: Freelance or hourly work</p>
             <label>Hours worked: <input type="number" id="verbalHours" value="0" onchange="calculateVerbalIncome()"></label><br>
             <label>Hourly Pay Rate: $<input type="number" id="verbalRate" value="0" onchange="calculateVerbalIncome()"></label><br>
-            <label>Tips: $<input type="number" id="verbalTips" value="0"></label><br>
-            <label>Other Income Sources: $<input type="number" id="verbalOther" value="0"></label><br>
             <p>Total: $<span id="verbalWeeklyTotal">0</span></p>
             <p>Average: $<span id="verbalWeeklyAverage">0</span></p>
             <p>Annual: $<span id="verbalAnnual">0</span></p>
@@ -96,6 +88,11 @@
             <p>Weekly Annual: $<span id="grandWeeklyAnnual">0</span></p>
             <p>Twice a Month Annual: $<span id="grandTwiceMonthAnnual">0</span></p>
             <p>Weekly Verbal Annual: $<span id="grandVerbalAnnual">0</span></p>
+            
+            <!-- New Tips and Other Income Fields for Grand Total -->
+            <label>Additional Tips: $<input type="number" id="grandTips" value="0" onchange="calculateGrandTotal()"></label><br>
+            <label>Other Income Sources: $<input type="number" id="grandOther" value="0" onchange="calculateGrandTotal()"></label><br>
+
             <p><strong>Grand Total Annual Income: $<span id="grandTotalAnnual">0</span></strong></p>
         </div>
     </div>
@@ -170,7 +167,11 @@
             const weeklyAnnual = parseFloat(document.getElementById('weeklyAnnual').textContent) || 0;
             const twiceMonthAnnual = parseFloat(document.getElementById('twiceMonthAnnual').textContent) || 0;
             const verbalAnnual = parseFloat(document.getElementById('verbalAnnual').textContent) || 0;
-            const grandTotal = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual;
+
+            // Add additional tips and other income in the grand total calculation
+            const tips = parseFloat(document.getElementById('grandTips').value) || 0;
+            const otherIncome = parseFloat(document.getElementById('grandOther').value) || 0;
+            const grandTotal = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + tips + otherIncome;
 
             document.getElementById('grandTotalAnnual').textContent = grandTotal.toFixed(2);
         }
@@ -182,8 +183,6 @@
         calculateVerbalIncome();
     </script>
 </body>
-</html>
-
 </html>
 
 
