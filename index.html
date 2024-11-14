@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,38 +18,50 @@
             background-color: #87CEEB; /* Light blue background */
             color: #333;
             display: flex;
-            justify-content: center;
             align-items: center;
-            flex-direction: column;
+            justify-content: center;
             min-height: 100vh;
             text-align: center;
         }
 
-        /* Title Styling */
-        h1 {
-            font-size: 3rem;
+        /* Container to Split the Screen */
+        .container {
+            display: flex;
+            width: 80%;
+            max-width: 1200px;
+            align-items: center;
+        }
+
+        /* Left Section - Title */
+        .left-section {
+            flex: 1;
+            text-align: left;
+            padding: 2rem;
             color: #fff;
-            margin-bottom: 0.5rem;
+        }
+        .left-section h1 {
+            font-size: 3rem;
             font-weight: bold;
+            line-height: 1.2;
             letter-spacing: 2px;
         }
-        h1::after {
+        .left-section h1::after {
             content: "BY H";
             display: block;
-            font-size: 1rem;
-            color: #fff;
-            margin-top: 0.5rem;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        /* Right Section - Buttons */
+        .right-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: flex-start;
         }
 
         /* Button Styles */
-        .button-container {
-            display: flex;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 2rem;
-        }
-
         .button {
             display: inline-flex;
             align-items: center;
@@ -62,52 +73,29 @@
             font-weight: bold;
             text-decoration: none;
             border-radius: 30px;
-            position: relative;
             min-width: 200px;
+            text-align: center;
         }
-
-        /* Icon Placeholder Styling */
-        .button::before {
-            content: "🌈"; /* Rainbow or other icons */
-            font-size: 1.5rem;
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        /* Unique Icons for each button */
-        .fee-scale-button::before {
-            content: "🌞"; /* Example: Sun icon for Fee Scale */
-        }
-        .price-sheet-button::before {
-            content: "⭐"; /* Example: Star icon for Price Sheet */
-        }
-
-        /* Decorative Elements (Placeholder) */
-        .decorative-icon {
-            font-size: 3rem;
-            margin: 1rem;
-            color: #FFCCCB;
+        .button:hover {
+            background-color: #f3b0b0;
         }
     </style>
 </head>
 <body>
 
-    <!-- Title -->
-    <h1>Family Health Education Services</h1>
+    <div class="container">
+        <!-- Left Section: Title -->
+        <div class="left-section">
+            <h1>Family Health<br>Education Services</h1>
+        </div>
 
-    <!-- Buttons for Fee Scale and Price Sheet -->
-    <div class="button-container">
-        <a href="fees.html" class="button fee-scale-button">Fee Scale</a>
-        <a href="pricesheet.html" class="button price-sheet-button">Price Sheet</a>
+        <!-- Right Section: Buttons -->
+        <div class="right-section">
+            <a href="fees.html" class="button">Fee Scale</a>
+            <a href="pricesheet.html" class="button">Price Sheet</a>
+        </div>
     </div>
-
-    <!-- Decorative Elements (Placeholder) -->
-    <div class="decorative-icon">🌟</div>
-    <div class="decorative-icon">☁️</div>
-    <div class="decorative-icon">🌈</div>
-    <div class="decorative-icon">🌞</div>
 
 </body>
 </html>
+
