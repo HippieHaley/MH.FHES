@@ -1,4 +1,4 @@
-            <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -46,7 +46,7 @@
         }
 
         /* Button Styling */
-        .fee-button, .price-button {
+        .price-button {
             display: inline-block;
             padding: 0.5rem 1.5rem;
             background-color: #f8c9f9;
@@ -97,11 +97,6 @@
             font-style: italic;
         }
 
-        /* Hide all tables by default */
-        .price-table {
-            display: none;
-        }
-
         /* Itemized list styling */
         .itemized-list {
             margin-bottom: 20px;
@@ -127,146 +122,33 @@
         <div class="left-side">
             <h1>Price Sheet</h1>
 
-            <!-- Buttons for Selecting Percentage -->
-            <div>
-                <button class="fee-button" onclick="showTable('table100')">100%</button>
-                <button class="fee-button" onclick="showTable('table75')">75%</button>
-                <button class="fee-button" onclick="showTable('table50')">50%</button>
-                <button class="fee-button" onclick="showTable('table25')">25%</button>
-            </div>
-
             <!-- Price Sheet Container -->
             <div class="price-sheet-container">
-                
+
                 <!-- Section Title: Services/Procedures -->
                 <h2>Services/Procedures</h2>
 
-                <!-- Price List for 100%, 75%, 50%, and 25% Fee Levels -->
-                <table id="table100" class="price-table">
+                <!-- Price Table for 100% Fee (default view) -->
+                <table id="table100">
                     <thead>
                         <tr>
                             <th>Service/Procedure</th>
-                            <th>100% Fee</th>
-                            <th>75% Fee</th>
-                            <th>50% Fee</th>
-                            <th>25% Fee</th>
+                            <th>Fee</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Existing Entries -->
                         <tr>
                             <td><span class="service-name">Limited-New</span><span class="cpt-code">99202</span></td>
                             <td><button class="price-button" onclick="addToTotal('Limited-New 100%', 170)">$170.00</button></td>
-                            <td><button class="price-button" onclick="addToTotal('Limited-New 75%', 127.5)">$127.50</button></td>
-                            <td><button class="price-button" onclick="addToTotal('Limited-New 50%', 85)">$85.00</button></td>
-                            <td><button class="price-button" onclick="addToTotal('Limited-New 25%', 42.5)">$42.50</button></td>
                         </tr>
                         <tr>
                             <td><span class="service-name">Intermediate-New</span><span class="cpt-code">99203</span></td>
                             <td><button class="price-button" onclick="addToTotal('Intermediate-New 100%', 240)">$240.00</button></td>
-                            <td><button class="price-button" onclick="addToTotal('Intermediate-New 75%', 180)">$180.00</button></td>
-                            <td><button class="price-button" onclick="addToTotal('Intermediate-New 50%', 120)">$120.00</button></td>
-                            <td><button class="price-button" onclick="addToTotal('Intermediate-New 25%', 60)">$60.00</button></td>
                         </tr>
-                        <tr>
-                            <td><span class="service-name">Comprehensive-New</span><span class="cpt-code">99204</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Comprehensive-New 100%', 365)">$365.00</button></td> <!-- 100% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Comprehensive-New 75%', 273.75)">$273.75</button></td> <!-- 75% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Comprehensive-New 50%', 182.5)">$182.50</button></td> <!-- 50% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Comprehensive-New 25%', 91.25)">$91.25</button></td> <!-- 25% Fee -->
-                        </tr>
-                        <tr>
-                            <td><span class="service-name">Preventive 12-17 New</span><span class="cpt-code">99384</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 12-17 New 100%', 306)">$306.00</button></td> <!-- 100% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 12-17 New 75%', 229.5)">$229.50</button></td> <!-- 75% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 12-17 New 50%', 153)">$153.00</button></td> <!-- 50% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 12-17 New 25%', 76.5)">$76.50</button></td> <!-- 25% Fee -->
-                        </tr>
-                        <tr>
-                            <td><span class="service-name">Preventive 18-39 New</span><span class="cpt-code">99385</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 18-39 New 100%', 296)">$296.00</button></td> <!-- 100% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 18-39 New 75%', 222)">$222.00</button></td> <!-- 75% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 18-39 New 50%', 148)">$148.00</button></td> <!-- 50% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 18-39 New 25%', 74)">$74.00</button></td> <!-- 25% Fee -->
-                        </tr>
-                        <tr>
-                            <td><span class="service-name">Preventive 40-64 New</span><span class="cpt-code">99386</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 40-64 New 100%', 343)">$343.00</button></td> <!-- 100% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 40-64 New 75%', 257.25)">$257.25</button></td> <!-- 75% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 40-64 New 50%', 171.5)">$171.50</button></td> <!-- 50% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 40-64 New 25%', 85.75)">$85.75</button></td> <!-- 25% Fee -->
-                        </tr>
-                        <tr>
-                            <td><span class="service-name">Minimal-Established</span><span class="cpt-code">99211</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Minimal-Established 100%', 51)">$51.00</button></td> <!-- 100% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Minimal-Established 75%', 38.25)">$38.25</button></td> <!-- 75% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Minimal-Established 50%', 25.5)">$25.50</button></td> <!-- 50% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Minimal-Established 25%', 12.75)">$12.75</button></td> <!-- 25% Fee -->
-                        </tr>
-                        <tr>
-                            <td><span class="service-name">Limited-Established</span><span class="cpt-code">99212</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Limited-Established 100%', 101)">$101.00</button></td> <!-- 100% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Limited-Established 75%', 75.75)">$75.75</button></td> <!-- 75% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Limited-Established 50%', 50.5)">$50.50</button></td> <!-- 50% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Limited-Established 25%', 25.25)">$25.25</button></td> <!-- 25% Fee -->
-                        </tr>
-                        <tr>
-                            <td><span class="service-name">Intermediate-Established</span><span class="cpt-code">99213</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Intermediate-Established 100%', 166)">$166.00</button></td> <!-- 100% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Intermediate-Established 75%', 124.5)">$124.50</button></td> <!-- 75% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Intermediate-Established 50%', 83)">$83.00</button></td> <!-- 50% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Intermediate-Established 25%', 41.5)">$41.50</button></td> <!-- 25% Fee -->
-                        </tr>
-                        <tr>
-                            <td><span class="service-name">Comprehensive-Established</span><span class="cpt-code">99214</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Comprehensive-Established 100%', 243)">$243.00</button></td> <!-- 100% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Comprehensive-Established 75%', 182.25)">$182.25</button></td> <!-- 75% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Comprehensive-Established 50%', 121.5)">$121.50</button></td> <!-- 50% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Comprehensive-Established 25%', 60.75)">$60.75</button></td> <!-- 25% Fee -->
-                        </tr>
-                        <tr>
-                            <td><span class="service-name">Preventive 12-17 Established</span><span class="cpt-code">99394</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 12-17 Established 100%', 262)">$262.00</button></td> <!-- 100% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 12-17 Established 75%', 196.5)">$196.50</button></td> <!-- 75% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 12-17 Established 50%', 131)">$131.00</button></td> <!-- 50% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 12-17 Established 25%', 65.5)">$65.50</button></td> <!-- 25% Fee -->
-                        </tr>
-                        <tr>
-                            <td><span class="service-name">Preventive 18-39 Established</span><span class="cpt-code">99395</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 18-39 Established 100%', 267)">$267.00</button></td> <!-- 100% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 18-39 Established 75%', 200.25)">$200.25</button></td> <!-- 75% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 18-39 Established 50%', 133.5)">$133.50</button></td> <!-- 50% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 18-39 Established 25%', 66.75)">$66.75</button></td> <!-- 25% Fee -->
-                        </tr>
-                        <!-- Continue adding all other Services/Procedures rows up to Preventive 40-64 Established -->
-                        <tr>
-                            <td><span class="service-name">Preventive 40-64 Established</span><span class="cpt-code">99396</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 40-64 Established 100%', 285)">$285.00</button></td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 40-64 Established 75%', 213.75)">$213.75</button></td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 40-64 Established 50%', 142.5)">$142.50</button></td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 40-64 Established 25%', 71.25)">$71.25</button></td>
-                        </tr>
+                        <!-- Add other 100% entries as needed -->
                     </tbody>
                 </table>
 
-                <!-- New Section Title: Procedures -->
-                <h2>Procedures</h2>
-
-                <!-- Procedures Table -->
-                <table id="procedures" class="price-table">
-                    <thead>
-                        <tr>
-                            <th>Procedure</th>
-                            <th>100% Fee</th>
-                            <th>75% Fee</th>
-                            <th>50% Fee</th>
-                            <th>25% Fee</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- New Procedure entries will go here -->
-                    </tbody>
-                </table>
             </div>
         </div>
 
@@ -283,19 +165,6 @@
 
     <script>
         let grandTotal = 0;
-
-        // Function to show only the selected price table
-        function showTable(tableId) {
-            // Hide all tables
-            const tables = document.querySelectorAll('.price-table');
-            tables.forEach(table => table.style.display = 'none');
-
-            // Show the selected table
-            document.getElementById(tableId).style.display = 'table';
-        }
-
-        // Initialize to show the 100% table by default
-        showTable('table100');
 
         // Function to add a service and price to the itemized list and grand total
         function addToTotal(service, price) {
@@ -330,3 +199,4 @@
 
 </body>
 </html>
+
