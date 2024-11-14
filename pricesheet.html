@@ -34,17 +34,22 @@
             padding-right: 20px;
         }
 
-        /* Right Side - Empty or Optional Content (1/3 of the screen) */
+        /* Right Side - Itemized List and Grand Total (1/3 of the screen) */
         .right-side {
             flex: 1;
-            /* You can add content here in the future if needed */
+            border: 2px solid #0000FF;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            text-align: left;
+            font-size: 1rem;
+            color: #333;
         }
 
         /* Button Styling */
-        .fee-button {
+        .fee-button, .price-button {
             display: inline-block;
             padding: 0.5rem 1.5rem;
-            margin: 10px;
             background-color: #f8c9f9;
             border: 1px solid #000;
             border-radius: 20px;
@@ -53,6 +58,7 @@
             font-weight: bold;
             font-size: 1rem;
             cursor: pointer;
+            margin: 5px;
         }
 
         /* Price Table Styling */
@@ -82,6 +88,12 @@
         /* Hide all tables by default */
         .price-table {
             display: none;
+        }
+
+        /* Itemized list styling */
+        .itemized-list {
+            margin-bottom: 20px;
+            font-size: 1rem;
         }
     </style>
 </head>
@@ -116,12 +128,12 @@
                         <tr>
                             <td>Limited-New</td>
                             <td>99202</td>
-                            <td>$170.00</td>
+                            <td><button class="price-button" onclick="addToTotal('Limited-New', 170)">\$170.00</button></td>
                         </tr>
                         <tr>
                             <td>Intermediate-New</td>
                             <td>99203</td>
-                            <td>$240.00</td>
+                            <td><button class="price-button" onclick="addToTotal('Intermediate-New', 240)">\$240.00</button></td>
                         </tr>
                         <!-- Add more rows as needed -->
                     </tbody>
@@ -140,98 +152,35 @@
                         <tr>
                             <td>Limited-New</td>
                             <td>99202</td>
-                            <td>$127.50</td>
+                            <td><button class="price-button" onclick="addToTotal('Limited-New', 127.5)">\$127.50</button></td>
                         </tr>
                         <tr>
                             <td>Intermediate-New</td>
                             <td>99203</td>
-                            <td>$180.00</td>
+                            <td><button class="price-button" onclick="addToTotal('Intermediate-New', 180)">\$180.00</button></td>
                         </tr>
                         <!-- Add more rows as needed -->
                     </tbody>
                 </table>
 
-                <!-- Price List for 50% -->
-                <table id="table50" class="price-table">
-                    <thead>
-                        <tr>
-                            <th>Service/Procedure</th>
-                            <th>CPT</th>
-                            <th>Fee</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Limited-New</td>
-                            <td>99202</td>
-                            <td>$85.00</td>
-                        </tr>
-                        <tr>
-                            <td>Intermediate-New</td>
-                            <td>99203</td>
-                            <td>$120.00</td>
-                        </tr>
-                        <!-- Add more rows as needed -->
-                    </tbody>
-                </table>
-
-                <!-- Price List for 25% -->
-                <table id="table25" class="price-table">
-                    <thead>
-                        <tr>
-                            <th>Service/Procedure</th>
-                            <th>CPT</th>
-                            <th>Fee</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Limited-New</td>
-                            <td>99202</td>
-                            <td>$42.50</td>
-                        </tr>
-                        <tr>
-                            <td>Intermediate-New</td>
-                            <td>99203</td>
-                            <td>$60.00</td>
-                        </tr>
-                        <!-- Add more rows as needed -->
-                    </tbody>
-                </table>
-
-                <!-- Price List for 0% -->
-                <table id="table0" class="price-table">
-                    <thead>
-                        <tr>
-                            <th>Service/Procedure</th>
-                            <th>CPT</th>
-                            <th>Fee</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Limited-New</td>
-                            <td>99202</td>
-                            <td>-</td>
-                        </tr>
-                        <tr>
-                            <td>Intermediate-New</td>
-                            <td>99203</td>
-                            <td>-</td>
-                        </tr>
-                        <!-- Add more rows as needed -->
-                    </tbody>
-                </table>
+                <!-- Add more tables for 50%, 25%, and 0% as needed -->
             </div>
         </div>
 
-        <!-- Right Side (1/3 of the screen, currently empty) -->
+        <!-- Right Side (Itemized List and Grand Total) -->
         <div class="right-side">
-            <!-- Optional: Add any content here for the right side of the screen -->
+            <h2>Selected Items</h2>
+            <div id="itemizedList" class="itemized-list">
+                <!-- Itemized list of services will appear here -->
+            </div>
+            <h2>Grand Total</h2>
+            <div id="grandTotal">\$0.00</div>
         </div>
     </div>
 
     <script>
+        let grandTotal = 0;
+
         // Function to show only the selected price table
         function showTable(tableId) {
             // Hide all tables
@@ -244,7 +193,21 @@
 
         // Initialize to show the 100% table by default
         showTable('table100');
+
+        // Function to add a service and price to the itemized list and grand total
+        function addToTotal(service, price) {
+            // Add the item to the itemized list
+            const itemizedList = document.getElementById('itemizedList');
+            const listItem = document.createElement('div');
+            listItem.textContent = `${service}: \$${price.toFixed(2)}`;
+            itemizedList.appendChild(listItem);
+
+            // Update the grand total
+            grandTotal += price;
+            document.getElementById('grandTotal').textContent = `\$${grandTotal.toFixed(2)}`;
+        }
     </script>
 
 </body>
 </html>
+
