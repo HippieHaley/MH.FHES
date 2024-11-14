@@ -232,31 +232,27 @@
                             <td><button class="price-button" onclick="addToTotal('Preventive 40-64 Established 50%', 142.5)">$142.50</button></td>
                             <td><button class="price-button" onclick="addToTotal('Preventive 40-64 Established 25%', 71.25)">$71.25</button></td>
                         </tr>
-                            </style>
-        </head>
-        <body>
+                    </thead>
+                <tbody>
+                    <div class="container">
+                        <!-- Left Side: Price Sheet -->
+                        <div class="left-side">
+                            <h1>Price Sheet</h1>
 
-            <div class="container">
-                <!-- Left Side: Price Sheet -->
-                <div class="left-side">
-                    <h1>Price Sheet</h1>
-
-                    <!-- Price Sheet Container -->
-                    <div class="price-sheet-container">
-                        <!-- Services/Procedures Table -->
-                        <table id="ProceduresTable">
-                            <thead>
-                                <tr>
-                                    <th>Procedure</th>
-                                        <th>100%</th>
-                                        <th>75%</th>
-                                        <th>50%</th>
-                                        <th>25%</th>
-                                     </tr>
-                                </thead>
-                              <tbody>
-
-                                </table>
+                            <!-- Price Sheet Container -->
+                            <div class="price-sheet-container">
+                            <!-- Procedures Table -->
+                                <table id="procedures" class="price-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Procedure</th>
+                                            <th>100% Fee</th>
+                                            <th>75% Fee</th>
+                                            <th>50% Fee</th>
+                                            <th>25% Fee</th>
+                                        </tr>
+                                    </thead>
+                                <tbody>
                                      <tr>
                                         <td><span class="service-name">IUD Insertion</span><span class="cpt-code">58300</span></td>
                                         <td><button class="price-button" onclick="addToTotal('IUD Insertion 100%', 178)">$178.00</button></td>
@@ -314,7 +310,7 @@
                                         <td><button class="price-button" onclick="addToTotal('Implant Insertion/Removal 25%', 119.5)">$119.50</button></td>
                                     </tr>
 
-                                  </tbody>
+                                  </tr>
                               </table>
         <!-- Right Side (Itemized List and Grand Total) -->
         <div class="right-side">
