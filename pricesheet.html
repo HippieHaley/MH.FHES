@@ -119,22 +119,20 @@
         }
     </style>
 </head>
- <body>
-     <div class="container">
-         <div class="left-side">
-             <h1>Price Sheet</h1>
-             <table id="Service/Procedures" class="price-table">
-                 <thead>
-                     <tr>
-                         <th>Service/Procedure</th>
-                         <th>100%</th>
-                         <th>75%</th>
-                         <th>50%</th>
-                         <th>25%</th>
-                     </tr>
-                 </thead>
-                 <tbody>
-                     <tr>
+ <tbody>
+
+               <table id="Services/Procedure" class="price-table">
+                    <thead>
+                        <tr>
+                            <th>Services/Procedure</th>
+                            <th>100% Fee</th>
+                            <th>75% Fee</th>
+                            <th>50% Fee</th>
+                            <th>25% Fee</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
                          <td><span class="service-name">Limited-New</span><span class="cpt-code">99202</span></td>
                          <td><button class="price-button" onclick="addToTotal('Limited-New 100%', 170)" >$170.00</button></td>
                          <td><button class="price-button" onclick="addToTotal('Limited-New 75%', 127.5)" >$127.50</button></td>
@@ -301,6 +299,7 @@
     <td><button class="price-button" onclick="addToTotal('Venipuncture 50%', 3.5)">$3.50</button></td>
     <td><button class="price-button" onclick="addToTotal('Venipuncture 25%', 1.75)">$1.75</button></td>
 </tr>
+</thead>
 <tbody>
 
                <table id="Labs" class="price-table">
@@ -614,5 +613,4 @@
         showTable('Labs'); // Initialize the default table
     });
 </script>
-
 
