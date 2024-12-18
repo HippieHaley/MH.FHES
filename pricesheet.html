@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26,6 +26,10 @@
             display: flex;
             width: 100%;
             max-width: 1200px;
+            background-color: #b0e4fc; /* White background */
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(233, 208, 218, 0.1); /* Optional shadow */
         }
 
         /* Left Side - Price Sheet (2/3 of the screen) */
@@ -300,8 +304,8 @@
                             <td><button class="price-button" onclick="addToTotal('Venipuncture 50%', 3.5)">$3.50</button></td>
                             <td><button class="price-button" onclick="addToTotal('Venipuncture 25%', 1.75)">$1.75</button></td>
                         </tr>
-                    </thead>
-                    <tbody>
+                     </tbody>
+                 </table> 
                <table id="Labs" class="price-table">
                     <thead>
                         <tr>
@@ -405,8 +409,8 @@
                                 <td><button class="price-button" onclick="addToTotal('WetMount/GramStain 50%', 7.5)">$7.50</button></td>
                                 <td><button class="price-button" onclick="addToTotal('WetMount/GramStain 25%', 3.75)">$3.75</button></td>
                             </tr>
-                        </thead>
-                        <tbody>
+                        </tbody>
+               </table>
                 <table id="Supplies" class="price-table">
                         <thead>
                             <tr>
@@ -565,6 +569,7 @@
                                 <td><button class="price-button" onclick="addToTotal('Vilbra 50%', 2.5)">$2.50</button></td>
                                 <td><button class="price-button" onclick="addToTotal('Vilbra 25%', 1.25)">$1.25</button></td>
                             </tr>
+                            
 <!-- Right Side (Itemized List and Grand Total) -->
 <div class="right-side">
     <h2>Selected Items</h2>
@@ -574,7 +579,7 @@
     <h2>Grand Total</h2>
     <div id="grandTotal">$0.00</div>
 </div>
-
+ </tbody>
 <script>
     let grandTotal = 0;
 
