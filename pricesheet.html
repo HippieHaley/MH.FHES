@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -121,351 +121,295 @@
 </head>
  <body>
      <div class="container">
-     <!-- Left Side: Price Sheet -->
-    <div class="left-side">
-         <h1>Price Sheet</h1>
+         <!-- Left Side: Price Sheet -->
+         <div class="left-side">
+             <h1>Price Sheet</h1>
 
-         <!-- Price Sheet Container -->
-         <div class="price-sheet-container">
-             <!-- Service/ Procedures Table -->
-              <table id="Service/ Procedures" class="price-table">
-            <thead>
+             <!-- Service/Procedures Table -->
+             <table id="Service/Procedures" class="price-table">
+                 <thead>
+                     <tr>
+                         <th>Service/Procedure</th>
+                         <th>100%</th>
+                         <th>75%</th>
+                         <th>50%</th>
+                         <th>25%</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     <tr>
+                         <td><span class="service-name">Limited-New</span><span class="cpt-code">99202</span></td>
+                         <td><button class="price-button" onclick="addToTotal('Limited-New 100%', 170)" >$170.00</button></td>
+                         <td><button class="price-button" onclick="addToTotal('Limited-New 75%', 127.5)" >$127.50</button></td>
+                         <td><button class="price-button" onclick="addToTotal('Limited-New 50%', 85)" >$85.00</button></td>
+                         <td><button class="price-button" onclick="addToTotal('Limited-New 25%', 42.5)" >$42.50</button></td>
+                     </tr>
+                     <tr>
+                         <td><span class="service-name">Intermediate-New</span><span class="cpt-code">99203</span></td>
+                         <td><button class="price-button" onclick="addToTotal('Intermediate-New 100%', 240)" >$240.00</button></td>
+                         <td><button class="price-button" onclick="addToTotal('Intermediate-New 75%', 180)" >$180.00</button></td>
+                         <td><button class="price-button" onclick="addToTotal('Intermediate-New 50%', 120)" >$120.00</button></td>
+                         <td><button class="price-button" onclick="addToTotal('Intermediate-New 25%', 60)" >$60.00</button></td>
+                     </tr>
+                     <tr>
+                         <td><span class="service-name">Comprehensive-New</span><span class="cpt-code">99204</span></td>
+                         <td><button class="price-button" onclick="addToTotal('Comprehensive-New 100%', 365)" >$365.00</button></td>
+                         <td><button class="price-button" onclick="addToTotal('Comprehensive-New 75%', 273.75)" >$273.75</button></td>
+                         <td><button class="price-button" onclick="addToTotal('Comprehensive-New 50%', 182.5)" >$182.50</button></td>
+                         <td><button class="price-button" onclick="addToTotal('Comprehensive-New 25%', 91.25)" >$91.25</button></td>
+                     </tr>
+                     <tr>
+                         <td><span class="service-name">Preventive 12-17 New</span><span class="cpt-code">99384</span></td>
+                         <td><button class="price-button" onclick="addToTotal('Preventive 12-17 New 100%', 306)" >$306.00</button></td>
+                         <td><button class="price-button" onclick="addToTotal('Preventive 12-17 New 75%', 229.5)" >$229.50</button></td>
+                         <td><button class="price-button" onclick="addToTotal('Preventive 12-17 New 50%', 153)" >$153.00</button></td>
+                         <td><button class="price-button" onclick="addToTotal('Preventive 12-17 New 25%', 76.5)" >$76.50</button></td>
+                     </tr>
+                     <tr>
+                         <td><span class="service-name">Preventive 40-64 Established</span><span class="cpt-code">99396</span></td>
+                         <td><button class="price-button" onclick="addToTotal('Preventive 40-64 Established 100%', 285)" >$285.00</button></td>
+                         <td><button class="price-button" onclick="addToTotal('Preventive 40-64 Established 75%', 213.75)" >$213.75</button></td>
+                         <td><button class="price-button" onclick="addToTotal('Preventive 40-64 Established 50%', 142.5)" >$142.50</button></td>
+                         <td><button class="price-button" onclick="addToTotal('Preventive 40-64 Established 25%', 71.25)" >$71.25</button></td>
+                     </tr>
+                 </tbody>
+             </table>
 
-                        <tr>
-                            <th>Service/Procedure</th>
-                                <th>100%</th>
-                                <th>75%</th>
-                                <th>50%</th>
-                                <th>25%</th>
-                             </tr>
-                        </thead>
-                    <tbody>
+             <!-- Price Sheet Container -->
+             <div class="price-sheet-container">
+                 <!-- Procedures Table -->
+                 <table id="procedures" class="price-table">
+                     <thead>
                          <tr>
-                            <td><span class="service-name">Limited-New</span><span class="cpt-code">99202</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Limited-New 100%', 170)">$170.00</button></td>
-                            <td><button class="price-button" onclick="addToTotal('Limited-New 75%', 127.5)">$127.50</button></td>
-                            <td><button class="price-button" onclick="addToTotal('Limited-New 50%', 85)">$85.00</button></td>
-                            <td><button class="price-button" onclick="addToTotal('Limited-New 25%', 42.5)">$42.50</button></td>
-                        </tr>
+                             <th>Procedure</th>
+                             <th>100% Fee</th>
+                             <th>75% Fee</th>
+                             <th>50% Fee</th>
+                             <th>25% Fee</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         <tr>
+                             <td><span class="service-name">IUD Insertion</span><span class="cpt-code">58300</span></td>
+                             <td><button class="price-button" onclick="addToTotal('IUD Insertion 100%', 178)">$178.00</button></td>
+                             <td><button class="price-button" onclick="addToTotal('IUD Insertion 75%', 133.5)">$133.50</button></td>
+                             <td><button class="price-button" onclick="addToTotal('IUD Insertion 50%', 89)">$89.00</button></td>
+                             <td><button class="price-button" onclick="addToTotal('IUD Insertion 25%', 44.5)">$44.50</button></td>
+                         </tr>
+                         <tr>
+                             <td><span class="service-name">IUD Removal</span><span class="cpt-code">58301</span></td>
+                             <td><button class="price-button" onclick="addToTotal('IUD Removal 100%', 211)">$211.00</button></td>
+                             <td><button class="price-button" onclick="addToTotal('IUD Removal 75%', 158.25)">$158.25</button></td>
+                             <td><button class="price-button" onclick="addToTotal('IUD Removal 50%', 105.5)">$105.50</button></td>
+                             <td><button class="price-button" onclick="addToTotal('IUD Removal 25%', 52.75)">$52.75</button></td>
+                         </tr>
+                         <tr>
+                             <td><span class="service-name">Female Genital Wart Treatment</span><span class="cpt-code">56501</span></td>
+                             <td><button class="price-button" onclick="addToTotal('Female Genital Wart Treatment 100%', 323)">$323.00</button></td>
+                             <td><button class="price-button" onclick="addToTotal('Female Genital Wart Treatment 75%', 242.25)">$242.25</button></td>
+                             <td><button class="price-button" onclick="addToTotal('Female Genital Wart Treatment 50%', 161.5)">$161.50</button></td>
+                             <td><button class="price-button" onclick="addToTotal('Female Genital Wart Treatment 25%', 80.75)">$80.75</button></td>
+                         </tr>
+                         <tr>
+		<tr>
+    <td><span class="service-name">Male Genital Wart Treatment</span><span class="cpt-code">54050</span></td>
+    <td><button class="price-button" onclick="addToTotal('Male Genital Wart Treatment 100%', 300)">$300.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Male Genital Wart Treatment 75%', 225)">$225.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Male Genital Wart Treatment 50%', 150)">$150.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Male Genital Wart Treatment 25%', 75)">$75.00</button></td>
+</tr>
+<tr>
+    <td><span class="service-name">Injection Fee</span><span class="cpt-code">96372</span></td>
+    <td><button class="price-button" onclick="addToTotal('Injection Fee 100%', 38)">$38.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Injection Fee 75%', 28.5)">$28.50</button></td>
+    <td><button class="price-button" onclick="addToTotal('Injection Fee 50%', 19)">$19.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Injection Fee 25%', 9.5)">$9.50</button></td>
+</tr>
+<tr>
+    <td><span class="service-name">Implant Insertion</span><span class="cpt-code">11981</span></td>
+    <td><button class="price-button" onclick="addToTotal('Implant Insertion 100%', 316)">$316.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Implant Insertion 75%', 237)">$237.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Implant Insertion 50%', 158)">$158.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Implant Insertion 25%', 79)">$79.00</button></td>
+</tr>
+<tr>
+    <td><span class="service-name">Implant Removal</span><span class="cpt-code">11982</span></td>
+    <td><button class="price-button" onclick="addToTotal('Implant Removal 100%', 349)">$349.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Implant Removal 75%', 261.75)">$261.75</button></td>
+    <td><button class="price-button" onclick="addToTotal('Implant Removal 50%', 174.5)">$174.50</button></td>
+    <td><button class="price-button" onclick="addToTotal('Implant Removal 25%', 87.25)">$87.25</button></td>
+</tr>
+<tr>
+    <td><span class="service-name">Implant Insertion/Removal</span><span class="cpt-code">11983</span></td>
+    <td><button class="price-button" onclick="addToTotal('Implant Insertion/Removal 100%', 478)">$478.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Implant Insertion/Removal 75%', 358.5)">$358.50</button></td>
+    <td><button class="price-button" onclick="addToTotal('Implant Insertion/Removal 50%', 239)">$239.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Implant Insertion/Removal 25%', 119.5)">$119.50</button></td>
+</tr>
+<tr>
+    <td><span class="service-name">Vasectomy</span><span class="cpt-code">55250</span></td>
+    <td><button class="price-button" onclick="addToTotal('Vasectomy 100%', 847)">$847.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Vasectomy 75%', 635.25)">$635.25</button></td>
+    <td><button class="price-button" onclick="addToTotal('Vasectomy 50%', 423.5)">$423.50</button></td>
+    <td><button class="price-button" onclick="addToTotal('Vasectomy 25%', 211.75)">$211.75</button></td>
+</tr>
+<tr>
+    <td><span class="service-name">Venipuncture</span><span class="cpt-code">36415</span></td>
+    <td><button class="price-button" onclick="addToTotal('Venipuncture 100%', 7)">$7.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Venipuncture 75%', 5.25)">$5.25</button></td>
+    <td><button class="price-button" onclick="addToTotal('Venipuncture 50%', 3.5)">$3.50</button></td>
+    <td><button class="price-button" onclick="addToTotal('Venipuncture 25%', 1.75)">$1.75</button></td>
+</tr>
+</thead>
+<tbody>
+    <div class="container">
+        <!-- Left Side: Price Sheet -->
+        <div class="left-side">
+            <h1>Price Sheet</h1>
+
+            <!-- Price Sheet Container -->
+            <div class="price-sheet-container">
+                <!-- Labs Table -->
+                <table id="Labs" class="price-table">
+                    <thead>
                         <tr>
-                            <td><span class="service-name">Intermediate-New</span><span class="cpt-code">99203</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Intermediate-New 100%', 240)">$240.00</button></td>
-                            <td><button class="price-button" onclick="addToTotal('Intermediate-New 75%', 180)">$180.00</button></td>
-                            <td><button class="price-button" onclick="addToTotal('Intermediate-New 50%', 120)">$120.00</button></td>
-                            <td><button class="price-button" onclick="addToTotal('Intermediate-New 25%', 60)">$60.00</button></td>
-                        </tr>
-                        <tr>
-                            <td><span class="service-name">Comprehensive-New</span><span class="cpt-code">99204</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Comprehensive-New 100%', 365)">$365.00</button></td> <!-- 100% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Comprehensive-New 75%', 273.75)">$273.75</button></td> <!-- 75% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Comprehensive-New 50%', 182.5)">$182.50</button></td> <!-- 50% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Comprehensive-New 25%', 91.25)">$91.25</button></td> <!-- 25% Fee -->
-                        </tr>
-                        <tr>
-                            <td><span class="service-name">Preventive 12-17 New</span><span class="cpt-code">99384</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 12-17 New 100%', 306)">$306.00</button></td> <!-- 100% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 12-17 New 75%', 229.5)">$229.50</button></td> <!-- 75% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 12-17 New 50%', 153)">$153.00</button></td> <!-- 50% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 12-17 New 25%', 76.5)">$76.50</button></td> <!-- 25% Fee -->
-                        </tr>
-                        <tr>
-                            <td><span class="service-name">Preventive 18-39 New</span><span class="cpt-code">99385</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 18-39 New 100%', 296)">$296.00</button></td> <!-- 100% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 18-39 New 75%', 222)">$222.00</button></td> <!-- 75% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 18-39 New 50%', 148)">$148.00</button></td> <!-- 50% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 18-39 New 25%', 74)">$74.00</button></td> <!-- 25% Fee -->
-                        </tr>
-                        <tr>
-                            <td><span class="service-name">Preventive 40-64 New</span><span class="cpt-code">99386</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 40-64 New 100%', 343)">$343.00</button></td> <!-- 100% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 40-64 New 75%', 257.25)">$257.25</button></td> <!-- 75% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 40-64 New 50%', 171.5)">$171.50</button></td> <!-- 50% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 40-64 New 25%', 85.75)">$85.75</button></td> <!-- 25% Fee -->
-                        </tr>
-                        <tr>
-                            <td><span class="service-name">Minimal-Established</span><span class="cpt-code">99211</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Minimal-Established 100%', 51)">$51.00</button></td> <!-- 100% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Minimal-Established 75%', 38.25)">$38.25</button></td> <!-- 75% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Minimal-Established 50%', 25.5)">$25.50</button></td> <!-- 50% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Minimal-Established 25%', 12.75)">$12.75</button></td> <!-- 25% Fee -->
-                        </tr>
-                        <tr>
-                            <td><span class="service-name">Limited-Established</span><span class="cpt-code">99212</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Limited-Established 100%', 101)">$101.00</button></td> <!-- 100% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Limited-Established 75%', 75.75)">$75.75</button></td> <!-- 75% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Limited-Established 50%', 50.5)">$50.50</button></td> <!-- 50% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Limited-Established 25%', 25.25)">$25.25</button></td> <!-- 25% Fee -->
-                        </tr>
-                        <tr>
-                            <td><span class="service-name">Intermediate-Established</span><span class="cpt-code">99213</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Intermediate-Established 100%', 166)">$166.00</button></td> <!-- 100% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Intermediate-Established 75%', 124.5)">$124.50</button></td> <!-- 75% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Intermediate-Established 50%', 83)">$83.00</button></td> <!-- 50% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Intermediate-Established 25%', 41.5)">$41.50</button></td> <!-- 25% Fee -->
-                        </tr>
-                        <tr>
-                            <td><span class="service-name">Comprehensive-Established</span><span class="cpt-code">99214</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Comprehensive-Established 100%', 243)">$243.00</button></td> <!-- 100% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Comprehensive-Established 75%', 182.25)">$182.25</button></td> <!-- 75% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Comprehensive-Established 50%', 121.5)">$121.50</button></td> <!-- 50% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Comprehensive-Established 25%', 60.75)">$60.75</button></td> <!-- 25% Fee -->
-                        </tr>
-                        <tr>
-                            <td><span class="service-name">Preventive 12-17 Established</span><span class="cpt-code">99394</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 12-17 Established 100%', 262)">$262.00</button></td> <!-- 100% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 12-17 Established 75%', 196.5)">$196.50</button></td> <!-- 75% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 12-17 Established 50%', 131)">$131.00</button></td> <!-- 50% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 12-17 Established 25%', 65.5)">$65.50</button></td> <!-- 25% Fee -->
-                        </tr>
-                        <tr>
-                            <td><span class="service-name">Preventive 18-39 Established</span><span class="cpt-code">99395</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 18-39 Established 100%', 267)">$267.00</button></td> <!-- 100% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 18-39 Established 75%', 200.25)">$200.25</button></td> <!-- 75% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 18-39 Established 50%', 133.5)">$133.50</button></td> <!-- 50% Fee -->
-                            <td><button class="price-button" onclick="addToTotal('Preventive 18-39 Established 25%', 66.75)">$66.75</button></td> <!-- 25% Fee -->
-                        </tr>
-                        <!-- Continue adding all other Services/Procedures rows up to Preventive 40-64 Established -->
-                        <tr>
-                            <td><span class="service-name">Preventive 40-64 Established</span><span class="cpt-code">99396</span></td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 40-64 Established 100%', 285)">$285.00</button></td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 40-64 Established 75%', 213.75)">$213.75</button></td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 40-64 Established 50%', 142.5)">$142.50</button></td>
-                            <td><button class="price-button" onclick="addToTotal('Preventive 40-64 Established 25%', 71.25)">$71.25</button></td>
+                            <th>Labs</th>
+                            <th>100% Fee</th>
+                            <th>75% Fee</th>
+                            <th>50% Fee</th>
+                            <th>25% Fee</th>
                         </tr>
                     </thead>
-                <tbody>
-                    <div class="container">
-
-                            <!-- Price Sheet Container -->
-                            <div class="price-sheet-container">
-                            <!-- Procedures Table -->
-                                <table id="procedures" class="price-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Procedure</th>
-                                            <th>100% Fee</th>
-                                            <th>75% Fee</th>
-                                            <th>50% Fee</th>
-                                            <th>25% Fee</th>
-                                        </tr>
-                                    </thead>
-                                <tbody>
-                                     <tr>
-                                        <td><span class="service-name">IUD Insertion</span><span class="cpt-code">58300</span></td>
-                                        <td><button class="price-button" onclick="addToTotal('IUD Insertion 100%', 178)">$178.00</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('IUD Insertion 75%', 133.5)">$133.50</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('IUD Insertion 50%', 89)">$89.00</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('IUD Insertion 25%', 44.5)">$44.50</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="service-name">IUD Removal</span><span class="cpt-code">58301</span></td>
-                                        <td><button class="price-button" onclick="addToTotal('IUD Removal 100%', 211)">$211.00</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('IUD Removal 75%', 158.25)">$158.25</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('IUD Removal 50%', 105.5)">$105.50</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('IUD Removal 25%', 52.75)">$52.75</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="service-name">Female Genital Wart Treatment</span><span class="cpt-code">56501</span></td>
-                                        <td><button class="price-button" onclick="addToTotal('Female Genital Wart Treatment 100%', 323)">$323.00</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('Female Genital Wart Treatment 75%', 242.25)">$242.25</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('Female Genital Wart Treatment 50%', 161.5)">$161.50</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('Female Genital Wart Treatment 25%', 80.75)">$80.75</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="service-name">Male Genital Wart Treatment</span><span class="cpt-code">54050</span></td>
-                                        <td><button class="price-button" onclick="addToTotal('Male Genital Wart Treatment 100%', 300)">$300.00</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('Male Genital Wart Treatment 75%', 225)">$225.00</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('Male Genital Wart Treatment 50%', 150)">$150.00</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('Male Genital Wart Treatment 25%', 75)">$75.00</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="service-name">Injection Fee</span><span class="cpt-code">96372</span></td>
-                                        <td><button class="price-button" onclick="addToTotal('Injection Fee 100%', 38)">$38.00</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('Injection Fee 75%', 28.5)">$28.50</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('Injection Fee 50%', 19)">$19.00</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('Injection Fee 25%', 9.5)">$9.50</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="service-name">Implant Insertion</span><span class="cpt-code">11981</span></td>
-                                        <td><button class="price-button" onclick="addToTotal('Implant Insertion 100%', 316)">$316.00</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('Implant Insertion 75%', 237)">$237.00</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('Implant Insertion 50%', 158)">$158.00</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('Implant Insertion 25%', 79)">$79.00</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="service-name">Implant Removal</span><span class="cpt-code">11982</span></td>
-                                        <td><button class="price-button" onclick="addToTotal('Implant Removal 100%', 349)">$349.00</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('Implant Removal 75%', 261.75)">$261.75</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('Implant Removal 50%', 174.5)">$174.50</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('Implant Removal 25%', 87.25)">$87.25</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="service-name">Implant Insertion/Removal</span><span class="cpt-code">11983</span></td>
-                                        <td><button class="price-button" onclick="addToTotal('Implant Insertion/Removal 100%', 478)">$478.00</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('Implant Insertion/Removal 75%', 358.5)">$358.50</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('Implant Insertion/Removal 50%', 239)">$239.00</button></td>
-                                        <td><button class="price-button" onclick="addToTotal('Implant Insertion/Removal 25%', 119.5)">$119.50</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="service-name">Vasectomy</span><span class="cpt-code">55250</span></td>
-                                        <td><button class="price-button" onclick="addToTotal(‘Vasectomy 100%', 323)">$847.00</button></td>
-                                        <td><button class="price-button" onclick="addToTotal(‘Vasectomy 75%', 242.25)">$635.25</button></td>
-                                        <td><button class="price-button" onclick="addToTotal(‘Vasectomy 50%', 161.5)">$423.50</button></td>
-                                        <td><button class="price-button" onclick="addToTotal(‘Vasectomy 25%', 80.75)">$211.75</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="service-name">Venipuncture</span><span class="cpt-code">36415</span></td>
-                                        <td><button class="price-button" onclick="addToTotal(‘Venipuncture 100%', 7)">$7.00</button></td>
-                                        <td><button class="price-button" onclick="addToTotal(‘Venipuncture 75%', 5.25)">$5.25</button></td>
-                                        <td><button class="price-button" onclick="addToTotal(‘Venipuncture 50%', 3.50)">$3.50</button></td>
-                                        <td><button class="price-button" onclick="addToTotal(‘Venipuncture 25%', 1.75)">$1.75</button></td>
-                                    </tr>
-                                        </thead>
-                                            <tbody>
-                                                <div class="container">
-                                                <!-- Left Side: Price Sheet -->
-                                                <div class="left-side">
-                                                <h1>Price Sheet</h1>
-
-                                                <!-- Price Sheet Container -->
-                                                <div class="price-sheet-container">
-                                            <!-- Labs Table -->
-                                            <table id="Labs" class="price-table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Labs</th>
-                                                        <th>100% Fee</th>
-                                                        <th>75% Fee</th>
-                                                        <th>50% Fee</th>
-                                                        <th>25% Fee</th>
-                                                    </tr>
-                                                </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td><span class="service-name">Chlamydia</span><span class="cpt-code">87491</span></td>
-                                                                <td>
-                                                                    <button class="price-button" onclick="addToTotal('Chlamydia 100%', 15)">$15.00</button>
-                                                                    <button class="price-button" onclick="updatePrice('Chlamydia 100% x2', 30)">x2</button> <!-- Times 2 -->
-                                                                    <button class="price-button" onclick="updatePrice('Chlamydia 100% x3', 45)">x3</button> <!-- Times 3 -->
-                                                                </td> <!-- 100% Fee -->
-                                                                <td>
-                                                                    <button class="price-button" onclick="addToTotal('Chlamydia 75%', 11.25)">$11.25</button>
-                                                                    <button class="price-button" onclick="updatePrice('Chlamydia 75% x2', 22.5)">x2</button> <!-- Times 2 -->
-                                                                    <button class="price-button" onclick="updatePrice('Chlamydia 75% x3', 33.75)">x3</button> <!-- Times 3 -->
-                                                                </td> <!-- 75% Fee -->
-                                                                <td>
-                                                                    <button class="price-button" onclick="addToTotal('Chlamydia 50%', 7.5)">$7.50</button>
-                                                                    <button class="price-button" onclick="updatePrice('Chlamydia 50% x2', 15)">x2</button> <!-- Times 2 -->
-                                                                    <button class="price-button" onclick="updatePrice('Chlamydia 50% x3', 22.5)">x3</button> <!-- Times 3 -->
-                                                                </td> <!-- 50% Fee -->
-                                                                <td>
-                                                                    <button class="price-button" onclick="addToTotal('Chlamydia 25%', 3.75)">$3.75</button>
-                                                                    <button class="price-button" onclick="updatePrice('Chlamydia 25% x2', 7.5)">x2</button> <!-- Times 2 -->
-                                                                    <button class="price-button" onclick="updatePrice('Chlamydia 25% x3', 11.25)">x3</button> <!-- Times 3 -->
-                                                                </td> <!-- 25% Fee -->
-                                                            </tr>
-
-                                     <tr>
-                                  </tr>
-                              </table>
-        <!-- Right Side (Itemized List and Grand Total) -->
-        <div class="right-side">
-            <h2>Selected Items</h2>
-            <div id="itemizedList" class="itemized-list">
-                <!-- Itemized list of services will appear here -->
+                    <tbody>
+                        <tr>
+                            <td><span class="service-name">Chlamydia</span><span class="cpt-code">87491</span></td>
+                            <td>
+                                <button class="price-button" onclick="addToTotal('Chlamydia 100%', 15)">$15.00</button>
+                                <button class="price-button" onclick="updatePrice('Chlamydia 100% x2', 30)">x2</button> <!-- Times 2 -->
+                                <button class="price-button" onclick="updatePrice('Chlamydia 100% x3', 45)">x3</button> <!-- Times 3 -->
+                            </td>
+                            <td>
+                                <button class="price-button" onclick="addToTotal('Chlamydia 75%', 11.25)">$11.25</button>
+                                <button class="price-button" onclick="updatePrice('Chlamydia 75% x2', 22.5)">x2</button> <!-- Times 2 -->
+                                <button class="price-button" onclick="updatePrice('Chlamydia 75% x3', 33.75)">x3</button> <!-- Times 3 -->
+                            </td>
+                            <td>
+                                <button class="price-button" onclick="addToTotal('Chlamydia 50%', 7.5)">$7.50</button>
+                                <button class="price-button" onclick="updatePrice('Chlamydia 50% x2', 15)">x2</button> <!-- Times 2 -->
+                                <button class="price-button" onclick="updatePrice('Chlamydia 50% x3', 22.5)">x3</button> <!-- Times 3 -->
+                            </td>
+                            <td>
+                                <button class="price-button" onclick="addToTotal('Chlamydia 25%', 3.75)">$3.75</button>
+                                <button class="price-button" onclick="updatePrice('Chlamydia 25% x2', 7.5)">x2</button> <!-- Times 2 -->
+                                <button class="price-button" onclick="updatePrice('Chlamydia 25% x3', 11.25)">x3</button> <!-- Times 3 -->
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <h2>Grand Total</h2>
-            <div id="grandTotal">$0.00</div>
         </div>
     </div>
+<tr>
+    <td><span class="service-name">Male Genital Wart Treatment</span><span class="cpt-code">54050</span></td>
+    <td><button class="price-button" onclick="addToTotal('Male Genital Wart Treatment 100%', 300)">$300.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Male Genital Wart Treatment 75%', 225)">$225.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Male Genital Wart Treatment 50%', 150)">$150.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Male Genital Wart Treatment 25%', 75)">$75.00</button></td>
+</tr>
+<!-- Other table rows -->
 
-    <script>
-        let grandTotal = 0;
+<div class="container">
+    <!-- Left Side: Price Sheet -->
+    <div class="left-side">
+        <h1>Price Sheet</h1>
+        <div class="price-sheet-container">
+            <!-- Labs Table -->
+            <table id="Labs" class="price-table">
+                <thead>
+                    <tr>
+                        <th>Labs</th>
+                        <th>100% Fee</th>
+                        <th>75% Fee</th>
+                        <th>50% Fee</th>
+                        <th>25% Fee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="service-name">Chlamydia</span><span class="cpt-code">87491</span></td>
+                        <td>
+                            <button class="price-button" onclick="addToTotal('Chlamydia 100%', 15)">$15.00</button>
+                            <button class="price-button" onclick="updatePrice('Chlamydia 100% x2', 30)">x2</button>
+                            <button class="price-button" onclick="updatePrice('Chlamydia 100% x3', 45)">x3</button>
+                        </td>
+                        <td>
+                            <button class="price-button" onclick="addToTotal('Chlamydia 75%', 11.25)">$11.25</button>
+                            <button class="price-button" onclick="updatePrice('Chlamydia 75% x2', 22.5)">x2</button>
+                            <button class="price-button" onclick="updatePrice('Chlamydia 75% x3', 33.75)">x3</button>
+                        </td>
+                        <td>
+                            <button class="price-button" onclick="addToTotal('Chlamydia 50%', 7.5)">$7.50</button>
+                            <button class="price-button" onclick="updatePrice('Chlamydia 50% x2', 15)">x2</button>
+                            <button class="price-button" onclick="updatePrice('Chlamydia 50% x3', 22.5)">x3</button>
+                        </td>
+                        <td>
+                            <button class="price-button" onclick="addToTotal('Chlamydia 25%', 3.75)">$3.75</button>
+                            <button class="price-button" onclick="updatePrice('Chlamydia 25% x2', 7.5)">x2</button>
+                            <button class="price-button" onclick="updatePrice('Chlamydia 25% x3', 11.25)">x3</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-        // Function to add a service and price to the itemized list and grand total
-        function addToTotal(service, price) {
-            // Create a new div for the item
-            const itemizedList = document.getElementById('itemizedList');
-            const listItem = document.createElement('div');
-            listItem.className = 'list-item';
-            listItem.textContent = `${service}: $${price.toFixed(2)}`;
-        function updatePrice(service, price) {
-            // Add to the itemized list and update the grand total with the new price
-            addToTotal(service, price);
-            // Create a remove button for each item
-            const removeButton = document.createElement('button');
-            removeButton.textContent = "X";
-            removeButton.className = 'remove-button';
-            removeButton.onclick = function() {
-                // Remove the item from the itemized list
-                itemizedList.removeChild(listItem);
+<!-- Right Side (Itemized List and Grand Total) -->
+<div class="right-side">
+    <h2>Selected Items</h2>
+    <div id="itemizedList" class="itemized-list">
+        <!-- Itemized list of services will appear here -->
+    </div>
+    <h2>Grand Total</h2>
+    <div id="grandTotal">$0.00</div>
+</div>
 
-                // Subtract the price from the grand total
-                grandTotal -= price;
-                document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
-            };
+<script>
+    let grandTotal = 0;
 
-            // Add the remove button to the list item, then add the item to the list
-            listItem.prepend(removeButton);
-            itemizedList.appendChild(listItem);
+    function addToTotal(service, price) {
+        const itemizedList = document.getElementById('itemizedList');
+        const listItem = document.createElement('div');
+        listItem.className = 'list-item';
+        listItem.textContent = `${service}: $${price.toFixed(2)}`;
 
-            // Update the grand total
-            grandTotal += price;
+        const removeButton = document.createElement('button');
+        removeButton.textContent = "X";
+        removeButton.className = 'remove-button';
+        removeButton.onclick = function () {
+            itemizedList.removeChild(listItem);
+            grandTotal -= price;
             document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
-        }
-    </script>
-     <script>
-        let grandTotal = 0;
+        };
 
-            // Function to show only the selected price table
-            function showTable(tableId) {
-                // Hide all tables
-                const tables = document.querySelectorAll('.price-table');
-                tables.forEach(table => table.style.display = 'none');
+        listItem.prepend(removeButton);
+        itemizedList.appendChild(listItem);
 
-                // Show the selected table
-                document.getElementById(tableId).style.display = 'table';
-            }
+        grandTotal += price;
+        document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+    }
 
-            // Initialize to show the 100% table by default
-            showTable('table100');
-        
-            // Function to add a service and price to the itemized list and grand total
-            function addToTotal(service, price) {
-                // Create a new div for the item
-                const itemizedList = document.getElementById('itemizedList');
-                const listItem = document.createElement('div');
-                listItem.className = 'list-item';
-                listItem.textContent = `${service}: $${price.toFixed(2)}`;
+    function updatePrice(service, price) {
+        addToTotal(service, price);
+    }
 
-                // Create a remove button for each item
-                const removeButton = document.createElement('button');
-                removeButton.textContent = "X";
-                removeButton.className = 'remove-button';
-                removeButton.onclick = function() {
-                    // Remove the item from the itemized list
-                    itemizedList.removeChild(listItem);
+    function showTable(tableId) {
+        const tables = document.querySelectorAll('.price-table');
+        tables.forEach(table => table.style.display = 'none');
+        document.getElementById(tableId).style.display = 'table';
+    }
 
-                    // Subtract the price from the grand total
-                    grandTotal -= price;
-                    document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
-                };
-
-                // Add the remove button to the list item, then add the item to the list
-                listItem.prepend(removeButton);
-                itemizedList.appendChild(listItem);
-
-                // Update the grand total
-                grandTotal += price;
-                document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
-            }
-
-            // Function to update price for times 2 and times 3 buttons
-            function updatePrice(service, price) {
-                // Add the updated price to the itemized list and update the grand total
-                addToTotal(service, price);
-            }
-        </script>
-</body>
-</html>
-
+    document.addEventListener('DOMContentLoaded', () => {
+        showTable('Labs'); // Initialize the default table
+    });
+</script>
