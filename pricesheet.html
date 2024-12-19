@@ -738,7 +738,7 @@
         <button class="price-button" onclick="updatePrice('MedroxyProgesterone 25% x8', 54)">x8</button>
         <button class="price-button" onclick="updatePrice('MedroxyProgesterone 25% x9', 60.75)">x9</button>
         <button class="price-button" onclick="updatePrice('MedroxyProgesterone 25% x10', 67.5)">x10</button>
-        <button class="price-button" onclick="updatePrice('MedroxyProgesterone 25% x11',  74.25)">x11</button>
+        <button class="price-button" onclick="updatePrice('MedroxyProgesterone 25% x11',74.25)">x11</button>
         <button class="price-button" onclick="updatePrice('MedroxyProgesterone 25% x12', 81)">x12</button>
     </td>
 </tr>
@@ -875,7 +875,7 @@
     <div id="grandTotal">$0.00</div>
 </div>
  </tbody>
-<script>
+ <script>
     let grandTotal = 0;
 
     function addToTotal(service, price) {
@@ -893,37 +893,8 @@
             document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
         };
 
-       document.addEventListener('DOMContentLoaded', () => {
-        showClass('Left-side'); // Initialize the default table
-    // Function to add Supplies items with multiplication options
-    function addSupplyWithMultiplier(service, price) {
-        const multipliers = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-        multipliers.forEach(multiplier => {
-            const button = document.createElement('button');
-            button.textContent = `x${multiplier}`;
-            button.className = 'price-button';
-            button.onclick = () => {
-                const multipliedPrice = price * multiplier;
-                addToTotal(`${service} x${multiplier}`, multipliedPrice);
-            };
-            document.getElementById(service).appendChild(button);
-        });
-    }
-   
-    // Function to add Supplies items with multiplication options
-    function addSupplyWithMultiplier(service, price) {
-        const multipliers = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-        multipliers.forEach(multiplier => {
-            const button = document.createElement('button');
-            button.textContent = `x${multiplier}`;
-            button.className = 'price-button';
-            button.onclick = () => {
-                const multipliedPrice = price * multiplier;
-                addToTotal(`${service} x${multiplier}`, multipliedPrice);
-            };
-            document.getElementById(service).appendChild(button);
-        });
-    }
+        listItem.prepend(removeButton);
+        itemizedList.appendChild(listItem);
 
         grandTotal += price;
         document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
@@ -939,6 +910,29 @@
         document.getElementById(tableId).style.display = 'table';
     }
 
+    function addSupplyWithMultiplier(service, price, containerId) {
+        const multipliers = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        const container = document.getElementById(containerId);
+
+        if (!container) {
+            console.error(`Container with ID ${containerId} not found.`);
+            return;
+        }
+
+        multipliers.forEach(multiplier => {
+            const button = document.createElement('button');
+            button.textContent = `x${multiplier}`;
+            button.className = 'price-button';
+            button.onclick = () => {
+                const multipliedPrice = price * multiplier;
+                addToTotal(`${service} x${multiplier}`, multipliedPrice);
+            };
+            container.appendChild(button);
+        });
+    }
+
+       document.addEventListener('DOMContentLoaded', () => {
+        showClass('Left-side'); // Initialize the default table
     });
 </script>
 </html>
