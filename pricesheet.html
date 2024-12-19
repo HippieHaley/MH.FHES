@@ -875,7 +875,7 @@
     <div id="grandTotal">$0.00</div>
 </div>
  </tbody>
- <script>
+<script>
     let grandTotal = 0;
 
     function addToTotal(service, price) {
@@ -908,27 +908,6 @@
         const tables = document.querySelectorAll('.price-table');
         tables.forEach(table => table.style.display = 'none');
         document.getElementById(tableId).style.display = 'table';
-    }
-
-    function addSupplyWithMultiplier(service, price, containerId) {
-        const multipliers = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-        const container = document.getElementById(containerId);
-
-        if (!container) {
-            console.error(`Container with ID ${containerId} not found.`);
-            return;
-        }
-
-        multipliers.forEach(multiplier => {
-            const button = document.createElement('button');
-            button.textContent = `x${multiplier}`;
-            button.className = 'price-button';
-            button.onclick = () => {
-                const multipliedPrice = price * multiplier;
-                addToTotal(`${service} x${multiplier}`, multipliedPrice);
-            };
-            container.appendChild(button);
-        });
     }
 
        document.addEventListener('DOMContentLoaded', () => {
