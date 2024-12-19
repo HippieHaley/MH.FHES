@@ -657,7 +657,8 @@
 <tr>
     <td><span class="service-name">DepoProvera</span><span class="cpt-code">J1050</span></td>
     <td>
-        <select class="price-dropdown" onchange="updatePrice('DepoProvera', this.value)">
+        <select class="price-dropdown" onchange="handleDropdownChange(this)">
+            <option value="">Select Quantity</option>
             <option value="27">1x ($27.00)</option>
             <option value="54">2x ($54.00)</option>
             <option value="81">3x ($81.00)</option>
