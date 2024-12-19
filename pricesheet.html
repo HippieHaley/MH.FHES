@@ -893,6 +893,8 @@
             document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
         };
 
+       document.addEventListener('DOMContentLoaded', () => {
+        showClass('Left-side'); // Initialize the default table
     // Function to add Supplies items with multiplication options
     function addSupplyWithMultiplier(service, price) {
         const multipliers = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -907,22 +909,21 @@
             document.getElementById(service).appendChild(button);
         });
     }
-
-    // Initialize the Supplies section to include multiplier buttons
-    document.addEventListener('DOMContentLoaded', () => {
-        showTable('Supplies'); // Show the Supplies section by default
-        const supplies = [
-            { service: "ExtCondomNon-Latex", price: 6 },
-            { service: "InternalCondom", price: 5 },
-            { service: "Diaphragm", price: 145 },
-            { service: "DepoProvera", price: 27 }
-        ];
-        supplies.forEach(supply => {
-            addSupplyWithMultiplier(supply.service, supply.price);
+   
+    // Function to add Supplies items with multiplication options
+    function addSupplyWithMultiplier(service, price) {
+        const multipliers = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        multipliers.forEach(multiplier => {
+            const button = document.createElement('button');
+            button.textContent = `x${multiplier}`;
+            button.className = 'price-button';
+            button.onclick = () => {
+                const multipliedPrice = price * multiplier;
+                addToTotal(`${service} x${multiplier}`, multipliedPrice);
+            };
+            document.getElementById(service).appendChild(button);
         });
-        
-        listItem.prepend(removeButton);
-        itemizedList.appendChild(listItem);
+    }
 
         grandTotal += price;
         document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
@@ -940,5 +941,4 @@
 
     });
 </script>
-
 </html>
