@@ -893,23 +893,6 @@
             document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
         };
 
-        listItem.prepend(removeButton);
-        itemizedList.appendChild(listItem);
-
-        grandTotal += price;
-        document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
-    }
-
-    function updatePrice(service, price) {
-        addToTotal(service, price);
-    }
-
-    function showTable(tableId) {
-        const tables = document.querySelectorAll('.price-table');
-        tables.forEach(table => table.style.display = 'none');
-        document.getElementById(tableId).style.display = 'table';
-    }
-
     // Function to add Supplies items with multiplication options
     function addSupplyWithMultiplier(service, price) {
         const multipliers = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -937,6 +920,24 @@
         supplies.forEach(supply => {
             addSupplyWithMultiplier(supply.service, supply.price);
         });
+        
+        listItem.prepend(removeButton);
+        itemizedList.appendChild(listItem);
+
+        grandTotal += price;
+        document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+    }
+
+    function updatePrice(service, price) {
+        addToTotal(service, price);
+    }
+
+    function showTable(tableId) {
+        const tables = document.querySelectorAll('.price-table');
+        tables.forEach(table => table.style.display = 'none');
+        document.getElementById(tableId).style.display = 'table';
+    }
+
     });
 </script>
 
