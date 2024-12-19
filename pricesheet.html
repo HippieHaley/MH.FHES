@@ -623,64 +623,71 @@
         <button class="price-button" onclick="updatePrice('Diaphragm 25% x11', 398.75)">x11</button>
         <button class="price-button" onclick="updatePrice('Diaphragm 25% x12', 435)">x12</button>
     </td>
-</tr>
-                           <tr>
+<tr>
     <td><span class="service-name">DepoProvera</span><span class="cpt-code">J1050</span></td>
     <td>
-        <button class="price-button" onclick="addToTotal('DepoProvera 100%', 27)">$27.00</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 100% x2', 54)">x2</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 100% x3', 81)">x3</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 100% x4', 108)">x4</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 100% x5', 135)">x5</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 100% x6', 162)">x6</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 100% x7', 189)">x7</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 100% x8', 216)">x8</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 100% x9', 243)">x9</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 100% x10', 270)">x10</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 100% x11', 297)">x11</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 100% x12', 324)">x12</button>
+        <select class="price-dropdown" onchange="updatePrice('DepoProvera', this.value)">
+            <option value="27">1x ($27.00)</option>
+            <option value="54">2x ($54.00)</option>
+            <option value="81">3x ($81.00)</option>
+            <option value="108">4x ($108.00)</option>
+            <option value="135">5x ($135.00)</option>
+            <option value="162">6x ($162.00)</option>
+            <option value="189">7x ($189.00)</option>
+            <option value="216">8x ($216.00)</option>
+            <option value="243">9x ($243.00)</option>
+            <option value="270">10x ($270.00)</option>
+            <option value="297">11x ($297.00)</option>
+            <option value="324">12x ($324.00)</option>
+        </select>
     </td>
     <td>
-        <button class="price-button" onclick="addToTotal('DepoProvera 75%', 20.5)">$20.50</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 75% x2', 41)">x2</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 75% x3', 61.5)">x3</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 75% x4', 82)">x4</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 75% x5', 102.5)">x5</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 75% x6', 123)">x6</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 75% x7', 143.5)">x7</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 75% x8', 164)">x8</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 75% x9', 184.5)">x9</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 75% x10', 205)">x10</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 75% x11', 225.5)">x11</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 75% x12', 246)">x12</button>
+        <select class="price-dropdown" onchange="updatePrice('DepoProvera 75%', this.value)">
+            <option value="20.5">1x ($20.50)</option>
+            <option value="41">2x ($41.00)</option>
+            <option value="61.5">3x ($61.50)</option>
+            <option value="82">4x ($82.00)</option>
+            <option value="102.5">5x ($102.50)</option>
+            <option value="123">6x ($123.00)</option>
+            <option value="143.5">7x ($143.50)</option>
+            <option value="164">8x ($164.00)</option>
+            <option value="184.5">9x ($184.50)</option>
+            <option value="205">10x ($205.00)</option>
+            <option value="225.5">11x ($225.50)</option>
+            <option value="246">12x ($246.00)</option>
+        </select>
     </td>
     <td>
-        <button class="price-button" onclick="addToTotal('DepoProvera 50%', 13.5)">$13.50</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 50% x2', 27)">x2</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 50% x3', 40.5)">x3</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 50% x4', 54)">x4</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 50% x5', 67.5)">x5</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 50% x6', 81)">x6</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 50% x7', 94.5)">x7</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 50% x8', 108)">x8</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 50% x9', 121.5)">x9</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 50% x10', 135)">x10</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 50% x11', 148.5)">x11</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 50% x12', 162)">x12</button>
+        <select class="price-dropdown" onchange="updatePrice('DepoProvera 50%', this.value)">
+            <option value="13.5">1x ($13.50)</option>
+            <option value="27">2x ($27.00)</option>
+            <option value="40.5">3x ($40.50)</option>
+            <option value="54">4x ($54.00)</option>
+            <option value="67.5">5x ($67.50)</option>
+            <option value="81">6x ($81.00)</option>
+            <option value="94.5">7x ($94.50)</option>
+            <option value="108">8x ($108.00)</option>
+            <option value="121.5">9x ($121.50)</option>
+            <option value="135">10x ($135.00)</option>
+            <option value="148.5">11x ($148.50)</option>
+            <option value="162">12x ($162.00)</option>
+        </select>
     </td>
     <td>
-        <button class="price-button" onclick="addToTotal('DepoProvera 25%', 6.75)">$6.75</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 25% x2', 13.5)">x2</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 25% x3', 20.25)">x3</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 25% x4', 27)">x4</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 25% x5', 33.75)">x5</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 25% x6', 40.5)">x6</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 25% x7', 47.25)">x7</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 25% x8', 54)">x8</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 25% x9', 60.75)">x9</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 25% x10', 67.5)">x10</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 25% x11', 74.25)">x11</button>
-        <button class="price-button" onclick="updatePrice('DepoProvera 25% x12', 81)">x12</button>
+        <select class="price-dropdown" onchange="updatePrice('DepoProvera 25%', this.value)">
+            <option value="6.75">1x ($6.75)</option>
+            <option value="13.5">2x ($13.50)</option>
+            <option value="20.25">3x ($20.25)</option>
+            <option value="27">4x ($27.00)</option>
+            <option value="33.75">5x ($33.75)</option>
+            <option value="40.5">6x ($40.50)</option>
+            <option value="47.25">7x ($47.25)</option>
+            <option value="54">8x ($54.00)</option>
+            <option value="60.75">9x ($60.75)</option>
+            <option value="67.5">10x ($67.50)</option>
+            <option value="74.25">11x ($74.25)</option>
+            <option value="81">12x ($81.00)</option>
+        </select>
     </td>
 </tr>
 <tr>
