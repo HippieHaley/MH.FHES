@@ -891,6 +891,16 @@
         document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
     }
 
+    function handleDropdownChange(dropdown) {
+    const selectedOption = dropdown.options[dropdown.selectedIndex];
+    const service = dropdown.closest('tr').querySelector('.service-name').textContent;
+    const price = parseFloat(selectedOption.value);
+
+    if (!isNaN(price)) {
+        addToTotal(`${service} ${selectedOption.textContent}`, price);
+    }
+}
+
     function updatePrice(service, price) {
         addToTotal(service, price);
     }
