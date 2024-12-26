@@ -93,20 +93,31 @@
         .button:hover {
             background-color: #e8b8e8; /* Slightly darker pink */
         }
-        .label {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f8c9f9; /* Soft pink */
-            color: #333;
-            padding: 10px 20px;
+     input[type="number"] {
+            width: 100%;
+            max-width: 300px;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border: 2px solid #f8c9f9; /* Soft pink border */
+            border-radius: 30px; /* Rounded edges */
+            background-color: #f8c9f9; /* Soft pink background */
+            color: #333; /* Dark text */
             font-size: 1rem;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 30px;
-            text-align: center;
-            border: 1px solid #000; /* Black border */
-            cursor: pointer;
+            outline: none;
+            transition: 0.3s ease;
+            -moz-appearance: textfield; /* Remove Firefox spinner */
+        }
+
+        /* Hover and Focus Effects */
+        input[type="number"]:hover {
+            background-color: #f0d4f0; /* Slightly lighter pink */
+        }
+
+        input[type="number"]:focus {
+            border-color: #e8b8e8; /* Darker pink border on focus */
+            background-color: #fff; /* White background on focus */
+            box-shadow: 0 0 5px rgba(232, 184, 232, 0.5); /* Soft pink glow */
+        }
     </style>
 </head>
 <body>
