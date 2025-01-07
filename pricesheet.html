@@ -726,7 +726,20 @@ function removeItem(button, price) {
     itemizedList.removeChild(listItem);
     updateGrandTotal();
 }
+    const listItem = document.createElement('div');
+    listItem.className = 'list-item';
+    listItem.dataset.itemName = itemName;
+    listItem.dataset.percentage = percentage;
+    listItem.innerHTML = `
+        <span>${service}</span>
+        <span>Quantity: <span class="quantity">1</span></span>
+        <span class="item-price">$${price.toFixed(2)}</span>
+        <button class="remove-button" onclick="removeItem(this, ${price})">Remove</button>
+    `;
 
+    itemizedList.appendChild(listItem);
+    updateGrandTotal();
+}
 function updateGrandTotal() {
     const itemizedList = document.getElementById('itemizedList');
     const items = Array.from(itemizedList.children);
