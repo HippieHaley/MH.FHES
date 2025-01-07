@@ -685,47 +685,23 @@
                     listItem.appendChild(multipleButton);
                     listItem.appendChild(removeButton);
                     document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
-                }
-            };
-            listItem.appendChild(multipleButton);
-        }
-
-        const removeButton = document.createElement('button');
-        removeButton.textContent = "X";
-        removeButton.className = 'remove-button';
-        removeButton.onclick = function () {
-            itemizedList.removeChild(listItem);
-            grandTotal -= price;
-            document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
-        };
-
-        listItem.appendChild(removeButton);
-        itemizedList.appendChild(listItem);
-
-        grandTotal += price;
-        document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
-    }
-
-    // Check if the "Multiple" button is allowed for the item
-    function isMultipleAllowed(service) {
-        const allowedItems = [
-            "InternalCondom", "Diaphragm", "DepoProvera", "MedroxyProgesterone",
-            "VCFFoam", "GynolII", "LilettaIUD", "ParagardIUD", "Xulane", "Chlamydia",
-            "Gonorrhea", "NuvaRing", "Nexplanon", "Alese", "Apri", "Aubra", "Aviane",
-            "Bicillin", "Camila", "Ceftriaxone", "Chateal", "Cryselle", "Cyred",
-            "Doxycycline", "Enpresse", "Jolivette", "Levora", "Lutera", "Lyza",
-            "Mononessa", "NorQD", "Nordette", "Norethindrone", "Nortrel777",
-            "Orsythia", "Portia", "Reclipsen", "Sprintec", "Sronyx", "Tri-LoMarzia",
-            "Tri-LoSprintec", "TriNessaLo", "Triphasil", "Trivora", "Vilibra"
-        ];
-        return allowedItems.some(item => service.includes(item));
-    }
-function removeItem(button, price) {
-    const listItem = button.parentElement;
+               function addToTotal(service, price, itemName, percentage) {
     const itemizedList = document.getElementById('itemizedList');
-    itemizedList.removeChild(listItem);
-    updateGrandTotal();
-}
+    let existingItem = Array.from(itemizedList.children).find(
+        (item) => item.dataset.itemName === itemName && item.dataset.percentage === percentage
+    );
+
+    if (existingItem) {
+        const quantityElement = existingItem.querySelector('.quantity');
+        let currentQuantity = parseInt(quantityElement.textContent);
+        currentQuantity++;
+        quantityElement.textContent = currentQuantity;
+        const totalPrice = currentQuantity * price;
+        existingItem.querySelector('.item-price').textContent = `$${totalPrice.toFixed(2)}`;
+        updateGrandTotal();
+        return;
+    }
+
     const listItem = document.createElement('div');
     listItem.className = 'list-item';
     listItem.dataset.itemName = itemName;
@@ -740,6 +716,14 @@ function removeItem(button, price) {
     itemizedList.appendChild(listItem);
     updateGrandTotal();
 }
+
+function removeItem(button, price) {
+    const listItem = button.parentElement;
+    const itemizedList = document.getElementById('itemizedList');
+    itemizedList.removeChild(listItem);
+    updateGrandTotal();
+}
+
 function updateGrandTotal() {
     const itemizedList = document.getElementById('itemizedList');
     const items = Array.from(itemizedList.children);
@@ -749,6 +733,6 @@ function updateGrandTotal() {
         return total + price;
     }, 0);
     document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
-}
+
 </script>
 </html>
