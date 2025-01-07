@@ -720,5 +720,22 @@
         ];
         return allowedItems.some(item => service.includes(item));
     }
+function removeItem(button, price) {
+    const listItem = button.parentElement;
+    const itemizedList = document.getElementById('itemizedList');
+    itemizedList.removeChild(listItem);
+    updateGrandTotal();
+}
+
+function updateGrandTotal() {
+    const itemizedList = document.getElementById('itemizedList');
+    const items = Array.from(itemizedList.children);
+    let grandTotal = items.reduce((total, item) => {
+        const priceText = item.querySelector('.item-price').textContent;
+        const price = parseFloat(priceText.replace('$', '')) || 0;
+        return total + price;
+    }, 0);
+    document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+}
 </script>
 </html>
