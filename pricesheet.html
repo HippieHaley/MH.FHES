@@ -662,63 +662,32 @@
 </div>
  </tbody>
 <script>
-   let grandTotal = 0;
-
-function addToTotal(service, price) {
+    let grandTotal = 0;
+function removeItem(button) {
+    const listItem = button.parentElement;
     const itemizedList = document.getElementById('itemizedList');
-    let existingItem = Array.from(itemizedList.children).find(item =>
-        item.dataset.service === service
-    );
+    const itemPriceElement = listItem.querySelector('.item-price');
+    const itemQuantityElement = listItem.querySelector('.quantity');
 
-    if (existingItem) {
-        // Update quantity and total price if item already exists
-        let quantityElement = existingItem.querySelector('.quantity');
-        let priceElement = existingItem.querySelector('.item-price');
+    // Parse the item's price and quantity
+    const totalPrice = parseFloat(itemPriceElement.textContent.replace('$', '')) || 0;
+    const quantity = parseInt(itemQuantityElement.textContent) || 1;
 
-        let quantity = parseInt(quantityElement.textContent) + 1;
-        let totalPrice = quantity * price;
+    // Calculate the price of one unit to correctly deduct from grand total
+    const pricePerUnit = totalPrice / quantity;
 
-        quantityElement.textContent = quantity;
-        priceElement.textContent = `$${totalPrice.toFixed(2)}`;
-    } else {
-        // Add new item to the list
-        const listItem = document.createElement('div');
-        listItem.className = 'list-item';
-        listItem.dataset.service = service;
-
-        listItem.innerHTML = `
-            <span>${service}</span>
-            <span class="quantity">1</span>
-            <span class="item-price">$${price.toFixed(2)}</span>
-            <button class="remove-button">Remove</button>
-        `;
-
-        listItem.querySelector('.remove-button').onclick = () => removeItem(listItem, price);
-
-        itemizedList.appendChild(listItem);
-    }
-
-    // Update grand total
-    grandTotal += price;
-    document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
-}
-
-function removeItem(listItem, pricePerUnit) {
-    const itemizedList = document.getElementById('itemizedList');
-    const quantityElement = listItem.querySelector('.quantity');
-    const priceElement = listItem.querySelector('.item-price');
-
-    let quantity = parseInt(quantityElement.textContent);
-    let totalPrice = parseFloat(priceElement.textContent.replace('$', ''));
-
-    // Subtract the full multiplier total from the grand total
-    grandTotal -= totalPrice;
-
-    // Remove the item completely
+    // Remove the item from the list
     itemizedList.removeChild(listItem);
 
-    // Update grand total display
-    document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+    // Update the grand total
+    const grandTotalElement = document.getElementById('grandTotal');
+    const currentGrandTotal = parseFloat(grandTotalElement.textContent.replace('$', '')) || 0;
+    const newGrandTotal = currentGrandTotal - totalPrice;
+
+    // Update the grand total display
+    grandTotalElement.textContent = `$${newGrandTotal.toFixed(2)}`;
+}
+
             };
             listItem.appendChild(multipleButton);
         }
