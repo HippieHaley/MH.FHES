@@ -655,7 +655,6 @@
 <div class="right-side">
     <h2>Selected Items</h2>
     <div id="itemizedList" class="itemized-list">
-        <div id="grandTotal">$0.00</div>
         <!-- Itemized list of services will appear here -->
     </div>
     <h2>Grand Total</h2>
@@ -663,30 +662,65 @@
 </div>
  </tbody>
 <script>
-    let grandTotal = 0;
+   let grandTotal = 0;
 
-    // Function to add items to the selected list
-    function addToTotal(service, price) {
-        const itemizedList = document.getElementById('itemizedList');
+function addToTotal(service, price) {
+    const itemizedList = document.getElementById('itemizedList');
+    let existingItem = Array.from(itemizedList.children).find(item =>
+        item.dataset.service === service
+    );
+
+    if (existingItem) {
+        // Update quantity and total price if item already exists
+        let quantityElement = existingItem.querySelector('.quantity');
+        let priceElement = existingItem.querySelector('.item-price');
+
+        let quantity = parseInt(quantityElement.textContent) + 1;
+        let totalPrice = quantity * price;
+
+        quantityElement.textContent = quantity;
+        priceElement.textContent = `$${totalPrice.toFixed(2)}`;
+    } else {
+        // Add new item to the list
         const listItem = document.createElement('div');
         listItem.className = 'list-item';
-        listItem.textContent = `${service}: $${price.toFixed(2)}`;
+        listItem.dataset.service = service;
 
-        // Add "Multiple" button for specific items
-        if (isMultipleAllowed(service)) {
-            const multipleButton = document.createElement('button');
-            multipleButton.textContent = "Multiple";
-            multipleButton.className = 'multiple-button';
-            multipleButton.onclick = function () {
-                const quantity = parseInt(prompt("Enter quantity:", "1"), 10);
-                if (!isNaN(quantity) && quantity > 0) {
-                    const totalPrice = price * quantity;
-                    grandTotal += totalPrice - price; // Adjust grand total for the new quantity
-                    listItem.textContent = `${service} x${quantity}: $${totalPrice.toFixed(2)}`;
-                    listItem.appendChild(multipleButton);
-                    listItem.appendChild(removeButton);
-                    document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
-                }
+        listItem.innerHTML = `
+            <span>${service}</span>
+            <span class="quantity">1</span>
+            <span class="item-price">$${price.toFixed(2)}</span>
+            <button class="remove-button">Remove</button>
+        `;
+
+        listItem.querySelector('.remove-button').onclick = () => removeItem(listItem, price);
+
+        itemizedList.appendChild(listItem);
+    }
+
+    // Update grand total
+    grandTotal += price;
+    document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+}
+
+function removeItem(listItem, pricePerUnit) {
+    const itemizedList = document.getElementById('itemizedList');
+    const quantityElement = listItem.querySelector('.quantity');
+    const priceElement = listItem.querySelector('.item-price');
+
+    let quantity = parseInt(quantityElement.textContent);
+    let totalPrice = parseFloat(priceElement.textContent.replace('$', ''));
+
+    // Subtract the full multiplier total from the grand total
+    grandTotal -= totalPrice;
+
+    // Remove the item completely
+    itemizedList.removeChild(listItem);
+
+    // Update grand total display
+    document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+}
+
             };
             listItem.appendChild(multipleButton);
         }
