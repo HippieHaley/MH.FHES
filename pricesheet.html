@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -61,37 +61,37 @@
             margin: 5px;
         }
 
-    .price-dropdown {
-        display: inline-block;
-        padding: 0.5rem 1.5rem;
-        background-color: #f8c9f9; /* Match button color */
-        border: 1px solid #000; /* Match button border */
-        border-radius: 20px; /* Match button border radius */
-        text-decoration: none;
-        color: #333; /* Match button text color */
-        font-weight: bold;
-        font-size: 1rem;
-        cursor: pointer;
-        margin: 5px;
-        appearance: none; /* Remove default dropdown styling */
-        -webkit-appearance: none; /* For Safari */
-        -moz-appearance: none; /* For Firefox */
-    }
+        .price-dropdown {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background-color: #f8c9f9; /* Match button color */
+            border: 1px solid #000; /* Match button border */
+            border-radius: 20px; /* Match button border radius */
+            text-decoration: none;
+            color: #333; /* Match button text color */
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 5px;
+            appearance: none; /* Remove default dropdown styling */
+            -webkit-appearance: none; /* For Safari */
+            -moz-appearance: none; /* For Firefox */
+        }
 
-    /* Add a custom arrow icon to the dropdown */
-    .price-dropdown:after {
-        content: "▼";
-        position: absolute;
-        right: 10px;
-        pointer-events: none;
-    }
+        /* Add a custom arrow icon to the dropdown */
+        .price-dropdown:after {
+            content: "▼";
+            position: absolute;
+            right: 10px;
+            pointer-events: none;
+        }
 
-    /* For dropdown focus/hover state */
-    .price-dropdown:hover,
-    .price-dropdown:focus {
-        outline: none;
-        background-color: #f7bdf7; /* Slightly darker shade for hover effect */
-    }
+        /* For dropdown focus/hover state */
+        .price-dropdown:hover,
+        .price-dropdown:focus {
+            outline: none;
+            background-color: #f7bdf7; /* Slightly darker shade for hover effect */
+        }
 
         /* Price Table Styling */
         .price-sheet-container {
@@ -151,21 +151,40 @@
             margin-right: 5px;
             font-weight: bold;
         }
+
+        /* Multiple button styling */
+        .multiple-button {
+            background-color: #f8c9f9;
+            border: 1px solid #000;
+            border-radius: 5px;
+            padding: 2px 5px;
+            cursor: pointer;
+            margin-left: 5px;
+            font-weight: bold;
+        }
+
+        .multiple-button:hover {
+            background-color: #f7bdf7;
+        }
     </style>
 </head>
-         <div class="left-side">
-               <table id="Services/Proceduce" class="price-table">
-                    <thead>
-                        <tr>
-                            <th>Services/Procedure</th>
-                            <th>100% Fee</th>
-                            <th>75% Fee</th>
-                            <th>50% Fee</th>
-                            <th>25% Fee</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
+<body>
+    <div class="container">
+        <!-- Left Side -->
+        <div class="left-side">
+            <!-- Services/Procedures Table -->
+            <table id="Services/Procedures" class="price-table">
+                <thead>
+                    <tr>
+                        <th>Services/Procedure</th>
+                        <th>100% Fee</th>
+                        <th>75% Fee</th>
+                        <th>50% Fee</th>
+                        <th>25% Fee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
                          <td><span class="service-name">Limited-New</span><span class="cpt-code">99202</span></td>
                          <td><button class="price-button" onclick="addToTotal('Limited-New 100%', 170)" >$170.00</button></td>
                          <td><button class="price-button" onclick="addToTotal('Limited-New 75%', 127.5)" >$127.50</button></td>
@@ -248,21 +267,22 @@
                          <td><button class="price-button" onclick="addToTotal('Preventive 40-64 Established 75%', 213.75)" >$213.75</button></td>
                          <td><button class="price-button" onclick="addToTotal('Preventive 40-64 Established 50%', 142.5)" >$142.50</button></td>
                          <td><button class="price-button" onclick="addToTotal('Preventive 40-64 Established 25%', 71.25)" >$71.25</button></td>
-                     </tr>
-                 </tbody>
-             </table>
-                 <table id="procedures" class="price-table">
-                     <thead>
-                         <tr>
-                             <th>Procedure</th>
-                             <th>100% Fee</th>
-                             <th>75% Fee</th>
-                             <th>50% Fee</th>
-                             <th>25% Fee</th>
-                         </tr>
-                     </thead>
-                     <tbody>
-                         <tr>
+                     </tr>                </tbody>
+            </table>
+
+            <!-- Procedures Table -->
+            <table id="procedures" class="price-table">
+                <thead>
+                    <tr>
+                        <th>Procedure</th>
+                        <th>100% Fee</th>
+                        <th>75% Fee</th>
+                        <th>50% Fee</th>
+                        <th>25% Fee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                     <tr>
                              <td><span class="service-name">IUD Insertion</span><span class="cpt-code">58300</span></td>
                              <td><button class="price-button" onclick="addToTotal('IUD Insertion 100%', 178)">$178.00</button></td>
                              <td><button class="price-button" onclick="addToTotal('IUD Insertion 75%', 133.5)">$133.50</button></td>
@@ -331,21 +351,22 @@
                             <td><button class="price-button" onclick="addToTotal('Venipuncture 75%', 5.25)">$5.25</button></td>
                             <td><button class="price-button" onclick="addToTotal('Venipuncture 50%', 3.5)">$3.50</button></td>
                             <td><button class="price-button" onclick="addToTotal('Venipuncture 25%', 1.75)">$1.75</button></td>
-                        </tr>
-                     </tbody>
-                 </table> 
-               <table id="Labs" class="price-table">
-                    <thead>
-                        <tr>
-                            <th>Labs</th>
-                            <th>100% Fee</th>
-                            <th>75% Fee</th>
-                            <th>50% Fee</th>
-                            <th>25% Fee</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
+                        </tr>                </tbody>
+            </table>
+
+            <!-- Labs Table -->
+            <table id="Labs" class="price-table">
+                <thead>
+                    <tr>
+                        <th>Labs</th>
+                        <th>100% Fee</th>
+                        <th>75% Fee</th>
+                        <th>50% Fee</th>
+                        <th>25% Fee</th>
+                    </tr>
+                </thead>
+                <tbody>
+<tr>
     <td><span class="service-name">Chlamydia</span><span class="cpt-code">87491</span></td>
     <td>
         <button class="price-button" onclick="addToTotal('Chlamydia 100%', 15, 'Chlamydia', '100%')">$15.00</button>
@@ -445,20 +466,22 @@
                                 <td><button class="price-button" onclick="addToTotal('WetMount/GramStain 50%', 7.5)">$7.50</button></td>
                                 <td><button class="price-button" onclick="addToTotal('WetMount/GramStain 25%', 3.75)">$3.75</button></td>
                             </tr>
-                        </tbody>
-               </table>
-               <table id="Supplies" class="price-table">
-    <thead>
-        <tr>
-            <th>Supplies</th>
-            <th>100% Fee</th>
-            <th>75% Fee</th>
-            <th>50% Fee</th>
-            <th>25% Fee</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
+                </tbody>
+            </table>
+
+            <!-- Supplies Table -->
+            <table id="Supplies" class="price-table">
+                <thead>
+                    <tr>
+                        <th>Supplies</th>
+                        <th>100% Fee</th>
+                        <th>75% Fee</th>
+                        <th>50% Fee</th>
+                        <th>25% Fee</th>
+                    </tr>
+                </thead>
+                <tbody>
+<tr>
             <td><span class="service-name">InternalCondom</span><span class="cpt-code">A4268</span></td>
             <td><button class="price-button" onclick="addToTotal('InternalCondom 100%', 5)">$5.00</button></td>
             <td><button class="price-button" onclick="addToTotal('InternalCondom 75%', 3.75)">$3.75</button></td>
@@ -647,95 +670,80 @@
     <td><button class="price-button" onclick="addToTotal('Vilbra 50%', 2.5)">$2.50</button></td>
     <td><button class="price-button" onclick="addToTotal('Vilbra 25%', 1.25)">$1.25</button></td>
 </tr>
-    </tbody>
-</table>
-         </div>
+                </tbody>
+            </table>
+        </div>
 
-<!-- Right Side (Itemized List and Grand Total) -->
-<div class="right-side">
-    <h2>Selected Items</h2>
-    <div id="itemizedList" class="itemized-list">
-        <!-- Itemized list of services will appear here -->
+        <!-- Right Side (Itemized List and Grand Total) -->
+        <div class="right-side">
+            <h2>Selected Items</h2>
+            <div id="itemizedList" class="itemized-list">
+                <!-- Itemized list of services will appear here -->
+            </div>
+            <h2>Grand Total</h2>
+            <div id="grandTotal">$0.00</div>
+        </div>
     </div>
-    <h2>Grand Total</h2>
-    <div id="grandTotal">$0.00</div>
-</div>
- </tbody>
-<script>
-    let grandTotal = 0;
 
-    // Function to add items to the selected list
-    function addToTotal(service, price) {
-        const itemizedList = document.getElementById('itemizedList');
-        const listItem = document.createElement('div');
-        listItem.className = 'list-item';
-        listItem.textContent = `${service}: $${price.toFixed(2)}`;
+    <script>
+        let grandTotal = 0;
 
-        // Add "Multiple" button for specific items
-        if (isMultipleAllowed(service)) {
-            const multipleButton = document.createElement('button');
-            multipleButton.textContent = "Multiple";
-            multipleButton.className = 'multiple-button';
-            multipleButton.onclick = function () {
-                const quantity = parseInt(prompt("Enter quantity:", "1"), 10);
-                if (!isNaN(quantity) && quantity > 0) {
-                    const totalPrice = price * quantity;
-                    grandTotal += totalPrice - price; // Adjust grand total for the new quantity
-                    listItem.textContent = `${service} x${quantity}: $${totalPrice.toFixed(2)}`;
-                    listItem.appendChild(multipleButton);
-                    listItem.appendChild(removeButton);
-                    document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
-                }
+        // Function to add items to the selected list
+        function addToTotal(service, price) {
+            const itemizedList = document.getElementById('itemizedList');
+            const listItem = document.createElement('div');
+            listItem.className = 'list-item';
+            listItem.textContent = `${service}: $${price.toFixed(2)}`;
+
+            // Add "Multiple" button for specific items
+            if (isMultipleAllowed(service)) {
+                const multipleButton = document.createElement('button');
+                multipleButton.textContent = "Multiple";
+                multipleButton.className = 'multiple-button';
+                multipleButton.onclick = function () {
+                    const quantity = parseInt(prompt("Enter quantity:", "1"), 10);
+                    if (!isNaN(quantity) && quantity > 0) {
+                        const totalPrice = price * quantity;
+                        grandTotal += totalPrice - price; // Adjust grand total for the new quantity
+                        listItem.textContent = `${service} x${quantity}: $${totalPrice.toFixed(2)}`;
+                        listItem.appendChild(multipleButton);
+                        listItem.appendChild(removeButton);
+                        document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+                    }
+                };
+                listItem.appendChild(multipleButton);
+            }
+
+            const removeButton = document.createElement('button');
+            removeButton.textContent = "X";
+            removeButton.className = 'remove-button';
+            removeButton.onclick = function () {
+                itemizedList.removeChild(listItem);
+                grandTotal -= price;
+                document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
             };
-            listItem.appendChild(multipleButton);
+
+            listItem.appendChild(removeButton);
+            itemizedList.appendChild(listItem);
+
+            grandTotal += price;
+            document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
         }
 
-        const removeButton = document.createElement('button');
-        removeButton.textContent = "X";
-        removeButton.className = 'remove-button';
-        removeButton.onclick = function () {
-            itemizedList.removeChild(listItem);
-            grandTotal -= price;
-            document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
-        };
-
-        listItem.appendChild(removeButton);
-        itemizedList.appendChild(listItem);
-
-        grandTotal += price;
-        document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
-    }
-
-    // Check if the "Multiple" button is allowed for the item
-    function isMultipleAllowed(service) {
-        const allowedItems = [
-            "InternalCondom", "Diaphragm", "DepoProvera", "MedroxyProgesterone",
-            "VCFFoam", "GynolII", "LilettaIUD", "ParagardIUD", "Xulane", "Chlamydia",
-            "Gonorrhea", "NuvaRing", "Nexplanon", "Alese", "Apri", "Aubra", "Aviane",
-            "Bicillin", "Camila", "Ceftriaxone", "Chateal", "Cryselle", "Cyred",
-            "Doxycycline", "Enpresse", "Jolivette", "Levora", "Lutera", "Lyza",
-            "Mononessa", "NorQD", "Nordette", "Norethindrone", "Nortrel777",
-            "Orsythia", "Portia", "Reclipsen", "Sprintec", "Sronyx", "Tri-LoMarzia",
-            "Tri-LoSprintec", "TriNessaLo", "Triphasil", "Trivora", "Vilibra"
-        ];
-        return allowedItems.some(item => service.includes(item));
-    }
-function removeItem(button, price) {
-    const listItem = button.parentElement;
-    const itemizedList = document.getElementById('itemizedList');
-    itemizedList.removeChild(listItem);
-    updateGrandTotal();
-}
-
-function updateGrandTotal() {
-    const itemizedList = document.getElementById('itemizedList');
-    const items = Array.from(itemizedList.children);
-    let grandTotal = items.reduce((total, item) => {
-        const priceText = item.querySelector('.item-price').textContent;
-        const price = parseFloat(priceText.replace('$', '')) || 0;
-        return total + price;
-    }, 0);
-    document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
-}
-</script>
+        // Check if the "Multiple" button is allowed for the item
+        function isMultipleAllowed(service) {
+            const allowedItems = [
+                "InternalCondom", "Diaphragm", "DepoProvera", "MedroxyProgesterone",
+                "VCFFoam", "GynolII", "LilettaIUD", "ParagardIUD", "Xulane", "Chlamydia",
+                "Gonorrhea", "NuvaRing", "Nexplanon", "Alese", "Apri", "Aubra", "Aviane",
+                "Bicillin", "Camila", "Ceftriaxone", "Chateal", "Cryselle", "Cyred",
+                "Doxycycline", "Enpresse", "Jolivette", "Levora", "Lutera", "Lyza",
+                "Mononessa", "NorQD", "Nordette", "Norethindrone", "Nortrel777",
+                "Orsythia", "Portia", "Reclipsen", "Sprintec", "Sronyx", "Tri-LoMarzia",
+                "Tri-LoSprintec", "TriNessaLo", "Triphasil", "Trivora", "Vilibra"
+            ];
+            return allowedItems.some(item => service.includes(item));
+        }
+    </script>
+</body>
 </html>
