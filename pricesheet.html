@@ -6,26 +6,24 @@
     <title>Price Sheet</title> 
     <style>
    .back-home {
-    display: inline-block;
-    width: auto;
-    padding: 10px 20px;
-    background-color: #f8c9f9; /* Soft pink */
-    color: #333;
-    text-decoration: none;
-    font-size: 1rem;
-    font-weight: bold;
-    border-radius: 30px;
-    text-align: center;
-    border: 1px solid #000;
-    position: absolute; /* Positioning fix */
-    top: 20px;
-    left: 20px;
-}
-
-.back-home:hover {
-    background-color: #e8b3e8; /* Slightly darker pink on hover */
-}
-
+            display: inline-block;  /* Prevent stretching */
+            width: auto;  /* Adjust width based on text */
+            padding: 10px 20px;
+            background-color: #f8c9f9; /* Soft pink */
+            color: #333;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 30px;
+            text-align: center;
+            border: 1px solid #000;
+            position: absolute; /* Positioning fix */
+            top: 20px;
+            left: 20px;
+        }
+        .back-home:hover {
+            background-color: #e8b3e8;
+        }
         /* Basic Reset */
         * {
             margin: 0;
@@ -41,18 +39,17 @@
             justify-content: center;
             padding-top: 50px;
         }
-h1 {
-    font-size: 2.5rem;
-    font-weight: bold;
-    line-height: 1.2;
-    letter-spacing: 2px;
-    color: #fff; /* White text with black outline */
-    -webkit-text-stroke: 1px #000;
-    text-stroke: 1px #000;
-    text-align: center;
-    margin-top: 80px; /* Add space for the button */
-    margin-bottom: 20px;
-}
+.title-section h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            line-height: 1.2;
+            letter-spacing: 2px;
+            color: #fff; /* White text with black outline */
+            -webkit-text-stroke: 1px #000;
+            text-stroke: 1px #000;
+            text-align: center;
+            margin-bottom: 20px;
+        }
         /* Container for left-aligned layout */
         .container {
             display: flex;
@@ -207,8 +204,8 @@ h1 {
     </style>
 </head>
 <body>
-   <a href="index.html" class="back-home">Back to Home</a>
-<h1>PriceSheet</h1>
+    <a href="index.html" class="back-home">Back to Home</a>
+    <h1>Price Sheet</h1>
     <div class="container">
         <!-- Left Side -->
         <div class="left-side">
