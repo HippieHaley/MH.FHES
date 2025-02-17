@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <a href="index.html" class="button back-home">Back to Home</a>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Income Calculator</title>
@@ -95,10 +94,24 @@
             background-color: #e8b8e8; /* Slightly darker pink */
         }
      .back-home {
-        display: block;
-        width: fit-content;
-        margin: 20px auto; /* Centers the button */
-    }
+            display: inline-block;  /* Prevent stretching */
+            width: auto;  /* Adjust width based on text */
+            padding: 10px 20px;
+            background-color: #f8c9f9; /* Soft pink */
+            color: #333;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 30px;
+            text-align: center;
+            border: 1px solid #000;
+            position: absolute; /* Positioning fix */
+            top: 20px;
+            left: 20px;
+        }
+        .back-home:hover {
+            background-color: #e8b3e8;
+        }
      input[type="number"] {
             width: 100%;
             max-width: 300px;
@@ -133,6 +146,7 @@
     </style>
 </head>
 <body>
+     <a href="index.html" class="back-home">Back to Home</a>
        <h1>Income Calculator</h1>
     
     <div class="container">
