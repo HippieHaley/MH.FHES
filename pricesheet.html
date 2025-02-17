@@ -6,9 +6,8 @@
     <title>Price Sheet</title> 
     <style>
    .back-home {
-            display: block;
-            width: fit-content;
-            margin: 20px auto; /* Centers the button */
+            display: inline-block;  /* Prevent stretching */
+            width: auto;  /* Adjust width based on text */
             padding: 10px 20px;
             background-color: #f8c9f9; /* Soft pink */
             color: #333;
@@ -18,9 +17,12 @@
             border-radius: 30px;
             text-align: center;
             border: 1px solid #000;
+            position: absolute; /* Positioning fix */
+            top: 20px;
+            left: 20px;
         }
         .back-home:hover {
-            background-color: #e8b3e8; /* Slightly darker pink */
+            background-color: #e8b3e8;
         }
         /* Basic Reset */
         * {
@@ -36,7 +38,12 @@
             display: flex;
             justify-content: center;
         }
-
+h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            color: #333;
+        }
         /* Container for left-aligned layout */
         .container {
             display: flex;
@@ -192,6 +199,7 @@
 </head>
 <body>
     <a href="index.html" class="back-home">Back to Home</a>
+    <h1>Price Sheet</h1>
     <div class="container">
         <!-- Left Side -->
         <div class="left-side">
