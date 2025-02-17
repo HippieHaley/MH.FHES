@@ -693,7 +693,13 @@
             const itemizedList = document.getElementById('itemizedList');
             const listItem = document.createElement('div');
             listItem.className = 'list-item';
-            listItem.textContent = `${service}: $${price.toFixed(2)}`;
+
+            // Track the total price for this item (including quantity)
+            let totalPrice = price;
+            let quantity = 1;
+
+            // Display the item and its price
+            listItem.textContent = `${service} x${quantity}: $${totalPrice.toFixed(2)}`;
 
             // Add "Multiple" button for specific items
             if (isMultipleAllowed(service)) {
@@ -701,10 +707,15 @@
                 multipleButton.textContent = "Multiple";
                 multipleButton.className = 'multiple-button';
                 multipleButton.onclick = function () {
-                    const quantity = parseInt(prompt("Enter quantity:", "1"), 10);
-                    if (!isNaN(quantity) && quantity > 0) {
-                        const totalPrice = price * quantity;
-                        grandTotal += totalPrice - price; // Adjust grand total for the new quantity
+                    const newQuantity = parseInt(prompt("Enter quantity:", quantity), 10);
+                    if (!isNaN(newQuantity) && newQuantity > 0) {
+                        // Update the total price based on the new quantity
+                        grandTotal -= totalPrice; // Remove the old total
+                        quantity = newQuantity;
+                        totalPrice = price * quantity;
+                        grandTotal += totalPrice; // Add the new total
+
+                        // Update the displayed item and total
                         listItem.textContent = `${service} x${quantity}: $${totalPrice.toFixed(2)}`;
                         listItem.appendChild(multipleButton);
                         listItem.appendChild(removeButton);
@@ -714,19 +725,21 @@
                 listItem.appendChild(multipleButton);
             }
 
+            // Add "Remove" button
             const removeButton = document.createElement('button');
             removeButton.textContent = "X";
             removeButton.className = 'remove-button';
             removeButton.onclick = function () {
                 itemizedList.removeChild(listItem);
-                grandTotal -= price;
+                grandTotal -= totalPrice; // Subtract the total price (including quantity)
                 document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
             };
 
             listItem.appendChild(removeButton);
             itemizedList.appendChild(listItem);
 
-            grandTotal += price;
+            // Update the grand total
+            grandTotal += totalPrice;
             document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
         }
 
