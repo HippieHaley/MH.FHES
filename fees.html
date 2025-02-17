@@ -231,7 +231,7 @@
 
         const coverageLevels = ["100%", "75%", "50%", "25%", "0%"];
 
-        // Function to determine coverage level based on household size and yearly income
+       // Function to determine coverage level based on household size and yearly income
         function determineCoverageLevel(householdSize, yearlyIncome) {
             if (!coverageChart[householdSize]) {
                 return "N/A"; // If household size is not in the chart
@@ -245,66 +245,48 @@
             return "0%"; // Default to 0% if above the highest threshold
         }
 
-        // Calculate Biweekly Income
-        function calculateBiweeklyTotal() {
-            const paystub1 = parseFloat(document.getElementById('paystub1').value) || 0;
-            const paystub2 = parseFloat(document.getElementById('paystub2').value) || 0;
-            const total = paystub1 + paystub2;
-            const average = total / 2;
-            const annual = average * 26;
+        // Calculate Income for a specific type (biweekly, weekly, twiceMonth, verbal)
+        function calculateIncome(type) {
+            let paystub1, paystub2, total, average, annual;
 
-            document.getElementById('biweeklyTotal').textContent = total.toFixed(2);
-            document.getElementById('biweeklyAverage').textContent = average.toFixed(2);
-            document.getElementById('biweeklyAnnual').textContent = annual.toFixed(2);
+            switch (type) {
+                case 'biweekly':
+                    paystub1 = parseFloat(document.getElementById('paystub1').value) || 0;
+                    paystub2 = parseFloat(document.getElementById('paystub2').value) || 0;
+                    total = paystub1 + paystub2;
+                    average = total / 2;
+                    annual = average * 26;
+                    break;
+                case 'weekly':
+                    paystub1 = parseFloat(document.getElementById('weeklyPaystub1').value) || 0;
+                    paystub2 = parseFloat(document.getElementById('weeklyPaystub2').value) || 0;
+                    total = paystub1 + paystub2;
+                    average = total / 2;
+                    annual = average * 52;
+                    break;
+                case 'twiceMonth':
+                    paystub1 = parseFloat(document.getElementById('twiceMonthPaystub1').value) || 0;
+                    paystub2 = parseFloat(document.getElementById('twiceMonthPaystub2').value) || 0;
+                    total = paystub1 + paystub2;
+                    average = total / 2;
+                    annual = average * 24;
+                    break;
+                case 'verbal':
+                    const hoursPerWeek = parseFloat(document.getElementById('verbalHours').value) || 0;
+                    const hourlyRate = parseFloat(document.getElementById('verbalRate').value) || 0;
+                    total = hoursPerWeek * hourlyRate;
+                    average = total;
+                    annual = total * 52;
+                    break;
+                default:
+                    return;
+            }
 
-            document.getElementById('grandBiweeklyAnnual').textContent = annual.toFixed(2);
-            calculateGrandTotal();
-        }
+            document.getElementById(`${type}Total`).textContent = total.toFixed(2);
+            document.getElementById(`${type}Average`).textContent = average.toFixed(2);
+            document.getElementById(`${type}Annual`).textContent = annual.toFixed(2);
 
-        // Calculate Weekly Income
-        function calculateWeeklyTotal() {
-            const paystub1 = parseFloat(document.getElementById('weeklyPaystub1').value) || 0;
-            const paystub2 = parseFloat(document.getElementById('weeklyPaystub2').value) || 0;
-            const total = paystub1 + paystub2;
-            const average = total / 2;
-            const annual = average * 52;
-
-            document.getElementById('weeklyTotal').textContent = total.toFixed(2);
-            document.getElementById('weeklyAverage').textContent = average.toFixed(2);
-            document.getElementById('weeklyAnnual').textContent = annual.toFixed(2);
-
-            document.getElementById('grandWeeklyAnnual').textContent = annual.toFixed(2);
-            calculateGrandTotal();
-        }
-
-        // Calculate Twice a Month Income
-        function calculateTwiceMonthTotal() {
-            const paystub1 = parseFloat(document.getElementById('twiceMonthPaystub1').value) || 0;
-            const paystub2 = parseFloat(document.getElementById('twiceMonthPaystub2').value) || 0;
-            const total = paystub1 + paystub2;
-            const average = total / 2;
-            const annual = average * 24;
-
-            document.getElementById('twiceMonthTotal').textContent = total.toFixed(2);
-            document.getElementById('twiceMonthAverage').textContent = average.toFixed(2);
-            document.getElementById('twiceMonthAnnual').textContent = annual.toFixed(2);
-
-            document.getElementById('grandTwiceMonthAnnual').textContent = annual.toFixed(2);
-            calculateGrandTotal();
-        }
-
-        // Calculate Weekly Verbal Income
-        function calculateVerbalIncome() {
-            const hoursPerWeek = parseFloat(document.getElementById('verbalHours').value) || 0;
-            const hourlyRate = parseFloat(document.getElementById('verbalRate').value) || 0;
-            const weeklyIncome = hoursPerWeek * hourlyRate;
-            const annualIncome = weeklyIncome * 52;
-
-            document.getElementById('verbalWeeklyTotal').textContent = weeklyIncome.toFixed(2);
-            document.getElementById('verbalWeeklyAverage').textContent = weeklyIncome.toFixed(2);
-            document.getElementById('verbalAnnual').textContent = annualIncome.toFixed(2);
-
-            document.getElementById('grandVerbalAnnual').textContent = annualIncome.toFixed(2);
+            document.getElementById(`grand${type.charAt(0).toUpperCase() + type.slice(1)}Annual`).textContent = annual.toFixed(2);
             calculateGrandTotal();
         }
 
@@ -329,7 +311,7 @@
 
         // Display the grand total as Yearly Income and update coverage level
         function updateHouseholdIncome() {
-            const householdSize = parseInt(document.getElementById('householdSize').value) || 1;
+            const householdSize = parseInt(document.getElementById('householdSize').value) || 0;
             const yearlyIncome = parseFloat(document.getElementById('grandTotalAnnual').textContent) || 0;
             document.getElementById('yearlyIncomeDisplay').textContent = yearlyIncome.toFixed(2);
 
