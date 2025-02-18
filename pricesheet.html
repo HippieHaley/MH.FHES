@@ -106,28 +106,44 @@
     border-radius: 10px; /* Adds rounded corners to the table */
     overflow: hidden; /* Ensures rounded corners apply properly */
 }
-table {
-    width: 100%;
-    border-radius: 10px; /* Rounded corners for the table */
-    background-color: #acdbf9; /* Light blue background */
-    border-collapse: collapse; /* Ensures borders are merged */
-}
+ table {
+        width: 100%;
+        /* Collapse borders so they merge cleanly */
+        border-collapse: collapse;
+        /* Match the background color */
+        background-color: #acdbf9;
+        /* Use a solid border to match your style */
+        border: 2px solid #333;
+        /* Round the corners */
+        border-radius: 8px;
+        /* Ensure corners stay rounded if content is bigger */
+        overflow: hidden;
+        /* Add spacing on top/bottom */
+        margin: 20px 0;
+    }
 
-tr {
-    border: 2px solid black; /* Border for the entire row */
-}
+    /* Table Rows */
+    tr {
+        /* This puts a border around each row. Remove if you only want the outer border. */
+        border: 2px solid #333;
+    }
 
-th, td {
-    text-align: center;
-    padding: 15px;
-    border: none; /* Remove borders from individual cells */
-}
+    /* Table Cells */
+    th, td {
+        text-align: center;
+        padding: 15px;
+        /* Use the same color as the body or section background */
+        background-color: #acdbf9;
+        color: #333;
+    }
 
-th {
-    background-color: #f8c9f9; /* Different background for headers */
-    color: #000;
-    font-weight: bold;
-}
+    /* Table Header */
+    th {
+        /* Pink header row to match button color */
+        background-color: #f8c9f9;
+        color: #000;
+        font-weight: bold;
+    }
         .cpt-code {
             font-size: 0.8rem;
             color: #333;
