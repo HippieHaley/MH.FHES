@@ -106,25 +106,28 @@
     border-radius: 10px; /* Adds rounded corners to the table */
     overflow: hidden; /* Ensures rounded corners apply properly */
 }
+table {
+    width: 100%;
+    border-radius: 10px; /* Rounded corners for the table */
+    background-color: #acdbf9; /* Light blue background */
+    border-collapse: collapse; /* Ensures borders are merged */
+}
 
 tr {
-    border: 2px solid black; /* Only applies border around the row */
+    border: 2px solid black; /* Border for the entire row */
 }
 
 th, td {
     text-align: center;
     padding: 15px;
-    background-color: #acdbf9; /* Light blue background */
+    border: none; /* Remove borders from individual cells */
 }
 
 th {
-    background-color: #f8c9f9; /* Light pink background for headers */
+    background-color: #f8c9f9; /* Different background for headers */
     color: #000;
     font-weight: bold;
-    box-sizing: border-box;
 }
-
-
         .cpt-code {
             font-size: 0.8rem;
             color: #333;
