@@ -100,33 +100,30 @@
         }
        
         table {
-            width: 100%;
-            border-radius;
-            background-color: #acdbf9; /* Light blue background */
-        }
+    width: 100%;
+    border-collapse: collapse; /* Ensures borders are clean */
+    background-color: #acdbf9; /* Light blue background */
+    border-radius: 10px; /* Adds rounded corners to the table */
+    overflow: hidden; /* Ensures rounded corners apply properly */
+}
 
-        th, td {
-            text-align: center;
-            padding: 15px;
-            background-color: #acdbf9; /* Light blue background */
-        }
-        tr {
-    border: 2px solid black; /* This applies the border only to the row */
-        }
-        th {
-            background-color: #f8c9f9;
-            color: #000;
-            font-weight: bold;
-            box-sizing: border-box;
-        }
+tr {
+    border: 2px solid black; /* Only applies border around the row */
+}
 
-        /* Service/Procedure with CPT styling */
-        .service-name {
-            font-size: 1.1rem;
-            font-weight: bold;
-            text-transform: capitalize;
-            background-color: #f8c9f9;
-        }
+th, td {
+    text-align: center;
+    padding: 15px;
+    background-color: #acdbf9; /* Light blue background */
+}
+
+th {
+    background-color: #f8c9f9; /* Light pink background for headers */
+    color: #000;
+    font-weight: bold;
+    box-sizing: border-box;
+}
+
 
         .cpt-code {
             font-size: 0.8rem;
