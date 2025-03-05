@@ -262,7 +262,7 @@
 
         // Calculate Income for a specific type (biweekly, weekly, twiceMonth, verbal)
         function calculateIncome(type) {
-            let paystub1, paystub2, hoursPerWeek, hourlyRate, total, average, annual;
+            let paystub1, paystub2, verbalHours, verbalRate, total, average, annual;
 
             switch (type) {
                 case 'biweekly':
@@ -287,11 +287,13 @@
                     annual = average * 24; // 24 pay periods in a year for twice a month
                     break;
                 case 'verbal':
-                    const hoursPerWeek = parseFloat(document.getElementById('verbalHours').value) || 0;
-                    const hourlyRate = parseFloat(document.getElementById('verbalRate').value) || 0;
-                    total = hoursPerWeek * hourlyRate; // Weekly total
-                    average = total; // Weekly average is the same as total
-                    annual = total * 52; // Annual income (52 weeks in a year)
+                verbalHours = parseFloat(document.getElementById('verbalHours').value) || 0;
+                    verbalRate = parseFloat(document.getElementById('verbalRate').value) || 0;
+                    total = verbalHours * verbalRate;
+                    average = total;
+                    annual = total * 52;
+                    document.getElementById("verbalTotal").textContent = total.toFixed(2);
+                    document.getElementById("verbalAnnual").textContent = annual.toFixed(2);
                     break;
                 default:
                     return;
