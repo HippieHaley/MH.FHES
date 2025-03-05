@@ -189,8 +189,8 @@
             <div class="section">
                 <h2>Weekly Verbal Income</h2>
                 <p class="example">Example: Freelance or hourly work</p>
-                <label>Hours worked: <input type="number" id=" verbalHours " value="0" onchange="calculateIncome('verbal')"></label><br>
-                <label>Hourly Pay: $<input type="number" id=" verbalRate " value="0" onchange="calculateIncome('verbal')"></label><br>
+                <label>Hours worked: <input type="number" id="verbalHours" value="0" onchange="calculateIncome('verbal')"></label><br>
+                <label>Hourly Pay: $<input type="number" id="verbalRate" value="0" onchange="calculateIncome('verbal')"></label><br>
                 <p>Total: $<span id="verbalWeeklyTotal">0</span></p>
                 <p>Average: $<span id="verbalWeeklyAverage">0</span></p>
                 <p>Annual: $<span id="verbalAnnual">0</span></p>
@@ -275,9 +275,11 @@
                 case 'weekly':
                     paystub1 = parseFloat(document.getElementById('weeklyPaystub1').value) || 0;
                     paystub2 = parseFloat(document.getElementById('weeklyPaystub2').value) || 0;
+                    console.log(`Weekly Paystub 1: ${paystub1}, Paystub 2: ${paystub2}`); // Debugging
                     total = paystub1 + paystub2;
                     average = total / 2;
-                    annual = average * 52; // 52 weeks in a year for weekly
+                    annual = average * 52;
+                    console.log(`Weekly Total: ${total}, Average: ${average}, Annual: ${annual}`); // Debugging
                     break;
                 case 'twiceMonth':
                     paystub1 = parseFloat(document.getElementById('twiceMonthPaystub1').value) || 0;
@@ -287,12 +289,13 @@
                     annual = average * 24; // 24 pay periods in a year for twice a month
                     break;
                 case 'verbal':
-                verbalHours = parseFloat(document.getElementById('verbalHours').value) || 0;
+                    verbalHours = parseFloat(document.getElementById('verbalHours').value) || 0;
                     verbalRate = parseFloat(document.getElementById('verbalRate').value) || 0;
                     total = verbalHours * verbalRate;
                     average = total;
                     annual = total * 52;
-                    document.getElementById("verbalTotal").textContent = total.toFixed(2);
+                    document.getElementById("verbalWeeklyTotal").textContent = total.toFixed(2);
+                    document.getElementById("verbalWeeklyAverage").textContent = average.toFixed(2);
                     document.getElementById("verbalAnnual").textContent = annual.toFixed(2);
                     break;
                 default:
@@ -317,6 +320,7 @@
             const weeklyAnnual = parseFloat(document.getElementById('weeklyAnnual').textContent) || 0;
             const twiceMonthAnnual = parseFloat(document.getElementById('twiceMonthAnnual').textContent) || 0;
             const verbalAnnual = parseFloat(document.getElementById('verbalAnnual').textContent) || 0;
+            console.log(`Verbal Annual: ${verbalAnnual}`); // Debugging
             const weeklyTips = parseFloat(document.getElementById('grandTips').value) || 0;
             const annualTips = weeklyTips * 52;
             const otherMonthlyIncome = parseFloat(document.getElementById('grandOtherMonthly').value) || 0;
@@ -324,6 +328,7 @@
             const otherAnnualIncome = parseFloat(document.getElementById('grandOtherAnnual').value) || 0;
 
             const grandTotal = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + annualTips + annualOtherMonthlyIncome + otherAnnualIncome;
+            console.log(`Grand Total: ${grandTotal}`); // Debugging
             document.getElementById('grandTotalAnnual').textContent = grandTotal.toFixed(2);
 
             // Update Yearly Income and Coverage Level display
