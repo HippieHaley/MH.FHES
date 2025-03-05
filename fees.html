@@ -5,7 +5,145 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Income Calculator</title>
     <style>
-        /* Your CSS styles here */
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* General Body Style */
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #acdbf9; /* Light blue background */
+            color: #333;
+            padding-top: 50px;
+        }
+
+        /* Container Flex Layout */
+        .container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        /* Column Style */
+        .column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Section Style */
+        .section {
+            padding: 15px;
+            border: 2px solid #333;
+            box-sizing: border-box;
+            background-color: #acdbf9; /* Light blue background */
+            border-radius: 8px;
+        }
+
+        /* Highlighted Section Styles */
+        .grand-total-section {
+            background-color: #acdbf9; /* Light blue background */
+            border: 2px solid #333;
+            padding: 20px;
+        }
+
+        .lookup-section {
+            padding: 15px;
+            background-color: #acdbf9; /* Light blue background */
+            border: 2px solid #333;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
+        /* Title Section */
+        .title-section h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            line-height: 1.2;
+            letter-spacing: 2px;
+            color: #fff; /* White text with black outline */
+            -webkit-text-stroke: 1px #000;
+            text-stroke: 1px #000;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Buttons */
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8c9f9; /* Soft pink */
+            color: #333;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 30px;
+            text-align: center;
+            border: 1px solid #000; /* Black border */
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #e8b8e8; /* Slightly darker pink */
+        }
+     .back-home {
+            display: inline-block;  /* Prevent stretching */
+            width: auto;  /* Adjust width based on text */
+            padding: 10px 20px;
+            background-color: #f8c9f9; /* Soft pink */
+            color: #333;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 30px;
+            text-align: center;
+            border: 1px solid #000;
+            position: absolute; /* Positioning fix */
+            top: 20px;
+            left: 20px;
+        }
+        .back-home:hover {
+            background-color: #e8b3e8;
+        }
+     input[type="number"] {
+            width: 100%;
+            max-width: 300px;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border: 2px solid #f8c9f9; /* Soft pink border */
+            border-radius: 30px; /* Rounded edges */
+            background-color: #f8c9f9; /* Soft pink background */
+            color: #333; /* Dark text */
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s ease;
+            -moz-appearance: textfield; /* Remove Firefox spinner */
+        }
+
+        /* Hover and Focus Effects */
+        input[type="number"]:hover {
+            background-color: #f0d4f0; /* Slightly lighter pink */
+        }
+
+        input[type="number"]:focus {
+            border-color: #e8b8e8; /* Darker pink border on focus */
+            background-color: #fff; /* White background on focus */
+            box-shadow: 0 0 5px rgba(232, 184, 232, 0.5); /* Soft pink glow */
+        }
+     /* Remove Spinner Buttons for Chrome */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
     </style>
 </head>
 <body>
