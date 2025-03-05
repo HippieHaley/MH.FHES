@@ -1,155 +1,17 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Income Calculator</title>
-<style>
-        /* Basic Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* General Body Style */
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 1000px;
-            margin: 0 auto;
-            background-color: #acdbf9; /* Light blue background */
-            color: #333;
-            padding-top: 50px;
-        }
-
-        /* Container Flex Layout */
-        .container {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin: 20px 0;
-        }
-
-        /* Column Style */
-        .column {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        /* Section Style */
-        .section {
-            padding: 15px;
-            border: 2px solid #333;
-            box-sizing: border-box;
-            background-color: #acdbf9; /* Light blue background */
-            border-radius: 8px;
-        }
-
-        /* Highlighted Section Styles */
-        .grand-total-section {
-            background-color: #acdbf9; /* Light blue background */
-            border: 2px solid #333;
-            padding: 20px;
-        }
-
-        .lookup-section {
-            padding: 15px;
-            background-color: #acdbf9; /* Light blue background */
-            border: 2px solid #333;
-            margin-top: 20px;
-            border-radius: 8px;
-        }
-
-        /* Title Section */
-        .title-section h1 {
-            font-size: 2.5rem;
-            font-weight: bold;
-            line-height: 1.2;
-            letter-spacing: 2px;
-            color: #fff; /* White text with black outline */
-            -webkit-text-stroke: 1px #000;
-            text-stroke: 1px #000;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        /* Buttons */
-        .button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f8c9f9; /* Soft pink */
-            color: #333;
-            padding: 10px 20px;
-            font-size: 1rem;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 30px;
-            text-align: center;
-            border: 1px solid #000; /* Black border */
-            cursor: pointer;
-        }
-        .button:hover {
-            background-color: #e8b8e8; /* Slightly darker pink */
-        }
-     .back-home {
-            display: inline-block;  /* Prevent stretching */
-            width: auto;  /* Adjust width based on text */
-            padding: 10px 20px;
-            background-color: #f8c9f9; /* Soft pink */
-            color: #333;
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 30px;
-            text-align: center;
-            border: 1px solid #000;
-            position: absolute; /* Positioning fix */
-            top: 20px;
-            left: 20px;
-        }
-        .back-home:hover {
-            background-color: #e8b3e8;
-        }
-     input[type="number"] {
-            width: 100%;
-            max-width: 300px;
-            padding: 10px 15px;
-            margin: 10px 0;
-            border: 2px solid #f8c9f9; /* Soft pink border */
-            border-radius: 30px; /* Rounded edges */
-            background-color: #f8c9f9; /* Soft pink background */
-            color: #333; /* Dark text */
-            font-size: 1rem;
-            outline: none;
-            transition: 0.3s ease;
-            -moz-appearance: textfield; /* Remove Firefox spinner */
-        }
-
-        /* Hover and Focus Effects */
-        input[type="number"]:hover {
-            background-color: #f0d4f0; /* Slightly lighter pink */
-        }
-
-        input[type="number"]:focus {
-            border-color: #e8b8e8; /* Darker pink border on focus */
-            background-color: #fff; /* White background on focus */
-            box-shadow: 0 0 5px rgba(232, 184, 232, 0.5); /* Soft pink glow */
-        }
-     /* Remove Spinner Buttons for Chrome */
-        input[type="number"]::-webkit-inner-spin-button,
-        input[type="number"]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
+    <style>
+        /* Your CSS styles here */
     </style>
 </head>
 <body>
-     <a href="index.html" class="back-home">Back to Home</a>
-       <h1>Income Calculator</h1>
-    
+    <a href="index.html" class="back-home">Back to Home</a>
+    <h1>Income Calculator</h1>
+
     <div class="container">
         <!-- Column 1: Biweekly and Weekly Income Sections -->
         <div class="column">
@@ -158,16 +20,16 @@
                 <p class="example">Example: Every other Friday</p>
                 <label>Paystub one: $<input type="number" id="paystub1" value="0" onchange="calculateIncome('biweekly')"></label><br>
                 <label>Paystub two: $<input type="number" id="paystub2" value="0" onchange="calculateIncome('biweekly')"></label><br>
-                 <p>Total: $<span id="weeklyTotal">0</span></p>
-                <p>Average: $<span id="weeklyAverage">0</span></p>
-                <p>Annual: $<span id="weeklyAnnual">0</span></p>
+                <p>Total: $<span id="biweeklyTotal">0</span></p>
+                <p>Average: $<span id="biweeklyAverage">0</span></p>
+                <p>Annual: $<span id="biweeklyAnnual">0</span></p>
             </div>
-            
+
             <div class="section">
                 <h2>Weekly Income</h2>
                 <p class="example">Example: Every Friday</p>
-               <label>Paystub one: $<input type="number" id="weeklyPaystub1" value="0" onchange="calculateIncome('weekly')"></label><br>
-<label>Paystub two: $<input type="number" id="weeklyPaystub2" value="0" onchange="calculateIncome('weekly')"></label><br>
+                <label>Paystub one: $<input type="number" id="weeklyPaystub1" value="0" onchange="calculateIncome('weekly')"></label><br>
+                <label>Paystub two: $<input type="number" id="weeklyPaystub2" value="0" onchange="calculateIncome('weekly')"></label><br>
                 <p>Total: $<span id="weeklyTotal">0</span></p>
                 <p>Average: $<span id="weeklyAverage">0</span></p>
                 <p>Annual: $<span id="weeklyAnnual">0</span></p>
@@ -179,8 +41,8 @@
             <div class="section">
                 <h2>Twice a Month Income</h2>
                 <p class="example">Example: 1st and 15th</p>
-              <label>Paystub one: $<input type="number" id="twiceMonthPaystub1" value="0" onchange="calculateIncome('twiceMonth')"></label><br>
-<label>Paystub two: $<input type="number" id="twiceMonthPaystub2" value="0" onchange="calculateIncome('twiceMonth')"></label><br>
+                <label>Paystub one: $<input type="number" id="twiceMonthPaystub1" value="0" onchange="calculateIncome('twiceMonth')"></label><br>
+                <label>Paystub two: $<input type="number" id="twiceMonthPaystub2" value="0" onchange="calculateIncome('twiceMonth')"></label><br>
                 <p>Total: $<span id="twiceMonthTotal">0</span></p>
                 <p>Average: $<span id="twiceMonthAverage">0</span></p>
                 <p>Annual: $<span id="twiceMonthAnnual">0</span></p>
@@ -190,7 +52,7 @@
                 <h2>Weekly Verbal Income</h2>
                 <p class="example">Example: Freelance or hourly work</p>
                 <label>Hours worked: <input type="number" id="verbalHours" value="0" onchange="calculateIncome('verbal')"></label><br>
-<label>Hourly Pay: $<input type="number" id="verbalRate" value="0" onchange="calculateIncome('verbal')"></label><br>
+                <label>Hourly Pay: $<input type="number" id="verbalRate" value="0" onchange="calculateIncome('verbal')"></label><br>
                 <p>Total: $<span id="verbalWeeklyTotal">0</span></p>
                 <p>Average: $<span id="verbalWeeklyAverage">0</span></p>
                 <p>Annual: $<span id="verbalAnnual">0</span></p>
@@ -208,8 +70,8 @@
 
                 <!-- Tips and Other Income for Grand Total -->
                 <label>Tips per week: $<input type="number" id="grandTips" value="0" onchange="calculateGrandTotal()"></label><br>
-<label>Other Income per month: $<input type="number" id="grandOtherMonthly" value="0" onchange="calculateGrandTotal()"></label><br>
-<label>Other Income by year: $<input type="number" id="grandOtherAnnual" value="0" onchange="calculateGrandTotal()"></label><br>
+                <label>Other Income per month: $<input type="number" id="grandOtherMonthly" value="0" onchange="calculateGrandTotal()"></label><br>
+                <label>Other Income by year: $<input type="number" id="grandOtherAnnual" value="0" onchange="calculateGrandTotal()"></label><br>
 
                 <p><strong>Grand Total Annual Income: $<span id="grandTotalAnnual">0</span></strong></p>
             </div>
@@ -218,7 +80,7 @@
             <div class="lookup-section">
                 <h3>Household Information</h3>
                 <label>People per Household: <input type="number" id="householdSize" min="1" value="1" onchange="updateHouseholdIncome()"></label><br>
-                <p><strong></strong>Yearly Income: $<span id="yearlyIncomeDisplay">0</span></p>
+                <p><strong>Yearly Income: $<span id="yearlyIncomeDisplay">0</span></strong></p>
                 <p><strong>Coverage Level: <span id="coverageLevel">N/A</span></strong></p>
             </div>
         </div>
@@ -227,115 +89,116 @@
     <script>
         // Chart data based on family size and coverage levels
         const coverageChart = {
-            1: [15650, 23474, 31300, 39124, 39125], 
-2: [21150, 31724, 42299, 52874, 52875], 
-3: [26650, 39974, 53299, 66624, 66625], 
-4: [32150, 48224, 64299, 80374, 80375], 
-5: [37650, 56474, 75299, 94124, 94125], 
-6: [43150, 64724, 86299, 107874, 107875], 
-7: [48650, 72974, 97299, 121624, 121625],
-8: [54150, 81224, 108299, 135374, 135375], 
-9: [59650, 89474, 119299, 149124, 149125], 
-10: [65150, 97724, 130299, 162874, 162875], 
-11: [70650, 105974, 141299, 176624, 176625], 
-12: [76150, 114224, 152299, 190374, 190375], 
-13: [81650, 122474, 163299, 204124, 204125], 
-14: [87150, 130724, 174299, 217874, 217875], 
-15: [92650, 138974, 185299, 231624, 231625],
+            1: [15650, 23474, 31300, 39124, 39125],
+            2: [21150, 31724, 42299, 52874, 52875],
+            3: [26650, 39974, 53299, 66624, 66625],
+            4: [32150, 48224, 64299, 80374, 80375],
+            5: [37650, 56474, 75299, 94124, 94125],
+            6: [43150, 64724, 86299, 107874, 107875],
+            7: [48650, 72974, 97299, 121624, 121625],
+            8: [54150, 81224, 108299, 135374, 135375],
+            9: [59650, 89474, 119299, 149124, 149125],
+            10: [65150, 97724, 130299, 162874, 162875],
+            11: [70650, 105974, 141299, 176624, 176625],
+            12: [76150, 114224, 152299, 190374, 190375],
+            13: [81650, 122474, 163299, 204124, 204125],
+            14: [87150, 130724, 174299, 217874, 217875],
+            15: [92650, 138974, 185299, 231624, 231625],
         };
-const coverageLevels = ["100%", "75%", "50%", "25%", "0%"];
 
-// Function to determine coverage level based on household size and yearly income
-function determineCoverageLevel(householdSize, yearlyIncome) {
-    if (!coverageChart[householdSize]) {
-        return "N/A"; // If household size is not in the chart
-    }
-    const incomeBrackets = coverageChart[householdSize];
-    for (let i = 0; i < incomeBrackets.length; i++) {
-        if (yearlyIncome <= incomeBrackets[i]) {
-            return coverageLevels[i];
+        const coverageLevels = ["100%", "75%", "50%", "25%", "0%"];
+
+        // Function to determine coverage level based on household size and yearly income
+        function determineCoverageLevel(householdSize, yearlyIncome) {
+            if (!coverageChart[householdSize]) {
+                return "N/A"; // If household size is not in the chart
+            }
+            const incomeBrackets = coverageChart[householdSize];
+            for (let i = 0; i < incomeBrackets.length; i++) {
+                if (yearlyIncome <= incomeBrackets[i]) {
+                    return coverageLevels[i];
+                }
+            }
+            return "0%"; // Default to 0% if above the highest threshold
         }
-    }
-    return "0%"; // Default to 0% if above the highest threshold
-}
 
-// Calculate Income for a specific type (biweekly, weekly, twiceMonth, verbal)
-function calculateIncome(type) {
-    let paystub1, paystub2, total, average, annual;
+        // Calculate Income for a specific type (biweekly, weekly, twiceMonth, verbal)
+        function calculateIncome(type) {
+            let paystub1, paystub2, total, average, annual;
 
-    switch (type) {
-        case 'biweekly':
-            paystub1 = parseFloat(document.getElementById('paystub1').value) || 0;
-            paystub2 = parseFloat(document.getElementById('paystub2').value) || 0;
-            total = paystub1 + paystub2;
-            average = total / 2;
-            annual = average * 26;
-            break;
-        case 'weekly':
-            paystub1 = parseFloat(document.getElementById('weeklyPaystub1').value) || 0;
-            paystub2 = parseFloat(document.getElementById('weeklyPaystub2').value) || 0;
-            total = paystub1 + paystub2;
-            average = total / 2;
-            annual = average * 52;
-            break;
-        case 'twiceMonth':
-            paystub1 = parseFloat(document.getElementById('twiceMonthPaystub1').value) || 0;
-            paystub2 = parseFloat(document.getElementById('twiceMonthPaystub2').value) || 0;
-            total = paystub1 + paystub2;
-            average = total / 2;
-            annual = average * 24;
-            break;
-        case 'verbal':
-            const hoursPerWeek = parseFloat(document.getElementById('verbalHours').value) || 0;
-            const hourlyRate = parseFloat(document.getElementById('verbalRate').value) || 0;
-            total = hoursPerWeek * hourlyRate;
-            average = total;
-            annual = total * 52;
-            break;
-        default:
-            return;
-    }
+            switch (type) {
+                case 'biweekly':
+                    paystub1 = parseFloat(document.getElementById('paystub1').value) || 0;
+                    paystub2 = parseFloat(document.getElementById('paystub2').value) || 0;
+                    total = paystub1 + paystub2;
+                    average = total / 2;
+                    annual = average * 26;
+                    break;
+                case 'weekly':
+                    paystub1 = parseFloat(document.getElementById('weeklyPaystub1').value) || 0;
+                    paystub2 = parseFloat(document.getElementById('weeklyPaystub2').value) || 0;
+                    total = paystub1 + paystub2;
+                    average = total / 2;
+                    annual = average * 52;
+                    break;
+                case 'twiceMonth':
+                    paystub1 = parseFloat(document.getElementById('twiceMonthPaystub1').value) || 0;
+                    paystub2 = parseFloat(document.getElementById('twiceMonthPaystub2').value) || 0;
+                    total = paystub1 + paystub2;
+                    average = total / 2;
+                    annual = average * 24;
+                    break;
+                case 'verbal':
+                    const hoursPerWeek = parseFloat(document.getElementById('verbalHours').value) || 0;
+                    const hourlyRate = parseFloat(document.getElementById('verbalRate').value) || 0;
+                    total = hoursPerWeek * hourlyRate;
+                    average = total;
+                    annual = total * 52;
+                    break;
+                default:
+                    return;
+            }
 
-    document.getElementById(`${type}Total`).textContent = total.toFixed(2);
-    document.getElementById(`${type}Average`).textContent = average.toFixed(2);
-    document.getElementById(`${type}Annual`).textContent = annual.toFixed(2);
+            document.getElementById(`${type}Total`).textContent = total.toFixed(2);
+            document.getElementById(`${type}Average`).textContent = average.toFixed(2);
+            document.getElementById(`${type}Annual`).textContent = annual.toFixed(2);
 
-    document.getElementById(`grand${type.charAt(0).toUpperCase() + type.slice(1)}Annual`).textContent = annual.toFixed(2);
-    calculateGrandTotal();
-}
+            document.getElementById(`grand${type.charAt(0).toUpperCase() + type.slice(1)}Annual`).textContent = annual.toFixed(2);
+            calculateGrandTotal();
+        }
 
-// Calculate Grand Total and update coverage level
-function calculateGrandTotal() {
-    const biweeklyAnnual = parseFloat(document.getElementById('biweeklyAnnual').textContent) || 0;
-    const weeklyAnnual = parseFloat(document.getElementById('weeklyAnnual').textContent) || 0;
-    const twiceMonthAnnual = parseFloat(document.getElementById('twiceMonthAnnual').textContent) || 0;
-    const verbalAnnual = parseFloat(document.getElementById('verbalAnnual').textContent) || 0;
-    const weeklyTips = parseFloat(document.getElementById('grandTips').value) || 0;
-    const annualTips = weeklyTips * 52;
-    const otherMonthlyIncome = parseFloat(document.getElementById('grandOtherMonthly').value) || 0;
-    const annualOtherMonthlyIncome = otherMonthlyIncome * 12;
-    const otherAnnualIncome = parseFloat(document.getElementById('grandOtherAnnual').value) || 0;
+        // Calculate Grand Total and update coverage level
+        function calculateGrandTotal() {
+            const biweeklyAnnual = parseFloat(document.getElementById('biweeklyAnnual').textContent) || 0;
+            const weeklyAnnual = parseFloat(document.getElementById('weeklyAnnual').textContent) || 0;
+            const twiceMonthAnnual = parseFloat(document.getElementById('twiceMonthAnnual').textContent) || 0;
+            const verbalAnnual = parseFloat(document.getElementById('verbalAnnual').textContent) || 0;
+            const weeklyTips = parseFloat(document.getElementById('grandTips').value) || 0;
+            const annualTips = weeklyTips * 52;
+            const otherMonthlyIncome = parseFloat(document.getElementById('grandOtherMonthly').value) || 0;
+            const annualOtherMonthlyIncome = otherMonthlyIncome * 12;
+            const otherAnnualIncome = parseFloat(document.getElementById('grandOtherAnnual').value) || 0;
 
-    const grandTotal = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + annualTips + annualOtherMonthlyIncome + otherAnnualIncome;
-    document.getElementById('grandTotalAnnual').textContent = grandTotal.toFixed(2);
+            const grandTotal = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + annualTips + annualOtherMonthlyIncome + otherAnnualIncome;
+            document.getElementById('grandTotalAnnual').textContent = grandTotal.toFixed(2);
 
-    // Update Yearly Income and Coverage Level display
-    updateHouseholdIncome();
-}
+            // Update Yearly Income and Coverage Level display
+            updateHouseholdIncome();
+        }
 
-// Display the grand total as Yearly Income and update coverage level
-function updateHouseholdIncome() {
-    const householdSize = parseInt(document.getElementById('householdSize').value) || 0;
-    const yearlyIncome = parseFloat(document.getElementById('grandTotalAnnual').textContent) || 0;
-    document.getElementById('yearlyIncomeDisplay').textContent = yearlyIncome.toFixed(2);
+        // Display the grand total as Yearly Income and update coverage level
+        function updateHouseholdIncome() {
+            const householdSize = parseInt(document.getElementById('householdSize').value) || 0;
+            const yearlyIncome = parseFloat(document.getElementById('grandTotalAnnual').textContent) || 0;
+            document.getElementById('yearlyIncomeDisplay').textContent = yearlyIncome.toFixed(2);
 
-    // Determine and display coverage level based on household size and yearly income
-    const coverageLevel = determineCoverageLevel(householdSize, yearlyIncome);
-    document.getElementById('coverageLevel').textContent = coverageLevel;
-}
+            // Determine and display coverage level based on household size and yearly income
+            const coverageLevel = determineCoverageLevel(householdSize, yearlyIncome);
+            document.getElementById('coverageLevel').textContent = coverageLevel;
+        }
 
-// Initialize all calculations
-calculateGrandTotal();
+        // Initialize all calculations
+        calculateGrandTotal();
     </script>
 </body>
 </html>
