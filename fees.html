@@ -189,8 +189,8 @@
             <div class="section">
                 <h2>Weekly Verbal Income</h2>
                 <p class="example">Example: Freelance or hourly work</p>
-                <label>Hours worked: <input type="number" id="hoursPerWeek" value="0" onchange="calculateIncome('verbal')"></label><br>
-                <label>Hourly Pay: $<input type="number" id="hourlyRate" value="0" onchange="calculateIncome('verbal')"></label><br>
+                <label>Hours worked: <input type="number" id=" verbalHours " value="0" onchange="calculateIncome('verbal')"></label><br>
+                <label>Hourly Pay: $<input type="number" id=" verbalRate " value="0" onchange="calculateIncome('verbal')"></label><br>
                 <p>Total: $<span id="verbalWeeklyTotal">0</span></p>
                 <p>Average: $<span id="verbalWeeklyAverage">0</span></p>
                 <p>Annual: $<span id="verbalAnnual">0</span></p>
@@ -262,7 +262,7 @@
 
         // Calculate Income for a specific type (biweekly, weekly, twiceMonth, verbal)
         function calculateIncome(type) {
-            let paystub1, paystub2, hoursPerWeek,hourlyRate, total, average, annual;
+            let paystub1, paystub2, hoursPerWeek, hourlyRate, total, average, annual;
 
             switch (type) {
                 case 'biweekly':
