@@ -270,38 +270,42 @@
                     paystub2 = parseFloat(document.getElementById('paystub2').value) || 0;
                     total = paystub1 + paystub2;
                     average = total / 2;
-                    annual = average * 26;
+                    annual = average * 26; // 26 pay periods in a year for biweekly
                     break;
                 case 'weekly':
                     paystub1 = parseFloat(document.getElementById('weeklyPaystub1').value) || 0;
                     paystub2 = parseFloat(document.getElementById('weeklyPaystub2').value) || 0;
                     total = paystub1 + paystub2;
                     average = total / 2;
-                    annual = average * 52;
+                    annual = average * 52; // 52 weeks in a year for weekly
                     break;
                 case 'twiceMonth':
                     paystub1 = parseFloat(document.getElementById('twiceMonthPaystub1').value) || 0;
                     paystub2 = parseFloat(document.getElementById('twiceMonthPaystub2').value) || 0;
                     total = paystub1 + paystub2;
                     average = total / 2;
-                    annual = average * 24;
+                    annual = average * 24; // 24 pay periods in a year for twice a month
                     break;
                 case 'verbal':
                     const hoursPerWeek = parseFloat(document.getElementById('verbalHours').value) || 0;
                     const hourlyRate = parseFloat(document.getElementById('verbalRate').value) || 0;
-                    total = hoursPerWeek * hourlyRate;
-                    average = total;
-                    annual = total * 52;
+                    total = hoursPerWeek * hourlyRate; // Weekly total
+                    average = total; // Weekly average is the same as total
+                    annual = total * 52; // Annual income (52 weeks in a year)
                     break;
                 default:
                     return;
             }
 
+            // Update the displayed values
             document.getElementById(`${type}Total`).textContent = total.toFixed(2);
             document.getElementById(`${type}Average`).textContent = average.toFixed(2);
             document.getElementById(`${type}Annual`).textContent = annual.toFixed(2);
 
+            // Update the grand total section
             document.getElementById(`grand${type.charAt(0).toUpperCase() + type.slice(1)}Annual`).textContent = annual.toFixed(2);
+
+            // Recalculate the grand total
             calculateGrandTotal();
         }
 
