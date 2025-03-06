@@ -191,8 +191,8 @@
                 <p class="example">Example: Freelance or hourly work</p>
                 <label>Hours worked: <input type="number" id="verbalHours" value="0" onchange="calculateIncome('verbal')"></label><br>
                 <label>Hourly Pay: $<input type="number" id="verbalRate" value="0" onchange="calculateIncome('verbal')"></label><br>
-                <p>Total: $<span id="verbalWeeklyTotal">0</span></p>
-                <p>Average: $<span id="verbalWeeklyAverage">0</span></p>
+                <p>Total: $<span id="verbalTotal">0</span></p>
+                <p>Average: $<span id="verbalAverage">0</span></p>
                 <p>Annual: $<span id="verbalAnnual">0</span></p>
             </div>
         </div>
@@ -294,8 +294,8 @@
                     total = verbalHours * verbalRate;
                     average = total;
                     annual = total * 52;
-                    document.getElementById("verbalWeeklyTotal").textContent = total.toFixed(2);
-                    document.getElementById("verbalWeeklyAverage").textContent = average.toFixed(2);
+                    document.getElementById("verbalTotal").textContent = total.toFixed(2);
+                    document.getElementById("verbalAverage").textContent = average.toFixed(2);
                     document.getElementById("verbalAnnual").textContent = annual.toFixed(2);
                     break;
                 default:
