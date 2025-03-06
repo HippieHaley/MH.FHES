@@ -294,19 +294,6 @@
                     total = verbalHours * verbalRate;
                     average = total;
                     annual = total * 52;
-                    document.getElementById("verbalTotal").textContent = total.toFixed(2);
-                    document.getElementById("verbalAverage").textContent = average.toFixed(2);
-                    document.getElementById("verbalAnnual").textContent = annual.toFixed(2);
-                    console.log("Verbal Income Calculation:", {
-        verbalHours: verbalHours,
-        verbalRate: verbalRate,
-        total: total,
-        annual: annual
-    });
-    
-    document.getElementById("verbalTotal").textContent = total.toFixed(2);
-    document.getElementById("verbalAverage").textContent = average.toFixed(2);
-    document.getElementById("verbalAnnual").textContent = annual.toFixed(2);
     break;
                 default:
                     return;
