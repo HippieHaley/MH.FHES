@@ -214,13 +214,13 @@
 
     <!-- Column 3: Grand Total and Household Information Section -->
     <div class="column">
-      <div class="section grand-total-section">
+      <div class="section">
         <h2>Grand Total</h2>
        
         <!-- Tips and Other Income for Grand Total -->
-        <label>Tips per week: $<input type="number" id="AnnualTips" value="0" onchange="calculateGrandTotal()"></label><br>
-        <label>Other Income per month: $<input type="number" id="AnnualOtherMonthly" value="0" onchange="calculateGrandTotal()"></label><br>
-        <label>Other Income by year: $<input type="number" id="OtherAnnual" value="0" onchange="calculateGrandTotal()"></label><br>
+        <label>Tips per week: $<input type="number" id="AnnualTips" value="0" onchange="calculateIncome()"></label><br>
+        <label>Other Income per month: $<input type="number" id="AnnualOtherMonthly" value="0" onchange="calculateIncome()"></label><br>
+        <label>Other Income by year: $<input type="number" id="OtherAnnual" value="0" onchange="calculateIncome()"></label><br>
 
       </div>
 
@@ -368,13 +368,13 @@
       document.getElementById(`${type}Average`).textContent = average.toFixed(2);
       document.getElementById(`${type}Annual`).textContent = annual.toFixed(2);
       document.getElementById(`grand${type.charAt(0).toUpperCase() + type.slice(1)}Annual`).textContent = annual.toFixed(2);
-      calculateGrandTotal();
+      calculateIncome();
     }
 
     /***************************************************
      * 4) Summation of All Incomes
      ***************************************************/
-    function calculateGrandTotal() {
+    function calculateIncome() {
       const biweeklyAnnual = parseFloat(document.getElementById('biweeklyAnnual').textContent) || 0;
       const weeklyAnnual = parseFloat(document.getElementById('weeklyAnnual').textContent) || 0;
       const twiceMonthAnnual = parseFloat(document.getElementById('twiceMonthAnnual').textContent) || 0;
@@ -392,7 +392,7 @@
 
       document.getElementById('grandTotal').textContent = grandTotal.toFixed(2);
       updateHouseholdIncome();
-       calculateGrandTotal();
+       calculateIncome();
     }
 
     /***************************************************
@@ -437,7 +437,7 @@
     }
 
     // Initialize everything on page load
-    calculateGrandTotal();
+    calculateIncome();
   </script>
 </body>
 </html>
