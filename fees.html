@@ -50,20 +50,29 @@
 
     /* Copy Button Styling (used for other buttons too) */
     .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #f8c9f9; /* Soft pink */
-      color: #333;
-      padding: 10px 20px;
-      font-size: 1rem;
-      font-weight: bold;
-      text-decoration: none;
-      border-radius: 30px;
-      text-align: center;
-      border: 1px solid #000; /* Black border */
-      cursor: pointer;
-    }
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8c9f9; /* Soft pink */
+  color: #333;
+  font-size: 1rem;
+  font-weight: bold;
+  text-decoration: none;
+  border: 1px solid #000; /* Black border */
+  border-radius: 30px;    /* Rounded corners */
+  cursor: pointer;
+  /* Remove or reduce padding so the button fits in 40x40 */
+  padding: 0.5rem;
+}
+
+/* Position & size for the copy icon button in the top-right corner */
+.icon-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+}
     .button:hover {
       background-color: #e8b8e8; /* Slightly darker pink */
     }
@@ -225,6 +234,10 @@
         
         <!-- Copy button positioned at top-right -->
         <button
+          class="button icon-button"
+    onclick="copyHouseholdInfo()"
+    title="Copy Info"
+  >
           onclick="copyHouseholdInfo()"
           style="
             position: absolute; 
