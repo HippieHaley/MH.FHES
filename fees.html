@@ -52,35 +52,32 @@
     }
 
     /* Main pink bubble style */
-.button {
-  display: inline-flex;
-  justify-content: center;
-  background-color: #f8c9f9; /* Pink background */
-  color: #333;              /* Text/icon color */
-  font-size: 1rem;
-  font-weight: bold;
-  border: 1px solid #000;   /* Black border */
-  border-radius: 50%;       /* Circle shape */
-  cursor: pointer;
-  /* The padding ensures the icon has some space. 
-     Adjust to your preference. */
-  padding: 0.5rem;
-}
-.button:hover {
-  background-color: #e8b8e8; /* Slightly darker pink */
-}
+    .button {
+      display: inline-flex;
+      justify-content: center;
+      background-color: #f8c9f9; /* Pink background */
+      color: #333;              /* Text/icon color */
+      font-size: 1rem;
+      font-weight: bold;
+      border: 1px solid #000;   /* Black border */
+      border-radius: 50%;       /* Circle shape */
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+    .button:hover {
+      background-color: #e8b8e8; /* Slightly darker pink */
+    }
 
-/* Position & size for the copy button in top-right corner */
-.icon-button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 40px;
-  height: 40px;
-  /* If you want the icon centered, keep display:flex, etc. 
-     But you can rely on .button's inline-flex if you prefer. */
-}
-     .back-home {
+    /* Position & size for the copy button in top-right corner */
+    .icon-button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 40px;
+      height: 40px;
+    }
+
+    .back-home {
       display: inline-block;  
       padding: 10px 20px;
       background-color: #f8c9f9; 
@@ -98,6 +95,7 @@
     .back-home:hover {
       background-color: #e8b3e8;
     }
+
     input[type="number"] {
       width: 100%;
       max-width: 300px;
@@ -157,22 +155,45 @@
       line-height: 1.2;
       letter-spacing: 2px;
       color: #fff;
-      -webkit-text-stroke: 1px #000;
-      text-stroke: 1px #000;
       text-align: center;
       margin-bottom: 20px;
     }
-     .h2 {
+
+    h2 {
       font-size: 1.5rem;
       font-weight: bold;
       line-height: 1.2;
       letter-spacing: 2px;
       color: #fff;
-      -webkit-text-stroke: 1px #000;
-      text-stroke: 1px #000;
       text-align: left;
-    flex-grow: 1; /* Makes all boxes equal height */
-     }
+    }
+
+    /* Tooltip Styling */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+    }
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -100px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -185,8 +206,8 @@
       <div class="section">
         <h2>Biweekly Income</h2>
         <p class="example">Example: Every other Friday</p>
-        <label>Paystub one: $<input type="number" id="paystub1" value="0" onchange="calculateIncome('biweekly')"></label><br>
-        <label>Paystub two: $<input type="number" id="paystub2" value="0" onchange="calculateIncome('biweekly')"></label><br>
+        <label>Paystub one: $<input type="number" id="paystub1" value="0" onchange="calculateIncome('biweekly')" placeholder="Enter amount"></label><br>
+        <label>Paystub two: $<input type="number" id="paystub2" value="0" onchange="calculateIncome('biweekly')" placeholder="Enter amount"></label><br>
         <p>Total: $<span id="biweeklyTotal">0</span></p>
         <p>Average: $<span id="biweeklyAverage">0</span></p>
         <p>Annual: $<span id="biweeklyAnnual">0</span></p>
@@ -195,8 +216,8 @@
       <div class="section">
         <h2>Weekly Income</h2>
         <p class="example">Example: Every Friday</p>
-        <label>Paystub one: $<input type="number" id="weeklyPaystub1" value="0" onchange="calculateIncome('weekly')"></label><br>
-        <label>Paystub two: $<input type="number" id="weeklyPaystub2" value="0" onchange="calculateIncome('weekly')"></label><br>
+        <label>Paystub one: $<input type="number" id="weeklyPaystub1" value="0" onchange="calculateIncome('weekly')" placeholder="Enter amount"></label><br>
+        <label>Paystub two: $<input type="number" id="weeklyPaystub2" value="0" onchange="calculateIncome('weekly')" placeholder="Enter amount"></label><br>
         <p>Total: $<span id="weeklyTotal">0</span></p>
         <p>Average: $<span id="weeklyAverage">0</span></p>
         <p>Annual: $<span id="weeklyAnnual">0</span></p>
@@ -208,8 +229,8 @@
       <div class="section">
         <h2>Twice a Month Income</h2>
         <p class="example">Example: 1st and 15th</p>
-        <label>Paystub one: $<input type="number" id="twiceMonthPaystub1" value="0" onchange="calculateIncome('twiceMonth')"></label><br>
-        <label>Paystub two: $<input type="number" id="twiceMonthPaystub2" value="0" onchange="calculateIncome('twiceMonth')"></label><br>
+        <label>Paystub one: $<input type="number" id="twiceMonthPaystub1" value="0" onchange="calculateIncome('twiceMonth')" placeholder="Enter amount"></label><br>
+        <label>Paystub two: $<input type="number" id="twiceMonthPaystub2" value="0" onchange="calculateIncome('twiceMonth')" placeholder="Enter amount"></label><br>
         <p>Total: $<span id="twiceMonthTotal">0</span></p>
         <p>Average: $<span id="twiceMonthAverage">0</span></p>
         <p>Annual: $<span id="twiceMonthAnnual">0</span></p>
@@ -218,8 +239,8 @@
       <div class="section">
         <h2>Weekly Verbal Income</h2>
         <p class="example">Example: Freelance or hourly work</p>
-        <label>Hours worked: <input type="number" id="verbalHours" value="0" onchange="calculateIncome('verbal')"></label><br>
-        <label>Hourly Pay: $<input type="number" id="verbalRate" value="0" onchange="calculateIncome('verbal')"></label><br>
+        <label>Hours worked: <input type="number" id="verbalHours" value="0" onchange="calculateIncome('verbal')" placeholder="Enter hours"></label><br>
+        <label>Hourly Pay: $<input type="number" id="verbalRate" value="0" onchange="calculateIncome('verbal')" placeholder="Enter rate"></label><br>
         <p>Total: $<span id="verbalTotal">0</span></p>
         <p>Average: $<span id="verbalAverage">0</span></p>
         <p>Annual: $<span id="verbalAnnual">0</span></p>
@@ -230,14 +251,14 @@
     <div class="column">
       <div class="section">
         <h2>Extra Income Sources</h2>
-        <label>Tips per week: $<input type="number" id="AnnualTips" value="0" onchange="calculateGrandTotal()"></label><br>
-        <label>Other Income per month: $<input type="number" id="AnnualOtherMonthly" value="0" onchange="calculateGrandTotal()"></label><br>
-        <label>Other Income by year: $<input type="number" id="OtherAnnual" value="0" onchange="calculateGrandTotal()"></label><br>
+        <label>Tips per week: $<input type="number" id="AnnualTips" value="0" onchange="calculateGrandTotal()" placeholder="Enter tips"></label><br>
+        <label>Other Income per month: $<input type="number" id="AnnualOtherMonthly" value="0" onchange="calculateGrandTotal()" placeholder="Enter amount"></label><br>
+        <label>Other Income by year: $<input type="number" id="OtherAnnual" value="0" onchange="calculateGrandTotal()" placeholder="Enter amount"></label><br>
       </div>
 
       <div class="lookup-section" style="position: relative;">
         <h3 style="margin: 0;">Household Information</h3>
-        <button class="button icon-button" onclick="copyHouseholdInfo()" title="Copy Info">
+        <button class="button icon-button" onclick="copyHouseholdInfo()" aria-label="Copy Household Info">
           <!-- Inline SVG icon for 'copy' -->
           <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
@@ -246,8 +267,16 @@
         </button>
         <label>People per Household: <input type="number" id="householdSize" min="1" value="1" onchange="updateHouseholdIncome()"></label><br>
         <p><strong>Total Income: $<span id="grandTotal">0</span></strong></p>
-        <p><strong>Coverage Level: <span id="coverageLevel">N/A</span></strong></p>
-        <p><strong>AWC! qualification: <span id="awcQualification">N/A</span></strong></p>
+        <p><strong>Coverage Level: <span id="coverageLevel">N/A</span></strong>
+          <span class="tooltip">ℹ️
+            <span class="tooltiptext">This indicates the percentage of coverage you qualify for based on your income.</span>
+          </span>
+        </p>
+        <p><strong>AWC! qualification: <span id="awcQualification">N/A</span></strong>
+          <span class="tooltip">ℹ️
+            <span class="tooltiptext">This indicates whether you qualify for the AWC! program based on your income and household size.</span>
+          </span>
+        </p>
       </div>
     </div>
   </div>
@@ -327,6 +356,10 @@
         case 'biweekly':
           paystub1 = parseFloat(document.getElementById('paystub1').value) || 0;
           paystub2 = parseFloat(document.getElementById('paystub2').value) || 0;
+          if (paystub1 < 0 || paystub2 < 0) {
+            alert("Please enter valid positive numbers.");
+            return;
+          }
           total = paystub1 + paystub2;
           average = total / 2;
           annual = average * 26;
@@ -334,6 +367,10 @@
         case 'weekly':
           paystub1 = parseFloat(document.getElementById('weeklyPaystub1').value) || 0;
           paystub2 = parseFloat(document.getElementById('weeklyPaystub2').value) || 0;
+          if (paystub1 < 0 || paystub2 < 0) {
+            alert("Please enter valid positive numbers.");
+            return;
+          }
           total = paystub1 + paystub2;
           average = total / 2;
           annual = average * 52;
@@ -341,6 +378,10 @@
         case 'twiceMonth':
           paystub1 = parseFloat(document.getElementById('twiceMonthPaystub1').value) || 0;
           paystub2 = parseFloat(document.getElementById('twiceMonthPaystub2').value) || 0;
+          if (paystub1 < 0 || paystub2 < 0) {
+            alert("Please enter valid positive numbers.");
+            return;
+          }
           total = paystub1 + paystub2;
           average = total / 2;
           annual = average * 24;
@@ -348,6 +389,10 @@
         case 'verbal':
           verbalHours = parseFloat(document.getElementById('verbalHours').value) || 0;
           verbalRate = parseFloat(document.getElementById('verbalRate').value) || 0;
+          if (verbalHours < 0 || verbalRate < 0) {
+            alert("Please enter valid positive numbers.");
+            return;
+          }
           total = verbalHours * verbalRate;
           average = total;
           annual = total * 52;
@@ -416,19 +461,48 @@
         `Coverage Level: ${coverageLevel}\n` +
         `AWC! qualification: ${awcQualification}\n`;
 
-      navigator.clipboard.writeText(infoToCopy)
-        .then(() => {
-          alert("Household info copied to clipboard!");
-        })
-        .catch(err => {
-          console.error("Failed to copy text:", err);
-          alert("Unable to copy info.");
-        });
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(infoToCopy)
+          .then(() => alert("Household info copied to clipboard!"))
+          .catch(err => console.error("Failed to copy:", err));
+      } else {
+        // Fallback for older browsers
+        const textArea = document.createElement("textarea");
+        textArea.value = infoToCopy;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+        alert("Copied to clipboard!");
+      }
     }
 
     // Initialize everything on page load
-    calculateGrandTotal();
+    window.onload = function() {
+      // Load saved inputs from localStorage
+      document.getElementById('paystub1').value = localStorage.getItem('paystub1') || 0;
+      document.getElementById('paystub2').value = localStorage.getItem('paystub2') || 0;
+      document.getElementById('weeklyPaystub1').value = localStorage.getItem('weeklyPaystub1') || 0;
+      document.getElementById('weeklyPaystub2').value = localStorage.getItem('weeklyPaystub2') || 0;
+      document.getElementById('twiceMonthPaystub1').value = localStorage.getItem('twiceMonthPaystub1') || 0;
+      document.getElementById('twiceMonthPaystub2').value = localStorage.getItem('twiceMonthPaystub2') || 0;
+      document.getElementById('verbalHours').value = localStorage.getItem('verbalHours') || 0;
+      document.getElementById('verbalRate').value = localStorage.getItem('verbalRate') || 0;
+      document.getElementById('AnnualTips').value = localStorage.getItem('AnnualTips') || 0;
+      document.getElementById('AnnualOtherMonthly').value = localStorage.getItem('AnnualOtherMonthly') || 0;
+      document.getElementById('OtherAnnual').value = localStorage.getItem('OtherAnnual') || 0;
+      document.getElementById('householdSize').value = localStorage.getItem('householdSize') || 1;
+
+      // Recalculate totals
+      calculateGrandTotal();
+    };
+
+    // Save inputs to localStorage on change
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('change', function() {
+        localStorage.setItem(input.id, input.value);
+      });
+    });
   </script>
 </body>
 </html>
-
