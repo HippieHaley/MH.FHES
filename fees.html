@@ -216,13 +216,19 @@
             </div>
 
             <!-- Coverage Level Section -->
-            <div class="lookup-section">
-                <h3>Household Information</h3>
-                <label>People per Household: <input type="number" id="householdSize" min="1" value="1" onchange="updateHouseholdIncome()"></label><br>
-                <p><strong>Yearly Income: $<span id="yearlyIncomeDisplay">0</span></strong></p>
-                <p><strong>Coverage Level: <span id="coverageLevel">N/A</span></strong></p>
-            </div>
-        </div>
+            <!-- Coverage Level Section -->
+<div class="lookup-section">
+    <h3>Household Information</h3>
+    <label>People per Household: 
+        <input type="number" id="householdSize" min="1" value="1" onchange="updateHouseholdIncome()">
+    </label><br>
+
+    <p><strong>Yearly Income: $<span id="yearlyIncomeDisplay">0</span></strong></p>
+    <p><strong>Coverage Level: <span id="coverageLevel">N/A</span></strong></p>
+
+    <!-- NEW LINE: AWC! qualification -->
+    <p><strong>AWC! qualification: <span id="awcQualification">N/A</span></strong></p>
+</div>
     </div>
    <script>
     /***************************************************
