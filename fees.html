@@ -15,6 +15,7 @@
     /* General Body Style */
      body {
       font-family: Arial, sans-serif;
+      justify-content: center;
       max-width: 1000px;
       margin: 0 auto;
       background-color: #acdbf9; /* Light blue background */
@@ -265,7 +266,6 @@
         <label>Other Income per month: $<input type="number" id="AnnualOtherMonthly" value="0" onchange="calculateGrandTotal()"></label><br>
         <label>Other Income by year: $<input type="number" id="OtherAnnual" value="0" onchange="calculateGrandTotal()"></label><br>
       </div>
-
       <div class="lookup-section" style="position: relative;">
         <h3 style="margin: 0;">Household Information</h3>
         <button class="button icon-button" onclick="copyHouseholdInfo()" aria-label="Copy Household Info">
