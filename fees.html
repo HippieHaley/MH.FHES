@@ -217,18 +217,26 @@
 
             <!-- Coverage Level Section -->
             <!-- Coverage Level Section -->
-<div class="lookup-section">
-    <h3>Household Information</h3>
+<div class="lookup-section" style="position: relative;">
+    <!-- Heading at top-left -->
+    <h3 style="margin: 0;">Household Information</h3>
+
+    <!-- Button at top-right corner -->
+    <button 
+        onclick="copyHouseholdInfo()" 
+        style="position: absolute; top: 0; right: 0;"
+    >
+        Copy Info
+    </button>
+
+    <!-- Rest of the content below -->
     <label>People per Household: 
         <input type="number" id="householdSize" min="1" value="1" onchange="updateHouseholdIncome()">
     </label><br>
 
     <p><strong>Yearly Income: $<span id="yearlyIncomeDisplay">0</span></strong></p>
     <p><strong>Coverage Level: <span id="coverageLevel">N/A</span></strong></p>
-
-    <!-- NEW LINE: AWC! qualification -->
     <p><strong>AWC! qualification: <span id="awcQualification">N/A</span></strong></p>
-    <button id="copyHouseholdInfoBtn" onclick="copyHouseholdInfo()">Copy Info</button>
 </div>
 </div>
     </div>
