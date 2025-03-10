@@ -176,6 +176,7 @@
         <p>Total: $<span id="biweeklyTotal">0</span></p>
         <p>Average: $<span id="biweeklyAverage">0</span></p>
         <p>Annual: $<span id="biweeklyAnnual">0</span></p>
+         <p>Biweekly Annual: $<span id="grandBiweeklyAnnual">0</span></p>
       </div>
 
       <div class="section">
@@ -186,6 +187,7 @@
         <p>Total: $<span id="weeklyTotal">0</span></p>
         <p>Average: $<span id="weeklyAverage">0</span></p>
         <p>Annual: $<span id="weeklyAnnual">0</span></p>
+         <p>Weekly Annual: $<span id="grandWeeklyAnnual">0</span></p>
       </div>
     </div>
 
@@ -199,6 +201,7 @@
         <p>Total: $<span id="twiceMonthTotal">0</span></p>
         <p>Average: $<span id="twiceMonthAverage">0</span></p>
         <p>Annual: $<span id="twiceMonthAnnual">0</span></p>
+         <p>Twice a Month Annual: $<span id="grandTwiceMonthAnnual">0</span></p>
       </div>
 
       <div class="section">
@@ -209,18 +212,15 @@
         <p>Total: $<span id="verbalTotal">0</span></p>
         <p>Average: $<span id="verbalAverage">0</span></p>
         <p>Annual: $<span id="verbalAnnual">0</span></p>
+        <p>Weekly Verbal Annual: $<span id="grandVerbalAnnual">0</span></p>
+
       </div>
     </div>
 
     <!-- Column 3: Grand Total and Household Information Section -->
     <div class="column">
       <div class="section grand-total-section">
-        <h2>Grand Total</h2>
-        <p>Biweekly Annual: $<span id="grandBiweeklyAnnual">0</span></p>
-        <p>Weekly Annual: $<span id="grandWeeklyAnnual">0</span></p>
-        <p>Twice a Month Annual: $<span id="grandTwiceMonthAnnual">0</span></p>
-        <p>Weekly Verbal Annual: $<span id="grandVerbalAnnual">0</span></p>
-
+        <h2>other income sources </h2>
         <!-- Tips and Other Income for Grand Total -->
         <label>Tips per week: $<input type="number" id="grandTips" value="0" onchange="calculateGrandTotal()"></label><br>
         <label>Other Income per month: $<input type="number" id="grandOtherMonthly" value="0" onchange="calculateGrandTotal()"></label><br>
