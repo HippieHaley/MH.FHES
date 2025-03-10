@@ -48,34 +48,36 @@
       flex-grow: 1; /* Makes all boxes equal height */
     }
 
-    /* Copy Button Styling (used for other buttons too) */
-    .button {
+    /* Main pink bubble style */
+.button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: #f8c9f9; /* Soft pink */
-  color: #333;
+  background-color: #f8c9f9; /* Pink background */
+  color: #333;              /* Text/icon color */
   font-size: 1rem;
   font-weight: bold;
-  text-decoration: none;
-  border: 1px solid #000; /* Black border */
-  border-radius: 30px;    /* Rounded corners */
+  border: 1px solid #000;   /* Black border */
+  border-radius: 50%;       /* Circle shape */
   cursor: pointer;
-  /* Remove or reduce padding so the button fits in 40x40 */
+  /* The padding ensures the icon has some space. 
+     Adjust to your preference. */
   padding: 0.5rem;
 }
+.button:hover {
+  background-color: #e8b8e8; /* Slightly darker pink */
+}
 
-/* Position & size for the copy icon button in the top-right corner */
+/* Position & size for the copy button in top-right corner */
 .icon-button {
   position: absolute;
   top: 0;
   right: 0;
   width: 40px;
   height: 40px;
+  /* If you want the icon centered, keep display:flex, etc. 
+     But you can rely on .button's inline-flex if you prefer. */
 }
-    .button:hover {
-      background-color: #e8b8e8; /* Slightly darker pink */
-    }
 
     .back-home {
       display: inline-block;  
@@ -232,43 +234,31 @@
         <!-- Title at top-left -->
         <h3 style="margin: 0;">Household Information</h3>
         
-        <!-- Copy button positioned at top-right -->
-        <button
-          class="button icon-button"
-          onclick="copyHouseholdInfo()"
-          style="
-            position: absolute; 
-            top: 0; 
-            right: 0; 
-            width: 40px; 
-            height: 40px;
-            border: 1px solid #ccc; 
-            border-radius: 8px;
-            background-color: ##f8c9f9;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-          "
-          title="Copy Info"
-        >
-          <!-- Inline SVG icon for copy -->
-          <svg 
-            class="button icon-button"
-            width="24" 
-            height="24" 
-            fill="#ccc;" 
-            stroke="currentColor" 
-            stroke-linecap="round" 
-            stroke-linejoin="round" 
-            stroke-width="2" 
-            viewBox="0 0 24 24"
-          >
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-        </button>
-        
+      <div class="lookup-section" style="position: relative;">
+  <h3 style="margin: 0;">Household Information</h3>
+
+  <button 
+    class="button icon-button"
+    onclick="copyHouseholdInfo()"
+    title="Copy Info"
+  >
+    <!-- Inline SVG icon for 'copy' -->
+    <svg 
+      width="24" 
+      height="24" 
+      fill="none" 
+      stroke="currentColor" 
+      stroke-linecap="round" 
+      stroke-linejoin="round" 
+      stroke-width="2" 
+      viewBox="0 0 24 24"
+    >
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4
+               a2 2 0 0 1 2-2h9
+               a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  </button>
         <!-- Household Information Content -->
         <label>People per Household: 
           <input type="number" id="householdSize" min="1" value="1" onchange="updateHouseholdIncome()">
