@@ -215,7 +215,7 @@
     <!-- Column 3: Grand Total and Household Information Section -->
     <div class="column">
       <div class="section">
-        <h2>Grand Total</h2>
+        <h2>Extra Income Sources</h2>
        
         <!-- Tips and Other Income for Grand Total -->
         <label>Tips per week: $<input type="number" id="AnnualTips" value="0" onchange="calculateIncome()"></label><br>
@@ -390,7 +390,7 @@
 
       const grandTotal = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + AnnualTips + AnnualOtherMonthly + otherAnnual;
 
-      document.getElementById('grandTotal').textContent = grandTotal.toFixed(2);
+      document.getElementById('calculateIncome').textContent = grandTotal.toFixed(2);
       updateHouseholdIncome();
        calculateIncome();
     }
