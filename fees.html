@@ -232,218 +232,226 @@
 </div>
 </div>
     </div>
-   <script>
-    /***************************************************
-     * 1) Coverage Chart & Coverage Level Logic
-     ***************************************************/
-    const coverageChart = {
-        1: [15650, 23474, 31300, 39124, 39125],
-        2: [21150, 31724, 42299, 52874, 52875],
-        3: [26650, 39974, 53299, 66624, 66625],
-        4: [32150, 48224, 64299, 80374, 80375],
-        5: [37650, 56474, 75299, 94124, 94125],
-        6: [43150, 64724, 86299, 107874, 107875],
-        7: [48650, 72974, 97299, 121624, 121625],
-        8: [54150, 81224, 108299, 135374, 135375],
-        9: [59650, 89474, 119299, 149124, 149125],
-        10: [65150, 97724, 130299, 162874, 162875],
-        11: [70650, 105974, 141299, 176624, 176625],
-        12: [76150, 114224, 152299, 190374, 190375],
-        13: [81650, 122474, 163299, 204124, 204125],
-        14: [87150, 130724, 174299, 217874, 217875],
-        15: [92650, 138974, 185299, 231624, 231625],
-    };
+<script>
+  /***************************************************
+   * 1) Coverage Chart & Coverage Level Logic
+   ***************************************************/
+  const coverageChart = {
+      1: [15650, 23474, 31300, 39124, 39125],
+      2: [21150, 31724, 42299, 52874, 52875],
+      3: [26650, 39974, 53299, 66624, 66625],
+      4: [32150, 48224, 64299, 80374, 80375],
+      5: [37650, 56474, 75299, 94124, 94125],
+      6: [43150, 64724, 86299, 107874, 107875],
+      7: [48650, 72974, 97299, 121624, 121625],
+      8: [54150, 81224, 108299, 135374, 135375],
+      9: [59650, 89474, 119299, 149124, 149125],
+      10: [65150, 97724, 130299, 162874, 162875],
+      11: [70650, 105974, 141299, 176624, 176625],
+      12: [76150, 114224, 152299, 190374, 190375],
+      13: [81650, 122474, 163299, 204124, 204125],
+      14: [87150, 130724, 174299, 217874, 217875],
+      15: [92650, 138974, 185299, 231624, 231625]
+  };
 
-    const coverageLevels = ["100%", "75%", "50%", "25%", "0%"];
+  const coverageLevels = ["100%", "75%", "50%", "25%", "0%"];
 
-    function determineCoverageLevel(householdSize, yearlyIncome) {
-        if (!coverageChart[householdSize]) {
-            return "N/A"; // If household size is not in the chart
-        }
-        const incomeBrackets = coverageChart[householdSize];
-        for (let i = 0; i < incomeBrackets.length; i++) {
-            if (yearlyIncome <= incomeBrackets[i]) {
-                return coverageLevels[i];
-            }
-        }
-        return "0%"; // Default to 0% if above the highest threshold
-    }
-
-    /***************************************************
-     * 2) AWC! Qualification Logic
-     ***************************************************/
-    // Based on your shared chart
-    const awcChart = {
-        1: [39125],
-        2: [52875],
-        3: [66625],
-        4: [80375],
-        5: [94125],
-        6: [107875],
-        7: [121625],
-        8: [135375],
-        9: [149125],
-        10: [162875],
-        11: [176625],
-        12: [190375],
-        13: [204125],
-        14: [217875],
-        15: [231625],
-    };
-
-    function determineAWCQualification(householdSize, yearlyIncome) {
-        if (!awcChart[householdSize]) {
-            return "N/A";
-        }
-        return (yearlyIncome <= awcChart[householdSize]) ? "Yes" : "No";
-    }
-
-    /***************************************************
-     * 3) Income Calculations (biweekly, weekly, etc.)
-     ***************************************************/
-    function calculateIncome(type) {
-        let paystub1, paystub2, verbalHours, verbalRate, total, average, annual;
-
-        switch (type) {
-            case 'biweekly':
-                paystub1 = parseFloat(document.getElementById('paystub1').value) || 0;
-                paystub2 = parseFloat(document.getElementById('paystub2').value) || 0;
-                total = paystub1 + paystub2;
-                average = total / 2;
-                annual = average * 26; // 26 pay periods in a year for biweekly
-                break;
-            case 'weekly':
-                paystub1 = parseFloat(document.getElementById('weeklyPaystub1').value) || 0;
-                paystub2 = parseFloat(document.getElementById('weeklyPaystub2').value) || 0;
-                total = paystub1 + paystub2;
-                average = total / 2;
-                annual = average * 52;
-                break;
-            case 'twiceMonth':
-                paystub1 = parseFloat(document.getElementById('twiceMonthPaystub1').value) || 0;
-                paystub2 = parseFloat(document.getElementById('twiceMonthPaystub2').value) || 0;
-                total = paystub1 + paystub2;
-                average = total / 2;
-                annual = average * 24; // 24 pay periods in a year for twice a month
-                break;
-            case 'verbal':
-                verbalHours = parseFloat(document.getElementById('verbalHours').value) || 0;
-                verbalRate = parseFloat(document.getElementById('verbalRate').value) || 0;
-                total = verbalHours * verbalRate;
-                average = total;
-                annual = total * 52;
-                break;
-            default:
-                return;
-        }
-
-        // Update the displayed values
-        document.getElementById(`${type}Total`).textContent = total.toFixed(2);
-        document.getElementById(`${type}Average`).textContent = average.toFixed(2);
-        document.getElementById(`${type}Annual`).textContent = annual.toFixed(2);
-
-        // Update the grand total section
-        document.getElementById(`grand${type.charAt(0).toUpperCase() + type.slice(1)}Annual`).textContent = annual.toFixed(2);
-
-        // Recalculate the grand total
-        calculateGrandTotal();
-    }
-       function updateHouseholdIncome() {
-    const householdSize = parseInt(document.getElementById('householdSize').value) || 0;
-    const yearlyIncome = parseFloat(document.getElementById('grandTotalAnnual').textContent) || 0;
-    
-    // Show the yearly income in the existing place
-    document.getElementById('yearlyIncomeDisplay').textContent = yearlyIncome.toFixed(2);
-
-    // Determine coverage level
-    const coverageLevel = determineCoverageLevel(householdSize, yearlyIncome);
-    document.getElementById('coverageLevel').textContent = coverageLevel;
-
-    // Determine AWC! qualification
-    const awcQualification = determineAWCQualification(householdSize, yearlyIncome);
-    document.getElementById('awcQualification').textContent = awcQualification;
-
-    /***************************************************
-     * 4) Summation of All Incomes + Household Display
-     ***************************************************/
-    function calculateGrandTotal() {
-        const biweeklyAnnual = parseFloat(document.getElementById('biweeklyAnnual').textContent) || 0;
-        const weeklyAnnual = parseFloat(document.getElementById('weeklyAnnual').textContent) || 0;
-        const twiceMonthAnnual = parseFloat(document.getElementById('twiceMonthAnnual').textContent) || 0;
-        const verbalAnnual = parseFloat(document.getElementById('verbalAnnual').textContent) || 0;
-
-        const weeklyTips = parseFloat(document.getElementById('grandTips').value) || 0;
-        const annualTips = weeklyTips * 52;
-
-        const otherMonthlyIncome = parseFloat(document.getElementById('grandOtherMonthly').value) || 0;
-        const annualOtherMonthlyIncome = otherMonthlyIncome * 12;
-
-        const otherAnnualIncome = parseFloat(document.getElementById('grandOtherAnnual').value) || 0;
-
-        const grandTotal = biweeklyAnnual 
-                         + weeklyAnnual 
-                         + twiceMonthAnnual 
-                         + verbalAnnual 
-                         + annualTips 
-                         + annualOtherMonthlyIncome 
-                         + otherAnnualIncome;
-
-        document.getElementById('grandTotalAnnual').textContent = grandTotal.toFixed(2);
-
-        // After updating grand total, update household display
-        updateHouseholdIncome();
-    }
-
-    // SINGLE version of updateHouseholdIncome that handles both coverage + AWC
-    function updateHouseholdIncome() {
-        const householdSize = parseInt(document.getElementById('householdSize').value) || 0;
-        const yearlyIncome = parseFloat(document.getElementById('grandTotalAnnual').textContent) || 0;
-
-        // Show the yearly income
-        document.getElementById('yearlyIncomeDisplay').textContent = yearlyIncome.toFixed(2);
-
-        // Show coverage level (existing logic)
-        const coverageLevel = determineCoverageLevel(householdSize, yearlyIncome);
-        document.getElementById('coverageLevel').textContent = coverageLevel;
-
-        // Show AWC! qualification (NEW)
-        const awcQualification = determineAWCQualification(householdSize, yearlyIncome);
-        // Make sure you have an element <span id="awcQualification"> in your HTML!
-        document.getElementById('awcQualification').textContent = awcQualification;
-    }
-
-    // Initialize calculations on page load
-    calculateGrandTotal();   // ======== NEW: Update the bottom summary section ========
-    document.getElementById('summaryYearlyIncome').textContent = yearlyIncome.toFixed(2);
-    document.getElementById('summaryHouseholdSize').textContent = householdSize;
-    document.getElementById('summaryCoverageLevel').textContent = coverageLevel;
-    document.getElementById('summaryAWCQualification').textContent = awcQualification;
-}
-        function copyHouseholdInfo() {
-    // Gather the text values
-    const householdSize = document.getElementById('householdSize')?.value || "1";
-    const yearlyIncome = document.getElementById('yearlyIncomeDisplay')?.textContent || "0";
-    const coverageLevel = document.getElementById('coverageLevel')?.textContent || "N/A";
-    const awcQualification = document.getElementById('awcQualification')?.textContent || "N/A";
-
-    // Build the text to copy
-    const infoToCopy = 
-      `People per Household: ${householdSize}\n` +
-      `Yearly Income: $${yearlyIncome}\n` +
-      `Coverage Level: ${coverageLevel}\n` +
-      `AWC! qualification: ${awcQualification}\n`;
-
-    // Use the Clipboard API to copy the text
-    navigator.clipboard.writeText(infoToCopy)
-      .then(() => {
-        alert("Household info copied to clipboard!");
-      })
-      .catch((err) => {
-        console.error("Failed to copy text: ", err);
-        alert("Unable to copy info.");
-      });
+  // Determine coverage level from coverageChart
+  function determineCoverageLevel(householdSize, yearlyIncome) {
+      if (!coverageChart[householdSize]) {
+          return "N/A"; // If household size is not in the chart
+      }
+      const incomeBrackets = coverageChart[householdSize];
+      for (let i = 0; i < incomeBrackets.length; i++) {
+          if (yearlyIncome <= incomeBrackets[i]) {
+              return coverageLevels[i];
+          }
+      }
+      return "0%"; // Default to 0% if above the highest threshold
   }
 
+  /***************************************************
+   * 2) AWC! Qualification Logic
+   ***************************************************/
+  // Store each household size as a single number (not an array)
+  const awcChart = {
+      1: 39125,
+      2: 52875,
+      3: 66625,
+      4: 80375,
+      5: 94125,
+      6: 107875,
+      7: 121625,
+      8: 135375,
+      9: 149125,
+      10: 162875,
+      11: 176625,
+      12: 190375,
+      13: 204125,
+      14: 217875,
+      15: 231625
+  };
+
+  function determineAWCQualification(householdSize, yearlyIncome) {
+      if (!awcChart[householdSize]) {
+          return "N/A";
+      }
+      return (yearlyIncome <= awcChart[householdSize]) ? "Yes" : "No";
+  }
+
+  /***************************************************
+   * 3) Income Calculations (biweekly, weekly, etc.)
+   ***************************************************/
+  function calculateIncome(type) {
+      let paystub1, paystub2, verbalHours, verbalRate, total, average, annual;
+
+      switch (type) {
+          case 'biweekly':
+              paystub1 = parseFloat(document.getElementById('paystub1').value) || 0;
+              paystub2 = parseFloat(document.getElementById('paystub2').value) || 0;
+              total = paystub1 + paystub2;
+              average = total / 2;
+              annual = average * 26; // 26 pay periods in a year for biweekly
+              break;
+          case 'weekly':
+              paystub1 = parseFloat(document.getElementById('weeklyPaystub1').value) || 0;
+              paystub2 = parseFloat(document.getElementById('weeklyPaystub2').value) || 0;
+              total = paystub1 + paystub2;
+              average = total / 2;
+              annual = average * 52;
+              break;
+          case 'twiceMonth':
+              paystub1 = parseFloat(document.getElementById('twiceMonthPaystub1').value) || 0;
+              paystub2 = parseFloat(document.getElementById('twiceMonthPaystub2').value) || 0;
+              total = paystub1 + paystub2;
+              average = total / 2;
+              annual = average * 24; // 24 pay periods in a year for twice a month
+              break;
+          case 'verbal':
+              verbalHours = parseFloat(document.getElementById('verbalHours').value) || 0;
+              verbalRate = parseFloat(document.getElementById('verbalRate').value) || 0;
+              total = verbalHours * verbalRate;
+              average = total;
+              annual = total * 52;
+              break;
+          default:
+              return;
+      }
+
+      // Update the displayed values for that pay type
+      document.getElementById(`${type}Total`).textContent = total.toFixed(2);
+      document.getElementById(`${type}Average`).textContent = average.toFixed(2);
+      document.getElementById(`${type}Annual`).textContent = annual.toFixed(2);
+
+      // Update the "grandXAnnual" display
+      document.getElementById(`grand${type.charAt(0).toUpperCase() + type.slice(1)}Annual`).textContent = annual.toFixed(2);
+
+      // Then recalc the grand total
+      calculateGrandTotal();
+  }
+
+  /***************************************************
+   * 4) Summation of All Incomes
+   ***************************************************/
+  function calculateGrandTotal() {
+      const biweeklyAnnual = parseFloat(document.getElementById('biweeklyAnnual').textContent) || 0;
+      const weeklyAnnual = parseFloat(document.getElementById('weeklyAnnual').textContent) || 0;
+      const twiceMonthAnnual = parseFloat(document.getElementById('twiceMonthAnnual').textContent) || 0;
+      const verbalAnnual = parseFloat(document.getElementById('verbalAnnual').textContent) || 0;
+
+      const weeklyTips = parseFloat(document.getElementById('grandTips').value) || 0;
+      const annualTips = weeklyTips * 52;
+
+      const otherMonthlyIncome = parseFloat(document.getElementById('grandOtherMonthly').value) || 0;
+      const annualOtherMonthlyIncome = otherMonthlyIncome * 12;
+
+      const otherAnnualIncome = parseFloat(document.getElementById('grandOtherAnnual').value) || 0;
+
+      const grandTotal = biweeklyAnnual 
+                       + weeklyAnnual 
+                       + twiceMonthAnnual 
+                       + verbalAnnual 
+                       + annualTips 
+                       + annualOtherMonthlyIncome 
+                       + otherAnnualIncome;
+
+      // Update the grand total display
+      document.getElementById('grandTotalAnnual').textContent = grandTotal.toFixed(2);
+
+      // After that, update coverage & AWC lines
+      updateHouseholdIncome();
+  }
+
+  /***************************************************
+   * 5) Household Info (Coverage + AWC) Display
+   ***************************************************/
+  function updateHouseholdIncome() {
+      const householdSize = parseInt(document.getElementById('householdSize').value) || 0;
+      const yearlyIncome = parseFloat(document.getElementById('grandTotalAnnual').textContent) || 0;
+
+      // Show the yearly income
+      document.getElementById('yearlyIncomeDisplay').textContent = yearlyIncome.toFixed(2);
+
+      // Coverage level
+      const coverageLevel = determineCoverageLevel(householdSize, yearlyIncome);
+      document.getElementById('coverageLevel').textContent = coverageLevel;
+
+      // AWC qualification
+      const awcQualification = determineAWCQualification(householdSize, yearlyIncome);
+      document.getElementById('awcQualification').textContent = awcQualification;
+
+      // (Optional) If you have a summary at the bottom with these IDs:
+      const summaryYearlyIncome = document.getElementById('summaryYearlyIncome');
+      const summaryHouseholdSize = document.getElementById('summaryHouseholdSize');
+      const summaryCoverageLevel = document.getElementById('summaryCoverageLevel');
+      const summaryAWCQualification = document.getElementById('summaryAWCQualification');
+
+      // Only update these if they exist in your HTML
+      if (summaryYearlyIncome) {
+        summaryYearlyIncome.textContent = yearlyIncome.toFixed(2);
+      }
+      if (summaryHouseholdSize) {
+        summaryHouseholdSize.textContent = householdSize;
+      }
+      if (summaryCoverageLevel) {
+        summaryCoverageLevel.textContent = coverageLevel;
+      }
+      if (summaryAWCQualification) {
+        summaryAWCQualification.textContent = awcQualification;
+      }
+  }
+
+  /***************************************************
+   * 6) Copy Button Function (No external download)
+   ***************************************************/
+  function copyHouseholdInfo() {
+      // Gather text values from your Household Info
+      const householdSize = document.getElementById('householdSize')?.value || "1";
+      const yearlyIncome = document.getElementById('yearlyIncomeDisplay')?.textContent || "0";
+      const coverageLevel = document.getElementById('coverageLevel')?.textContent || "N/A";
+      const awcQualification = document.getElementById('awcQualification')?.textContent || "N/A";
+
+      // Build the text to copy
+      const infoToCopy = 
+        `People per Household: ${householdSize}\n` +
+        `Yearly Income: $${yearlyIncome}\n` +
+        `Coverage Level: ${coverageLevel}\n` +
+        `AWC! qualification: ${awcQualification}\n`;
+
+      // Use the Clipboard API
+      navigator.clipboard.writeText(infoToCopy)
+        .then(() => {
+          alert("Household info copied to clipboard!");
+        })
+        .catch(err => {
+          console.error("Failed to copy text:", err);
+          alert("Unable to copy info.");
+        });
+  }
+
+  // Initialize everything on page load
+  // (You can also call this in your <body onload="calculateGrandTotal()"> if you prefer.)
+  calculateGrandTotal();
 </script>
 </body>
 </html>
