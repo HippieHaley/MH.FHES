@@ -252,7 +252,7 @@
         <label>People per Household: 
           <input type="number" id="householdSize" min="1" value="1" onchange="updateHouseholdIncome()">
         </label><br>
-        <p><strong>Total Income: $<span id="calculateTotal">0</span></strong></p>
+        <p><strong>Total Income: $<span id="grandTotal">0</span></strong></p>
         <p><strong>Coverage Level: <span id="coverageLevel">N/A</span></strong></p>
         <p><strong>AWC! qualification: <span id="awcQualification">N/A</span></strong></p>
       </div>
@@ -326,10 +326,10 @@
       return (yearlyIncome <= awcChart[householdSize]) ? "Yes" : "No";
     }
 
-    /***************************************************
-     * 3) Income Calculations (biweekly, weekly, etc.)
-     ***************************************************/
- function  calculateTotal (type) {
+  /***************************************************
+ * 3) Income Calculations (biweekly, weekly, etc.)
+ ***************************************************/
+function calculateIncome(type) {
   let paystub1, paystub2, verbalHours, verbalRate, total, average, annual;
 
   switch (type) {
@@ -369,14 +369,14 @@
   document.getElementById(`${type}Average`).textContent = average.toFixed(2);
   document.getElementById(`${type}Annual`).textContent = annual.toFixed(2);
 
-  // Call calculateTotal to update the grand total
-  calculateTotal();
+  // Call calculateGrandTotal to update the grand total
+  calculateGrandTotal();
 }
 
-    /***************************************************
-     * 4) Summation of All Incomes
-     ***************************************************/
-   function calculateTotal() {
+/***************************************************
+ * 4) Summation of All Incomes
+ ***************************************************/
+function calculateGrandTotal() {
   const biweeklyAnnual = parseFloat(document.getElementById('biweeklyAnnual').textContent) || 0;
   const weeklyAnnual = parseFloat(document.getElementById('weeklyAnnual').textContent) || 0;
   const twiceMonthAnnual = parseFloat(document.getElementById('twiceMonthAnnual').textContent) || 0;
@@ -392,26 +392,24 @@
 
   const grandTotal = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + annualTips + annualOtherMonthlyIncome + otherAnnualIncome;
 
-  document.getElementById('grandTotal').textContent = grandTotal.toFixed(2);
+  document.getElementById('calculateTotal').textContent = grandTotal.toFixed(2);
   updateHouseholdIncome();
 }
-
     /***************************************************
-     * 5) Household Info (Coverage + AWC) Display
-     ***************************************************/
-    function updateHouseholdIncome() {
-      const householdSize = parseInt(document.getElementById('householdSize').value) || 0;
-      const yearlyIncome = parseFloat(document.getElementById('grandTotal').textContent) || 0;
+ * 5) Household Info (Coverage + AWC) Display
+ ***************************************************/
+function updateHouseholdIncome() {
+  const householdSize = parseInt(document.getElementById('householdSize').value) || 0;
+  const yearlyIncome = parseFloat(document.getElementById('grandTotal').textContent) || 0;
 
-      document.getElementById('yearlyIncomeDisplay').textContent = yearlyIncome.toFixed(2);
+  document.getElementById('yearlyIncomeDisplay').textContent = yearlyIncome.toFixed(2);
 
-      const coverageLevel = determineCoverageLevel(householdSize, yearlyIncome);
-      document.getElementById('coverageLevel').textContent = coverageLevel;
+  const coverageLevel = determineCoverageLevel(householdSize, yearlyIncome);
+  document.getElementById('coverageLevel').textContent = coverageLevel;
 
-      const awcQualification = determineAWCQualification(householdSize, yearlyIncome);
-      document.getElementById('awcQualification').textContent = awcQualification;
-    }
-
+  const awcQualification = determineAWCQualification(householdSize, yearlyIncome);
+  document.getElementById('awcQualification').textContent = awcQualification;
+}
     /***************************************************
      * 6) Copy Button Function
      ***************************************************/
@@ -438,7 +436,8 @@
     }
 
     // Initialize everything on page load
-    calculateTotal();
+   calculateGrandTotal();
+}
   </script>
 </body>
 </html>
