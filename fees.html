@@ -248,17 +248,14 @@
                a2 2 0 0 1 2 2v1"></path>
     </svg>
   </button>
-        <!-- Household Information Content -->
-        <label>People per Household: 
-          <input type="number" id="householdSize" min="1" value="1" onchange="updateHouseholdIncome()">
-        </label><br>
-        <p><strong>Total Income: $<span id="grandTotal">0</span></strong></p>
-        <p><strong>Coverage Level: <span id="coverageLevel">N/A</span></strong></p>
-        <p><strong>AWC! qualification: <span id="awcQualification">N/A</span></strong></p>
-      </div>
-    </div>
-  </div>
-
+  <!-- Household Information Content -->
+  <label>People per Household: 
+    <input type="number" id="householdSize" min="1" value="1" onchange="updateHouseholdIncome()">
+  </label><br>
+  <p><strong>Total Income: $<span id="grandTotal">0</span></strong></p>
+  <p><strong>Coverage Level: <span id="coverageLevel">N/A</span></strong></p>
+  <p><strong>AWC! qualification: <span id="awcQualification">N/A</span></strong></p>
+</div>
   <script>
      calculateTotal();
 }
@@ -326,7 +323,7 @@
       return (yearlyIncome <= awcChart[householdSize]) ? "Yes" : "No";
     }
 
-  /***************************************************
+ /***************************************************
  * 3) Income Calculations (biweekly, weekly, etc.)
  ***************************************************/
 function calculateIncome(type) {
@@ -392,15 +389,15 @@ function calculateGrandTotal() {
 
   const grandTotal = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + annualTips + annualOtherMonthlyIncome + otherAnnualIncome;
 
-  document.getElementById('calculateTotal').textContent = grandTotal.toFixed(2);
+  document.getElementById('grandTotal').textContent = grandTotal.toFixed(2);
   updateHouseholdIncome();
 }
-    /***************************************************
+/***************************************************
  * 5) Household Info (Coverage + AWC) Display
  ***************************************************/
 function updateHouseholdIncome() {
   const householdSize = parseInt(document.getElementById('householdSize').value) || 0;
-  const yearlyIncome = parseFloat(document.getElementById('grandTotal').textContent) || 0;
+  const yearlyIncome = parseFloat(document.getElementById('calculateTotal').textContent) || 0;
 
   document.getElementById('yearlyIncomeDisplay').textContent = yearlyIncome.toFixed(2);
 
@@ -410,6 +407,7 @@ function updateHouseholdIncome() {
   const awcQualification = determineAWCQualification(householdSize, yearlyIncome);
   document.getElementById('awcQualification').textContent = awcQualification;
 }
+
     /***************************************************
      * 6) Copy Button Function
      ***************************************************/
