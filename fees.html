@@ -42,47 +42,42 @@
     .section {
       padding: 15px;
       border: 2px solid #333;
-      box-sizing: border-box;
-      background-color: #acdbf9; /* Light blue background */
+      background-color: #acdbf9; 
       border-radius: 8px;
       flex-grow: 1; /* Makes all boxes equal height */
     }
 
     /* Main pink bubble style */
-.button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f8c9f9; /* Pink background */
-  color: #333;              /* Text/icon color */
-  font-size: 1rem;
-  font-weight: bold;
-  border: 1px solid #000;   /* Black border */
-  border-radius: 50%;       /* Circle shape */
-  cursor: pointer;
-  /* The padding ensures the icon has some space. 
-     Adjust to your preference. */
-  padding: 0.5rem;
-}
-.button:hover {
-  background-color: #e8b8e8; /* Slightly darker pink */
-}
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f8c9f9; /* Pink background */
+      color: #333;              
+      font-size: 1rem;
+      font-weight: bold;
+      border: 1px solid #000;   
+      border-radius: 50%;       
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+    .button:hover {
+      background-color: #e8b8e8; /* Slightly darker pink */
+    }
 
-/* Position & size for the copy button in top-right corner */
-.icon-button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 40px;
-  height: 40px;
-  /* If you want the icon centered, keep display:flex, etc. 
-     But you can rely on .button's inline-flex if you prefer. */
-}
+    /* Position & size for the copy button in top-right corner */
+    .icon-button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 40px;
+      height: 40px;
+    }
 
     .back-home {
       display: inline-block;  
       padding: 10px 20px;
-      background-color: #f8c9f9; /* Soft pink */
+      background-color: #f8c9f9; 
       color: #333;
       text-decoration: none;
       font-size: 1rem;
@@ -103,9 +98,9 @@
       max-width: 300px;
       padding: 10px 15px;
       margin: 10px 0;
-      border: 2px solid #f8c9f9; /* Soft pink border */
-      border-radius: 30px; /* Rounded edges */
-      background-color: #f8c9f9; /* Soft pink background */
+      border: 2px solid #f8c9f9; 
+      border-radius: 30px; 
+      background-color: #f8c9f9; 
       color: #333;
       font-size: 1rem;
       outline: none;
@@ -176,7 +171,6 @@
         <p>Total: $<span id="biweeklyTotal">0</span></p>
         <p>Average: $<span id="biweeklyAverage">0</span></p>
         <p>Annual: $<span id="biweeklyAnnual">0</span></p>
-         <p>Biweekly Annual: $<span id="grandBiweeklyAnnual">0</span></p>
       </div>
 
       <div class="section">
@@ -187,7 +181,6 @@
         <p>Total: $<span id="weeklyTotal">0</span></p>
         <p>Average: $<span id="weeklyAverage">0</span></p>
         <p>Annual: $<span id="weeklyAnnual">0</span></p>
-         <p>Weekly Annual: $<span id="grandWeeklyAnnual">0</span></p>
       </div>
     </div>
 
@@ -201,7 +194,6 @@
         <p>Total: $<span id="twiceMonthTotal">0</span></p>
         <p>Average: $<span id="twiceMonthAverage">0</span></p>
         <p>Annual: $<span id="twiceMonthAnnual">0</span></p>
-         <p>Twice a Month Annual: $<span id="grandTwiceMonthAnnual">0</span></p>
       </div>
 
       <div class="section">
@@ -212,15 +204,13 @@
         <p>Total: $<span id="verbalTotal">0</span></p>
         <p>Average: $<span id="verbalAverage">0</span></p>
         <p>Annual: $<span id="verbalAnnual">0</span></p>
-        <p>Weekly Verbal Annual: $<span id="grandVerbalAnnual">0</span></p>
-
       </div>
     </div>
 
     <!-- Column 3: Grand Total and Household Information Section -->
     <div class="column">
       <div class="section grand-total-section">
-        <h2>other income sources </h2>
+        <h2>Other Income Sources</h2>
         <!-- Tips and Other Income for Grand Total -->
         <label>Tips per week: $<input type="number" id="grandTips" value="0" onchange="calculateGrandTotal()"></label><br>
         <label>Other Income per month: $<input type="number" id="grandOtherMonthly" value="0" onchange="calculateGrandTotal()"></label><br>
@@ -229,31 +219,30 @@
         <p><strong>Grand Total Annual Income: $<span id="grandTotalAnnual">0</span></strong></p>
       </div>
 
-      <div class="lookup-section" style="position: relative;">
-  <h3 style="margin: 0;">Household Information</h3>
-
-  <button 
-    class="button icon-button"
-    onclick="copyHouseholdInfo()"
-    title="Copy Info"
-  >
-    <!-- Inline SVG icon for 'copy' -->
-    <svg 
-      width="24" 
-      height="24" 
-      fill="none" 
-      stroke="currentColor" 
-      stroke-linecap="round" 
-      stroke-linejoin="round" 
-      stroke-width="2" 
-      viewBox="0 0 24 24"
-    >
-      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-      <path d="M5 15H4a2 2 0 0 1-2-2V4
-               a2 2 0 0 1 2-2h9
-               a2 2 0 0 1 2 2v1"></path>
-    </svg>
-  </button>
+      <div class="lookup-section">
+        <h3 style="margin: 0;">Household Information</h3>
+        <button 
+          class="button icon-button"
+          onclick="copyHouseholdInfo()"
+          title="Copy Info"
+        >
+          <!-- Inline SVG icon for 'copy' -->
+          <svg 
+            width="24" 
+            height="24" 
+            fill="none" 
+            stroke="currentColor" 
+            stroke-linecap="round" 
+            stroke-linejoin="round" 
+            stroke-width="2" 
+            viewBox="0 0 24 24"
+          >
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4
+                     a2 2 0 0 1 2-2h9
+                     a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
         <!-- Household Information Content -->
         <label>People per Household: 
           <input type="number" id="householdSize" min="1" value="1" onchange="updateHouseholdIncome()">
@@ -369,10 +358,12 @@
           return;
       }
 
+      // Update the DOM for that pay type
       document.getElementById(`${type}Total`).textContent = total.toFixed(2);
       document.getElementById(`${type}Average`).textContent = average.toFixed(2);
       document.getElementById(`${type}Annual`).textContent = annual.toFixed(2);
-      document.getElementById(`grand${type.charAt(0).toUpperCase() + type.slice(1)}Annual`).textContent = annual.toFixed(2);
+
+      // Then recalc the grand total
       calculateGrandTotal();
     }
 
@@ -393,9 +384,19 @@
 
       const otherAnnualIncome = parseFloat(document.getElementById('grandOtherAnnual').value) || 0;
 
-      const grandTotal = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + annualTips + annualOtherMonthlyIncome + otherAnnualIncome;
+      const grandTotal = 
+          biweeklyAnnual + 
+          weeklyAnnual + 
+          twiceMonthAnnual + 
+          verbalAnnual + 
+          annualTips + 
+          annualOtherMonthlyIncome + 
+          otherAnnualIncome;
 
+      // Show the grand total
       document.getElementById('grandTotalAnnual').textContent = grandTotal.toFixed(2);
+
+      // Then update coverage & AWC lines
       updateHouseholdIncome();
     }
 
@@ -406,11 +407,14 @@
       const householdSize = parseInt(document.getElementById('householdSize').value) || 0;
       const yearlyIncome = parseFloat(document.getElementById('grandTotalAnnual').textContent) || 0;
 
+      // Show the yearly income
       document.getElementById('yearlyIncomeDisplay').textContent = yearlyIncome.toFixed(2);
 
+      // Coverage level
       const coverageLevel = determineCoverageLevel(householdSize, yearlyIncome);
       document.getElementById('coverageLevel').textContent = coverageLevel;
 
+      // AWC qualification
       const awcQualification = determineAWCQualification(householdSize, yearlyIncome);
       document.getElementById('awcQualification').textContent = awcQualification;
     }
