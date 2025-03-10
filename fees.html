@@ -374,7 +374,7 @@
     /***************************************************
      * 4) Summation of All Incomes
      ***************************************************/
-    function calculateIncome() {
+    function calculateTotal() {
       const biweeklyAnnual = parseFloat(document.getElementById('biweeklyAnnual').textContent) || 0;
       const weeklyAnnual = parseFloat(document.getElementById('weeklyAnnual').textContent) || 0;
       const twiceMonthAnnual = parseFloat(document.getElementById('twiceMonthAnnual').textContent) || 0;
@@ -388,9 +388,9 @@
 
       const otherAnnualIncome = parseFloat(document.getElementById('OtherAnnual').value) || 0;
 
-      const grandTotal = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + AnnualTips + AnnualOtherMonthly + otherAnnual;
+      const calculateIncome = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + AnnualTips + AnnualOtherMonthly + otherAnnual;
 
-      document.getElementById('calculateIncome').textContent = grandTotal.toFixed(2);
+      document.getElementById('calculateIncome').textContent = calculateIncome.toFixed(2);
       updateHouseholdIncome();
        calculateIncome();
     }
