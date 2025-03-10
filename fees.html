@@ -340,6 +340,52 @@
         // Recalculate the grand total
         calculateGrandTotal();
     }
+       function updateHouseholdIncome() {
+    const householdSize = parseInt(document.getElementById('householdSize').value) || 0;
+    const yearlyIncome = parseFloat(document.getElementById('grandTotalAnnual').textContent) || 0;
+    
+    // Show the yearly income in the existing place
+    document.getElementById('yearlyIncomeDisplay').textContent = yearlyIncome.toFixed(2);
+
+    // Determine coverage level
+    const coverageLevel = determineCoverageLevel(householdSize, yearlyIncome);
+    document.getElementById('coverageLevel').textContent = coverageLevel;
+
+    // Determine AWC! qualification
+    const awcQualification = determineAWCQualification(householdSize, yearlyIncome);
+    document.getElementById('awcQualification').textContent = awcQualification;
+
+    // ======== NEW: Update the bottom summary section ========
+    document.getElementById('summaryYearlyIncome').textContent = yearlyIncome.toFixed(2);
+    document.getElementById('summaryHouseholdSize').textContent = householdSize;
+    document.getElementById('summaryCoverageLevel').textContent = coverageLevel;
+    document.getElementById('summaryAWCQualification').textContent = awcQualification;
+}
+       function copySummary() {
+    // Get the values from the summary section
+    const yearlyIncome = document.getElementById('summaryYearlyIncome').textContent;
+    const householdSize = document.getElementById('summaryHouseholdSize').textContent;
+    const coverageLevel = document.getElementById('summaryCoverageLevel').textContent;
+    const awcQualification = document.getElementById('summaryAWCQualification').textContent;
+
+    // Build the text to copy
+    const summaryText = 
+        `Yearly Income: $${yearlyIncome}\n` +
+        `Household Size: ${householdSize}\n` +
+        `Coverage Level: ${coverageLevel}\n` +
+        `AWC! qualification: ${awcQualification}\n`;
+
+    // Write to the clipboard
+    navigator.clipboard.writeText(summaryText)
+        .then(() => {
+            alert("Summary copied to clipboard!");
+        })
+        .catch(err => {
+            console.error("Failed to copy text: ", err);
+            alert("Unable to copy summary.");
+        });
+}
+
 
     /***************************************************
      * 4) Summation of All Incomes + Household Display
