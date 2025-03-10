@@ -228,6 +228,8 @@
 
     <!-- NEW LINE: AWC! qualification -->
     <p><strong>AWC! qualification: <span id="awcQualification">N/A</span></strong></p>
+    <button id="copyHouseholdInfoBtn" onclick="copyHouseholdInfo()">Copy Info</button>
+</div>
 </div>
     </div>
    <script>
@@ -361,38 +363,6 @@
     const awcQualification = determineAWCQualification(householdSize, yearlyIncome);
     document.getElementById('awcQualification').textContent = awcQualification;
 
-    // ======== NEW: Update the bottom summary section ========
-    document.getElementById('summaryYearlyIncome').textContent = yearlyIncome.toFixed(2);
-    document.getElementById('summaryHouseholdSize').textContent = householdSize;
-    document.getElementById('summaryCoverageLevel').textContent = coverageLevel;
-    document.getElementById('summaryAWCQualification').textContent = awcQualification;
-}
-       function copySummary() {
-    // Get the values from the summary section
-    const yearlyIncome = document.getElementById('summaryYearlyIncome').textContent;
-    const householdSize = document.getElementById('summaryHouseholdSize').textContent;
-    const coverageLevel = document.getElementById('summaryCoverageLevel').textContent;
-    const awcQualification = document.getElementById('summaryAWCQualification').textContent;
-
-    // Build the text to copy
-    const summaryText = 
-        `Yearly Income: $${yearlyIncome}\n` +
-        `Household Size: ${householdSize}\n` +
-        `Coverage Level: ${coverageLevel}\n` +
-        `AWC! qualification: ${awcQualification}\n`;
-
-    // Write to the clipboard
-    navigator.clipboard.writeText(summaryText)
-        .then(() => {
-            alert("Summary copied to clipboard!");
-        })
-        .catch(err => {
-            console.error("Failed to copy text: ", err);
-            alert("Unable to copy summary.");
-        });
-}
-
-
     /***************************************************
      * 4) Summation of All Incomes + Household Display
      ***************************************************/
@@ -443,7 +413,37 @@
     }
 
     // Initialize calculations on page load
-    calculateGrandTotal();
+    calculateGrandTotal();   // ======== NEW: Update the bottom summary section ========
+    document.getElementById('summaryYearlyIncome').textContent = yearlyIncome.toFixed(2);
+    document.getElementById('summaryHouseholdSize').textContent = householdSize;
+    document.getElementById('summaryCoverageLevel').textContent = coverageLevel;
+    document.getElementById('summaryAWCQualification').textContent = awcQualification;
+}
+        function copyHouseholdInfo() {
+    // Gather the text values
+    const householdSize = document.getElementById('householdSize')?.value || "1";
+    const yearlyIncome = document.getElementById('yearlyIncomeDisplay')?.textContent || "0";
+    const coverageLevel = document.getElementById('coverageLevel')?.textContent || "N/A";
+    const awcQualification = document.getElementById('awcQualification')?.textContent || "N/A";
+
+    // Build the text to copy
+    const infoToCopy = 
+      `People per Household: ${householdSize}\n` +
+      `Yearly Income: $${yearlyIncome}\n` +
+      `Coverage Level: ${coverageLevel}\n` +
+      `AWC! qualification: ${awcQualification}\n`;
+
+    // Use the Clipboard API to copy the text
+    navigator.clipboard.writeText(infoToCopy)
+      .then(() => {
+        alert("Household info copied to clipboard!");
+      })
+      .catch((err) => {
+        console.error("Failed to copy text: ", err);
+        alert("Unable to copy info.");
+      });
+  }
+
 </script>
 </body>
 </html>
