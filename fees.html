@@ -388,10 +388,11 @@
 
       const otherAnnualIncome = parseFloat(document.getElementById('OtherAnnual').value) || 0;
 
-      const grandTotal = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + annualTips + annualOtherMonthlyIncome + otherAnnual;
+      const grandTotal = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + AnnualTips + AnnualOtherMonthly + otherAnnual;
 
       document.getElementById('grandTotal').textContent = grandTotal.toFixed(2);
       updateHouseholdIncome();
+       calculateGrandTotal();
     }
 
     /***************************************************
