@@ -25,7 +25,6 @@
     /* Container Flex Layout */
     .container {
       display: flex;
-      gap: 20px;
       justify-content: center;
       flex-wrap: wrap;
       margin: 20px 0;
@@ -265,6 +264,7 @@
         <label>Other Income per month: $<input type="number" id="AnnualOtherMonthly" value="0" onchange="calculateGrandTotal()"></label><br>
         <label>Other Income by year: $<input type="number" id="OtherAnnual" value="0" onchange="calculateGrandTotal()"></label><br>
       </div>
+
       <div class="lookup-section" style="position: relative;">
         <h3 style="margin: 0;">Household Information</h3>
         <button class="button icon-button" onclick="copyHouseholdInfo()" aria-label="Copy Household Info">
@@ -274,7 +274,8 @@
             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
           </svg>
         </button>
-        <label>People per Household: <input type="number" id="householdSize" min="1" value="1" onchange="updateHouseholdIncome()"></label><br>
+        <div class="example"></div>
+        <label> People per Household: <input type="number" id="householdSize" min="1" value="1" onchange="updateHouseholdIncome()"></label><br>
         <p><strong>Total Income: $<span id="grandTotal">0</span></strong></p>
         <p><strong>Coverage Level: <span id="coverageLevel">N/A</span></strong>
           <span class="tooltip">ℹ️
