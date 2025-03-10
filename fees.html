@@ -215,21 +215,55 @@
                 <p><strong>Grand Total Annual Income: $<span id="grandTotalAnnual">0</span></strong></p>
             </div>
 
-            <!-- Coverage Level Section -->
-            <!-- Coverage Level Section -->
 <div class="lookup-section" style="position: relative;">
-    <!-- Heading at top-left -->
+    <!-- Title at top-left -->
     <h3 style="margin: 0;">Household Information</h3>
-
-    <!-- Button at top-right corner -->
-    <button 
-        onclick="copyHouseholdInfo()" 
-        style="position: absolute; top: 0; right: 0;"
+    
+    <!-- Icon button at top-right corner -->
+    <button
+      onclick="copyHouseholdInfo()"
+      style="
+        position: absolute; 
+        top: 0; 
+        right: 0; 
+        width: 40px; 
+        height: 40px;
+        border: 1px solid #ccc; 
+        border-radius: 8px;
+        background-color: #fff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      "
+      title="Copy Info"
     >
-        Copy Info
+  <svg 
+  width="24" 
+  height="24" 
+  fill="none" 
+  stroke="currentColor" 
+  stroke-linecap="round" 
+  stroke-linejoin="round" 
+  stroke-width="2" 
+  viewBox="0 0 24 24"
+>
+  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+  <path d="M5 15H4a2 2 0 0 1-2-2V4
+           a2 2 0 0 1 2-2h9
+           a2 2 0 0 1 2 2v1"/>
+</svg>
+
+        <!-- Outer square -->
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+        <!-- Inner page outline -->
+        <path d="M5 15H4a2 2 0 0 1-2-2V4
+                 a2 2 0 0 1 2-2h9
+                 a2 2 0 0 1 2 2v1"/>
+      </svg>
     </button>
 
-    <!-- Rest of the content below -->
+    <!-- Rest of your Household Information content below -->
     <label>People per Household: 
         <input type="number" id="householdSize" min="1" value="1" onchange="updateHouseholdIncome()">
     </label><br>
@@ -237,7 +271,6 @@
     <p><strong>Yearly Income: $<span id="yearlyIncomeDisplay">0</span></strong></p>
     <p><strong>Coverage Level: <span id="coverageLevel">N/A</span></strong></p>
     <p><strong>AWC! qualification: <span id="awcQualification">N/A</span></strong></p>
-</div>
 </div>
     </div>
 <script>
