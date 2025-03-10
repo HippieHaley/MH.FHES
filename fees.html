@@ -171,8 +171,8 @@
       <div class="section">
         <h2>Biweekly Income</h2>
         <p class="example">Example: Every other Friday</p>
-        <label>Paystub one: $<input type="number" id="paystub1" value="0" onchange="calculateIncome('biweekly')"></label><br>
-        <label>Paystub two: $<input type="number" id="paystub2" value="0" onchange="calculateIncome('biweekly')"></label><br>
+        <label>Paystub one: $<input type="number" id="paystub1" value="0" onchange="calculateTotal('biweekly')"></label><br>
+        <label>Paystub two: $<input type="number" id="paystub2" value="0" onchange="calculateTotal('biweekly')"></label><br>
         <p>Total: $<span id="biweeklyTotal">0</span></p>
         <p>Average: $<span id="biweeklyAverage">0</span></p>
         <p>Annual: $<span id="biweeklyAnnual">0</span></p>
@@ -181,8 +181,8 @@
       <div class="section">
         <h2>Weekly Income</h2>
         <p class="example">Example: Every Friday</p>
-        <label>Paystub one: $<input type="number" id="weeklyPaystub1" value="0" onchange="calculateIncome('weekly')"></label><br>
-        <label>Paystub two: $<input type="number" id="weeklyPaystub2" value="0" onchange="calculateIncome('weekly')"></label><br>
+        <label>Paystub one: $<input type="number" id="weeklyPaystub1" value="0" onchange="calculateTotal('weekly')"></label><br>
+        <label>Paystub two: $<input type="number" id="weeklyPaystub2" value="0" onchange="calculateTotal('weekly')"></label><br>
         <p>Total: $<span id="weeklyTotal">0</span></p>
         <p>Average: $<span id="weeklyAverage">0</span></p>
         <p>Annual: $<span id="weeklyAnnual">0</span></p>
@@ -194,8 +194,8 @@
       <div class="section">
         <h2>Twice a Month Income</h2>
         <p class="example">Example: 1st and 15th</p>
-        <label>Paystub one: $<input type="number" id="twiceMonthPaystub1" value="0" onchange="calculateIncome('twiceMonth')"></label><br>
-        <label>Paystub two: $<input type="number" id="twiceMonthPaystub2" value="0" onchange="calculateIncome('twiceMonth')"></label><br>
+        <label>Paystub one: $<input type="number" id="twiceMonthPaystub1" value="0" onchange="calculateTotal('twiceMonth')"></label><br>
+        <label>Paystub two: $<input type="number" id="twiceMonthPaystub2" value="0" onchange="calculateTotal('twiceMonth')"></label><br>
         <p>Total: $<span id="twiceMonthTotal">0</span></p>
         <p>Average: $<span id="twiceMonthAverage">0</span></p>
         <p>Annual: $<span id="twiceMonthAnnual">0</span></p>
@@ -204,8 +204,8 @@
       <div class="section">
         <h2>Weekly Verbal Income</h2>
         <p class="example">Example: Freelance or hourly work</p>
-        <label>Hours worked: <input type="number" id="verbalHours" value="0" onchange="calculateIncome('verbal')"></label><br>
-        <label>Hourly Pay: $<input type="number" id="verbalRate" value="0" onchange="calculateIncome('verbal')"></label><br>
+        <label>Hours worked: <input type="number" id="verbalHours" value="0" onchange="calculateTotal('verbal')"></label><br>
+        <label>Hourly Pay: $<input type="number" id="verbalRate" value="0" onchange="calculateTotal('verbal')"></label><br>
         <p>Total: $<span id="verbalTotal">0</span></p>
         <p>Average: $<span id="verbalAverage">0</span></p>
         <p>Annual: $<span id="verbalAnnual">0</span></p>
@@ -218,10 +218,10 @@
         <h2>Extra Income Sources</h2>
        
         <!-- Tips and Other Income for Grand Total -->
-        <label>Tips per week: $<input type="number" id="AnnualTips" value="0" onchange="calculateIncome()"></label><br>
-        <label>Other Income per month: $<input type="number" id="AnnualOtherMonthly" value="0" onchange="calculateIncome()"></label><br>
-        <label>Other Income by year: $<input type="number" id="OtherAnnual" value="0" onchange="calculateIncome()"></label><br>
-
+        <label>Tips per week: $<input type="number" id="AnnualTips" value="0" onchange="calculateTotal()"></label><br>
+        <label>Other Income per month: $<input type="number" id="AnnualOtherMonthly" value="0" onchange="calculateTotal()"></label><br>
+        <label>Other Income by year: $<input type="number" id="OtherAnnual" value="0" onchange="calculateTotal()"></label><br>
+<p><strong>Grand Total: $<span id="grandTotal">0</span></strong></p>
       </div>
 
       <div class="lookup-section" style="position: relative;">
@@ -261,6 +261,8 @@
   </div>
 
   <script>
+     calculateTotal();
+}
     /***************************************************
      * 1) Coverage Chart & Coverage Level Logic
      ***************************************************/
@@ -328,72 +330,72 @@
     /***************************************************
      * 3) Income Calculations (biweekly, weekly, etc.)
      ***************************************************/
-    function calculateIncome(type) {
-      let paystub1, paystub2, verbalHours, verbalRate, total, average, annual;
+ function  calculateTotal (type) {
+  let paystub1, paystub2, verbalHours, verbalRate, total, average, annual;
 
-      switch (type) {
-        case 'biweekly':
-          paystub1 = parseFloat(document.getElementById('paystub1').value) || 0;
-          paystub2 = parseFloat(document.getElementById('paystub2').value) || 0;
-          total = paystub1 + paystub2;
-          average = total / 2;
-          annual = average * 26;
-          break;
-        case 'weekly':
-          paystub1 = parseFloat(document.getElementById('weeklyPaystub1').value) || 0;
-          paystub2 = parseFloat(document.getElementById('weeklyPaystub2').value) || 0;
-          total = paystub1 + paystub2;
-          average = total / 2;
-          annual = average * 52;
-          break;
-        case 'twiceMonth':
-          paystub1 = parseFloat(document.getElementById('twiceMonthPaystub1').value) || 0;
-          paystub2 = parseFloat(document.getElementById('twiceMonthPaystub2').value) || 0;
-          total = paystub1 + paystub2;
-          average = total / 2;
-          annual = average * 24;
-          break;
-        case 'verbal':
-          verbalHours = parseFloat(document.getElementById('verbalHours').value) || 0;
-          verbalRate = parseFloat(document.getElementById('verbalRate').value) || 0;
-          total = verbalHours * verbalRate;
-          average = total;
-          annual = total * 52;
-          break;
-        default:
-          return;
-      }
+  switch (type) {
+    case 'biweekly':
+      paystub1 = parseFloat(document.getElementById('paystub1').value) || 0;
+      paystub2 = parseFloat(document.getElementById('paystub2').value) || 0;
+      total = paystub1 + paystub2;
+      average = total / 2;
+      annual = average * 26;
+      break;
+    case 'weekly':
+      paystub1 = parseFloat(document.getElementById('weeklyPaystub1').value) || 0;
+      paystub2 = parseFloat(document.getElementById('weeklyPaystub2').value) || 0;
+      total = paystub1 + paystub2;
+      average = total / 2;
+      annual = average * 52;
+      break;
+    case 'twiceMonth':
+      paystub1 = parseFloat(document.getElementById('twiceMonthPaystub1').value) || 0;
+      paystub2 = parseFloat(document.getElementById('twiceMonthPaystub2').value) || 0;
+      total = paystub1 + paystub2;
+      average = total / 2;
+      annual = average * 24;
+      break;
+    case 'verbal':
+      verbalHours = parseFloat(document.getElementById('verbalHours').value) || 0;
+      verbalRate = parseFloat(document.getElementById('verbalRate').value) || 0;
+      total = verbalHours * verbalRate;
+      average = total;
+      annual = total * 52;
+      break;
+    default:
+      return;
+  }
 
-      document.getElementById(`${type}Total`).textContent = total.toFixed(2);
-      document.getElementById(`${type}Average`).textContent = average.toFixed(2);
-      document.getElementById(`${type}Annual`).textContent = annual.toFixed(2);
-      document.getElementById(`${type.charAt(0).toUpperCase() + type.slice(1)}Annual`).textContent = annual.toFixed(2);
-      calculateIncome();
-    }
+  document.getElementById(`${type}Total`).textContent = total.toFixed(2);
+  document.getElementById(`${type}Average`).textContent = average.toFixed(2);
+  document.getElementById(`${type}Annual`).textContent = annual.toFixed(2);
+
+  // Call calculateTotal to update the grand total
+  calculateTotal();
+}
 
     /***************************************************
      * 4) Summation of All Incomes
      ***************************************************/
-    function calculateTotal() {
-      const biweeklyAnnual = parseFloat(document.getElementById('biweeklyAnnual').textContent) || 0;
-      const weeklyAnnual = parseFloat(document.getElementById('weeklyAnnual').textContent) || 0;
-      const twiceMonthAnnual = parseFloat(document.getElementById('twiceMonthAnnual').textContent) || 0;
-      const verbalAnnual = parseFloat(document.getElementById('verbalAnnual').textContent) || 0;
+   function calculateTotal() {
+  const biweeklyAnnual = parseFloat(document.getElementById('biweeklyAnnual').textContent) || 0;
+  const weeklyAnnual = parseFloat(document.getElementById('weeklyAnnual').textContent) || 0;
+  const twiceMonthAnnual = parseFloat(document.getElementById('twiceMonthAnnual').textContent) || 0;
+  const verbalAnnual = parseFloat(document.getElementById('verbalAnnual').textContent) || 0;
 
-      const weeklyTips = parseFloat(document.getElementById('AnnualTips').value) || 0;
-      const annualTips = weeklyTips * 52;
+  const weeklyTips = parseFloat(document.getElementById('AnnualTips').value) || 0;
+  const annualTips = weeklyTips * 52;
 
-      const otherMonthlyIncome = parseFloat(document.getElementById('AnnualOtherMonthly').value) || 0;
-      const annualOtherMonthlyIncome = otherMonthlyIncome * 12;
+  const otherMonthlyIncome = parseFloat(document.getElementById('AnnualOtherMonthly').value) || 0;
+  const annualOtherMonthlyIncome = otherMonthlyIncome * 12;
 
-      const otherAnnualIncome = parseFloat(document.getElementById('OtherAnnual').value) || 0;
+  const otherAnnualIncome = parseFloat(document.getElementById('OtherAnnual').value) || 0;
 
-      const calculateIncome = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + AnnualTips + AnnualOtherMonthly + otherAnnual;
+  const grandTotal = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + annualTips + annualOtherMonthlyIncome + otherAnnualIncome;
 
-      document.getElementById('calculateIncome').textContent = calculateIncome.toFixed(2);
-      updateHouseholdIncome();
-       calculateIncome();
-    }
+  document.getElementById('grandTotal').textContent = grandTotal.toFixed(2);
+  updateHouseholdIncome();
+}
 
     /***************************************************
      * 5) Household Info (Coverage + AWC) Display
@@ -437,7 +439,7 @@
     }
 
     // Initialize everything on page load
-    calculateIncome();
+    calculateTotal();
   </script>
 </body>
 </html>
