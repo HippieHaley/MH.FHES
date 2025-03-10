@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Income Calculator</title>
-  <style>
+    <style>
     /* Basic Reset */
     * {
       margin: 0;
@@ -13,7 +13,7 @@
     }
 
     /* General Body Style */
-    body {
+     body {
       font-family: Arial, sans-serif;
       max-width: 1000px;
       margin: 0 auto;
@@ -240,7 +240,7 @@
         <label>Other Income per month: $<input type="number" id="AnnualOtherMonthly" value="0" onchange="calculateGrandTotal()"></label><br>
         <label>Other Income by year: $<input type="number" id="OtherAnnual" value="0" onchange="calculateGrandTotal()"></label><br>
       </div>
-
+    </div>
       <div class="lookup-section" style="position: relative;">
         <h3 style="margin: 0;">Household Information</h3>
         <button class="button icon-button" onclick="copyHouseholdInfo()" title="Copy Info">
@@ -257,8 +257,6 @@
         <p><strong>AWC! qualification: <span id="awcQualification">N/A</span></strong></p>
       </div>
     </div>
-  </div>
-
   <script>
     /***************************************************
      * 1) Coverage Chart & Coverage Level Logic
