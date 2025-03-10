@@ -31,25 +31,26 @@
       margin: 20px 0;
     }
 
-    /* Column Style */
-    .column {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      gap: 20px;
-    }
+   /* Column Style */
+  .column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centers content vertically */
+    gap: 20px;              /* Adds spacing between sections */
+  }
 
-    /* Section Style */
-    .section {
-      justify-content: center;
-      padding: 15px;
-      border: 2px solid #333;
-      box-sizing: border-box;
-      background-color: #acdbf9; /* Light blue background */
-      border-radius: 8px;
-      flex-grow: 1; /* Makes all boxes equal height */
-    }
+  /* Section Style */
+  .section {
+    justify-content: center;
+    padding: 15px;
+    border: 2px solid #333;
+    box-sizing: border-box;
+    background-color: #acdbf9; /* Light blue background */
+    border-radius: 8px;
+    flex-grow: 1; /* Makes all boxes equal height */
+    width: 100%;  /* Ensures sections take full width of the column */
+  }
 
     /* Main pink bubble style */
     .button {
