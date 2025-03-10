@@ -367,7 +367,7 @@
       document.getElementById(`${type}Total`).textContent = total.toFixed(2);
       document.getElementById(`${type}Average`).textContent = average.toFixed(2);
       document.getElementById(`${type}Annual`).textContent = annual.toFixed(2);
-      document.getElementById(`grand${type.charAt(0).toUpperCase() + type.slice(1)}Annual`).textContent = annual.toFixed(2);
+      document.getElementById(`${type.charAt(0).toUpperCase() + type.slice(1)}Annual`).textContent = annual.toFixed(2);
       calculateIncome();
     }
 
