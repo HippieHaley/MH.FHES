@@ -5,175 +5,145 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Income Calculator</title>
   <style>
-    /* Basic Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  /* Basic Reset */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-    /* General Body Style */
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 1000px;
-      margin: 0 auto;
-      background-color: #acdbf9; /* Light blue background */
-      color: #333;
-      padding-top: 50px;
-    }
+  /* General Body Style */
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: #acdbf9; /* Light blue background */
+    color: #333;
+    padding-top: 50px;
+  }
 
-    /* Container Flex Layout */
-    .container {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin: 20px 0;
-    }
+  /* Container Flex Layout */
+  .container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
 
-    /* Column Style */
-    .column {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      gap: 20px;
-    }
+  /* Column Style */
+  .column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
 
-    /* Section Style */
-    .section {
-      justify-content: center;
-      padding: 15px;
-      border: 2px solid #333;
-      box-sizing: border-box;
-      background-color: #acdbf9; /* Light blue background */
-      border-radius: 8px;
-      flex-grow: 1; /* Makes all boxes equal height */
-    }
+  /* Section Style */
+  .section {
+    padding: 15px;
+    border: 2px solid #333;
+    background-color: #acdbf9; /* Light blue background */
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center child elements horizontally */
+    justify-content: center; /* Center child elements vertically */
+    min-height: 200px; /* Ensure sections have a minimum height */
+  }
 
-    /* Main pink bubble style */
-.button {
-  display: inline-flex;
-  justify-content: center;
-  background-color: #f8c9f9; /* Pink background */
-  color: #333;              /* Text/icon color */
-  font-size: 1rem;
-  font-weight: bold;
-  border: 1px solid #000;   /* Black border */
-  border-radius: 50%;       /* Circle shape */
-  cursor: pointer;
-  /* The padding ensures the icon has some space. 
-     Adjust to your preference. */
-  padding: 0.5rem;
-}
-.button:hover {
-  background-color: #e8b8e8; /* Slightly darker pink */
-}
+  /* Pink Bubble Button Style */
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8c9f9; /* Pink background */
+    color: #333;
+    font-size: 1rem;
+    font-weight: bold;
+    border: 1px solid #000;
+    border-radius: 50%; /* Circle shape */
+    cursor: pointer;
+    padding: 0.5rem;
+  }
 
-/* Position & size for the copy button in top-right corner */
-.icon-button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 40px;
-  height: 40px;
-  /* If you want the icon centered, keep display:flex, etc. 
-     But you can rely on .button's inline-flex if you prefer. */
-}
-     .back-home {
-      display: inline-block;  
-      padding: 10px 20px;
-      background-color: #f8c9f9; 
-      color: #333;
-      text-decoration: none;
-      font-size: 1rem;
-      font-weight: bold;
-      border-radius: 30px;
-      text-align: center;
-      border: 1px solid #000;
-      position: absolute; 
-      top: 20px;
-      left: 20px;
-    }
-    .back-home:hover {
-      background-color: #e8b3e8;
-    }
-    input[type="number"] {
-      width: 100%;
-      max-width: 300px;
-      padding: 10px 15px;
-      margin: 10px 0;
-      border: 2px solid #f8c9f9; /* Soft pink border */
-      border-radius: 30px; /* Rounded edges */
-      background-color: #f8c9f9; /* Soft pink background */
-      color: #333;
-      font-size: 1rem;
-      outline: none;
-      transition: 0.3s ease;
-      -moz-appearance: textfield; /* Remove Firefox spinner */
-    }
+  .button:hover {
+    background-color: #e8b8e8; /* Slightly darker pink */
+  }
 
-    input[type="number"]:hover {
-      background-color: #f0d4f0; /* Slightly lighter pink */
-    }
+  /* Copy Button Position */
+  .icon-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+  }
 
-    input[type="number"]:focus {
-      border-color: #e8b8e8;
-      background-color: #fff;
-      box-shadow: 0 0 5px rgba(232, 184, 232, 0.5);
-    }
+  /* Back Home Button */
+  .back-home {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #f8c9f9; /* Soft pink */
+    color: #333;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 30px;
+    border: 1px solid #000;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  }
 
-    /* Remove Spinner Buttons for Chrome */
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
+  .back-home:hover {
+    background-color: #e8b3e8;
+  }
 
-    /* Grand Total Section Styling */
-    .grand-total-section {
-      background-color: #acdbf9;
-      border: 2px solid #333;
-      align-items: center; /* Centers text vertically */
-      justify-content: center; /* Centers text horizontally */
-    }
+  /* Input Field Style */
+  input[type="number"] {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px 15px;
+    margin: 10px 0;
+    border: 2px solid #f8c9f9; /* Soft pink border */
+    border-radius: 30px; /* Rounded edges */
+    background-color: #f8c9f9; /* Soft pink background */
+    color: #333;
+    font-size: 1rem;
+    outline: none;
+    transition: 0.3s ease;
+  }
 
-    /* Household Information Lookup Section */
-    .lookup-section {
-      padding: 15px;
-      background-color: #acdbf9;
-      flex-grow: 1; /* Makes all boxes equal height */
-      align-items: center; /* Centers text vertically */
-      justify-content: center; /* Centers text horizontally */
-      border: 2px solid #333;
-      border-radius: 8px;
-      position: relative; /* For positioning the copy button */
-    }
+  input[type="number"]:hover {
+    background-color: #f0d4f0; /* Slightly lighter pink */
+  }
 
-    /* Title Section */
-    .title-section h1 {
-      font-size: 2.5rem;
-      font-weight: bold;
-      line-height: 1.2;
-      letter-spacing: 2px;
-      color: #fff;
-      -webkit-text-stroke: 1px #000;
-      text-stroke: 1px #000;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-     .h2 {
-      font-size: 1.5rem;
-      font-weight: bold;
-      line-height: 1.2;
-      letter-spacing: 2px;
-      color: #fff;
-      -webkit-text-stroke: 1px #000;
-      text-stroke: 1px #000;
-      text-align: left;
-    flex-grow: 1; /* Makes all boxes equal height */
-     }
-  </style>
+  input[type="number"]:focus {
+    border-color: #e8b8e8;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(232, 184, 232, 0.5);
+  }
+
+  /* Remove Spinner Buttons for Number Inputs */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Title Section */
+  .title-section h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    line-height: 1.2;
+    letter-spacing: 2px;
+    color: #fff;
+    -webkit-text-stroke: 1px #000;
+    text-stroke: 1px #000;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+</style>
 </head>
 <body>
   <a href="index.html" class="back-home">Back to Home</a>
