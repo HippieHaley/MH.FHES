@@ -221,7 +221,6 @@
         <label>Tips per week: $<input type="number" id="AnnualTips" value="0" onchange="calculateTotal()"></label><br>
         <label>Other Income per month: $<input type="number" id="AnnualOtherMonthly" value="0" onchange="calculateTotal()"></label><br>
         <label>Other Income by year: $<input type="number" id="OtherAnnual" value="0" onchange="calculateTotal()"></label><br>
-<p><strong>Grand Total: $<span id="grandTotal">0</span></strong></p>
       </div>
 
       <div class="lookup-section" style="position: relative;">
@@ -253,7 +252,7 @@
         <label>People per Household: 
           <input type="number" id="householdSize" min="1" value="1" onchange="updateHouseholdIncome()">
         </label><br>
-        <p><strong>Yearly Income: $<span id="yearlyIncomeDisplay">0</span></strong></p>
+        <p><strong>Total Income: $<span id="calculateTotal">0</span></strong></p>
         <p><strong>Coverage Level: <span id="coverageLevel">N/A</span></strong></p>
         <p><strong>AWC! qualification: <span id="awcQualification">N/A</span></strong></p>
       </div>
