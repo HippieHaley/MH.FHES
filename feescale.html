@@ -166,19 +166,17 @@ body {
       width: 100%;
       height: 100%;
       background-color: rgba(0,0,0,0.5);
-      z-index: 1000;
+      z-index: 9000; /* Above most content */
       justify-content: center;
       align-items: center;
     }
     /* Modal Window */
     .modal {
       background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      width: 80%
-      max-width: 800px:min-content
+      padding: 10px;
+      width: 100%;
+      max-width: 1000px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      position: relative;
     }
     /* Table Styling for Modal Content */
     table {
@@ -189,7 +187,7 @@ body {
     th, td {
       border: 1px solid #ddd;
       padding: 8px;
-      text-align: left;
+      text-align: center;
     }
     th {
       background-color: #f2f2f2;
@@ -277,7 +275,7 @@ body {
           <label> People per Household: <input type="number" id="householdSize" min="1" value="1" onchange="updateHouseholdIncome()"></label><br>
           <div class="example"></div>
       <h2> Household Income </h2>
-      <div class="space"></div>
+      <div class="example"></div>
           <p><strong>Total Income: $<span id="grandTotal">0</span></strong></p>
           <div class="space"></div>
           <p><strong>Coverage Level: <span id="coverageLevel">N/A</span></strong>
