@@ -157,7 +157,6 @@ body {
       margin-left: 5px;
       display: inline-block;
     }
-    
     /* Modal Overlay (common style for both modals) */
     .modal-overlay {
       display: none; /* Hidden by default */
@@ -171,7 +170,6 @@ body {
       justify-content: center;
       align-items: center;
     }
-    
     /* Modal Window */
     .modal {
       background-color: #fff;
@@ -201,11 +199,6 @@ body {
       cursor: pointer;
       font-size: 24px;
     }
-       /* Paperclip Icon Style */
-     #modalTrigger2 {
-    cursor: pointer;
-    font-size: 24px;
-}
   </style>
 </head>
 <body>
@@ -447,7 +440,6 @@ body {
             <p><strong>AWC! qualification: <span id="awcQualification">N/A</span></strong>
               <span class="modal-trigger" id="triggerModal2">📎</span>
               <div class="modal-overlay" id="modalOverlay2">
-                <div class="modal">
                   <h2>AWC! Program Eligibility</h2>
                   <table>
                     <thead>
@@ -619,16 +611,14 @@ body {
       document.getElementById('awcQualification').textContent = awcQualification;
     }
     // Grab elements
-    const modalTrigger = document.getElementById('modalTrigger');
-    const modalOverlay = document.getElementById('modalOverlay');
-    const modalClose = document.getElementById('modalClose');
-    const tableContainer = document.getElementById('tableContainer');
-
+ const modalTrigger = document.getElementById('modalTrigger');
+const modalOverlay = document.getElementById('modalOverlay');
+const modalClose = document.getElementById('modalClose');
+const tableContainer = document.getElementById('tableContainer');
     // Show the modal on click
     modalTrigger.addEventListener('click', function() {
       modalOverlay.style.display = 'flex'; // Switch from "none" to "flex" to center content
     });
-
     // Close the modal if the user clicks anywhere outside the table
     modalOverlay.addEventListener('click', function(e) {
       // If the click is NOT inside the table container, hide the modal
