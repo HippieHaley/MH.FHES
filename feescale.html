@@ -650,12 +650,16 @@ modalOverlay2.addEventListener('click', function(e) {
       const awcQualification = document.getElementById('awcQualification')?.textContent || "N/A";
 
       const infoToCopy = 
-        `People per Household: ${householdSize}\n` +
-        `Yearly Income: $${yearlyIncome}\n` +
-        `Coverage Level: ${coverageLevel}\n` +
-        `AWC! qualification: ${awcQualification}\n`;
-
-      navigator.clipboard.writeText(infoToCopy)
+       `NO - INCOME DOCS NEEDED - VERBAL INCOME\n
+        People in Household: ${householdSize}\n
+        Yearly Income: $${yearlyIncome}\n
+        Coverage Level: ${coverageLevel}\n
+        AWC! qualification: ${awcQualification}\n
+        Insurance:\n
+        ${new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit', year: 'numeric', month: '2-digit', day: '2-digit' })}\n
+        Staff: H\n`;
+       
+       navigator.clipboard.writeText(infoToCopy)
         .then(() => {
           alert("Household info copied to clipboard!");
         })
