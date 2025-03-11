@@ -148,7 +148,17 @@ body {
   /* If you want the icon centered, keep display:flex, etc. 
      But you can rely on .button's inline-flex if you prefer. */
 }
-    /* Modal Overlay: covers the entire screen */
+   /* Trigger Buttons */
+   .modal-trigger {
+      cursor: pointer;
+      font-size: 18px;
+      border-radius: 4px;
+      padding: 0 5px;
+      margin-left: 5px;
+      display: inline-block;
+    }
+    
+    /* Modal Overlay (common style for both modals) */
     .modal-overlay {
       display: none; /* Hidden by default */
       position: fixed;
@@ -161,56 +171,16 @@ body {
       justify-content: center;
       align-items: center;
     }
-    /* Modal Content Container */
+    
+    /* Modal Window */
     .modal {
       background-color: #fff;
       padding: 20px;
       border-radius: 8px;
       width: 90%;
-      max-width: 1000px;
+      max-width: 500px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
       position: relative;
-    }
-    /* Close Button Styling */
-    .modal-close {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      cursor: pointer;
-      font-size: 24px;
-      font-weight: bold;
-    }
-     /* Modal Overlay: covers the entire screen */
-     .modal-overlay2 {
-      display: none; /* Hidden by default */
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-    /* Modal Content Container */
-    .modal2 {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      width: 90%;
-      max-width: 600px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      position: relative;
-    }
-    /* Close Button Styling */
-    .modal-close2 {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      cursor: pointer;
-      font-size: 24px;
-      font-weight: bold;
     }
     /* Table Styling for Modal Content */
     table {
@@ -318,9 +288,9 @@ body {
           <p><strong>Total Income: $<span id="grandTotal">0</span></strong></p>
           <div class="example"></div>
           <p><strong>Coverage Level: <span id="coverageLevel">N/A</span></strong>
-        <span id="modalTrigger">📎</span>
-            <div class="modal-overlay" id="modalOverlay">
-              <div class="modal">
+        <span class="modal-trigger" id="triggerModal1">📎</span>
+              <div class="modal-overlay" id="modalOverlay1">
+                <div class="modal">
                 <h2>AWC! Program Sliding Fee Scale</h2>
                 <table>
                   <thead>
@@ -475,10 +445,9 @@ body {
             </div>          
             <div class="space"></div>
             <p><strong>AWC! qualification: <span id="awcQualification">N/A</span></strong>
-              <span id="modalTrigger2">📎</span>
-              <div class="modal-overlay2" id="modalOverlay2">
-                <div class="modal2">
-                  <span class="modal-close2" id="modalClose2">&times;</span>
+              <span class="modal-trigger" id="triggerModal2">📎</span>
+              <div class="modal-overlay" id="modalOverlay2">
+                <div class="modal">
                   <h2>AWC! Program Eligibility</h2>
                   <table>
                     <thead>
@@ -653,24 +622,51 @@ body {
     const modalTrigger = document.getElementById('modalTrigger');
     const modalOverlay = document.getElementById('modalOverlay');
     const modalClose = document.getElementById('modalClose');
+    const tableContainer = document.getElementById('tableContainer');
 
     // Show the modal on click
     modalTrigger.addEventListener('click', function() {
       modalOverlay.style.display = 'flex'; // Switch from "none" to "flex" to center content
     });
 
-    // Close the modal when user clicks the "X"
-    modalClose.addEventListener('click', function() {
-      modalOverlay.style.display = 'none';
-    });
-
-    // Optional: close modal by clicking outside the modal content
+    // Close the modal if the user clicks anywhere outside the table
     modalOverlay.addEventListener('click', function(e) {
-      // If the click is on the overlay (and not the modal itself), hide the modal
-      if (e.target === modalOverlay) {
+      // If the click is NOT inside the table container, hide the modal
+      if (!tableContainer.contains(e.target)) {
         modalOverlay.style.display = 'none';
       }
     });
+
+      // Modal 1 functionality
+      const triggerModal1 = document.getElementById('triggerModal1');
+    const modalOverlay1 = document.getElementById('modalOverlay1');
+    
+    triggerModal1.addEventListener('click', function() {
+      modalOverlay1.style.display = 'flex';
+    });
+    
+    modalOverlay1.addEventListener('click', function(e) {
+      // Close if clicking outside the modal content
+      if (e.target === modalOverlay1) {
+        modalOverlay1.style.display = 'none';
+      }
+    });
+    
+    // Modal 2 functionality
+    const triggerModal2 = document.getElementById('triggerModal2');
+    const modalOverlay2 = document.getElementById('modalOverlay2');
+    
+    triggerModal2.addEventListener('click', function() {
+      modalOverlay2.style.display = 'flex';
+    });
+    
+    modalOverlay2.addEventListener('click', function(e) {
+      // Close if clicking outside the modal content
+      if (e.target === modalOverlay2) {
+        modalOverlay2.style.display = 'none';
+      }
+    });
+
     /***************************************************
      * 6) Copy Button Function
      ***************************************************/
