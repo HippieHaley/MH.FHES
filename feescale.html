@@ -165,7 +165,7 @@ body {
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+      background-color: rgba(0,0,0,0.5);
       z-index: 1000;
       justify-content: center;
       align-items: center;
@@ -175,8 +175,8 @@ body {
       background-color: #fff;
       padding: 20px;
       border-radius: 8px;
-      width: 90%;
-      max-width: 500px;
+      width: 80%
+      max-width: 800px:min-content
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
       position: relative;
     }
@@ -279,11 +279,11 @@ body {
       <h2> Household Income </h2>
       <div class="space"></div>
           <p><strong>Total Income: $<span id="grandTotal">0</span></strong></p>
-          <div class="example"></div>
+          <div class="space"></div>
           <p><strong>Coverage Level: <span id="coverageLevel">N/A</span></strong>
         <span class="modal-trigger" id="triggerModal1">📎</span>
               <div class="modal-overlay" id="modalOverlay1">
-                <h2>AWC! Program Sliding Fee Scale</h2>
+               <div class="modal">
                 <table>
                   <thead>
                     <tr>
@@ -434,11 +434,13 @@ body {
                   </tbody>
                 </table>
               </div>
-            </div>          
+            </div>
             <div class="space"></div>
             <p><strong>AWC! qualification: <span id="awcQualification">N/A</span></strong>
               <span class="modal-trigger" id="triggerModal2">📎</span>
               <div class="modal-overlay" id="modalOverlay2">
+                <div class="modal">
+
                   <h2>AWC! Program Eligibility</h2>
                   <table>
                     <thead>
@@ -467,6 +469,7 @@ body {
                   </table>
                 </div>
               </div>
+      </div>
     </div>
   </div>
   <script>
@@ -609,52 +612,35 @@ body {
       const awcQualification = determineAWCQualification(householdSize, yearlyIncome);
       document.getElementById('awcQualification').textContent = awcQualification;
     }
-    // Grab elements
- const modalTrigger = document.getElementById('modalTrigger');
-const modalOverlay = document.getElementById('modalOverlay');
-const modalClose = document.getElementById('modalClose');
-const tableContainer = document.getElementById('tableContainer');
-    // Show the modal on click
-    modalTrigger.addEventListener('click', function() {
-      modalOverlay.style.display = 'flex'; // Switch from "none" to "flex" to center content
-    });
-    // Close the modal if the user clicks anywhere outside the table
-    modalOverlay.addEventListener('click', function(e) {
-      // If the click is NOT inside the table container, hide the modal
-      if (!tableContainer.contains(e.target)) {
-        modalOverlay.style.display = 'none';
-      }
-    });
+// Modal 1 functionality
+const triggerModal1 = document.getElementById('triggerModal1');
+const modalOverlay1 = document.getElementById('modalOverlay1');
 
-      // Modal 1 functionality
-      const triggerModal1 = document.getElementById('triggerModal1');
-    const modalOverlay1 = document.getElementById('modalOverlay1');
-    
-    triggerModal1.addEventListener('click', function() {
-      modalOverlay1.style.display = 'flex';
-    });
-    
-    modalOverlay1.addEventListener('click', function(e) {
-      // Close if clicking outside the modal content
-      if (e.target === modalOverlay1) {
-        modalOverlay1.style.display = 'none';
-      }
-    });
-    
-    // Modal 2 functionality
-    const triggerModal2 = document.getElementById('triggerModal2');
-    const modalOverlay2 = document.getElementById('modalOverlay2');
-    
-    triggerModal2.addEventListener('click', function() {
-      modalOverlay2.style.display = 'flex';
-    });
-    
-    modalOverlay2.addEventListener('click', function(e) {
-      // Close if clicking outside the modal content
-      if (e.target === modalOverlay2) {
-        modalOverlay2.style.display = 'none';
-      }
-    });
+triggerModal1.addEventListener('click', function() {
+  modalOverlay1.style.display = 'flex';
+});
+
+modalOverlay1.addEventListener('click', function(e) {
+  // Close if clicking outside the modal content
+  if (e.target === modalOverlay1) {
+    modalOverlay1.style.display = 'none';
+  }
+});
+
+// Modal 2 functionality
+const triggerModal2 = document.getElementById('triggerModal2');
+const modalOverlay2 = document.getElementById('modalOverlay2');
+
+triggerModal2.addEventListener('click', function() {
+  modalOverlay2.style.display = 'flex';
+});
+
+modalOverlay2.addEventListener('click', function(e) {
+  // Close if clicking outside the modal content
+  if (e.target === modalOverlay2) {
+    modalOverlay2.style.display = 'none';
+  }
+});
 
     /***************************************************
      * 6) Copy Button Function
