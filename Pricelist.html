@@ -5,14 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Price Sheet</title> 
 <style>
-     /* Basic Reset */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
- /* Back Home Button */
- .back-home {
+  /* Back Home Button */
+  .back-home {
     display: inline-block;       /* Prevent stretching */
     width: auto;                 /* Adjust width based on text */
     padding: 10px 20px;
@@ -24,30 +18,62 @@
     border-radius: 30px;
     text-align: center;
     border: 1px solid #000;
+    position: absolute;          /* Positioning fix */
     top: 20px;
     left: 20px;
   }
   .back-home:hover {
     background-color: #e8b3e8;
   }
+
+  /* Basic Reset */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  /* General Body Style */
   body {
-         font-family: Arial, sans-serif;
-         max-width: 1500px;
-         margin: 0 auto;
-         background-color: #acdbf9; /* Light blue background */
-         color: #333;
-         padding-top: 50px;
-     } 
+    font-family: Arial, sans-serif;
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: #acdbf9;     /* Light blue background */
+    color: #333;
+    padding-top: 50px;
+  }
+
+  /* Title Section */
+  .title-section h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    line-height: 1.2;
+    letter-spacing: 2px;            /* White text with black outline */
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  /* Container for Left-Aligned Layout */
+  .container {
+    display: flex-left;
+    width: 100%;
+    max-width: 1500px;
+    background-color: #acdbf9;     /* Light blue background */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(233, 208, 218, 0.1); /* Optional shadow */
+  }
+
   /* Left Side - Price Sheet (2/3 of the screen) */
   .left-side {
-    flex: 2;
+    flex: 1;
     padding-right: 20px;
-    margin-right: 20px;           /* Pushes content left to make space for .right-side */
+    margin-right: 35%;           /* Pushes content left to make space for .right-side */
   }
 
   /* Right Side - Itemized List and Grand Total (Fixed Position) */
   .right-side {
-    width: 25%;                 /* Adjust width to fit content */
+    width: 30%;                 /* Adjust width to fit content */
     padding: 20px;
     border-radius: 10px;
     background-color: #f8c9f9;
@@ -157,10 +183,11 @@ td:first-child {
 <body>
     <a href="index.html" class="back-home">Back to Home</a>
     <h1>Price Sheet</h1>
+    <div class="container">
         <!-- Left Side -->
-        <div class="column left-side">
+        <div class="left-side">
             <!-- Services/Procedures Table -->
-             <table id="Services/Procedures">
+            <table id="Services/Procedures" class="price-table">
                 <thead>
                     <tr>
                         <th>Services/Procedure</th>
@@ -200,7 +227,7 @@ td:first-child {
                          <td><button class="price-button" onclick="addToTotal('Preventive 12-17 New 25%', 76.5)" >$76.50</button></td>
                      </tr>
                      <tr>
-                         <td><span class="service-name"><strong>Preventive 18-39 New</strong></span><span class="cpt-code">99384</span></td>
+                         <td><span class="service-name"><strong>Preventive 18-39 New</strong></span><span class="cpt-code">99385</span></td>
                          <td><button class="price-button" onclick="addToTotal('Preventive 18-39 New 100%', 296)" >$296.00</button></td>
                          <td><button class="price-button" onclick="addToTotal('Preventive 18-39 New 75%', 222)" >$222.00</button></td>
                          <td><button class="price-button" onclick="addToTotal('Preventive 18-39 New 50%', 148)" >$148.00</button></td>
@@ -355,36 +382,20 @@ td:first-child {
                     </tr>
                 </thead>
                 <tbody>
-<tr>
-    <td><span class="service-name"><strong>Chlamydia</strong></span><span class="cpt-code">87491</span></td>
-    <td>
-        <button class="price-button" onclick="addToTotal('Chlamydia 100%', 15, 'Chlamydia', '100%')">$15.00</button>
-    </td>
-    <td>
-        <button class="price-button" onclick="addToTotal('Chlamydia 75%', 11.25, 'Chlamydia', '75%')">$11.25</button>
-    </td>
-    <td>
-        <button class="price-button" onclick="addToTotal('Chlamydia 50%', 7.5, 'Chlamydia', '50%')">$7.50</button>
-    </td>
-    <td>
-        <button class="price-button" onclick="addToTotal('Chlamydia 25%', 3.75, 'Chlamydia', '25%')">$3.75</button>
-    </td>
-</tr>
-<tr>
-    <td><span class="service-name"><strong>Gonorrhea</strong></span><span class="cpt-code">87591</span></td>
-    <td>
-        <button class="price-button" onclick="addToTotal('Gonorrhea 100%', 15, 'Gonorrhea', '100%')">$15.00</button>
-    </td>
-    <td>
-        <button class="price-button" onclick="addToTotal('Gonorrhea 75%', 11.25, 'Gonorrhea', '75%')">$11.25</button>
-    </td>
-    <td>
-        <button class="price-button" onclick="addToTotal('Gonorrhea 50%', 7.5, 'Gonorrhea', '50%')">$7.50</button>
-    </td>
-    <td>
-        <button class="price-button" onclick="addToTotal('Gonorrhea 25%', 3.75, 'Gonorrhea', '25%')">$3.75</button>
-    </td>
-</tr>
+                    <tr>
+                        <td><span class="service-name"><strong>Chlamydia</strong></span><span class="cpt-code">87491</span></td>
+                        <td><button class="price-button" onclick="addToTotal('Chlamydia 100%', 15)">$15.00</button></td>
+                        <td><button class="price-button" onclick="addToTotal('Chlamydia 75%', 11.25)">$11.25</button></td>
+                        <td><button class="price-button" onclick="addToTotal('Chlamydia 50%', 7.5)">$7.50</button></td>
+                        <td><button class="price-button" onclick="addToTotal('Chlamydia 25%', 3.75)">$3.75</button></td>
+                    </tr>
+                    <tr>
+                        <td><span class="service-name"><strong>Gonorrhea</strong></span><span class="cpt-code">87591</span></td>
+                        <td><button class="price-button" onclick="addToTotal('Gonorrhea 100%', 15)">$15.00</button></td>
+                        <td><button class="price-button" onclick="addToTotal('Gonorrhea 75%', 11.25)">$11.25</button></td>
+                        <td><button class="price-button" onclick="addToTotal('Gonorrhea 50%', 7.5)">$7.50</button></td>
+                        <td><button class="price-button" onclick="addToTotal('Gonorrhea 25%', 3.75)">$3.75</button></td>
+                    </tr>
                         <tr>
                                 <td><span class="service-name"><strong>HerpesViralCulture</strong></span><span class="cpt-code">87254</span></td>
                                 <td><button class="price-button" onclick="addToTotal('HerpesViralCulture 100%', 39)">$39.00</button></td>
@@ -435,6 +446,20 @@ td:first-child {
                                 <td><button class="price-button" onclick="addToTotal('PapConventional 25%', 5.75)">$5.75</button></td>
                             </tr>
                             <tr>
+                                <td><span class="service-name"><strong>Pap Liquid Base</strong></span><span class="cpt-code">88142</span></td>
+                                <td><button class="price-button" onclick="addToTotal('Pap Liquid Base 100%', 30)">$30.00</button></td>
+                                <td><button class="price-button" onclick="addToTotal('Pap Liquid Base 75%', 22.5)">$22.50</button></td>
+                                <td><button class="price-button" onclick="addToTotal('Pap Liquid Base 50%', 15)">$15.00</button></td>
+                                <td><button class="price-button" onclick="addToTotal('Pap Liquid Base 25%', 7.5)">$7.50</button></td>
+                            </tr>                            
+                            <tr>
+                                <td><span class="service-name"><strong>Pathology Interpretation</strong></span><span class="cpt-code">88141</span></td>
+                                <td><button class="price-button" onclick="addToTotal('Pathology Interpretation 100%', 72)">$72.00</button></td>
+                                <td><button class="price-button" onclick="addToTotal('Pathology Interpretation 75%', 54)">$54.00</button></td>
+                                <td><button class="price-button" onclick="addToTotal('Pathology Interpretation 50%', 36)">$36.00</button></td>
+                                <td><button class="price-button" onclick="addToTotal('Pathology Interpretation 25%', 18)">$18.00</button></td>
+                            </tr>                            
+                            <tr>
                                 <td><span class="service-name"><strong>UrinePregnancyTest</strong></span><span class="cpt-code">81025</span></td>
                                 <td><button class="price-button" onclick="addToTotal('UrinePregnancyTest 100%', 20)">$20.00</button></td>
                                 <td><button class="price-button" onclick="addToTotal('UrinePregnancyTest 75%', 15)">$15.00</button></td>
@@ -448,6 +473,13 @@ td:first-child {
                                 <td><button class="price-button" onclick="addToTotal('UADipstick 50%', 4)">$4.00</button></td>
                                 <td><button class="price-button" onclick="addToTotal('UADipstick 25%', 2)">$2.00</button></td>
                             </tr>
+                            <tr>
+                                <td><span class="service-name"><strong>UA Dip Automated</strong></span><span class="cpt-code">81003</span></td>
+                                <td><button class="price-button" onclick="addToTotal('UA Dip Automated 100%', 10)">$10.00</button></td>
+                                <td><button class="price-button" onclick="addToTotal('UA Dip Automated 75%', 7.5)">$7.50</button></td>
+                                <td><button class="price-button" onclick="addToTotal('UA Dip Automated 50%', 5)">$5.00</button></td>
+                                <td><button class="price-button" onclick="addToTotal('UA Dip Automated 25%', 2.5)">$2.50</button></td>
+                            </tr>                            
                             <tr>
                                 <td><span class="service-name"><strong>WetMount/GramStain</strong></span><span class="cpt-code">87210</span></td>
                                 <td><button class="price-button" onclick="addToTotal('WetMount/GramStain 100%', 15)">$15.00</button></td>
@@ -470,13 +502,14 @@ td:first-child {
                     </tr>
                 </thead>
                 <tbody>
-<tr>
-            <td><span class="service-name"><strong>InternalCondom</strong></span><span class="cpt-code">A4268</span></td>
-            <td><button class="price-button" onclick="addToTotal('InternalCondom 100%', 5)">$5.00</button></td>
-            <td><button class="price-button" onclick="addToTotal('InternalCondom 75%', 3.75)">$3.75</button></td>
-            <td><button class="price-button" onclick="addToTotal('InternalCondom 50%', 2.5)">$2.50</button></td>
-            <td><button class="price-button" onclick="addToTotal('InternalCondom 25%', 1.25)">$1.25</button></td>
-        </tr>
+                    <tr>
+                        <td><span class="service-name"><strong>Basal Thermometer</strong></span><span class="cpt-code">A4931</span></td>
+                        <td><button class="price-button" onclick="addToTotal('Basal Thermometer 100%', 16)">$16.00</button></td>
+                        <td><button class="price-button" onclick="addToTotal('Basal Thermometer 75%', 12)">$12.00</button></td>
+                        <td><button class="price-button" onclick="addToTotal('Basal Thermometer 50%', 8)">$8.00</button></td>
+                        <td><button class="price-button" onclick="addToTotal('Basal Thermometer 25%', 4)">$4.00</button></td>
+                    </tr>
+                    
         <tr>
             <td><span class="service-name"><strong>DepoProvera</strong></span><span class="cpt-code">J1050</span></td>
             <td><button class="price-button" onclick="addToTotal('DepoProvera 100%', 27)">$27.00</button></td>
@@ -484,6 +517,29 @@ td:first-child {
             <td><button class="price-button" onclick="addToTotal('DepoProvera 50%', 13.5)">$13.50</button></td>
             <td><button class="price-button" onclick="addToTotal('DepoProvera 25%', 6.75)">$6.75</button></td>
         </tr>
+        <tr>
+            <td><span class="service-name"><strong>MedroxyProgesterone</strong></span><span class="cpt-code">J1050</span></td>
+            <td><button class="price-button" onclick="addToTotal('MedroxyProgesterone 100%', 27)">$27.00</button></td>
+            <td><button class="price-button" onclick="addToTotal('MedroxyProgesterone 75%', 20.50)">$20.50</button></td>
+            <td><button class="price-button" onclick="addToTotal('MedroxyProgesterone 50%', 13.50)">$13.50</button></td>
+            <td><button class="price-button" onclick="addToTotal('MedroxyProgesterone 25%', 6.75)">$6.75</button></td>
+        </tr>
+        
+        <tr>
+            <td><span class="service-name"><strong>VCF Foam</strong></span><span class="cpt-code">A4269</span></td>
+            <td><button class="price-button" onclick="addToTotal('VCF Foam 100%', 16)">$16.00</button></td>
+            <td><button class="price-button" onclick="addToTotal('VCF Foam 75%', 12)">$12.00</button></td>
+            <td><button class="price-button" onclick="addToTotal('VCF Foam 50%', 8)">$8.00</button></td>
+            <td><button class="price-button" onclick="addToTotal('VCF Foam 25%', 4)">$4.00</button></td>
+        </tr>
+        
+        <tr>
+            <td><span class="service-name"><strong>Gynol II</strong></span><span class="cpt-code">A4269</span></td>
+            <td><button class="price-button" onclick="addToTotal('Gynol II 100%', 7)">$7.00</button></td>
+            <td><button class="price-button" onclick="addToTotal('Gynol II 75%', 5.25)">$5.25</button></td>
+            <td><button class="price-button" onclick="addToTotal('Gynol II 50%', 3.50)">$3.50</button></td>
+            <td><button class="price-button" onclick="addToTotal('Gynol II 25%', 1.75)">$1.75</button></td>
+        </tr>        
         <tr>
             <td><span class="service-name"><strong>LilettaIUD</strong></span><span class="cpt-code">J7297</span></td>
             <td><button class="price-button" onclick="addToTotal('LilettaIUD 100%', 130)">$130.00</button></td>
@@ -499,18 +555,11 @@ td:first-child {
             <td><button class="price-button" onclick="addToTotal('ParagardIUD 25%', 78.75)">$78.75</button></td>
         </tr>
         <tr>
-            <td><span class="service-name"><strong>Chlamydia</strong></span><span class="cpt-code">87491</span></td>
-            <td><button class="price-button" onclick="addToTotal('Chlamydia 100%', 15)">$15.00</button></td>
-            <td><button class="price-button" onclick="addToTotal('Chlamydia 75%', 11.25)">$11.25</button></td>
-            <td><button class="price-button" onclick="addToTotal('Chlamydia 50%', 7.5)">$7.50</button></td>
-            <td><button class="price-button" onclick="addToTotal('Chlamydia 25%', 3.75)">$3.75</button></td>
-        </tr>
-        <tr>
-            <td><span class="service-name"><strong>Gonorrhea</strong></span><span class="cpt-code">87591</span></td>
-            <td><button class="price-button" onclick="addToTotal('Gonorrhea 100%', 15)">$15.00</button></td>
-            <td><button class="price-button" onclick="addToTotal('Gonorrhea 75%', 11.25)">$11.25</button></td>
-            <td><button class="price-button" onclick="addToTotal('Gonorrhea 50%', 7.5)">$7.50</button></td>
-            <td><button class="price-button" onclick="addToTotal('Gonorrhea 25%', 3.75)">$3.75</button></td>
+            <td><span class="service-name"><strong>Xulane</strong></span><span class="cpt-code">J7304</span></td>
+            <td><button class="price-button" onclick="addToTotal('Xulane 100%', 75)">$75.00</button></td>
+            <td><button class="price-button" onclick="addToTotal('Xulane 75%', 56.25)">$56.25</button></td>
+            <td><button class="price-button" onclick="addToTotal('Xulane 50%', 37.50)">$37.50</button></td>
+            <td><button class="price-button" onclick="addToTotal('Xulane 25%', 18.75)">$18.75</button></td>
         </tr>
         <tr>
             <td><span class="service-name"><strong>NuvaRing</strong></span><span class="cpt-code">J7303</span></td>
@@ -576,6 +625,27 @@ td:first-child {
     <td><button class="price-button" onclick="addToTotal('Ceftriaxone 25%', 5)">$5.00</button></td>
 </tr>
 <tr>
+    <td><span class="service-name"><strong>Chateal</strong></span><span class="cpt-code">S4993</span></td>
+    <td><button class="price-button" onclick="addToTotal('Chateal 100%', 4)">$4.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Chateal 75%', 3)">$3.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Chateal 50%', 2)">$2.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Chateal 25%', 1)">$1.00</button></td>
+</tr>
+<tr>
+    <td><span class="service-name"><strong>Cryselle</strong></span><span class="cpt-code">S4993</span></td>
+    <td><button class="price-button" onclick="addToTotal('Cryselle 100%', 5)">$5.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Cryselle 75%', 3.75)">$3.75</button></td>
+    <td><button class="price-button" onclick="addToTotal('Cryselle 50%', 2.5)">$2.50</button></td>
+    <td><button class="price-button" onclick="addToTotal('Cryselle 25%', 1.25)">$1.25</button></td>
+</tr>
+<tr>
+    <td><span class="service-name"><strong>Cyred</strong></span><span class="cpt-code">S4993</span></td>
+    <td><button class="price-button" onclick="addToTotal('Cyred 100%', 4)">$4.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Cyred 75%', 3)">$3.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Cyred 50%', 2)">$2.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Cyred 25%', 1)">$1.00</button></td>
+</tr>
+<tr>
     <td><span class="service-name"><strong>Doxycycline</strong></span><span class="cpt-code">S4993</span></td>
     <td><button class="price-button" onclick="addToTotal('Doxycycline 100%', 1)">$1.00</button></td>
     <td><button class="price-button" onclick="addToTotal('Doxycycline 75%', 0.75)">$0.75</button></td>
@@ -625,11 +695,60 @@ td:first-child {
     <td><button class="price-button" onclick="addToTotal('Mononessa 25%', 1)">$1.00</button></td>
 </tr>
 <tr>
+    <td><span class="service-name"><strong>Nor QD</strong></span><span class="cpt-code">S4993</span></td>
+    <td><button class="price-button" onclick="addToTotal('Nor QD 100%', 9)">$9.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Nor QD 75%', 6.75)">$6.75</button></td>
+    <td><button class="price-button" onclick="addToTotal('Nor QD 50%', 4.50)">$4.50</button></td>
+    <td><button class="price-button" onclick="addToTotal('Nor QD 25%', 2.25)">$2.25</button></td>
+</tr>
+<tr>
+    <td><span class="service-name"><strong>Nordette</strong></span><span class="cpt-code">S4993</span></td>
+    <td><button class="price-button" onclick="addToTotal('Nordette 100%', 4)">$4.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Nordette 75%', 3)">$3.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Nordette 50%', 2)">$2.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Nordette 25%', 1)">$1.00</button></td>
+</tr>
+<tr>
+    <td><span class="service-name"><strong>Norethindrone</strong></span><span class="cpt-code">S4993</span></td>
+    <td><button class="price-button" onclick="addToTotal('Norethindrone 100%', 4)">$4.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Norethindrone 75%', 3)">$3.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Norethindrone 50%', 2)">$2.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Norethindrone 25%', 1)">$1.00</button></td>
+</tr>
+<tr>
+    <td><span class="service-name"><strong>Nortrel 777</strong></span><span class="cpt-code">S4993</span></td>
+    <td><button class="price-button" onclick="addToTotal('Nortrel 777 100%', 5)">$5.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Nortrel 777 75%', 3.75)">$3.75</button></td>
+    <td><button class="price-button" onclick="addToTotal('Nortrel 777 50%', 2.50)">$2.50</button></td>
+    <td><button class="price-button" onclick="addToTotal('Nortrel 777 25%', 1.25)">$1.25</button></td>
+</tr>
+<tr>
+    <td><span class="service-name"><strong>Orsythia</strong></span><span class="cpt-code">S4993</span></td>
+    <td><button class="price-button" onclick="addToTotal('Orsythia 100%', 4)">$4.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Orsythia 75%', 3)">$3.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Orsythia 50%', 2)">$2.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Orsythia 25%', 1)">$1.00</button></td>
+</tr>
+<tr>
+    <td><span class="service-name"><strong>Portia</strong></span><span class="cpt-code">S4993</span></td>
+    <td><button class="price-button" onclick="addToTotal('Portia 100%', 5)">$5.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Portia 75%', 3.75)">$3.75</button></td>
+    <td><button class="price-button" onclick="addToTotal('Portia 50%', 2.50)">$2.50</button></td>
+    <td><button class="price-button" onclick="addToTotal('Portia 25%', 1.25)">$1.25</button></td>
+</tr>
+<tr>
     <td><span class="service-name"><strong>Reclipsen</strong></span><span class="cpt-code">S4993</span></td>
     <td><button class="price-button" onclick="addToTotal('Reclipsen 100%', 11)">$11.00</button></td>
     <td><button class="price-button" onclick="addToTotal('Reclipsen 75%', 8.25)">$8.25</button></td>
     <td><button class="price-button" onclick="addToTotal('Reclipsen 50%', 5.5)">$5.50</button></td>
     <td><button class="price-button" onclick="addToTotal('Reclipsen 25%', 2.75)">$2.75</button></td>
+</tr>
+<tr>
+    <td><span class="service-name"><strong>Sprintec</strong></span><span class="cpt-code">S4993</span></td>
+    <td><button class="price-button" onclick="addToTotal('Sprintec 100%', 5)">\$5.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Sprintec 75%', 3.75)">\$3.75</button></td>
+    <td><button class="price-button" onclick="addToTotal('Sprintec 50%', 2.5)">\$2.50</button></td>
+    <td><button class="price-button" onclick="addToTotal('Sprintec 25%', 1.25)">\$1.25</button></td>
 </tr>
 <tr>
     <td><span class="service-name"><strong>Sronyx</strong></span><span class="cpt-code">S4993</span></td>
@@ -644,6 +763,29 @@ td:first-child {
     <td><button class="price-button" onclick="addToTotal('Tri-LoMarzia 75%', 10.5)">$10.50</button></td>
     <td><button class="price-button" onclick="addToTotal('Tri-LoMarzia 50%', 7)">$7.00</button></td>
     <td><button class="price-button" onclick="addToTotal('Tri-LoMarzia 25%', 3.5)">$3.50</button></td>
+</tr>
+<tr>
+    <td><span class="service-name"><strong>Tri-Lo Sprintec</strong></span><span class="cpt-code">S4993</span></td>
+    <td><button class="price-button" onclick="addToTotal('Tri-Lo Sprintec 100%', 5)">$5.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Tri-Lo Sprintec 75%', 3.75)">$3.75</button></td>
+    <td><button class="price-button" onclick="addToTotal('Tri-Lo Sprintec 50%', 2.5)">$2.50</button></td>
+    <td><button class="price-button" onclick="addToTotal('Tri-Lo Sprintec 25%', 1.25)">$1.25</button></td>
+</tr>
+
+<tr>
+    <td><span class="service-name"><strong>TriNessa Lo</strong></span><span class="cpt-code">S4993</span></td>
+    <td><button class="price-button" onclick="addToTotal('TriNessa Lo 100%', 4)">$4.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('TriNessa Lo 75%', 3)">$3.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('TriNessa Lo 50%', 2)">$2.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('TriNessa Lo 25%', 1)">$1.00</button></td>
+</tr>
+
+<tr>
+    <td><span class="service-name"><strong>Triphasil</strong></span><span class="cpt-code">$4993</span></td>
+    <td><button class="price-button" onclick="addToTotal('Triphasil 100%', 4)">$4.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Triphasil 75%', 3)">$3.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Triphasil 50%', 2)">$2.00</button></td>
+    <td><button class="price-button" onclick="addToTotal('Triphasil 25%', 1)">$1.00</button></td>
 </tr>
 <tr>
     <td><span class="service-name"><strong>Trivora</strong></span><span class="cpt-code">S4993</span></td>
