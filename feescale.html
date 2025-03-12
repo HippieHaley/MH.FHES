@@ -52,6 +52,10 @@ body {
         color: #333;
         margin-bottom: 10px;
     }
+    .heart {
+  height: 30px;
+  width: auto
+}
     .label{
    margin-top: 20px;
     align-items: center; /* Centers text vertically */
@@ -192,10 +196,7 @@ body {
     th {
       background-color: #f2f2f2;
     }
-    #triggerModal img {
-  width: 48px; /* or any size you prefer */
-  height: 48px; /* or any size you prefer */
-}
+
 
   </style>
 </head>
@@ -279,7 +280,9 @@ body {
           <p><strong>Total Income: $<span id="grandTotal">0</span></strong></p>
           <div class="space"></div>
           <p><strong>Coverage Level: <span id="coverageLevel">N/A</span></strong>
-        <span class="modal-trigger" id="triggerModal1">📎</span>
+            <span class="modal-trigger" id="triggerModal1">
+              <img src="images/heart.png" class="heart" alt="Heart icon">
+            </span>
               <div class="modal-overlay" id="modalOverlay1">
                <div class="modal">
                 <table>
@@ -436,7 +439,7 @@ body {
             <div class="space"></div>
             <p><strong>AWC! qualification: <span id="awcQualification">N/A</span></strong>
               <span class="modal-trigger" id="triggerModal1">
-                <img src="images/heart.png" alt="Heart Icon">
+                <img src="images/heart.png" class="heart" alt="Heart icon">
               </span>              
               <div class="modal-overlay" id="modalOverlay2">
                 <div class="modal">
