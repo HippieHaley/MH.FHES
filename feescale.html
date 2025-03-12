@@ -196,7 +196,9 @@ body {
     th {
       background-color: #f2f2f2;
     }
-
+    .hidden {
+      display: none;
+    }
 
   </style>
 </head>
@@ -210,22 +212,28 @@ body {
           <h2>Biweekly Income</h2>
           <div class="example"></div>
           <p>Example: Every other Friday</p>
+          <div class="space"></div>
           <label>Paystub one: $<input type="number" id="paystub1" value="0" onchange="calculateIncome('biweekly')"></label><br>
           <label>Paystub two: $<input type="number" id="paystub2" value="0" onchange="calculateIncome('biweekly')"></label><br>
           <div class="space"></div>
           <p>Total: $<span id="biweeklyTotal">0</span></p>
           <p>Average: $<span id="biweeklyAverage">0</span></p>
+          <div class="space"></div>
           <p>Annual: $<span id="biweeklyAnnual">0</span></p>
         </div>
         <div class="section">
           <h2>Weekly Income</h2>
           <div class="example"></div>
           <p>Example: Every Friday</p>
+          <div class="space"></div>
           <label>Paystub one: $<input type="number" id="weeklyPaystub1" value="0" onchange="calculateIncome('weekly')"></label><br>
           <label>Paystub two: $<input type="number" id="weeklyPaystub2" value="0" onchange="calculateIncome('weekly')"></label><br>
           <div class="space"></div>
+          <div class="hidden">
           <p>Total: $<span id="weeklyTotal">0</span></p>
+         </div>
           <p>Average: $<span id="weeklyAverage">0</span></p>
+          <div class="space"></div>
           <p>Annual: $<span id="weeklyAnnual">0</span></p>
         </div>
       </div>
@@ -235,22 +243,30 @@ body {
           <h2>Twice a Month Income</h2>
           <div class="example"></div>
           <p>Example: 1st and 15th</p>
+          <div class="space"></div>
           <label>Paystub one: $<input type="number" id="twiceMonthPaystub1" value="0" onchange="calculateIncome('twiceMonth')"></label><br>
           <label>Paystub two: $<input type="number" id="twiceMonthPaystub2" value="0" onchange="calculateIncome('twiceMonth')"></label><br>
           <div class="space"></div>
-          <p>Total: $<span id="twiceMonthTotal">0</span></p>
+          <div class="hidden">
+            <p>Total: $<span id="weeklyTotal">0</span></p>
+           </div>
           <p>Average: $<span id="twiceMonthAverage">0</span></p>
+          <div class="space"></div>
           <p>Annual: $<span id="twiceMonthAnnual">0</span></p>
         </div>
         <div class="section">
           <h2>Weekly Verbal Income</h2>
           <div class="example"></div>
           <p> Example: Freelance or hourly work</p>
+          <div class="space"></div>
           <label>Hours worked: <input type="number" id="verbalHours" value="0" onchange="calculateIncome('verbal')"></label><br>
           <label>Hourly Pay: $<input type="number" id="verbalRate" value="0" onchange="calculateIncome('verbal')"></label><br>
           <div class="space"></div>
-          <p>Total: $<span id="verbalTotal">0</span></p>
+          <div class="hidden">
+            <p>Total: $<span id="weeklyTotal">0</span></p>
+           </div>
           <p>Average: $<span id="verbalAverage">0</span></p>
+          <div class="space"></div>
           <p>Annual: $<span id="verbalAnnual">0</span></p>
         </div>
       </div>
