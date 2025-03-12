@@ -48,19 +48,16 @@
     font-size: 2.5rem;
     font-weight: bold;
     line-height: 1.2;
-    letter-spacing: 2px;
-    color: #fff;                 /* White text with black outline */
-    -webkit-text-stroke: 1px #000;
-    text-stroke: 1px #000;
+    letter-spacing: 2px;            /* White text with black outline */
     text-align: center;
     margin-bottom: 20px;
   }
 
   /* Container for Left-Aligned Layout */
   .container {
-    display: flex;
+    display: flex-left;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1500px;
     background-color: #acdbf9;     /* Light blue background */
     border-radius: 10px;
     padding: 20px;
@@ -69,7 +66,7 @@
 
   /* Left Side - Price Sheet (2/3 of the screen) */
   .left-side {
-    flex: 2;
+    flex: 1;
     padding-right: 20px;
     margin-right: 35%;           /* Pushes content left to make space for .right-side */
   }
@@ -558,7 +555,7 @@ td:first-child {
             <td><button class="price-button" onclick="addToTotal('ParagardIUD 25%', 78.75)">$78.75</button></td>
         </tr>
         <tr>
-            <td><span class="service-name"><strong>Xulane</strong></span><span class="cpt-code">17304</span></td>
+            <td><span class="service-name"><strong>Xulane</strong></span><span class="cpt-code">J7304</span></td>
             <td><button class="price-button" onclick="addToTotal('Xulane 100%', 75)">$75.00</button></td>
             <td><button class="price-button" onclick="addToTotal('Xulane 75%', 56.25)">$56.25</button></td>
             <td><button class="price-button" onclick="addToTotal('Xulane 50%', 37.50)">$37.50</button></td>
