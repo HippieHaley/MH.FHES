@@ -265,7 +265,7 @@ body {
         </div>
         <div class="lookup-section" style="position: relative;">
           <h2>Household Information</h2>
-          <button class="button icon-button" onclick="copyHouseholdInfo()" aria-label="Copy Household Info">
+          <button class="button icon-button" onclick="copyIncomeInfo()" aria-label="Copy Household Info">
             <!-- Inline SVG icon for 'copy' -->
             <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
@@ -647,31 +647,153 @@ modalOverlay2.addEventListener('click', function(e) {
     /***************************************************
      * 6) Copy Button Function
      ***************************************************/
-    function copyHouseholdInfo() {
-      const householdSize = document.getElementById('householdSize')?.value || "1";
-      const yearlyIncome = document.getElementById('grandTotal')?.textContent || "0";
-      const coverageLevel = document.getElementById('coverageLevel')?.textContent || "N/A";
-      const awcQualification = document.getElementById('awcQualification')?.textContent || "N/A";
+     function copyIncomeInfo() {
+  // Get household-related data
+  const householdSize = document.getElementById('householdSize').value || "1";
+  const yearlyIncome = document.getElementById('grandTotal').textContent || "0";
+  const coverageLevel = document.getElementById('coverageLevel').textContent || "N/A";
+  const awcQualification = document.getElementById('awcQualification').textContent || "N/A";
 
-      const infoToCopy = 
-       `NO - INCOME DOCS NEEDED - VERBAL INCOME\n
-        People in Household: ${householdSize}\n
-        Yearly Income: $${yearlyIncome}\n
-        Coverage Level: ${coverageLevel}\n
-        AWC! qualification: ${awcQualification}\n
-        Insurance:\n
-        ${new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit', year: 'numeric', month: '2-digit', day: '2-digit' })}\n
-        Staff: H\n`;
-       
-       navigator.clipboard.writeText(infoToCopy)
-        .then(() => {
-          alert("Household info copied to clipboard!");
-        })
-        .catch(err => {
-          console.error("Failed to copy text:", err);
-          alert("Unable to copy info.");
-        });
+  // Debugging: Log the values to the console
+  console.log("Household Size:", householdSize);
+  console.log("Yearly Income:", yearlyIncome);
+  console.log("Coverage Level:", coverageLevel);
+  console.log("AWC Qualification:", awcQualification);
+
+  // Begin building the string with header info
+  let infoToCopy = `NO - INCOME DOCS NEEDED - VERBAL INCOME\n`;
+  infoToCopy += `People in Household: ${householdSize}\n\n`;
+  infoToCopy += "Income Details:\n----------------------\n";
+
+  // Biweekly Income
+  const biweeklyAnnual = parseFloat(document.getElementById('biweeklyAnnual').textContent) || 0;
+  if (biweeklyAnnual !== 0) {
+    const paystub1 = document.getElementById('paystub1').value || "0";
+    const paystub2 = document.getElementById('paystub2').value || "0";
+    const biweeklyTotal = document.getElementById('biweeklyTotal').textContent || "0";
+    const biweeklyAverage = parseFloat(document.getElementById('biweeklyAverage').textContent) || 0;
+    infoToCopy += 
+`Biweekly Income:
+  Paystub 1: $${paystub1}
+  Paystub 2: $${paystub2}
+  Total:     $${biweeklyTotal}
+  Average:   $${biweeklyAverage.toFixed(2)}
+  Annual:    $${biweeklyAnnual.toFixed(2)}
+
+`;
+  }
+
+  // Weekly Income
+  const weeklyAnnual = parseFloat(document.getElementById('weeklyAnnual').textContent) || 0;
+  if (weeklyAnnual !== 0) {
+    const weeklyPaystub1 = document.getElementById('weeklyPaystub1').value || "0";
+    const weeklyPaystub2 = document.getElementById('weeklyPaystub2').value || "0";
+    const weeklyTotal = document.getElementById('weeklyTotal').textContent || "0";
+    const weeklyAverage = parseFloat(document.getElementById('weeklyAverage').textContent) || 0;
+    infoToCopy += 
+`Weekly Income:
+  Paystub 1: $${weeklyPaystub1}
+  Paystub 2: $${weeklyPaystub2}
+  Total:     $${weeklyTotal}
+  Average:   $${weeklyAverage.toFixed(2)}
+  Annual:    $${weeklyAnnual.toFixed(2)}
+
+`;
+  }
+
+  // Twice a Month Income
+  const twiceMonthAnnual = parseFloat(document.getElementById('twiceMonthAnnual').textContent) || 0;
+  if (twiceMonthAnnual !== 0) {
+    const twiceMonthPaystub1 = document.getElementById('twiceMonthPaystub1').value || "0";
+    const twiceMonthPaystub2 = document.getElementById('twiceMonthPaystub2').value || "0";
+    const twiceMonthTotal = document.getElementById('twiceMonthTotal').textContent || "0";
+    const twiceMonthAverage = parseFloat(document.getElementById('twiceMonthAverage').textContent) || 0;
+    infoToCopy += 
+`Twice a Month Income:
+  Paystub 1: $${twiceMonthPaystub1}
+  Paystub 2: $${twiceMonthPaystub2}
+  Total:     $${twiceMonthTotal}
+  Average:   $${twiceMonthAverage.toFixed(2)}
+  Annual:    $${twiceMonthAnnual.toFixed(2)}
+
+`;
+  }
+
+  // Weekly Verbal Income
+  const verbalAnnual = parseFloat(document.getElementById('verbalAnnual').textContent) || 0;
+  if (verbalAnnual !== 0) {
+    const verbalHours = document.getElementById('verbalHours').value || "0";
+    const verbalRate = document.getElementById('verbalRate').value || "0";
+    const verbalTotal = document.getElementById('verbalTotal').textContent || "0";
+    const verbalAverage = parseFloat(document.getElementById('verbalAverage').textContent) || 0;
+    infoToCopy += 
+`Weekly Verbal Income:
+  Hours Worked: ${verbalHours}
+  Hourly Rate:  $${verbalRate}
+  Total:        $${verbalTotal}
+  Average:      $${verbalAverage.toFixed(2)}
+  Annual:       $${verbalAnnual.toFixed(2)}
+
+`;
+  }
+
+  // Extra Income Section
+  const tipsValue = document.getElementById('AnnualTips').value || "0";
+  const tips = parseFloat(tipsValue) || 0;
+  const otherMonthlyValue = document.getElementById('AnnualOtherMonthly').value || "0";
+  const otherMonthly = parseFloat(otherMonthlyValue) || 0;
+  const otherAnnualValue = document.getElementById('OtherAnnual').value || "0";
+  const otherAnnual = parseFloat(otherAnnualValue) || 0;
+
+  if (tips !== 0 || otherMonthly !== 0 || otherAnnual !== 0) {
+    infoToCopy += "Extra Income:\n";
+    if (tips !== 0) {
+      let annualTips = tips * 52;
+      infoToCopy += `  Tips per week: $${tips} (Annualized: $${annualTips.toFixed(2)})\n`;
     }
+    if (otherMonthly !== 0) {
+      let annualOtherMonthly = otherMonthly * 12;
+      infoToCopy += `  Other Income per Month: $${otherMonthly} (Annualized: $${annualOtherMonthly.toFixed(2)})\n`;
+    }
+    if (otherAnnual !== 0) {
+      infoToCopy += `  Other Annual Income: $${otherAnnual}\n`;
+    }
+    infoToCopy += "\n";
+  }
+
+  // If no income details were added, indicate that no data was entered.
+  if (
+      infoToCopy.indexOf("Biweekly Income:") === -1 &&
+      infoToCopy.indexOf("Weekly Income:") === -1 &&
+      infoToCopy.indexOf("Twice a Month Income:") === -1 &&
+      infoToCopy.indexOf("Weekly Verbal Income:") === -1 &&
+      infoToCopy.indexOf("Extra Income:") === -1
+  ) {
+    infoToCopy += "No income data entered.\n";
+  }
+
+  // Append additional household information and timestamp
+  infoToCopy += 
+`Yearly Income: $${yearlyIncome}\n` +
+`Coverage Level: ${coverageLevel}\n` +
+`AWC! qualification: ${awcQualification}\n` +
+`Insurance:\n` +
+`${new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit', year: 'numeric', month: '2-digit', day: '2-digit' })}\n` +
+`Staff: H\n`;
+
+  // Debugging: Log the final info to copy
+  console.log("Info to Copy:", infoToCopy);
+
+  // Copy the text to the clipboard using the Clipboard API
+  navigator.clipboard.writeText(infoToCopy)
+    .then(() => {
+      alert("Household info copied to clipboard!");
+    })
+    .catch(err => {
+      console.error("Failed to copy text:", err);
+      alert("Unable to copy info.");
+    });
+}
     // Initialize everything on page load
     calculateGrandTotal();
   </script>
