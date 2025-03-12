@@ -48,8 +48,9 @@ body {
   height: 30px;
   width: auto
 }
-    .label{
-   margin-bottom: 15px;
+ .label{
+      margin-top: 30px;
+   margin-bottom: 10px;
     align-items: center; /* Centers text vertically */
   }
    .example {
@@ -57,7 +58,7 @@ body {
    align-items: center; /* Centers text vertically */
      }
       .space {
-     margin-top: 10px;
+     margin-top: 8px;
      align-items: center; /* Centers text vertically */
       }
       /* Position & size for the copy button in top-right corner */
@@ -207,12 +208,12 @@ body {
           <p>Example: Every other Friday</p>
           <div class="example"></div>
           <label>Paystub one: $<input type="number" id="paystub1" value="0" onchange="calculateIncome('biweekly')"></label><br>
+          <div class="space"></div>
           <label>Paystub two: $<input type="number" id="paystub2" value="0" onchange="calculateIncome('biweekly')"></label><br>
           <div class=" hidden">
-            <p>Total: $<span id="biweeklyTotal">0</span></p>
-            </div>
+            <p>Total: $<span id="biweeklyTotal">0</span></p></div>
           <p>Average: $<span id="biweeklyAverage">0</span></p>
-          <div class="example"></div>
+          <div class="space"></div>
           <p>Annual: $<span id="biweeklyAnnual">0</span></p>
         </div>
         <div class="section">
@@ -221,12 +222,12 @@ body {
           <p>Example: Every Friday</p>
           <div class="example"></div>
           <label>Paystub one: $<input type="number" id="weeklyPaystub1" value="0" onchange="calculateIncome('weekly')"></label><br>
+          <div class="space"></div>
           <label>Paystub two: $<input type="number" id="weeklyPaystub2" value="0" onchange="calculateIncome('weekly')"></label><br>
           <div class=" hidden">
-            <p>Total: $<span id="biweeklyTotal">0</span></p>
-            </div>
+            <p>Total: $<span id="biweeklyTotal">0</span></p></div>
           <p>Average: $<span id="weeklyAverage">0</span></p>
-          <div class="example"></div>
+          <div class="space"></div>
           <p>Annual: $<span id="weeklyAnnual">0</span></p>
         </div>
       </div>
@@ -238,12 +239,12 @@ body {
           <p>Example: 1st and 15th</p>
           <div class="example"></div>
           <label>Paystub one: $<input type="number" id="twiceMonthPaystub1" value="0" onchange="calculateIncome('twiceMonth')"></label><br>
+          <div class="space"></div>
           <label>Paystub two: $<input type="number" id="twiceMonthPaystub2" value="0" onchange="calculateIncome('twiceMonth')"></label><br>
           <div class=" hidden">
-            <p>Total: $<span id="biweeklyTotal">0</span></p>
-            </div>
+            <p>Total: $<span id="twiceMonthTotal">0</span></p></div>
           <p>Average: $<span id="twiceMonthAverage">0</span></p>
-          <div class="example"></div>
+          <div class="space"></div>
           <p>Annual: $<span id="twiceMonthAnnual">0</span></p>
         </div>
         <div class="section">
@@ -252,12 +253,11 @@ body {
           <p> Example: Freelance or hourly work</p>
           <div class="example"></div>
           <label>Hours worked: <input type="number" id="verbalHours" value="0" onchange="calculateIncome('verbal')"></label><br>
+          <div class="space"></div>
           <label>Hourly Pay: $<input type="number" id="verbalRate" value="0" onchange="calculateIncome('verbal')"></label><br>
-          <div class=" hidden">
-            <p>Total: $<span id="biweeklyTotal">0</span></p>
-            </div>
+          <div class=" hidden"><p>Total: $<span id="biweeklyTotal">0</span></p></div>
           <p>Average: $<span id="verbalAverage">0</span></p>
-          <div class="example"></div>
+          <div class="space"></div>
           <p>Annual: $<span id="verbalAnnual">0</span></p>
         </div>
       </div>
@@ -266,30 +266,32 @@ body {
         <div class="section">
           <h2>Extra Income Sources</h2>
           <div class="example"></div>
-          <div class="space"></div>
           <label>Tips per week: $<input type="number" id="AnnualTips" value="0" onchange="calculateGrandTotal()"></label><br>
           <div class="space"></div>
           <label>Other Income per month: $<input type="number" id="AnnualOtherMonthly" value="0" onchange="calculateGrandTotal()"></label><br>
           <div class="space"></div>
           <label>Other Income by year: $<input type="number" id="OtherAnnual" value="0" onchange="calculateGrandTotal()"></label><br>
+          <div class="space"></div>
         </div>
         <div class="section">
-        <h2>Household Information</h2>
-        <class="lookup-section" style="position: relative;">
-          <button class="button icon-button" onclick="copyIncomeInfo()" aria-label="Copy Household Info">
-            <!-- Inli</button>ne SVG icon for 'copy' -->
-            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg>
-          </button>
-          <div class="example"></div>
-          <label> People per Household: <input type="number" id="householdSize" min="1" value="1" onchange="updateHouseholdIncome()"></label><br>
-          <div class="example"></div>
-      <h2> Household Income </h2>
-      <div class="hidden">
+        <h2>Household Info</h2>
+      <div class="example"></div>
+          <p> People per Household:</p>
+           <input type="number" id="householdSize" min="1" value="1" onchange="updateHouseholdIncome()"><br>
+           <div class=" hidden"><p>spacing fix</p></div>
+          <class="lookup-section" style="position: relative;">
+            <button class="button icon-button" onclick="copyIncomeInfo()" aria-label="Copy Household Info">
+              <!-- Inli</button>ne SVG icon for 'copy' -->
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+            </button>
+ <div class="example"></div>
+      <h2> Household Income</h2>
+      <div class="example"></div>
           <p><strong>Total Income: $<span id="grandTotal">0</span></strong></p>
-      </div>
+          <div class="space"></div>
           <p><strong>Coverage Level: <span id="coverageLevel">N/A</span></strong>
             <span class="modal-trigger" id="triggerModal1">
               <img src="images/heart.png" class="heart" alt="Heart icon">
@@ -484,6 +486,7 @@ body {
               </div>
       </div>
     </div>
+    <div class=" space"></div>
   </div>
   <script>
     /***************************************************
