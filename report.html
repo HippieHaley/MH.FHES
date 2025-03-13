@@ -8,55 +8,55 @@
 <body>
     <h1>PDF Template Filler</h1>
     
-    <!-- ✅ Upload button for the data source -->
-    <input type="file" id="dataFileInput" accept="application/pdf" />
+    <!-- ✅ Upload button for the DOCX file -->
+    <input type="file" id="dataFileInput" accept=".docx" />
     <button id="fillTemplateButton">Fill Template and Download</button>
 
-    <!-- ✅ Load pdf-lib and pdf.js -->
+    <!-- ✅ Load libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.11.0/pdf-lib.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
+    <script src="statement.docx"></script>
 
     <script>
         let extractedData = {};
 
-        // ✅ Handle file upload and extract data
+        // ✅ Extract text from DOCX
         document.getElementById('dataFileInput').addEventListener('change', async (event) => {
             const file = event.target.files[0];
             if (!file) return;
 
             // ✅ Check file type
-            if (file.type !== 'application/pdf') {
-                alert('Please upload a valid PDF file.');
+            if (file.type !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+                alert('Please upload a valid DOCX file.');
                 console.error('Invalid file type:', file.type);
                 return;
             }
 
             const reader = new FileReader();
+
             reader.onload = async (e) => {
                 try {
-                    const pdfBytes = new Uint8Array(e.target.result);
+                    const arrayBuffer = e.target.result;
 
-                    console.log('PDF file loaded successfully. Size:', pdfBytes.length, 'bytes');
+                    // ✅ Convert DOCX to text using Mammoth.js
+                    const result = await Mammoth.extractRawText({ arrayBuffer });
+                    const text = result.value;
 
-                    // ✅ Load PDF using PDF.js
-                    const loadingTask = pdfjsLib.getDocument({ data: pdfBytes });
-                    const pdf = await loadingTask.promise;
-                    const page = await pdf.getPage(1);
-                    const textContent = await page.getTextContent();
+                    console.log('Extracted text:', text);
 
-                    console.log('Extracted text content:', textContent.items.map(i => i.str));
-
-                    // ✅ Example of how to parse extracted data
-                    extractedData.clientName = textContent.items.find(i => i.str.includes("Client Name"))?.str.split(':')[1]?.trim() || 'N/A';
-                    extractedData.clientID = textContent.items.find(i => i.str.includes("Client ID"))?.str.split(':')[1]?.trim() || 'N/A';
-                    extractedData.statementDate = textContent.items.find(i => i.str.includes("Statement Date"))?.str.split(':')[1]?.trim() || 'N/A';
-                    extractedData.amountToPay = textContent.items.find(i => i.str.includes("PAY THIS AMOUNT"))?.str.split(':')[1]?.trim() || 'N/A';
+                    // ✅ Extract key data points
+                    extractedData.clientName = text.match(/Client Name:\s*([\w\s]+)/)?.[1]?.trim() || 'N/A';
+                    extractedData.clientID = text.match(/Client Name:.*\(([\w\d#]+)\)/)?.[1]?.trim() || 'N/A';
+                    extractedData.paymentType = text.match(/Payment Type:\s*\((.*?)\)/)?.[1]?.trim() || 'N/A';
+                    extractedData.cardType = text.match(/Card Type:\s*\((.*?)\)/)?.[1]?.trim() || 'N/A';
+                    extractedData.amountToPay = text.match(/PAY THIS AMOUNT:\s*([\d\.\$]+)/)?.[1]?.trim() || 'N/A';
+                    extractedData.statementDate = text.match(/Statement Date:\s*([\d\/]+)/)?.[1]?.trim() || 'N/A';
 
                     console.log("Extracted Data:", extractedData);
                     alert("Data extracted successfully! Click 'Fill Template and Download'");
                 } catch (error) {
-                    console.error('Failed to parse PDF file:', error);
-                    alert(`Failed to parse PDF file. Error: ${error.message}`);
+                    console.error('Failed to parse DOCX file:', error);
+                    alert(`Failed to parse DOCX file. Error: ${error.message}`);
                 }
             };
 
@@ -67,12 +67,12 @@
         document.getElementById('fillTemplateButton').addEventListener('click', async () => {
             try {
                 if (!extractedData.clientName) {
-                    alert("Please upload a valid PDF first!");
+                    alert("Please upload a valid DOCX file first!");
                     return;
                 }
 
-                // ✅ Load the statementpdf.pdf template
-                const templateUrl = './statementpdf.pdf';
+                // ✅ Load the statement.pdf template
+                const templateUrl = './statement.pdf';
                 const templateBytes = await fetch(templateUrl).then(res => res.arrayBuffer());
 
                 const pdfDoc = await PDFLib.PDFDocument.load(templateBytes);
@@ -99,7 +99,7 @@
                     color: PDFLib.rgb(0, 0, 0),
                 });
 
-                firstPage.drawText(`${extractedData.statementDate}`, {
+                firstPage.drawText(`Statement Date: ${extractedData.statementDate}`, {
                     x: 450,
                     y: height - 150,
                     size: 12,
@@ -107,7 +107,7 @@
                     color: PDFLib.rgb(0, 0, 0),
                 });
 
-                firstPage.drawText(`${extractedData.amountToPay}`, {
+                firstPage.drawText(`Amount: ${extractedData.amountToPay}`, {
                     x: 450,
                     y: height - 170,
                     size: 12,
@@ -123,7 +123,7 @@
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.download = 'filled_template.pdf';
+                link.download = 'filled_statement.pdf';
                 document.body.appendChild(link);
                 link.click();
 
