@@ -12,7 +12,6 @@
     padding: 0;
     box-sizing: border-box;
   }
-
   /* General Body Style */
   body {
     font-family: Arial, sans-serif;
@@ -172,9 +171,18 @@ td:first-child {
 </head>
 <body>
     <a href="index.html" class="back-home">Back to Home</a>
+
     
     <div class="container">
-       <h1>Price Sheet</h1> <!-- Left Side -->
+       <h1>Price Sheet</h1> <!-- Left Side -->    <div style="margin-bottom: 20px;">
+        <label for="percentSelector">Select Fee Percentage:</label>
+        <select id="percentSelector" onchange="updateVisibleColumn()">
+            <option value="100">100%</option>
+            <option value="75">75%</option>
+            <option value="50">50%</option>
+            <option value="25">25%</option>
+        </select>
+    </div>
         <div class="left-side">
             <!-- Services/Procedures Table -->
             <table id="Services/Procedures" class="price-table">
@@ -878,6 +886,40 @@ td:first-child {
             ];
             return allowedItems.some(item => service.includes(item));
         }
+function updateVisibleColumn() {
+    const selectedPercent = document.getElementById('percentSelector').value;
+
+    // Get all columns in the table
+    const allColumns = document.querySelectorAll('td, th');
+    
+    // Loop through all table columns and show/hide based on selection
+    allColumns.forEach(column => {
+        // Check for column headers or buttons matching the selected percent
+        if (column.textContent.includes(`${selectedPercent}%`)) {
+            column.style.display = '';
+        } else if (column.classList.contains('price-button')) {
+            // Handle buttons for each percentage column
+            if (column.textContent.includes(`$`) && column.getAttribute('onclick').includes(`'${selectedPercent}%`)) {
+                column.style.display = '';
+            } else {
+                column.style.display = 'none';
+            }
+        } else {
+            column.style.display = 'none';
+        }
+    });
+
+    // Ensure the service name column stays visible
+    document.querySelectorAll('td:first-child, th:first-child').forEach(column => {
+        column.style.display = '';
+    });
+}
+
+// Initialize the table to only show the 100% column
+document.addEventListener('DOMContentLoaded', () => {
+    updateVisibleColumn();
+});
+
     </script>
 </body>
 </html>
