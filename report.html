@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>PDF Fixer</title>
+  <title>PDF Report Generator</title>
 </head>
 <body>
-  <h2>Upload PDF Report to Fix Table</h2>
+  <h2>Upload PDF Report to Generate a Horizontal Report</h2>
   <input type="file" id="fileInput" />
-  <button onclick="downloadFixedPdf()">Download Fixed PDF</button>
+  <button onclick="downloadFixedPdf()">Download New Report</button>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.11.0/pdf-lib.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
@@ -14,7 +14,7 @@
   <script>
     let fixedPdfBytes;
 
-    async function fixPdf(file) {
+    async function generateNewReport(file) {
       console.log("File uploaded:", file.name);
 
       const reader = new FileReader();
@@ -24,10 +24,6 @@
 
           // Load PDF using pdf-lib
           const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
-          const pages = pdfDoc.getPages();
-
-          // ✅ Embed a font
-          const helveticaFont = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
 
           // ✅ Create a Blob URL for PDF.js
           const blob = new Blob([existingPdfBytes], { type: 'application/pdf' });
@@ -48,80 +44,119 @@
             return;
           }
 
-          let fixedText = '';
-          let firstRowFixed = false;
+          // ✅ Collect data from the extracted text
+          let headerData = [];
+          let tableData = [];
+          let dottedLineFound = false;
 
           textContent.items.forEach((item) => {
-            let text = item.str;
+            let text = item.str.trim();
 
-            // ✅ Fix only the first row
-            if (!firstRowFixed && text.includes("Claim Number") && text.includes("Service Date")) {
-              console.log("First row before fix:", text);
+            // ✅ Fix Unsupported Characters
+            text = text.replace(/☐/g, '[ ]'); // Replace ☑ with [ ]
 
-              text = text
-                .replace(/Patient Charge: [^\s]+/, 'Patient Charge: ') // Blank value
-                .replace(/Total Paid: [^\s]+/, 'Total Paid: ') // Blank value
-                .replace(/Ins\. Paid: [^\s]+/, 'Ins. Paid: ') // Blank value
-                .replace(/Patient Paid: [^\s]+/, 'Patient Paid: ') // Blank value
-                .replace(/Total Adj\.: [^\s]+/, 'Total Adj.: '); // Blank value
-
-              console.log("First row after fix:", text);
-
-              firstRowFixed = true;
+            // ✅ Everything ABOVE the dotted line
+            if (!dottedLineFound) {
+              headerData.push(text);
+            } 
+            
+            // ✅ Detect dotted line to stop extracting header data
+            if (text.includes("---------")) {
+              dottedLineFound = true;
             }
 
-            fixedText += text + "\n";
+            if (dottedLineFound) {
+              tableData.push(text);
+            }
           });
 
-          if (!fixedText) {
-            console.error("No modified text created.");
-            return;
-          }
+          console.log("Header Data:", headerData);
+          console.log("Table Data:", tableData);
 
-          console.log("Modified text:", fixedText);
+          // ✅ Create a NEW PDF in LANDSCAPE mode
+          const newPdfDoc = await PDFLib.PDFDocument.create();
+          let newPage = newPdfDoc.addPage([842, 595]); // A4 Landscape (width, height)
+          const { width, height } = newPage.getSize();
 
-          // ✅ Clean out any hidden or unsupported characters
-          fixedText = fixedText
-            .replace(/\u200B/g, '') // Zero-width space
-            .replace(/\u00A0/g, '') // Non-breaking space
-            .replace(/[^\x20-\x7E]/g, ''); // Strip unsupported characters
+          // ✅ Embed a font
+          const helveticaFont = await newPdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
 
-          // ✅ Write back to PDF using pdf-lib
-          try {
-            if (fixedText) {
-              const { width, height } = pages[0].getSize();
+          let yPosition = height - 50;
+          let lineHeight = 20;
 
-              console.log(`Page size: width=${width}, height=${height}`);
+          // ✅ Title
+          newPage.drawText("Generated Report", {
+            x: 50,
+            y: yPosition,
+            size: 18,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0)
+          });
 
-              // ✅ Clear existing content by drawing a white rectangle over it
-              pages[0].drawRectangle({
-                x: 40,
-                y: height - 120, // Adjust Y based on table location
-                width: width - 80,
-                height: 60,
-                color: PDFLib.rgb(1, 1, 1),
-              });
+          yPosition -= 30;
 
-              // ✅ Write the fixed text
-              pages[0].drawText(fixedText, {
-                x: 50,
-                y: height - 100,
-                size: 10,
-                font: helveticaFont,
-                color: PDFLib.rgb(0, 0, 0),
-                maxWidth: width - 100, // Prevent overflow
-              });
+          // ✅ Draw Header Data (Everything Above the Dotted Line)
+          headerData.forEach((line) => {
+            newPage.drawText(line, {
+              x: 50,
+              y: yPosition,
+              size: 10,
+              font: helveticaFont,
+              color: PDFLib.rgb(0, 0, 0)
+            });
+            yPosition -= lineHeight;
+          });
 
-              console.log("Text written to PDF.");
+          yPosition -= 20;
+
+          // ✅ Headers for Table
+          const headers = [
+            "Claim Number", "Service Date", "Procedure", "Units", "Total Charge", "Patient Charge", "Total Paid"
+          ];
+
+          const columnWidths = [90, 90, 120, 60, 90, 90, 90]; // Adjusted for landscape width
+
+          headers.forEach((header, i) => {
+            newPage.drawText(header, {
+              x: 50 + columnWidths.slice(0, i).reduce((a, b) => a + b, 0),
+              y: yPosition,
+              size: 10,
+              font: helveticaFont,
+              color: PDFLib.rgb(0.2, 0.2, 0.2),
+            });
+          });
+
+          yPosition -= lineHeight;
+
+          // ✅ Draw Table Content
+          tableData.forEach((row, index) => {
+            let values = row.split(/\s+/); // Split row into columns based on whitespace
+
+            if (values.length >= 7) {
+              // ✅ Draw fixed table rows
+              for (let i = 0; i < 7; i++) {
+                newPage.drawText(values[i], {
+                  x: 50 + columnWidths.slice(0, i).reduce((a, b) => a + b, 0),
+                  y: yPosition,
+                  size: 10,
+                  font: helveticaFont,
+                  color: PDFLib.rgb(0, 0, 0),
+                });
+              }
+
+              yPosition -= lineHeight;
+
+              // ✅ Prevent table overflow
+              if (yPosition < 50) {
+                yPosition = height - 50;
+                newPage = newPdfDoc.addPage([842, 595]); // New landscape page
+              }
             }
-          } catch (error) {
-            console.error("Failed to draw text:", error);
-            alert("Failed to modify PDF content. Check console for details.");
-          }
+          });
 
-          // ✅ Save modified PDF
-          fixedPdfBytes = await pdfDoc.save(); // Save as bytes
-          console.log("PDF successfully fixed.");
+          // ✅ Save the new PDF
+          fixedPdfBytes = await newPdfDoc.save();
+          console.log("New PDF successfully created.");
         } catch (error) {
           console.error("Error processing file:", error);
           alert("Failed to process file. See console for details.");
@@ -134,7 +169,7 @@
     document.getElementById('fileInput').addEventListener('change', (event) => {
       const file = event.target.files[0];
       if (file && file.type === 'application/pdf') {
-        fixPdf(file);
+        generateNewReport(file);
       } else {
         alert('Please upload a valid PDF file.');
       }
@@ -152,7 +187,7 @@
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'fixed_report.pdf';
+        link.download = 'new_report.pdf';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
