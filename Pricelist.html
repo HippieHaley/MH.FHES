@@ -4,74 +4,111 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Price Sheet</title> 
-<style>
-  /* Back Home Button */
-  .back-home {
-    display: inline-block;       /* Prevent stretching */
-    width: auto;                 /* Adjust width based on text */
-    padding: 10px 20px;
-    background-color: #f8c9f9;     /* Soft pink */
-    color: #333;
-    text-decoration: none;
-    font-size: 1rem;
-    font-weight: bold;
-    border-radius: 30px;
-    text-align: center;
-    border: 1px solid #000;
-    position: absolute;          /* Positioning fix */
-    top: 20px;
-    left: 20px;
-  }
-  .back-home:hover {
-    background-color: #e8b3e8;
-  }
+    <style>
+        /* General Reset */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+      
+        /* Body Styling */
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #f9f9f9;
+          color: #333;
+          margin: 20px;
+          line-height: 1.6;
+        }
+      
+        /* Heading Styling */
+        h2 {
+          font-size: 1.8rem;
+          margin-bottom: 20px;
+          color: #222;
+        }
+      
+        /* Dropdown Styling */
+        select {
+          padding: 12px;
+          font-size: 16px;
+          border: 1px solid #ccc;
+          border-radius: 6px;
+          margin-bottom: 20px;
+          background-color: #fff;
+          color: #333;
+          cursor: pointer;
+          transition: border-color 0.2s ease;
+        }
+      
+        select:focus {
+          border-color: #888;
+          outline: none;
+        }
+      
+        /* Table Styling */
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 20px;
+        }
+      
+        th, td {
+          padding: 14px;
+          border: 1px solid #ddd;
+          text-align: center;
+        }
+      
+        th {
+          background-color: #f4f4f4;
+          font-weight: bold;
+          color: #333;
+        }
+      
+        /* Button Styling */
+        .price-button {
+          padding: 8px 14px;
+          background-color: #4CAF50;
+          color: #fff;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 14px;
+          transition: background-color 0.2s ease;
+        }
+      
+        .price-button:hover {
+          background-color: #45a049;
+        }
+/* Back Home Button */
+.back-home {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #f8c9f9;
+  color: #333;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 20px;
+  text-align: center;
+  border: 1px solid #000;
+  top: 20px;
+  left: 20px;
+  z-index: 999; /* Ensures it stays above other elements */
+  transition: background-color 0.2s ease;
+}
 
-  /* Basic Reset */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+.back-home:hover {
+  background-color: #e8b3e8;
+}
 
-  /* General Body Style */
-  body {
-    font-family: Arial, sans-serif;
-    max-width: 1000px;
-    margin: 0 auto;
-    background-color: #acdbf9;     /* Light blue background */
-    color: #333;
-    padding-top: 50px;
-  }
-
-  /* Title Section */
-  .title-section h1 {
-    font-size: 2.5rem;
-    font-weight: bold;
-    line-height: 1.2;
-    letter-spacing: 2px;            /* White text with black outline */
-    text-align: center;
-    margin-bottom: 20px;
-  }
-
-  /* Container for Left-Aligned Layout */
-  .container {
-    display: flex-left;
-    width: 100%;
-    max-width: 1500px;
-    background-color: #acdbf9;     /* Light blue background */
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(233, 208, 218, 0.1); /* Optional shadow */
-  }
-
-  /* Left Side - Price Sheet (2/3 of the screen) */
-  .left-side {
-    flex: 1;
-    padding-right: 20px;
-    margin-right: 35%;           /* Pushes content left to make space for .right-side */
-  }
-
-  /* Right Side - Itemized List and Grand Total (Fixed Position) */
+/* Fix container positioning */
+.container {
+  position: static; /* Ensure container doesn’t affect button position */
+  display: flex;
+  gap: 20px;
+}
+ /* Right Side - Itemized List and Grand Total (Fixed Position) */
   .right-side {
     width: 30%;                 /* Adjust width to fit content */
     padding: 20px;
@@ -84,117 +121,32 @@
     top: 20px;                  /* Distance from the top */
     right: 10px;                /* Distance from the right edge of the screen */
   }
-
-  /* Price Button Styling */
-  .price-button {
-    display: inline-block;
-    padding: 0.5rem 1.5rem;
-    background-color: #f8c9f9;
-    border: 1px solid #000;
-    border-radius: 20px;
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    margin: 5px;
-  }
-  .price-button:hover {
-    background-color: #e8b8e8;    /* Slightly darker pink */
-  }
-
-  /* Table Styling */
-  table {
-    width: 100%;
-    border-collapse: collapse;   /* Ensures borders are clean */
-    background-color: #acdbf9;     /* Light blue background */
-    border: 2px solid #333;        /* Solid border to match your style */
-    border-radius: 8px;            /* Rounded corners */
-    overflow: hidden;              /* Ensures rounded corners apply properly */
-    margin: 20px 0;               /* Spacing on top/bottom */
-  }
-
-  /* Table Rows */
-  tr {
-    border: 2px solid #333;        /* Border around each row */
-  }
-
-  /* Table Cells */
-  th,
-  td {
-    text-align: center;
-    padding: 15px;
-    background-color: #acdbf9;     /* Same as table background */
-    color: #333;
-  }
-
-  /* Table Header */
-  th {
-    background-color: #f8c9f9;     /* Pink header row to match button color */
-    color: #000;
-    font-weight: bold;
-  }
-th:first-child,
-td:first-child {
-    background-color: #f8c9f9; /* Soft pink */
+/* Left Side */
+.left-side {
+  flex: 1;
+  margin-right: 0; /* Remove negative margin */
+  padding-right: 20px;
 }
-  /* CPT Code Styling */
-  .cpt-code {
-    font-size: 0.8rem;
-    color: #333;
-    margin-top: 0.3rem;
-    display: block;
-    font-style: italic;
-  }
-
-  /* Itemized List Styling */
-  .itemized-list {
-    margin-bottom: 20px;
-    font-size: 1rem;
-    background-color: #f8c9f9;
-  }
-
-  /* Remove Button Styling */
-  .remove-button {
-    background-color: #f8c9f9;
-    border: 1px solid #000;
-    border-radius: 5px;
-    padding: 2px 5px;
-    cursor: pointer;
-    margin-right: 5px;
-    font-weight: bold;
-  }
-
-  /* Multiple Button Styling */
-  .multiple-button {
-    background-color: #f8c9f9;
-    border: 1px solid #000;
-    border-radius: 5px;
-    padding: 2px 5px;
-    cursor: pointer;
-    margin-left: 5px;
-    font-weight: bold;
-  }
-  .multiple-button:hover {
-    background-color: #f7bdf7;
-  }
-</style>
-</head>
+        /* Hidden Class for Filtering */
+        .hidden {
+          display: none;
+        }
+   </style>      
 <body>
-    <a href="index.html" class="back-home">Back to Home</a>
-    <h1>Price Sheet</h1>
-    <div class="container">
-        <!-- Left Side -->
-        <div class="left-side">
-            <!-- Services/Procedures Table -->
-            <table id="Services/Procedures" class="price-table">
-                <thead>
-                    <tr>
-                        <th>Services/Procedure</th>
-                        <th>100% Fee</th>
-                        <th>75% Fee</th>
-                        <th>50% Fee</th>
-                        <th>25% Fee</th>
+  <a href="index.html" class="back-home">Back to Home</a>
+  <h1>Price Sheet</h1>
+  <div class="container">
+    <!-- Left Side -->
+    <div class="left-side">
+      <!-- Services/Procedures Table -->
+      <table id="Services/Procedures" class="price-table">
+        <thead>
+          <tr>
+            <th>Services/Procedure</th>
+            <th>100% Fee</th>
+            <th>75% Fee</th>
+            <th>50% Fee</th>
+            <th>25% Fee</th>
                     </tr>
                 </thead>
                 <tbody>

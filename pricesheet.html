@@ -5,26 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Price Sheet</title> 
 <style>
-  /* Back Home Button */
-  .back-home {
-    display: inline-block;       /* Prevent stretching */
-    width: auto;                 /* Adjust width based on text */
-    padding: 10px 20px;
-    background-color: #f8c9f9;     /* Soft pink */
-    color: #333;
-    text-decoration: none;
-    font-size: 1rem;
-    font-weight: bold;
-    border-radius: 30px;
-    text-align: center;
-    border: 1px solid #000;
-    position: absolute;          /* Positioning fix */
-    top: 20px;
-    left: 20px;
-  }
-  .back-home:hover {
-    background-color: #e8b3e8;
-  }
 
   /* Basic Reset */
   * {
@@ -42,20 +22,30 @@
     color: #333;
     padding-top: 50px;
   }
+/* Back Home Button */
+.back-home {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #f8c9f9;
+  color: #333;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 20px;
+  text-align: center;
+  border: 1px solid #000;
+  top: 20px;
+  left: 20px;
+  z-index: 999; /* Ensures it stays above other elements */
+  transition: background-color 0.2s ease;
+}
 
-  /* Title Section */
-  .title-section h1 {
-    font-size: 2.5rem;
-    font-weight: bold;
-    line-height: 1.2;
-    letter-spacing: 2px;            /* White text with black outline */
-    text-align: center;
-    margin-bottom: 20px;
-  }
+.back-home:hover {
+  background-color: #e8b3e8;
+}
 
   /* Container for Left-Aligned Layout */
   .container {
-    display: flex-left;
     width: 100%;
     max-width: 1500px;
     background-color: #acdbf9;     /* Light blue background */
@@ -182,9 +172,9 @@ td:first-child {
 </head>
 <body>
     <a href="index.html" class="back-home">Back to Home</a>
-    <h1>Price Sheet</h1>
+    
     <div class="container">
-        <!-- Left Side -->
+       <h1>Price Sheet</h1> <!-- Left Side -->
         <div class="left-side">
             <!-- Services/Procedures Table -->
             <table id="Services/Procedures" class="price-table">
