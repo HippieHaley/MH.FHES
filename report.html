@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PDF Fixer</title>
+</head>
+<body>
+  <h2>Upload PDF Report to Fix Table</h2>
+  <input type="file" id="fileInput" />
+  <button onclick="downloadFixedPdf()">Download Fixed PDF</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.11.0/pdf-lib.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+  
+  <script>
+    let fixedPdfBytes;
+
+    async function fixPdf(file) {
+      console.log("File uploaded:", file.name);
+
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        try {
+          const existingPdfBytes = new Uint8Array(event.target.result);
+
+          // Load PDF using pdf-lib
+          const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
+          const pages = pdfDoc.getPages();
+
+          // ✅ Embed a font
+          const helveticaFont = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+
+          // ✅ Create a Blob URL for PDF.js
+          const blob = new Blob([existingPdfBytes], { type: 'application/pdf' });
+          const url = URL.createObjectURL(blob);
+
+          // ✅ Load with PDF.js
+          const loadingTask = pdfjsLib.getDocument(url);
+          const pdf = await loadingTask.promise;
+          const page = await pdf.getPage(1);
+          const textContent = await page.getTextContent();
+
+          console.log("Extracted text content:");
+          console.table(textContent.items.map(i => i.str));
+
+          if (!textContent.items.length) {
+            console.error("No text extracted. PDF might be an image.");
+            alert("No text found — the PDF might be an image-based table.");
+            return;
+          }
+
+          let fixedText = '';
+          let firstRowFixed = false;
+
+          textContent.items.forEach((item) => {
+            let text = item.str;
+
+            // ✅ Fix only the first row
+            if (!firstRowFixed && text.includes("Claim Number") && text.includes("Service Date")) {
+              console.log("First row before fix:", text);
+
+              text = text
+                .replace(/Patient Charge: [^\s]+/, 'Patient Charge: ') // Blank value
+                .replace(/Total Paid: [^\s]+/, 'Total Paid: ') // Blank value
+                .replace(/Ins\. Paid: [^\s]+/, 'Ins. Paid: ') // Blank value
+                .replace(/Patient Paid: [^\s]+/, 'Patient Paid: ') // Blank value
+                .replace(/Total Adj\.: [^\s]+/, 'Total Adj.: '); // Blank value
+
+              console.log("First row after fix:", text);
+
+              firstRowFixed = true;
+            }
+
+            fixedText += text + "\n";
+          });
+
+          if (!fixedText) {
+            console.error("No modified text created.");
+            return;
+          }
+
+          console.log("Modified text:", fixedText);
+
+          // ✅ Clean out any hidden or unsupported characters
+          fixedText = fixedText
+            .replace(/\u200B/g, '') // Zero-width space
+            .replace(/\u00A0/g, '') // Non-breaking space
+            .replace(/[^\x20-\x7E]/g, ''); // Strip unsupported characters
+
+          // ✅ Write back to PDF using pdf-lib
+          try {
+            if (fixedText) {
+              const { width, height } = pages[0].getSize();
+
+              console.log(`Page size: width=${width}, height=${height}`);
+
+              // ✅ Clear existing content by drawing a white rectangle over it
+              pages[0].drawRectangle({
+                x: 40,
+                y: height - 120, // Adjust Y based on table location
+                width: width - 80,
+                height: 60,
+                color: PDFLib.rgb(1, 1, 1),
+              });
+
+              // ✅ Write the fixed text
+              pages[0].drawText(fixedText, {
+                x: 50,
+                y: height - 100,
+                size: 10,
+                font: helveticaFont,
+                color: PDFLib.rgb(0, 0, 0),
+                maxWidth: width - 100, // Prevent overflow
+              });
+
+              console.log("Text written to PDF.");
+            }
+          } catch (error) {
+            console.error("Failed to draw text:", error);
+            alert("Failed to modify PDF content. Check console for details.");
+          }
+
+          // ✅ Save modified PDF
+          fixedPdfBytes = await pdfDoc.save(); // Save as bytes
+          console.log("PDF successfully fixed.");
+        } catch (error) {
+          console.error("Error processing file:", error);
+          alert("Failed to process file. See console for details.");
+        }
+      };
+
+      reader.readAsArrayBuffer(file);
+    }
+
+    document.getElementById('fileInput').addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (file && file.type === 'application/pdf') {
+        fixPdf(file);
+      } else {
+        alert('Please upload a valid PDF file.');
+      }
+    });
+
+    function downloadFixedPdf() {
+      if (!fixedPdfBytes) {
+        alert('No modified file available for download.');
+        console.error('Download failed — fixedPdfBytes is empty.');
+        return;
+      }
+
+      try {
+        const blob = new Blob([fixedPdfBytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'fixed_report.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        console.log('PDF downloaded successfully.');
+      } catch (error) {
+        console.error('Failed to create PDF download:', error);
+      }
+    }
+  </script>
+</body>
+</html>
