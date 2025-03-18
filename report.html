@@ -51,12 +51,19 @@
         input[type="file"]::file-selector-button:hover {
             background-color: #1976D2;
         }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
     </style>
+    <!-- Use Cloudflare CDN for PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
     <input type="file" id="fileInput" accept="application/pdf" />
-    <button onclick="downloadExcel()">Download Excel</button>
+    <button id="showDataBtn" onclick="showData()" disabled>Show Extracted Data</button>
 
     <script>
         let extractedData = [];
@@ -65,13 +72,15 @@
             const file = event.target.files[0];
             if (file) {
                 try {
+                    console.log('Loading PDF.js...');
+                    if (typeof pdfjsLib === 'undefined') {
+                        throw new Error('PDF.js library is not loaded');
+                    }
+
                     const arrayBuffer = await file.arrayBuffer();
                     const pdfData = new Uint8Array(arrayBuffer);
 
-                    // Load PDF.js and worker
-                    const pdfjsLib = await import('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js');
-                    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js';
-
+                    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
                     const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
 
                     extractedData = [];
@@ -107,6 +116,7 @@
                     console.log(extractedData); // Debugging
                     if (extractedData.length > 0) {
                         alert('PDF data extracted successfully!');
+                        document.getElementById('showDataBtn').disabled = false;
                     } else {
                         alert('No readable text extracted.');
                     }
@@ -138,7 +148,7 @@
                 const { data: { text } } = await worker.recognize(canvas);
                 console.log('OCR Result:', text);
 
-                extractedData.push(...text.split('\n').map(line => line.trim()).filter(line => line !== ''));
+                extractedData.push(...text.split('\n').map(line => line.replace(/[^\x20-\x7E]/g, '').trim()).filter(line => line !== ''));
 
                 await worker.terminate();
                 console.log('OCR completed successfully');
@@ -149,37 +159,18 @@
             }
         }
 
-        async function downloadExcel() {
+        function showData() {
             if (extractedData.length === 0) {
-                alert('No data to export!');
+                alert('No data to display!');
                 return;
             }
-
-            const workbook = new ExcelJS.Workbook();
-            const worksheet = workbook.addWorksheet('Extracted Data');
-
-            extractedData.forEach((line) => {
-                worksheet.addRow([line]);
-            });
-
-            const buffer = await workbook.xlsx.writeBuffer();
-            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            const url = URL.createObjectURL(blob);
-
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'extracted_data.xlsx';
-            a.click();
-            URL.revokeObjectURL(url);
+            const newWindow = window.open('', '_blank');
+            newWindow.document.write('<html><head><title>Extracted Data</title></head><body>');
+            newWindow.document.write('<h1>Extracted PDF Data</h1>');
+            newWindow.document.write('<pre>' + extractedData.join('\n') + '</pre>');
+            newWindow.document.write('</body></html>');
+            newWindow.document.close();
         }
-
-        // Changed to beforeunload event to avoid deprecated warning
-        window.addEventListener('beforeunload', function(ev) { 
-            console.log('Closing connection or cleanup');
-        });
-
     </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 </body>
 </html>
