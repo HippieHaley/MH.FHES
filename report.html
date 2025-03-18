@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Data Extraction</title>
+    <title>PDF Data Extraction to Excel</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -59,11 +59,13 @@
     </style>
     <!-- Use Cloudflare CDN for PDF.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js" crossorigin="anonymous"></script>
+    <!-- Use SheetJS for Excel file creation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 
     <input type="file" id="fileInput" accept="application/pdf" />
-    <button id="showDataBtn" onclick="showData()" disabled>Show Extracted Data</button>
+    <button id="exportExcelBtn" onclick="exportToExcel()" disabled>Export to Excel</button>
 
     <script>
         let extractedData = [];
@@ -116,7 +118,7 @@
                     console.log(extractedData); // Debugging
                     if (extractedData.length > 0) {
                         alert('PDF data extracted successfully!');
-                        document.getElementById('showDataBtn').disabled = false;
+                        document.getElementById('exportExcelBtn').disabled = false;
                     } else {
                         alert('No readable text extracted.');
                     }
@@ -159,17 +161,21 @@
             }
         }
 
-        function showData() {
+        function exportToExcel() {
             if (extractedData.length === 0) {
-                alert('No data to display!');
+                alert('No data to export!');
                 return;
             }
-            const newWindow = window.open('', '_blank');
-            newWindow.document.write('<html><head><title>Extracted Data</title></head><body>');
-            newWindow.document.write('<h1>Extracted PDF Data</h1>');
-            newWindow.document.write('<pre>' + extractedData.join('\n') + '</pre>');
-            newWindow.document.write('</body></html>');
-            newWindow.document.close();
+
+            // Create a worksheet
+            const worksheet = XLSX.utils.aoa_to_sheet(extractedData.map(line => [line]));
+
+            // Create a workbook
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Extracted Data');
+
+            // Export the workbook to an Excel file
+            XLSX.writeFile(workbook, 'Extracted_Data.xlsx');
         }
     </script>
 </body>
