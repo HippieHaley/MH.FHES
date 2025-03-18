@@ -1,223 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice/Statement Generator</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-        }
-
-        .invoice-container {
-            width: 1000px; /* Increased width to accommodate more columns */
-            padding: 20px;
-            background-color: white;
-            border: 1px solid #ddd;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .header h1 {
-            font-size: 24px;
-            margin: 0;
-        }
-
-        .header p {
-            margin: 5px 0;
-        }
-
-        .total-payment {
-            font-size: 20px;
-            font-weight: bold;
-            color: #4CAF50;
-            margin-top: 10px;
-        }
-
-        .table-container {
-            margin-top: 20px;
-            overflow-x: auto; /* Allow horizontal scrolling for the table */
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        table th, table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-
-        table th {
-            background-color: #f5f5f5;
-            font-weight: bold;
-        }
-
-        .footer {
-            margin-top: 20px;
-            font-size: 12px;
-            color: #666;
-        }
-
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            margin-top: 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: #4CAF50;
-            color: white;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
-    <!-- Use SheetJS for Excel file creation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice/Statement Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 20px;
+      background-color: #f9f9f9;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+    .invoice-container {
+      width: 1000px;
+      padding: 20px;
+      background-color: white;
+      border: 1px solid #ddd;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      font-size: 24px;
+      margin: 0;
+    }
+    .header p {
+      margin: 5px 0;
+    }
+    .total-payment {
+      font-size: 20px;
+      font-weight: bold;
+      color: #4CAF50;
+      margin-top: 10px;
+    }
+    .table-container {
+      margin-top: 20px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    table th {
+      background-color: #f5f5f5;
+      font-weight: bold;
+    }
+    table td:nth-child(n+4) {
+      text-align: right;
+    }
+    .footer {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #666;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+  <!-- Use SheetJS for Excel file creation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 
-    <div class="invoice-container">
-        <!-- Header Section -->
-        <div class="header">
-            <h1>Clinic Name</h1>
-            <p>123 Clinic Street, City, State, ZIP</p>
-            <p>Phone: (123) 456-7890</p>
-            <p>Statement Date: <span id="statementDate">3/14/2025</span></p>
-            <p>Client Name: <span id="clientName">John Doe</span></p>
-            <p>Client Address: <span id="clientAddress">456 Client Ave, City, State, ZIP</span></p>
-            <p class="total-payment">Total Payment Amount: <span id="totalPayment">$80.00</span></p>
-        </div>
-
-        <!-- Table Section -->
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Claim Number</th>
-                        <th>Service Date</th>
-                        <th>Procedure</th>
-                        <th>Units</th>
-                        <th>Line Total</th>
-                        <th>Patient Paid</th>
-                        <th>Insurance Paid</th>
-                        <th>Adjustments</th>
-                        <th>Balance</th>
-                        <th>Payment</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <!-- Rows will be dynamically inserted here -->
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Footer Section -->
-        <div class="footer">
-            <p>Disclaimer: Charges/adjustments made after statement date are not reflected in this statement.</p>
-            <p>Please contact our office for any questions or concerns.</p>
-        </div>
+  <div class="invoice-container">
+    <!-- Header Section -->
+    <div class="header">
+      <h1>Clinic Name</h1>
+      <p>123 Clinic Street, City, State, ZIP</p>
+      <p>Phone: (123) 456-7890</p>
+      <p>Statement Date: <span id="statementDate">3/14/2025</span></p>
+      <p>Client Name: <span id="clientName">John Doe</span></p>
+      <p>Client Address: <span id="clientAddress">456 Client Ave, City, State, ZIP</span></p>
+      <p class="total-payment">Total Payment Amount: <span id="totalPayment">$80.00</span></p>
     </div>
 
-    <button onclick="exportToExcel()">Export to Excel</button>
+    <!-- Table Section -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Claim Number</th>
+            <th>Service Date</th>
+            <th>Procedure</th>
+            <th>Units</th>
+            <th>Line Total</th>
+            <th>Patient Paid</th>
+            <th>Insurance Paid</th>
+            <th>Adjustments</th>
+            <th>Balance</th>
+            <th>Payment</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <!-- Rows will be dynamically inserted here -->
+        </tbody>
+      </table>
+    </div>
 
-    <script>
-        // Sample data for the table
-        const tableData = [
-            {
-                claimNumber: "05692-CL-0001",
-                serviceDate: "03/14/2025",
-                procedure: "87491-Chlamydia",
-                units: 2,
-                lineTotal: "$30.00",
-                patientPaid: "$10.00",
-                insurancePaid: "$15.00",
-                adjustments: "$5.00",
-                balance: "$0.00",
-                payment: "$0.00"
-            },
-            {
-                claimNumber: "05692-CL-0001",
-                serviceDate: "03/15/2025",
-                procedure: "87491-Chlamydia",
-                units: 1,
-                lineTotal: "$50.00",
-                patientPaid: "$0.00",
-                insurancePaid: "$0.00",
-                adjustments: "$0.00",
-                balance: "$50.00",
-                payment: "$0.00"
-            }
+    <!-- Footer Section -->
+    <div class="footer">
+      <p>Disclaimer: Charges/adjustments made after statement date are not reflected in this statement.</p>
+      <p>Please contact our office for any questions or concerns.</p>
+    </div>
+  </div>
+
+  <button onclick="exportToExcel()">Export to Excel</button>
+
+  <script>
+    // Sample data for the table
+    const tableData = [
+      {
+        claimNumber: "05692-CL-0001",
+        serviceDate: "03/14/2025",
+        procedure: "87491-Chlamydia",
+        units: 2,
+        lineTotal: "$30.00",
+        patientPaid: "$10.00",
+        insurancePaid: "$15.00",
+        adjustments: "$5.00",
+        balance: "$0.00",
+        payment: "$0.00"
+      },
+      {
+        claimNumber: "05692-CL-0002",
+        serviceDate: "03/15/2025",
+        procedure: "87491-Chlamydia",
+        units: 1,
+        lineTotal: "$50.00",
+        patientPaid: "$0.00",
+        insurancePaid: "$0.00",
+        adjustments: "$0.00",
+        balance: "$50.00",
+        payment: "$0.00"
+      }
+    ];
+
+    // Populate the table with sample data
+    const tableBody = document.getElementById('tableBody');
+    if (tableBody) {
+      tableData.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${row.claimNumber}</td>
+          <td>${row.serviceDate}</td>
+          <td>${row.procedure}</td>
+          <td>${row.units}</td>
+          <td>${row.lineTotal}</td>
+          <td>${row.patientPaid}</td>
+          <td>${row.insurancePaid}</td>
+          <td>${row.adjustments}</td>
+          <td>${row.balance}</td>
+          <td>${row.payment}</td>
+        `;
+        tableBody.appendChild(tr);
+      });
+    } else {
+      console.error("Table body element not found!");
+    }
+
+    // Function to export the invoice to Excel
+    function exportToExcel() {
+      try {
+        // Create a worksheet from the table data
+        const worksheet = XLSX.utils.table_to_sheet(document.querySelector('table'));
+
+        // Add header data to the worksheet
+        XLSX.utils.sheet_add_aoa(worksheet, [
+          ["Clinic Name", "123 Clinic Street, City, State, ZIP"],
+          ["Phone", "(123) 456-7890"],
+          ["Statement Date", document.getElementById('statementDate').textContent],
+          ["Client Name", document.getElementById('clientName').textContent],
+          ["Client Address", document.getElementById('clientAddress').textContent],
+          ["Total Payment Amount", document.getElementById('totalPayment').textContent],
+          [] // Empty row for spacing
+        ], { origin: "A1" });
+
+        // Add footer data to the worksheet
+        const footerText = [
+          "Disclaimer: Charges/adjustments made after statement date are not reflected in this statement.",
+          "Please contact our office for any questions or concerns."
         ];
+        XLSX.utils.sheet_add_aoa(worksheet, footerText, { origin: -1 }); // Add footer at the end
 
-        // Populate the table with sample data
-        const tableBody = document.getElementById('tableBody');
-        tableData.forEach(row => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${row.claimNumber}</td>
-                <td>${row.serviceDate}</td>
-                <td>${row.procedure}</td>
-                <td>${row.units}</td>
-                <td>${row.lineTotal}</td>
-                <td>${row.patientPaid}</td>
-                <td>${row.insurancePaid}</td>
-                <td>${row.adjustments}</td>
-                <td>${row.balance}</td>
-                <td>${row.payment}</td>
-            `;
-            tableBody.appendChild(tr);
-        });
+        // Create a workbook and add the worksheet
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Invoice');
 
-        // Function to export the invoice to Excel
-        function exportToExcel() {
-            // Create a worksheet from the table data
-            const worksheet = XLSX.utils.table_to_sheet(document.querySelector('table'));
-
-            // Add header data to the worksheet
-            XLSX.utils.sheet_add_aoa(worksheet, [
-                ["Clinic Name", "123 Clinic Street, City, State, ZIP"],
-                ["Phone", "(123) 456-7890"],
-                ["Statement Date", document.getElementById('statementDate').textContent],
-                ["Client Name", document.getElementById('clientName').textContent],
-                ["Client Address", document.getElementById('clientAddress').textContent],
-                ["Total Payment Amount", document.getElementById('totalPayment').textContent],
-                [], // Empty row for spacing
-            ], { origin: "A1" });
-
-            // Add footer data to the worksheet
-            const footerText = [
-                "Disclaimer: Charges/adjustments made after statement date are not reflected in this statement.",
-                "Please contact our office for any questions or concerns."
-            ];
-            XLSX.utils.sheet_add_aoa(worksheet, footerText, { origin: -1 }); // Add footer at the end
-
-            // Create a workbook and add the worksheet
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, 'Invoice');
-
-            // Export the workbook to an Excel file
-            XLSX.writeFile(workbook, 'Invoice_Statement.xlsx');
-        }
-    </script>
+        // Export the workbook to an Excel file
+        XLSX.writeFile(workbook, 'Invoice_Statement.xlsx');
+      } catch (error) {
+        console.error("Error exporting to Excel:", error);
+        alert("Failed to export to Excel. Check the console for details.");
+      }
+    }
+  </script>
 </body>
 </html>
