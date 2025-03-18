@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Data Extraction to Excel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        button, input[type="file"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover, input[type="file"]:hover {
+            background-color: #45a049;
+        }
+
+        input[type="file"] {
+            background-color: #2196F3;
+        }
+
+        input[type="file"]::file-selector-button {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background-color: #1976D2;
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+    </style>
+    <!-- Use Cloudflare CDN for PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js" crossorigin="anonymous"></script>
+    <!-- Use SheetJS for Excel file creation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+    <input type="file" id="fileInput" accept="application/pdf" />
+    <button id="exportExcelBtn" onclick="exportToExcel()" disabled>Export to Excel</button>
+
+    <script>
+        let extractedData = [];
+
+        document.getElementById('fileInput').addEventListener('change', async (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                try {
+                    console.log('Loading PDF.js...');
+                    if (typeof pdfjsLib === 'undefined') {
+                        throw new Error('PDF.js library is not loaded');
+                    }
+
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdfData = new Uint8Array(arrayBuffer);
+
+                    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+                    const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
+
+                    extractedData = [];
+
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const textContent = await page.getTextContent();
+
+                        console.log(`Extracting page ${i}`); // Debugging
+
+                        let line = '';
+                        let lastY = null;
+
+                        if (textContent.items.length > 0) {
+                            textContent.items.forEach((item) => {
+                                if (lastY !== null && Math.abs(item.transform[5] - lastY) > 10) {
+                                    extractedData.push(line.trim());
+                                    line = '';
+                                }
+                                line += item.str + ' ';
+                                lastY = item.transform[5];
+                            });
+
+                            if (line.trim()) {
+                                extractedData.push(line.trim());
+                            }
+                        } else {
+                            console.log(`Page ${i} contains no text, attempting OCR`);
+                            await extractTextFromImage(page);
+                        }
+                    }
+
+                    console.log('Raw Extracted Data:', extractedData); // Debugging
+
+                    // Process the extracted data
+                    const processedData = processExtractedData(extractedData);
+
+                    if (processedData.length > 0) {
+                        alert('PDF data extracted and processed successfully!');
+                        document.getElementById('exportExcelBtn').disabled = false;
+                    } else {
+                        alert('No readable text extracted.');
+                    }
+
+                } catch (error) {
+                    console.error('Error extracting PDF data:', error);
+                    alert('Failed to extract data. Check the console for details.');
+                }
+            }
+        });
+
+        async function extractTextFromImage(page) {
+            try {
+                const viewport = page.getViewport({ scale: 1.0 });
+                const canvas = document.createElement("canvas");
+                const context = canvas.getContext("2d");
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                console.log('Rendering page to canvas');
+                await page.render({ canvasContext: context, viewport }).promise;
+
+                console.log('Loading Tesseract.js');
+                const { createWorker } = await import('https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/2.1.5/tesseract.min.js');
+
+                const worker = await createWorker('eng');
+
+                console.log('Starting OCR');
+                const { data: { text } } = await worker.recognize(canvas);
+                console.log('OCR Result:', text);
+
+                extractedData.push(...text.split('\n').map(line => line.replace(/[^\x20-\x7E]/g, '').trim()).filter(line => line !== ''));
+
+                await worker.terminate();
+                console.log('OCR completed successfully');
+
+            } catch (error) {
+                console.error('Error during OCR:', error);
+                alert(`Failed to process image with OCR: ${error.message}`);
+            }
+        }
+
+        function processExtractedData(data) {
+            console.log('Processing extracted data...');
+
+            // Example: Filter out irrelevant lines
+            const filteredData = data.filter(line => line.length > 5); // Keep lines with more than 5 characters
+
+            // Example: Relabel specific patterns
+            const relabeledData = filteredData.map(line => {
+                // Replace "Name:" with "Full Name:"
+                if (line.includes("Name:")) {
+                    return line.replace("Name:", "Full Name:");
+                }
+                // Replace "Date:" with "Transaction Date:"
+                if (line.includes("Date:")) {
+                    return line.replace("Date:", "Transaction Date:");
+                }
+                return line;
+            });
+
+            // Example: Format data into a structured table
+            const structuredData = relabeledData.map(line => {
+                return {
+                    Label: line.split(":")[0]?.trim() || "Unknown",
+                    Value: line.split(":")[1]?.trim() || "N/A"
+                };
+            });
+
+            console.log('Processed Data:', structuredData); // Debugging
+            return structuredData;
+        }
+
+        function exportToExcel() {
+            if (extractedData.length === 0) {
+                alert('No data to export!');
+                return;
+            }
+
+            // Process the data before exporting
+            const processedData = processExtractedData(extractedData);
+
+            // Convert processed data to a worksheet
+            const worksheet = XLSX.utils.json_to_sheet(processedData);
+
+            // Create a workbook
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Processed Data');
+
+            // Export the workbook to an Excel file
+            XLSX.writeFile(workbook, 'Processed_Data.xlsx');
+        }
+    </script>
+</body>
+</html>
