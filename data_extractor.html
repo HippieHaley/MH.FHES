@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PDF Data Extraction to Excel with Template</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice/Statement Generator</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -16,6 +17,7 @@
       height: 100vh;
       flex-direction: column;
     }
+
     button, input[type="file"] {
       padding: 10px 20px;
       font-size: 16px;
@@ -27,12 +29,15 @@
       color: white;
       transition: background-color 0.3s ease;
     }
+
     button:hover, input[type="file"]:hover {
       background-color: #45a049;
     }
+
     input[type="file"] {
       background-color: #2196F3;
     }
+
     input[type="file"]::file-selector-button {
       background-color: #2196F3;
       color: white;
@@ -42,176 +47,87 @@
       border-radius: 5px;
       transition: background-color 0.3s ease;
     }
+
     input[type="file"]::file-selector-button:hover {
       background-color: #1976D2;
     }
+
     button:disabled {
       background-color: #cccccc;
       cursor: not-allowed;
     }
   </style>
-  <!-- PDF.js from Cloudflare CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js" crossorigin="anonymous"></script>
-  <!-- SheetJS for Excel file creation -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
-  <h2>PDF Data Extractor with Template</h2>
-  <input type="file" id="pdfFile" accept=".pdf" />
-  <p id="status"></p>
+  <input type="file" id="fileInput" accept="application/pdf" />
+  <button id="exportExcelBtn" onclick="exportToExcel()" disabled>Export to Excel</button>
 
   <script>
-    // Listen for file selection
-    document.getElementById('pdfFile').addEventListener('change', handleFile, false);
+    let extractedData = [];
 
-    async function handleFile(event) {
+    document.getElementById('fileInput').addEventListener('change', async (event) => {
       const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = async function(e) {
+      if (file) {
         try {
-          const pdfData = new Uint8Array(e.target.result);
-          // Extract text from the PDF
-          const text = await extractTextFromPDF(pdfData);
-          // Parse the extracted text into structured data
-          const invoiceData = parseTextToInvoiceData(text);
-          // Generate the Excel file with the merged-cell template
-          generateExcelWithTemplate(invoiceData);
-          document.getElementById('status').innerText = 'File successfully processed!';
+          const arrayBuffer = await file.arrayBuffer();
+          const pdfData = new Uint8Array(arrayBuffer);
+
+          pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+          const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
+
+          extractedData = [];
+
+          for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+
+            let line = '';
+            let lastY = null;
+
+            textContent.items.forEach((item) => {
+              if (lastY !== null && Math.abs(item.transform[5] - lastY) > 10) {
+                extractedData.push(line.trim());
+                line = '';
+              }
+              line += item.str + ' ';
+              lastY = item.transform[5];
+            });
+
+            if (line.trim()) {
+              extractedData.push(line.trim());
+            }
+          }
+
+          console.log('Extracted Data:', extractedData);
+          if (extractedData.length > 0) {
+            alert('PDF data extracted successfully!');
+            document.getElementById('exportExcelBtn').disabled = false;
+          } else {
+            alert('No readable text extracted.');
+          }
         } catch (error) {
-          console.error("Error processing PDF:", error);
-          alert("An error occurred while processing the PDF. Please check the console for details.");
-        }
-      };
-      reader.readAsArrayBuffer(file);
-    }
-
-    async function extractTextFromPDF(pdfData) {
-      const loadingTask = pdfjsLib.getDocument({ data: pdfData });
-      const pdf = await loadingTask.promise;
-      let fullText = "";
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const content = await page.getTextContent();
-        const pageText = content.items.map(item => item.str).join(' ');
-        fullText += pageText + "\n";
-      }
-      return fullText;
-    }
-
-    function parseTextToInvoiceData(text) {
-      const lines = text.split('\n');
-      // Customize these based on your PDF's content
-      const clientName = lines.find(line => line.includes('Client Name:'))?.split(':')[1]?.trim() || "N/A";
-      const amountDue = lines.find(line => line.includes('Amount Due:'))?.split(':')[1]?.trim() || "$0.00";
-      const statementDate = lines.find(line => line.includes('Statement Date:'))?.split(':')[1]?.trim() || "N/A";
-      const lineItems = [];
-      for (let i = 0; i < lines.length; i++) {
-        if (lines[i].includes('Claim Number:')) {
-          const claimNumber = lines[i].split(':')[1]?.trim() || "";
-          const serviceDate = lines[i + 1] ? lines[i + 1].split(':')[1]?.trim() : "";
-          const procedure = lines[i + 2] ? lines[i + 2].split(':')[1]?.trim() : "";
-          const units = lines[i + 3] ? lines[i + 3].split(':')[1]?.trim() : "";
-          const lineTotal = lines[i + 4] ? lines[i + 4].split(':')[1]?.trim() : "";
-          const patientPaid = lines[i + 5] ? lines[i + 5].split(':')[1]?.trim() : "";
-          const insurancePaid = lines[i + 6] ? lines[i + 6].split(':')[1]?.trim() : "";
-          const adjustments = lines[i + 7] ? lines[i + 7].split(':')[1]?.trim() : "";
-          const balance = lines[i + 8] ? lines[i + 8].split(':')[1]?.trim() : "";
-          const payment = lines[i + 9] ? lines[i + 9].split(':')[1]?.trim() : "";
-
-          lineItems.push({
-            claimNumber,
-            serviceDate,
-            procedure,
-            units,
-            lineTotal,
-            patientPaid,
-            insurancePaid,
-            adjustments,
-            balance,
-            payment
-          });
+          console.error('Error extracting PDF data:', error);
+          alert('Failed to extract data. Check the console for details.');
         }
       }
+    });
 
-      return {
-        clientName,
-        amountDue,
-        statementDate,
-        disclaimer: "Charges/adjustments made after statement date may not appear...",
-        lineItems
-      };
-    }
+    function exportToExcel() {
+      if (extractedData.length === 0) {
+        alert('No data to export.');
+        return;
+      }
 
-    function generateExcelWithTemplate(invoiceData) {
-      // Create a new workbook
-      const wb = XLSX.utils.book_new();
-
-      // Build worksheet data using an array of arrays (AOA)
-      const wsData = [
-        // Header area with merged cells
-        ["", "", "", "Client Name: " + invoiceData.clientName, "", "",]
-        [ "","Statement Date: " + invoiceData.statementDate, "", ""],
-        [ "PAY THIS AMOUNT: " + invoiceData.amountDue, "", ""],
-        // Addresses (example layout)
-        ["", "", "", "", "", "Family Health Education Services", "", "", ""],
-        ["", "", "", "", "", "930 North 10th St", "", "", ""],
-        ["", "", "", "", "", "Spearfish, SD 57783", "", "", ""],
-        [""], // Blank row for spacing
-        // Table header for invoice line items
-        ["Claim Number", "Service Date", "Procedure", "Units", "Line Total", "Patient Paid", "Insurance Paid", "Adjustments", "Balance", "Payment"]
-      ];
-
-      // Append each line item row from invoiceData.lineItems
-      invoiceData.lineItems.forEach(item => {
-        wsData.push([
-          item.claimNumber,
-          item.serviceDate,
-          item.procedure,
-          item.units,
-          item.lineTotal,
-          item.patientPaid,
-          item.insurancePaid,
-          item.adjustments,
-          item.balance,
-          item.payment
-        ]);
-      });
-
-      // Blank row then disclaimer
-      wsData.push([]);
-      wsData.push([invoiceData.disclaimer]);
-
-      // Convert the AOA to a worksheet
+      // Convert extracted data to a worksheet
+      const wsData = extractedData.map(line => [line]);
       const ws = XLSX.utils.aoa_to_sheet(wsData);
 
-      // Define column widths
-      ws['!cols'] = [
-        { wch: 15 }, { wch: 12 }, { wch: 25 }, { wch: 10 }, { wch: 15 },
-        { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 15 }
-      ];
-
-      // Define merges to replicate your template layout
-      ws['!merges'] = [
-        // Merge for "Client Name: ..." across columns 3-4 in row 0 (zero-indexed)
-        { s: { r: 1, c: 3 }, e: { r: 1, c: 4 } },
-        // Merge for "Statement Date: ..." across columns 6-8 in row 0
-        { s: { r: 1, c: 1 }, e: { r: 1, c: 1 } },
-        // Merge for "PAY THIS AMOUNT: ..." across columns 6-8 in row 1
-        { s: { r: 1, c: 1 }, e: { r: 1, c: 1 } },
-        // Merge addresses on left and right sides (rows 2-4)
-        { s: { r: 2, c: 0 }, e: { r: 2, c: 1 } },
-        { s: { r: 2, c: 5 }, e: { r: 2, c: 8 } },
-        { s: { r: 3, c: 0 }, e: { r: 3, c: 1 } },
-        { s: { r: 3, c: 5 }, e: { r: 3, c: 8 } },
-        { s: { r: 4, c: 0 }, e: { r: 4, c: 1 } },
-        { s: { r: 4, c: 5 }, e: { r: 4, c: 8 } },
-        // Optionally, merge the disclaimer row (last row) across all columns
-        { s: { r: wsData.length - 1, c: 0 }, e: { r: wsData.length - 1, c: 9 } }
-      ];
-      // Append the worksheet to the workbook with the sheet name "Invoice"
+      // Create a workbook and add the worksheet
+      const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Invoice");
+
       // Save the workbook as an Excel file
       XLSX.writeFile(wb, "Invoice_Statement.xlsx");
     }
