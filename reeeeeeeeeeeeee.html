@@ -173,13 +173,9 @@
 
             // Example: Relabel specific patterns
             const relabeledData = filteredData.map(line => {
-                // Replace "Name:" with "Full Name:"
-                if (line.includes("Name:")) {
-                    return line.replace("Name:", "Full Name:");
-                }
-                // Replace "Date:" with "Transaction Date:"
-                if (line.includes("Date:")) {
-                    return line.replace("Date:", "Transaction Date:");
+                // Replace "Ins. Balance with "Fee Scale & Ins. Write-off"
+                if (line.includes("Ins. Balance")) {
+                    return line.replace("Ins. Balance", "Fee Scale & Ins. Write-off");
                 }
                 return line;
             });
