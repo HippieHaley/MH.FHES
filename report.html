@@ -1,223 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Invoice/Statement Generator</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      margin: 20px;
-      background-color: #f9f9f9;
-      color: #333;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
-    }
-    .invoice-container {
-      width: 1000px;
-      padding: 20px;
-      background-color: white;
-      border: 1px solid #ddd;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    .header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .header h1 {
-      font-size: 24px;
-      margin: 0;
-    }
-    .header p {
-      margin: 5px 0;
-    }
-    .total-payment {
-      font-size: 20px;
-      font-weight: bold;
-      color: #4CAF50;
-      margin-top: 10px;
-    }
-    .table-container {
-      margin-top: 20px;
-      overflow-x: auto;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
-    }
-    table th, table td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      text-align: left;
-    }
-    table th {
-      background-color: #f5f5f5;
-      font-weight: bold;
-    }
-    table td:nth-child(n+4) {
-      text-align: right;
-    }
-    .footer {
-      margin-top: 20px;
-      font-size: 12px;
-      color: #666;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      margin-top: 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      background-color: #4CAF50;
-      color: white;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-  </style>
-  <!-- Use SheetJS for Excel file creation -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Data Extraction to Excel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        button, input[type="file"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover, input[type="file"]:hover {
+            background-color: #45a049;
+        }
+
+        input[type="file"] {
+            background-color: #2196F3;
+        }
+
+        input[type="file"]::file-selector-button {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background-color: #1976D2;
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+    </style>
+    <!-- Use Cloudflare CDN for PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js" crossorigin="anonymous"></script>
+    <!-- Use SheetJS for Excel file creation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 
-  <div class="invoice-container">
-    <!-- Header Section -->
-    <div class="header">
-      <h1>Clinic Name</h1>
-      <p>123 Clinic Street, City, State, ZIP</p>
-      <p>Phone: (123) 456-7890</p>
-      <p>Statement Date: <span id="statementDate">3/14/2025</span></p>
-      <p>Client Name: <span id="clientName">John Doe</span></p>
-      <p>Client Address: <span id="clientAddress">456 Client Ave, City, State, ZIP</span></p>
-      <p class="total-payment">Total Payment Amount: <span id="totalPayment">$80.00</span></p>
-    </div>
+    <input type="file" id="fileInput" accept="application/pdf" />
+    <button id="exportExcelBtn" onclick="exportToExcel()" disabled>Export to Excel</button>
 
-    <!-- Table Section -->
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Claim Number</th>
-            <th>Service Date</th>
-            <th>Procedure</th>
-            <th>Units</th>
-            <th>Line Total</th>
-            <th>Patient Paid</th>
-            <th>Insurance Paid</th>
-            <th>Adjustments</th>
-            <th>Balance</th>
-            <th>Payment</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody">
-          <!-- Rows will be dynamically inserted here -->
-        </tbody>
-      </table>
-    </div>
+    <script>
+        let extractedData = [];
 
-    <!-- Footer Section -->
-    <div class="footer">
-      <p>Disclaimer: Charges/adjustments made after statement date are not reflected in this statement.</p>
-      <p>Please contact our office for any questions or concerns.</p>
-    </div>
-  </div>
+        document.getElementById('fileInput').addEventListener('change', async (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                try {
+                    console.log('Loading PDF.js...');
+                    if (typeof pdfjsLib === 'undefined') {
+                        throw new Error('PDF.js library is not loaded');
+                    }
 
-  <button onclick="exportToExcel()">Export to Excel</button>
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdfData = new Uint8Array(arrayBuffer);
 
-  <script>
-    // Sample data for the table
-    const tableData = [
-      {
-        claimNumber: "05692-CL-0001",
-        serviceDate: "03/14/2025",
-        procedure: "87491-Chlamydia",
-        units: 2,
-        lineTotal: "$30.00",
-        patientPaid: "$10.00",
-        insurancePaid: "$15.00",
-        adjustments: "$5.00",
-        balance: "$0.00",
-        payment: "$0.00"
-      },
-      {
-        claimNumber: "05692-CL-0002",
-        serviceDate: "03/15/2025",
-        procedure: "87491-Chlamydia",
-        units: 1,
-        lineTotal: "$50.00",
-        patientPaid: "$0.00",
-        insurancePaid: "$0.00",
-        adjustments: "$0.00",
-        balance: "$50.00",
-        payment: "$0.00"
-      }
-    ];
+                    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+                    const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
 
-    // Populate the table with sample data
-    const tableBody = document.getElementById('tableBody');
-    if (tableBody) {
-      tableData.forEach(row => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${row.claimNumber}</td>
-          <td>${row.serviceDate}</td>
-          <td>${row.procedure}</td>
-          <td>${row.units}</td>
-          <td>${row.lineTotal}</td>
-          <td>${row.patientPaid}</td>
-          <td>${row.insurancePaid}</td>
-          <td>${row.adjustments}</td>
-          <td>${row.balance}</td>
-          <td>${row.payment}</td>
-        `;
-        tableBody.appendChild(tr);
-      });
-    } else {
-      console.error("Table body element not found!");
-    }
+                    extractedData = [];
 
-    // Function to export the invoice to Excel
-    function exportToExcel() {
-      try {
-        // Create a worksheet from the table data
-        const worksheet = XLSX.utils.table_to_sheet(document.querySelector('table'));
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const textContent = await page.getTextContent();
 
-        // Add header data to the worksheet
-        XLSX.utils.sheet_add_aoa(worksheet, [
-          ["Clinic Name", "123 Clinic Street, City, State, ZIP"],
-          ["Phone", "(123) 456-7890"],
-          ["Statement Date", document.getElementById('statementDate').textContent],
-          ["Client Name", document.getElementById('clientName').textContent],
-          ["Client Address", document.getElementById('clientAddress').textContent],
-          ["Total Payment Amount", document.getElementById('totalPayment').textContent],
-          [] // Empty row for spacing
-        ], { origin: "A1" });
+                        console.log(`Extracting page ${i}`); // Debugging
 
-        // Add footer data to the worksheet
-        const footerText = [
-          "Disclaimer: Charges/adjustments made after statement date are not reflected in this statement.",
-          "Please contact our office for any questions or concerns."
-        ];
-        XLSX.utils.sheet_add_aoa(worksheet, footerText, { origin: -1 }); // Add footer at the end
+                        let line = '';
+                        let lastY = null;
 
-        // Create a workbook and add the worksheet
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Invoice');
+                        if (textContent.items.length > 0) {
+                            textContent.items.forEach((item) => {
+                                if (lastY !== null && Math.abs(item.transform[5] - lastY) > 10) {
+                                    extractedData.push(line.trim());
+                                    line = '';
+                                }
+                                line += item.str + ' ';
+                                lastY = item.transform[5];
+                            });
 
-        // Export the workbook to an Excel file
-        XLSX.writeFile(workbook, 'Invoice_Statement.xlsx');
-      } catch (error) {
-        console.error("Error exporting to Excel:", error);
-        alert("Failed to export to Excel. Check the console for details.");
-      }
-    }
-  </script>
+                            if (line.trim()) {
+                                extractedData.push(line.trim());
+                            }
+                        } else {
+                            console.log(`Page ${i} contains no text, attempting OCR`);
+                            await extractTextFromImage(page);
+                        }
+                    }
+
+                    console.log(extractedData); // Debugging
+                    if (extractedData.length > 0) {
+                        alert('PDF data extracted successfully!');
+                        document.getElementById('exportExcelBtn').disabled = false;
+                    } else {
+                        alert('No readable text extracted.');
+                    }
+
+                } catch (error) {
+                    console.error('Error extracting PDF data:', error);
+                    alert('Failed to extract data. Check the console for details.');
+                }
+            }
+        });
+
+        async function extractTextFromImage(page) {
+            try {
+                const viewport = page.getViewport({ scale: 1.0 });
+                const canvas = document.createElement("canvas");
+                const context = canvas.getContext("2d");
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                console.log('Rendering page to canvas');
+                await page.render({ canvasContext: context, viewport }).promise;
+
+                console.log('Loading Tesseract.js');
+                const { createWorker } = await import('https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/2.1.5/tesseract.min.js');
+
+                const worker = await createWorker('eng');
+
+                console.log('Starting OCR');
+                const { data: { text } } = await worker.recognize(canvas);
+                console.log('OCR Result:', text);
+
+                extractedData.push(...text.split('\n').map(line => line.replace(/[^\x20-\x7E]/g, '').trim()).filter(line => line !== ''));
+
+                await worker.terminate();
+                console.log('OCR completed successfully');
+
+            } catch (error) {
+                console.error('Error during OCR:', error);
+                alert(`Failed to process image with OCR: ${error.message}`);
+            }
+        }
+
+        function exportToExcel() {
+            if (extractedData.length === 0) {
+                alert('No data to export!');
+                return;
+            }
+
+            // Create a worksheet
+            const worksheet = XLSX.utils.aoa_to_sheet(extractedData.map(line => [line]));
+
+            // Create a workbook
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Extracted Data');
+
+            // Export the workbook to an Excel file
+            XLSX.writeFile(workbook, 'Extracted_Data.xlsx');
+        }
+    </script>
 </body>
 </html>
