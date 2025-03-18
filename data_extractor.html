@@ -1,208 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Data Extraction to Excel</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-        }
-
-        button, input[type="file"] {
-            padding: 10px 20px;
-            font-size: 16px;
-            margin: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: #4CAF50;
-            color: white;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover, input[type="file"]:hover {
-            background-color: #45a049;
-        }
-
-        input[type="file"] {
-            background-color: #2196F3;
-        }
-
-        input[type="file"]::file-selector-button {
-            background-color: #2196F3;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        input[type="file"]::file-selector-button:hover {
-            background-color: #1976D2;
-        }
-
-        button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-        }
-    </style>
-    <!-- Use Cloudflare CDN for PDF.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js" crossorigin="anonymous"></script>
-    <!-- Use SheetJS for Excel file creation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <meta charset="UTF-8">
+  <title>PDF Data Extraction to Excel with Template</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 20px;
+      background-color: #f9f9f9;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+    button, input[type="file"] {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+    button:hover, input[type="file"]:hover {
+      background-color: #45a049;
+    }
+    input[type="file"] {
+      background-color: #2196F3;
+    }
+    input[type="file"]::file-selector-button {
+      background-color: #2196F3;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    input[type="file"]::file-selector-button:hover {
+      background-color: #1976D2;
+    }
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+  </style>
+  <!-- PDF.js from Cloudflare CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js" crossorigin="anonymous"></script>
+  <!-- SheetJS for Excel file creation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
-    <h2>PDF Data Extractor with Template</h2>
-    <input type="file" id="pdfFile" accept=".pdf" />
+  <h2>PDF Data Extractor with Template</h2>
+  <input type="file" id="pdfFile" accept=".pdf" />
 
-    <script>
-        // Listen for file selection
-        document.getElementById('pdfFile').addEventListener('change', handleFile, false);
+  <script>
+    // Listen for file selection
+    document.getElementById('pdfFile').addEventListener('change', handleFile, false);
 
-        async function handleFile(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+    async function handleFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
 
-            const reader = new FileReader();
-            reader.onload = async function (e) {
-                try {
-                    const pdfData = new Uint8Array(e.target.result);
-
-                    // Extract text from the PDF
-                    const text = await extractTextFromPDF(pdfData);
-
-                    // Parse the extracted text into structured data
-                    const invoiceData = parseTextToInvoiceData(text);
-
-                    // Generate the Excel file with the template
-                    generateExcelWithTemplate(invoiceData);
-                } catch (error) {
-                    console.error("Error processing PDF:", error);
-                    alert("An error occurred while processing the PDF. Please check the console for details.");
-                }
-            };
-            reader.readAsArrayBuffer(file);
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        try {
+          const pdfData = new Uint8Array(e.target.result);
+          // Extract text from the PDF
+          const text = await extractTextFromPDF(pdfData);
+          // Parse the extracted text into structured data
+          const invoiceData = parseTextToInvoiceData(text);
+          // Generate the Excel file with the merged-cell template
+          generateExcelWithTemplate(invoiceData);
+        } catch (error) {
+          console.error("Error processing PDF:", error);
+          alert("An error occurred while processing the PDF. Please check the console for details.");
         }
+      };
+      reader.readAsArrayBuffer(file);
+    }
 
-        async function extractTextFromPDF(pdfData) {
-            // Load PDF using pdfjs-dist
-            const loadingTask = pdfjsLib.getDocument({ data: pdfData });
-            const pdf = await loadingTask.promise;
-            let fullText = "";
+    async function extractTextFromPDF(pdfData) {
+      const loadingTask = pdfjsLib.getDocument({ data: pdfData });
+      const pdf = await loadingTask.promise;
+      let fullText = "";
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        const pageText = content.items.map(item => item.str).join(' ');
+        fullText += pageText + "\n";
+      }
+      return fullText;
+    }
+    function parseTextToInvoiceData(text) {
+      const lines = text.split('\n');
+      // Customize these based on your PDF's content
+      const clientName = lines.find(line => line.includes('Client Name:'))?.split(':')[1]?.trim() || "N/A";
+      const amountDue = lines.find(line => line.includes('Amount Due:'))?.split(':')[1]?.trim() || "$0.00";
+      const statementDate = lines.find(line => line.includes('Statement Date:'))?.split(':')[1]?.trim() || "N/A";
+      const lineItems = [];
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].includes('Claim Number:')) {
+          const claimNumber = lines[i].split(':')[1]?.trim() || "";
+          const serviceDate = lines[i + 1] ? lines[i + 1].split(':')[1]?.trim() : "";
+          const procedure = lines[i + 2] ? lines[i + 2].split(':')[1]?.trim() : "";
+          const units = lines[i + 3] ? lines[i + 3].split(':')[1]?.trim() : "";
+          const lineTotal = lines[i + 4] ? lines[i + 4].split(':')[1]?.trim() : "";
+          const patientPaid = lines[i + 5] ? lines[i + 5].split(':')[1]?.trim() : "";
+          const insurancePaid = lines[i + 6] ? lines[i + 6].split(':')[1]?.trim() : "";
+          const adjustments = lines[i + 7] ? lines[i + 7].split(':')[1]?.trim() : "";
+          const balance = lines[i + 8] ? lines[i + 8].split(':')[1]?.trim() : "";
+          const payment = lines[i + 9] ? lines[i + 9].split(':')[1]?.trim() : "";
 
-            // Loop through each page and extract text
-            for (let i = 1; i <= pdf.numPages; i++) {
-                const page = await pdf.getPage(i);
-                const content = await page.getTextContent();
-                // Join all text items with a space and add a newline at the end of each page
-                const pageText = content.items.map(item => item.str).join(' ');
-                fullText += pageText + "\n";
-            }
-
-            return fullText;
+          lineItems.push({
+            claimNumber,
+            serviceDate,
+            procedure,
+            units,
+            lineTotal,
+            patientPaid,
+            insurancePaid,
+            adjustments,
+            balance,
+            payment
+          });
         }
+      }
 
-        function parseTextToInvoiceData(text) {
-            // Split the extracted text into lines
-            const lines = text.split('\n');
+      return {
+        clientName,
+        amountDue,
+        statementDate,
+        disclaimer: "Charges/adjustments made after statement date may not appear...",
+        lineItems
+      };
+    }
 
-            // Extract header fields (customize the keywords as per your PDF content)
-            const clientName = lines.find(line => line.includes('Client Name:'))?.split(':')[1]?.trim() || "N/A";
-            const amountDue = lines.find(line => line.includes('Amount Due:'))?.split(':')[1]?.trim() || "$0.00";
-            const statementDate = lines.find(line => line.includes('Statement Date:'))?.split(':')[1]?.trim() || "N/A";
+    function generateExcelWithTemplate(invoiceData) {
+      // Create a new workbook
+      const wb = XLSX.utils.book_new();
 
-            // Extract line items – here we assume each line item starts with "Claim Number:"
-            const lineItems = [];
-            for (let i = 0; i < lines.length; i++) {
-                if (lines[i].includes('Claim Number:')) {
-                    const claimNumber = lines[i].split(':')[1]?.trim() || "";
-                    const serviceDate = lines[i + 1] ? lines[i + 1].split(':')[1]?.trim() : "";
-                    const procedure = lines[i + 2] ? lines[i + 2].split(':')[1]?.trim() : "";
-                    const units = lines[i + 3] ? lines[i + 3].split(':')[1]?.trim() : "";
-                    const lineTotal = lines[i + 4] ? lines[i + 4].split(':')[1]?.trim() : "";
-                    const patientPaid = lines[i + 5] ? lines[i + 5].split(':')[1]?.trim() : "";
-                    const insurancePaid = lines[i + 6] ? lines[i + 6].split(':')[1]?.trim() : "";
-                    const adjustments = lines[i + 7] ? lines[i + 7].split(':')[1]?.trim() : "";
-                    const balance = lines[i + 8] ? lines[i + 8].split(':')[1]?.trim() : "";
-                    const payment = lines[i + 9] ? lines[i + 9].split(':')[1]?.trim() : "";
+      // Build worksheet data using an array of arrays (AOA)
+      // Adjust rows and columns to mimic your Pricelist layout.
+      const wsData = [
+        // Header area with merged cells
+        ["", "", "", "Client Name: " + invoiceData.clientName, "", "", "Statement Date: " + invoiceData.statementDate, "", ""],
+        ["", "", "", "", "", "", "PAY THIS AMOUNT: " + invoiceData.amountDue, "", ""],
+        // Addresses (example layout)
+        [ "","", "", "", "", "Family Health Education Services", "", "", ""],
+        [, "", "", "", "", "930 North 10th St", "", "", ""],
+        ["", "", "", "", "", "Spearfish, SD 57783", "", "", ""],
+        [""], // Blank row for spacing
+        // Table header for invoice line items
+        ["Claim Number", "Service Date", "Procedure", "Units", "Line Total", "Patient Paid", "Insurance Paid", "Adjustments", "Balance", "Payment"]
+      ];
+      // Append each line item row from invoiceData.lineItems
+      invoiceData.lineItems.forEach(item => {
+        wsData.push([
+          item.claimNumber,
+          item.serviceDate,
+          item.procedure,
+          item.units,
+          item.lineTotal,
+          item.patientPaid,
+          item.insurancePaid,
+          item.adjustments,
+          item.balance,
+          item.payment
+        ]);
+      });
+      // Blank row then disclaimer
+      wsData.push([]);
+      wsData.push([invoiceData.disclaimer]);
+      // Convert the AOA to a worksheet
+      const ws = XLSX.utils.aoa_to_sheet(wsData);
+      // Define merges to replicate your template layout
+      ws['!merges'] = [
+        // Merge for "Client Name: ..." across columns 3-4 in row 0 (zero-indexed)
+        { s: { r: 0, c: 3 }, e: { r: 0, c: 4 } },
+        // Merge for "Statement Date: ..." across columns 6-8 in row 0
+        { s: { r: 0, c: 6 }, e: { r: 0, c: 8 } },
+        // Merge for "PAY THIS AMOUNT: ..." across columns 6-8 in row 1
+        { s: { r: 1, c: 6 }, e: { r: 1, c: 8 } },
+        // Merge addresses on left and right sides (rows 2-4)
+        { s: { r: 2, c: 0 }, e: { r: 2, c: 1 } },
+        { s: { r: 2, c: 5 }, e: { r: 2, c: 8 } },
+        { s: { r: 3, c: 0 }, e: { r: 3, c: 1 } },
+        { s: { r: 3, c: 5 }, e: { r: 3, c: 8 } },
+        { s: { r: 4, c: 0 }, e: { r: 4, c: 1 } },
+        { s: { r: 4, c: 5 }, e: { r: 4, c: 8 } },
+        // Optionally, merge the disclaimer row (last row) across all columns
+        { s: { r: wsData.length - 1, c: 0 }, e: { r: wsData.length - 1, c: 9 } }
+      ];
 
-                    lineItems.push({
-                        claimNumber,
-                        serviceDate,
-                        procedure,
-                        units,
-                        lineTotal,
-                        patientPaid,
-                        insurancePaid,
-                        adjustments,
-                        balance,
-                        payment
-                    });
-                }
-            }
+      // Append the worksheet to the workbook with the sheet name "Invoice"
+      XLSX.utils.book_append_sheet(wb, ws, "Invoice");
 
-            return {
-                clientName,
-                amountDue,
-                statementDate,
-                disclaimer: "Charges/adjustments made after statement date may not appear...",
-                lineItems
-            };
-        }
-
-        function generateExcelWithTemplate(invoiceData) {
-            // Create a new workbook
-            const workbook = XLSX.utils.book_new();
-
-            // Build worksheet data with the template header and table header
-            const worksheetData = [
-                ["PAY THIS AMOUNT:", invoiceData.amountDue],
-                ["Client Name:", invoiceData.clientName],
-                ["Statement Date:", invoiceData.statementDate],
-                [], // Empty row for spacing
-                // Table header row
-                ["Claim Number", "Service Date", "Procedure", "Units", "Line Total", "Patient Paid", "Insurance Paid", "Adjustments", "Balance", "Payment"]
-            ];
-
-            // Add each line item as a row in the worksheet
-            invoiceData.lineItems.forEach(item => {
-                worksheetData.push([
-                    item.claimNumber,
-                    item.serviceDate,
-                    item.procedure,
-                    item.units,
-                    item.lineTotal,
-                    item.patientPaid,
-                    item.insurancePaid,
-                    item.adjustments,
-                    item.balance,
-                    item.payment
-                ]);
-            });
-
-            // Append the disclaimer at the bottom
-            worksheetData.push([], [invoiceData.disclaimer]);
-
-            // Convert the array of arrays to a worksheet
-            const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
-
-            // Append the worksheet to the workbook
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Invoice");
-
-            // Trigger the download of the Excel file
-            XLSX.writeFile(workbook, "Invoice_Statement.xlsx");
-        }
-    </script>
+      // Save the workbook as an Excel file
+      XLSX.writeFile(wb, "Invoice_Statement.xlsx");
+    }
+  </script>
 </body>
 </html>
