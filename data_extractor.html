@@ -97,12 +97,14 @@
       }
       return fullText;
     }
+
     function parseTextToInvoiceData(text) {
       const lines = text.split('\n');
       // Customize these based on your PDF's content
       const clientName = lines.find(line => line.includes('Client Name:'))?.split(':')[1]?.trim() || "N/A";
       const amountDue = lines.find(line => line.includes('Amount Due:'))?.split(':')[1]?.trim() || "$0.00";
       const statementDate = lines.find(line => line.includes('Statement Date:'))?.split(':')[1]?.trim() || "N/A";
+
       const lineItems = [];
       for (let i = 0; i < lines.length; i++) {
         if (lines[i].includes('Claim Number:')) {
@@ -152,13 +154,14 @@
         ["", "", "", "Client Name: " + invoiceData.clientName, "", "", "Statement Date: " + invoiceData.statementDate, "", ""],
         ["", "", "", "", "", "", "PAY THIS AMOUNT: " + invoiceData.amountDue, "", ""],
         // Addresses (example layout)
-        [ "","", "", "", "", "Family Health Education Services", "", "", ""],
-        [, "", "", "", "", "930 North 10th St", "", "", ""],
-        ["", "", "", "", "", "Spearfish, SD 57783", "", "", ""],
+        ["Hale, Savannah", "", "", "", "", "Family Health Education Services", "", "", ""],
+        ["1840 Shelby Ave #201", "", "", "", "", "930 North 10th St", "", "", ""],
+        ["Rapid City, SD 57701", "", "", "", "", "Spearfish, SD 57783", "", "", ""],
         [""], // Blank row for spacing
         // Table header for invoice line items
         ["Claim Number", "Service Date", "Procedure", "Units", "Line Total", "Patient Paid", "Insurance Paid", "Adjustments", "Balance", "Payment"]
       ];
+
       // Append each line item row from invoiceData.lineItems
       invoiceData.lineItems.forEach(item => {
         wsData.push([
@@ -174,11 +177,14 @@
           item.payment
         ]);
       });
+
       // Blank row then disclaimer
       wsData.push([]);
       wsData.push([invoiceData.disclaimer]);
+
       // Convert the AOA to a worksheet
       const ws = XLSX.utils.aoa_to_sheet(wsData);
+
       // Define merges to replicate your template layout
       ws['!merges'] = [
         // Merge for "Client Name: ..." across columns 3-4 in row 0 (zero-indexed)
