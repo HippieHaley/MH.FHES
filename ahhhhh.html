@@ -158,66 +158,99 @@ function parseCurrency(value) {
     return parseFloat(value.replace(/,/g, '').replace('$', '')) || 0;
 }
 function extractData(rows) {
-    const regex = /^(\d{6}-CL-\d{5})?\s*(Service Line\s*#\d+)?\s*(\d{2}[\/-]\d{2}[\/-]\d{4})?\s*(\d{5})?\s*-\s*(.*?)?\s*(\d{1,2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?/;
+    console.log("extractData() called with rows:", rows);
 
-        const tableBody = document.querySelector('#dataTable tbody');
-        tableBody.innerHTML = '';
+    const claimRegex = /^(\d{6}-CL-\d{5})?\s*(Service Line\s*#\d+)?\s*(\d{2}[\/-]\d{2}[\/-]\d{4})?\s*(\d{5})?\s*-\s*(.*?)\s+(\d{1,2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?$/;
 
-        rows.forEach(row => {
-            if (typeof row[0] === 'string') {
-                const match = row[0].match(regex);
-                if (match) {
-                    let [
-                        _,
-                        claimNumber,
-                        serviceLine,
-                        serviceDate,
-                        procedureCode,
-                        procedureDescription,
-                        units,
-                        unitRate,
-                        totalCharge,
-                        patientCharge,
-                        totalPaid,
-                        insurancePaid,
-                        patientPaid,
-                        adjustment,
-                        totalBalance,
-                        insuranceBalance,
-                        balanceOwed
-                    ] = match;
+    const serviceLineRegex = /^(Service Line\s*#\d+)\s*(\d{2}[\/\-]\d{2}[\/\-]\d{4})?\s*(\d{5})\s*-\s*(.*?)\s+(\d{1,2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?/;
 
-                    if (claimNumber) {
-                        unitRate = null;
-                        procedureCode = null;
-                    }
-                    if (!procedureCode) {
-                        procedureCode = '';
-                        procedureDescription = '';
-                    }
+    const tableBody = document.querySelector('#dataTable tbody');
+    tableBody.innerHTML = '';
 
-                    tableBody.innerHTML += `
-                        <tr>
-                            <td>${claimNumber || serviceLine || ''}</td>
-                            <td>${formatDate(serviceDate) || ''}</td>
-                            <td>${procedureCode ? `${procedureCode} - ${procedureDescription}` : ''}</td>
-                            <td>${units || ''}</td>
-                            <td>${unitRate || ''}</td>
-                            <td>${totalCharge || ''}</td>
-                            <td>${patientCharge || ''}</td>
-                            <td>${totalPaid || ''}</td>
-                            <td>${insurancePaid || ''}</td>
-                            <td>${patientPaid || ''}</td>
-                            <td>${adjustment || ''}</td>
-                            <td>${totalBalance || ''}</td>
-                            <td>${insuranceBalance || ''}</td>
-                            <td>${balanceOwed || ''}</td>
-                        </tr>
-                    `;
-                }
+    rows.forEach(row => {
+        const claimMatch = row[0]?.match(claimRegex);
+        if (claimMatch) {
+            const [
+                _,
+                claimNumber,
+                serviceLine,
+                serviceDate,
+                procedureCode,
+                procedureDescription,
+                units,
+                unitRate,
+                totalCharge,
+                patientCharge,
+                totalPaid,
+                insurancePaid,
+                patientPaid,
+                adjustment,
+                totalBalance,
+                insuranceBalance,
+                balanceOwed
+            ] = claimMatch;
+
+            // ✅ Keep claim row formatting unchanged
+            if (claimNumber && /^\d{6}-CL-\d{5}$/.test(claimNumber)) {               
+                 tableBody.innerHTML += `
+                    <tr>
+                        <td>${claimNumber || ''}</td>
+                        <td>${formatDate(serviceDate) || ''}</td>
+                        <td>${procedureCode ? `${procedureCode} - ${procedureDescription}` : ''}</td>
+                        <td>${units || ''}</td>
+                        <td>${unitRate || ''}</td>
+                        <td>${totalCharge || ''}</td>
+                        <td>${patientCharge || ''}</td>
+                        <td>${totalPaid || '0.00'}</td>
+                        <td>${insurancePaid || '0.00'}</td>
+                        <td>${patientPaid || '0.00'}</td>
+                        <td>${adjustment || '0.00'}</td>
+                        <td>${totalBalance || '0.00'}</td>
+                        <td>${insuranceBalance || '0.00'}</td>
+                        <td>${balanceOwed || '0.00'}</td>
+                    </tr>
+                `;
+                return;
             }
-        });
-    
+        }
+
+        const serviceLineMatch = row[0]?.match(serviceLineRegex);
+        if (serviceLineMatch) {
+            const [
+                _,
+                serviceLine,
+                serviceDate,
+                procedureCode,
+                procedureDescription,
+                units,
+                unitRate,
+                totalCharge,
+                patientCharge,
+                totalPaid,
+                insurancePaid
+            ] = serviceLineMatch;
+
+            tableBody.innerHTML += `
+                <tr>
+                    <td>${serviceLine || ''}</td>
+                    <td>${formatDate(serviceDate) || ''}</td>
+                    <td>${procedureCode ? `${procedureCode} - ${procedureDescription}` : ''}</td>
+                    <td>${units || ''}</td>
+                    <td>${unitRate || ''}</td>
+                    <td>${totalCharge || ''}</td>
+                    <td>${patientCharge || ''}</td>
+                    <td>${totalPaid || '0.00'}</td>
+                    <td>${insurancePaid || '0.00'}</td>
+                    <td>${patientPaid || '0.00'}</td>
+                    <td>${adjustment || '0.00'}</td>
+                    <td>${totalBalance || '0.00'}</td>
+                    <td>${insuranceBalance || '0.00'}</td>
+                    <td>${balanceOwed || '0.00'}</td>
+                </tr>
+            `;
+        }
+    });
+
     // ✅ Display Client and Clinic Name
     document.getElementById('clientName').innerText = clientName;
     document.getElementById('clinicName').innerText = clinicName;
