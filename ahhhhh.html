@@ -108,8 +108,6 @@
         </div>
     </div>
 </div>
-
-
 <script>
     let sortedData = [];
     let clientName = "";
@@ -160,7 +158,7 @@ function parseCurrency(value) {
     return parseFloat(value.replace(/,/g, '').replace('$', '')) || 0;
 }
 function extractData(rows) {
-        const regex = /^\s*(\d{6}-CL-\d{5})?\s*(Service Line\s*#\s*\d+)?\s*(\d{2}[\/-]\d{2}[\/-]\d{4})?\s*(\d{5})?\s*-\s*(.*?)?\s+(\d{1,2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?/;
+    const regex = /^(\d{6}-CL-\d{5})?\s*(Service Line\s*#\d+)?\s*(\d{2}[\/-]\d{2}[\/-]\d{4})?\s*(\d{5})?\s*-\s*(.*?)?\s*(\d{1,2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?/;
 
         const tableBody = document.querySelector('#dataTable tbody');
         tableBody.innerHTML = '';
@@ -224,7 +222,6 @@ function extractData(rows) {
     document.getElementById('clientName').innerText = clientName;
     document.getElementById('clinicName').innerText = clinicName;
 }
-
 </script>
 </body>
 </html>
