@@ -36,43 +36,94 @@
         button:hover {
             background-color: #45a049;
         }
+        .printable-document {
+            margin: 20px;
+        }
+        .balances-section {
+            margin-top: 20px;
+        }
+        .balances-section table {
+            width: auto;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 
-<h2>Upload Invoice File</h2>
+    <h2>Upload Invoice File</h2>
 
-<!-- File Upload Button -->
-<input type="file" id="fileUpload" accept=".xlsx" />
-<button onclick="processFile()">Process File</button>
-
-<!-- Display Results -->
-<table id="resultTable">
-    <thead>
-        <tr>
-            <th>Claim Number</th>
-            <th>Service Date</th>
-            <th>Procedure</th>
-            <th>Units</th>
-            <th>Unit Rate</th>
-            <th>Total Charge</th>
-            <th>Patient Charge</th>
-            <th>Total Paid</th>
-            <th>Insurance Paid</th>
-            <th>Patient Paid</th>
-            <th>Adjustment</th>
-            <th>Balance</th>
-            <th>Unapplied Balance</th>
-            <th>Total Due</th>
-        </tr>
-    </thead>
-    <tbody></tbody>
-</table>
-
-<button onclick="downloadExcel()">Download Cleaned File</button>
+    <!-- File Upload Button -->
+    <input type="file" id="fileUpload" accept=".xlsx" />
+    <button onclick="processFile()">Process File</button>
+    
+    <!-- Printable Document -->
+    <div id="printableDocument" class="printable-document">
+        <h2 id="clientName"></h2>
+        <h3 id="clinicName"></h3>
+        <table id="dataTable" border="1">
+            <thead>
+                <tr>
+                    <th>Claim Number</th>
+                    <th>Service Date</th>
+                    <th>Procedure (and Codes)</th>
+                    <th>Units</th>
+                    <th>Unit Rate</th>
+                    <th>Total Charge</th>
+                    <th>Patient Charge</th>
+                    <th>Total Paid</th>
+                    <th>Insurance Paid</th>
+                    <th>Patient Paid</th>
+                    <th>Total Adjustment</th>
+                    <th>Balance Owed</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    
+        <!-- Patient's Unapplied Balance -->
+        <div id="unappliedBalance" style="margin-top: 10px;">
+            <strong>Patient's Unapplied Balance:</strong> $0.00
+        </div>
+    
+        <!-- Totals -->
+        <div id="totals" style="margin-top: 10px;">
+            <strong>Totals:</strong> $0.00
+        </div>
+    
+        <!-- Balances by Days Past -->
+        <div class="balances-section">
+            <h4>Balances by Days Past</h4>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>0 - 30</th>
+                        <th>31 - 60</th>
+                        <th>61 - 90</th>
+                        <th>Over 90</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>$0.00</td>
+                        <td>$0.00</td>
+                        <td>$0.00</td>
+                        <td>$0.00</td>
+                        <td>$0.00</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="margin-top: 10px;">
+                <strong>All Other Payers:</strong> $0.00<br>
+                <strong>Patient:</strong> $94.00
+            </div>
+        </div>
+    </div>
 
 <script>
-    let cleanedData = [];
+    let sortedData = [];
+    let clientName = "";
+    let clinicName = "";
 
     function processFile() {
         const file = document.getElementById('fileUpload').files[0];
@@ -82,130 +133,115 @@
         }
 
         const reader = new FileReader();
-        reader.onload = (event) => {
-            const data = new Uint8Array(event.target.result);
+        reader.onload = (e) => {
+            const data = new Uint8Array(e.target.result);
             const workbook = XLSX.read(data, { type: 'array' });
-            const sheet = workbook.Sheets[workbook.SheetNames[0]];
-            const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+            const sheetName = workbook.SheetNames[0];
+            const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
 
-            let tableStartIdx = rows.findIndex(row => row && row[0] && row[0].includes("Claim Number"));
-            if (tableStartIdx === -1) {
-                alert("Invalid file format.");
+            clientName = jsonData[0]?.[0] || "Client Name Not Found";
+            clinicName = jsonData[1]?.[0] || "Clinic Name Not Found";
+
+            const tableStartIndex = jsonData.findIndex(row => 
+                row[0] && (row[0].match(/^\d{6}-CL-\d{5}/) || row[0].startsWith("Service Line #"))
+            );
+            if (tableStartIndex === -1) {
+                alert("Invalid file format. Could not find claim numbers.");
                 return;
             }
 
-            cleanedData = rows.slice(tableStartIdx + 1).filter(row =>
-                row[0]?.startsWith('Service Line#') || row[0]?.startsWith('105692-CL') || row[0]?.startsWith('A')
-            ).map(row => {
-                let fields = row.join(' ').split(/\s+/).slice(0, 14).map(cell => cell.trim() || "0");
+            sortedData = jsonData
+                .slice(tableStartIndex)
+                .filter(row => row[0] && !row[0].includes("Disclaimer:"))
+                .map(row => parseRow(row[0]))
+                .filter(row => row !== null);
 
-                // ✅ Fix Claim Number and Service Line#
-                const claimPattern = /^(105692-CL-\d+)(\s*Service Line#\s*(\d+))?/;
-                const altClaimPattern = /^(A\d+)(\s*Service Line#\s*(\d+))?/;
+                extractData(rows);
+    };
 
-                const claimMatch = fields[0].match(claimPattern);
-                const altClaimMatch = fields[0].match(altClaimPattern);
+    reader.readAsArrayBuffer(file);
+}
 
-                if (claimMatch) {
-                    const claimNumber = claimMatch[1];
-                    const lineNumber = claimMatch[3];
-                    if (lineNumber) {
-                        fields[0] = `${claimNumber}-Line-${lineNumber}`;
-                    } else {
-                        fields[0] = claimNumber;
-                    }
-                } else if (altClaimMatch) {
-                    const claimNumber = altClaimMatch[1];
-                    const lineNumber = altClaimMatch[3];
-                    if (lineNumber) {
-                        fields[0] = `${claimNumber}-Line-${lineNumber}`;
-                    } else {
-                        fields[0] = claimNumber;
-                    }
-                }
+function extractData(rows) {
+    const regex = /(?:Service Line#\s*(\d+)|(\d{6}-CL-\d{5}))\s+(\d{2}[/-]\d{2}[/-]\d{4})\s+([\w\s-]+)\s+(\d+)\s+\$?([\d,]*\.?\d*)\s+\$?([\d,]*\.?\d*)\s+\$?([\d,]*\.?\d*)\s+\$?([\d,]*\.?\d*)\s+\$?([\d,]*\.?\d*)\s+\$?([\d,]*\.?\d*)\s+\$?([\d,]*\.?\d*)\s+\$?([\d,]*\.?\d*)/;
 
-                // ✅ Fix Service Date (Format MM/DD/YYYY)
-                const datePattern = /^\d{2}\/\d{2}\/\d{4}$/;
-                if (!datePattern.test(fields[1])) {
-                    fields[1] = "";
-                }
+    const outputTable = document.querySelector('#outputTable tbody');
+    outputTable.innerHTML = ''; // Clear previous results
 
-                // ✅ Fix Procedure Code + Description
-                const procedurePattern = /^(\d{5})\s*(.*)$/;
-                const procedureMatch = fields[2].match(procedurePattern);
-                if (procedureMatch) {
-                    const cptCode = procedureMatch[1];
-                    const description = procedureMatch[2] || "Unknown Procedure";
-                    fields[2] = `${cptCode} ${description}`;
-                }
+    rows.forEach(row => {
+        if (typeof row[0] === 'string') {
+            const match = row[0].match(regex);
+            if (match) {
+                let [
+                    _,
+                    serviceLine,
+                    claimNumber,
+                    serviceDate,
+                    procedureCode,
+                    units,
+                    unitRate,
+                    totalCharge,
+                    patientCharge,
+                    totalPaid,
+                    insurancePaid,
+                    patientPaid,
+                    adjustment,
+                    balanceOwed
+                ] = match;
 
-                // ✅ Fix Units (Whole Integer)
-                fields[3] = !isNaN(fields[3]) ? parseInt(fields[3]) : 0;
-
-                // ✅ Fix Unit Rate
-                if (!isNaN(fields[4])) {
-                    fields[4] = fields[4].length <= 2
-                        ? `${parseInt(fields[4])}`
-                        : `$${parseFloat(fields[4]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
-                }
-
-                // ✅ Format currency fields correctly
-                for (let i = 5; i <= 13; i++) {
-                    if (!isNaN(fields[i])) {
-                        fields[i] = parseFloat(fields[i]) < 0
-                            ? `(${Math.abs(parseFloat(fields[i])).toFixed(2)})`
-                            : `$${parseFloat(fields[i]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
-                    } else {
-                        fields[i] = "$0.00";
+                // ✅ Fix: Assign unit rate and total charge properly for service lines
+                if (serviceLine) {
+                    if (!unitRate && totalCharge && units) {
+                        unitRate = totalCharge;
+                        totalCharge = null;
                     }
                 }
 
-                // ✅ Fix Unapplied Balance to display "N/A" if empty
-                if (fields[12] === "$0.00" || fields[12] === "0") {
-                    fields[12] = "N/A";
+                // ✅ Fix: Ignore procedure code for claim rows
+                if (claimNumber) {
+                    procedureCode = null;
                 }
 
-                // ✅ Ensure row has exactly 14 fields
-                while (fields.length < 14) {
-                    fields.push("0");
-                }
+                // ✅ Add to table
+                const rowHtml = `
+                    <tr>
+                        <td>${claimNumber || `Service Line# ${serviceLine}` || ''}</td>
+                        <td>${serviceDate || ''}</td>
+                        <td>${procedureCode || ''}</td>
+                        <td>${units || ''}</td>
+                        <td>${unitRate || ''}</td>
+                        <td>${totalCharge || ''}</td>
+                        <td>${patientCharge || ''}</td>
+                        <td>${totalPaid || ''}</td>
+                        <td>${insurancePaid || ''}</td>
+                        <td>${patientPaid || ''}</td>
+                        <td>${adjustment || ''}</td>
+                        <td>${balanceOwed || ''}</td>
+                    </tr>
+                `;
 
-                return fields;
-            });
+                outputTable.insertAdjacentHTML('beforeend', rowHtml);
+            }
+        }
+    });
 
-            displayTable(cleanedData);
-        };
 
-        reader.readAsArrayBuffer(file);
-    }
+        // Update client and clinic names
+        document.getElementById('clientName').innerText = clientName;
+        document.getElementById('clinicName').innerText = clinicName;
 
-    function displayTable(data) {
-        const tableBody = document.querySelector("#resultTable tbody");
-        tableBody.innerHTML = "";
-        data.forEach(row => {
-            const tr = document.createElement('tr');
-            row.forEach(cell => {
-                const td = document.createElement('td');
-                td.innerText = cell;
-                tr.appendChild(td);
-            });
-            tableBody.appendChild(tr);
-        });
-    }
-
-    function downloadExcel() {
-        const worksheet = XLSX.utils.aoa_to_sheet([
-            ['Claim Number', 'Service Date', 'Procedure', 'Units', 'Unit Rate', 'Total Charge',
-             'Patient Charge', 'Total Paid', 'Insurance Paid', 'Patient Paid', 'Adjustment',
-             'Balance', 'Unapplied Balance', 'Total Due'],
-            ...cleanedData
-        ]);
-
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Cleaned Data");
-        XLSX.writeFile(workbook, 'cleaned_invoice.xlsx');
+        // Update totals
+        document.getElementById('totals').innerHTML = `
+            <strong>Totals:</strong>
+            Total Charge: $${totals.totalCharge.toFixed(2)} |
+            Patient Charge: $${totals.patientCharge.toFixed(2)} |
+            Total Paid: $${totals.totalPaid.toFixed(2)} |
+            Insurance Paid: $${totals.insurancePaid.toFixed(2)} |
+            Patient Paid: $${totals.patientPaid.toFixed(2)} |
+            Adjustment: $${totals.adjustment.toFixed(2)} |
+            Balance Owed: $${totals.balanceOwed.toFixed(2)}
+        `;
     }
 </script>
-
 </body>
 </html>
