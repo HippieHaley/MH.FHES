@@ -292,7 +292,7 @@ body {
       <div class="example"></div>
           <p><strong>Total Income: $<span id="grandTotal">0</span></strong></p>
           <div class="space"></div>
-          <p><strong>Coverage Level: <span id="coverageLevel">N/A</span></strong>
+          <p><strong>Client Pay: <span id="coverageLevel">N/A</span></strong>
             <span class="modal-trigger" id="triggerModal1">
               <img src="images/heart.png" class="heart" alt="Heart icon">
             </span>
@@ -509,7 +509,7 @@ body {
       14: [87150, 130724, 174299, 217874, 217875],
       15: [92650, 138974, 185299, 231624, 231625]
     };
-    const coverageLevels = ["100%", "75%", "50%", "25%", "0%"];
+    const coverageLevels = ["0%", "25%", "50%", "75%", "100%"];
     function determineCoverageLevel(householdSize, yearlyIncome) {
       if (!coverageChart[householdSize]) {
         return "N/A";
