@@ -23,6 +23,7 @@
         }
         th {
             background-color: #f0f0f0;
+            font-weight: bold;
         }
         button {
             padding: 10px 20px;
@@ -57,12 +58,12 @@
             <th>Total Charge</th>
             <th>Patient Charge</th>
             <th>Total Paid</th>
-            <th>Ins. Paid</th>
+            <th>Insurance Paid</th>
             <th>Patient Paid</th>
-            <th>Total Adj.</th>
-            <th>Total Balance</th>
+            <th>Adjustment</th>
+            <th>Balance</th>
             <th>Unapplied Balance</th>
-            <th>Other Balance</th>
+            <th>Total Due</th>
         </tr>
     </thead>
     <tbody></tbody>
@@ -73,7 +74,6 @@
 <script>
     let cleanedData = [];
 
-    // Function to process the uploaded file
     function processFile() {
         const file = document.getElementById('fileUpload').files[0];
         if (!file) {
@@ -85,72 +85,87 @@
         reader.onload = (event) => {
             const data = new Uint8Array(event.target.result);
             const workbook = XLSX.read(data, { type: 'array' });
-            
-            // Read first sheet
-            const sheetName = workbook.SheetNames[0];
-            const sheet = workbook.Sheets[sheetName];
+            const sheet = workbook.Sheets[workbook.SheetNames[0]];
             const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-            // Find where the table starts
             let tableStartIdx = rows.findIndex(row => row && row[0] && row[0].includes("Claim Number"));
             if (tableStartIdx === -1) {
                 alert("Invalid file format.");
                 return;
             }
 
-            // Extract table data — only rows starting with "Service Line#" or "105692-CL"
             cleanedData = rows.slice(tableStartIdx + 1).filter(row =>
-                row[0]?.startsWith('Service Line#') || row[0]?.startsWith('105692-CL')
+                row[0]?.startsWith('Service Line#') || row[0]?.startsWith('105692-CL') || row[0]?.startsWith('A')
             ).map(row => {
-                // Split row using regex for consistent spacing
                 let fields = row.join(' ').split(/\s+/).slice(0, 14).map(cell => cell.trim() || "0");
 
-                // Ensure Service Line# is under Claim Number
-                if (fields[0].startsWith('Service Line#')) {
-                    const lineMatch = fields[0].match(/Service Line#\s*(\d+)/);
-                    if (lineMatch) {
-                        fields[0] = `Service Line# ${lineMatch[1]}`; // Keep Service Line# with line number
-                        fields[2] = lineMatch[1]; // Put line number in the procedure column
+                // ✅ Fix Claim Number and Service Line#
+                const claimPattern = /^(105692-CL-\d+)(\s*Service Line#\s*(\d+))?/;
+                const altClaimPattern = /^(A\d+)(\s*Service Line#\s*(\d+))?/;
+
+                const claimMatch = fields[0].match(claimPattern);
+                const altClaimMatch = fields[0].match(altClaimPattern);
+
+                if (claimMatch) {
+                    const claimNumber = claimMatch[1];
+                    const lineNumber = claimMatch[3];
+                    if (lineNumber) {
+                        fields[0] = `${claimNumber}-Line-${lineNumber}`;
+                    } else {
+                        fields[0] = claimNumber;
+                    }
+                } else if (altClaimMatch) {
+                    const claimNumber = altClaimMatch[1];
+                    const lineNumber = altClaimMatch[3];
+                    if (lineNumber) {
+                        fields[0] = `${claimNumber}-Line-${lineNumber}`;
+                    } else {
+                        fields[0] = claimNumber;
                     }
                 }
 
-                // Fix Service Date (if valid)
+                // ✅ Fix Service Date (Format MM/DD/YYYY)
                 const datePattern = /^\d{2}\/\d{2}\/\d{4}$/;
                 if (!datePattern.test(fields[1])) {
-                    const dateMatch = fields.find(value => datePattern.test(value));
-                    fields[1] = dateMatch || "";
+                    fields[1] = "";
                 }
 
-                // Fix Procedure Code extraction (if it starts with a CPU code)
-                const cpuCodePattern = /\b\d{5,7}\b/;
-                const procedureMatch = fields.find(value => cpuCodePattern.test(value));
+                // ✅ Fix Procedure Code + Description
+                const procedurePattern = /^(\d{5})\s*(.*)$/;
+                const procedureMatch = fields[2].match(procedurePattern);
                 if (procedureMatch) {
-                    fields[2] = procedureMatch + ' ' + fields[2];
+                    const cptCode = procedureMatch[1];
+                    const description = procedureMatch[2] || "Unknown Procedure";
+                    fields[2] = `${cptCode} ${description}`;
                 }
 
-                // Fix Unit Rate Formatting
-                try {
-                    if (!isNaN(fields[4])) {
-                        if (fields[4].length <= 2) {
-                            fields[4] = `${parseInt(fields[4])}`; // Keep as a number if 1 or 2 digits
-                        } else {
-                            fields[4] = `$${parseFloat(fields[4]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`; // Format as currency if larger
-                        }
-                    }
-                } catch (error) {
-                    fields[4] = "0";
+                // ✅ Fix Units (Whole Integer)
+                fields[3] = !isNaN(fields[3]) ? parseInt(fields[3]) : 0;
+
+                // ✅ Fix Unit Rate
+                if (!isNaN(fields[4])) {
+                    fields[4] = fields[4].length <= 2
+                        ? `${parseInt(fields[4])}`
+                        : `$${parseFloat(fields[4]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
                 }
 
-                // Format currency fields correctly
+                // ✅ Format currency fields correctly
                 for (let i = 5; i <= 13; i++) {
                     if (!isNaN(fields[i])) {
-                        fields[i] = `$${parseFloat(fields[i]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
+                        fields[i] = parseFloat(fields[i]) < 0
+                            ? `(${Math.abs(parseFloat(fields[i])).toFixed(2)})`
+                            : `$${parseFloat(fields[i]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
                     } else {
                         fields[i] = "$0.00";
                     }
                 }
 
-                // Ensure row length is exactly 14 fields
+                // ✅ Fix Unapplied Balance to display "N/A" if empty
+                if (fields[12] === "$0.00" || fields[12] === "0") {
+                    fields[12] = "N/A";
+                }
+
+                // ✅ Ensure row has exactly 14 fields
                 while (fields.length < 14) {
                     fields.push("0");
                 }
@@ -158,18 +173,15 @@
                 return fields;
             });
 
-            // Display data in table
             displayTable(cleanedData);
         };
 
         reader.readAsArrayBuffer(file);
     }
 
-    // Function to display data in the table
     function displayTable(data) {
         const tableBody = document.querySelector("#resultTable tbody");
-        tableBody.innerHTML = ""; // Clear existing data
-        
+        tableBody.innerHTML = "";
         data.forEach(row => {
             const tr = document.createElement('tr');
             row.forEach(cell => {
@@ -181,23 +193,16 @@
         });
     }
 
-    // Function to download cleaned data as an Excel file
     function downloadExcel() {
-        if (cleanedData.length === 0) {
-            alert("No data to download!");
-            return;
-        }
-
         const worksheet = XLSX.utils.aoa_to_sheet([
             ['Claim Number', 'Service Date', 'Procedure', 'Units', 'Unit Rate', 'Total Charge',
-             'Patient Charge', 'Total Paid', 'Ins. Paid', 'Patient Paid', 'Total Adj.', 'Total Balance',
-             'Unapplied Balance', 'Other Balance'],
+             'Patient Charge', 'Total Paid', 'Insurance Paid', 'Patient Paid', 'Adjustment',
+             'Balance', 'Unapplied Balance', 'Total Due'],
             ...cleanedData
         ]);
 
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Cleaned Data");
-
         XLSX.writeFile(workbook, 'cleaned_invoice.xlsx');
     }
 </script>

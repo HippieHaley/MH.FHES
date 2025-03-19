@@ -44,7 +44,7 @@ table_start_idx = df[df.iloc[:, 0].str.contains('Claim Number', na=False)].index
 raw_data = df.iloc[table_start_idx + 1:, :].dropna().values.flatten().tolist()
 
 # Keep only rows starting with "Service Line#" or valid claim numbers
-filtered_data = [row for row in raw_data if row.startswith('Service Line#') or row.startswith('105692-CL-')]
+filtered_data = [row for row in raw_data if row.startswith('Service Line#') or row.startswith('105692-CL-') or row.startswith('A')]
 
 # Split rows using regex for consistent spacing
 split_rows = [re.split(r'\s+', row) for row in filtered_data]
@@ -52,21 +52,26 @@ split_rows = [re.split(r'\s+', row) for row in filtered_data]
 # Clean up any extra characters or spaces
 split_rows = [[cell.strip().replace('$', '').replace(',', '') for cell in row] for row in split_rows]
 
-# Fix Service Line# and Line Number extraction
+# Fix Claim Number (Handle Multiple Formats)
 for row in split_rows:
-    if row[0].startswith('Service Line#'):
-        line_match = re.search(r'Service Line#\s*(\d+)', row[0])
-        if line_match:
-            line_number = line_match.group(1)
-            row[0] = f"Service Line# {line_number}" # Keep line number with Service Line
-            row.pop(1) # Remove extra extracted value
+    claim_match = re.match(r'^(105692-CL-\d+)(\s*Service Line#\s*(\d+))?', row[0])
+    alt_claim_match = re.match(r'^(A\d+)(\s*Service Line#\s*(\d+))?', row[0])
 
-# Fix Procedure Code extraction (if it starts with CPU code)
-cpu_code_pattern = re.compile(r'\b\d{5,7}\b')
-for row in split_rows:
-    procedure_match = cpu_code_pattern.search(' '.join(row))
-    if procedure_match:
-        row[2] = procedure_match.group() + ' ' + row[2]
+    if claim_match:
+        claim_number = claim_match.group(1)
+        line_number = claim_match.group(3)
+        if line_number:
+            row[0] = f"{claim_number}-Line-{line_number}"
+        else:
+            row[0] = claim_number
+
+    elif alt_claim_match:
+        claim_number = alt_claim_match.group(1)
+        line_number = alt_claim_match.group(3)
+        if line_number:
+            row[0] = f"{claim_number}-Line-{line_number}"
+        else:
+            row[0] = claim_number
 
 # Fix Service Date based on known field position
 for row in split_rows:
@@ -75,26 +80,50 @@ for row in split_rows:
             date_match = next((value for value in row if re.match(r'\d{2}/\d{2}/\d{4}', value)), None)
             row[1] = date_match if date_match else ''
 
-# Fix Unit Rate Formatting (Can be number or currency)
+# Fix Procedure Code and Description
+for row in split_rows:
+    procedure_match = re.match(r'(\d{5})\s*(.*)', row[2])
+    if procedure_match:
+        cpt_code = procedure_match.group(1)
+        description = procedure_match.group(2) if procedure_match.group(2) else 'Unknown Procedure'
+        row[2] = f"{cpt_code} {description}"
+
+# Fix Units
 for row in split_rows:
     try:
-        if len(row[4]) <= 2:  # If Unit Rate is a single digit or double digit number
-            row[4] = f"{int(row[4])}"  # Keep as a number (no $ sign)
+        row[3] = int(row[3]) if row[3].isdigit() else 0
+    except:
+        row[3] = 0
+
+# Fix Unit Rate Formatting
+for row in split_rows:
+    try:
+        if len(row[4]) <= 2:
+            row[4] = f"{int(row[4])}" # Keep as number
         else:
-            row[4] = f"${float(row[4]):,.2f}"  # Format as currency if it’s larger
-    except (ValueError, IndexError):
+            row[4] = f"${float(row[4]):,.2f}"
+    except:
         row[4] = "0"
 
-# Format currency fields correctly (like charges, payments)
-currency_fields = [5, 6, 7, 8, 9, 10, 11, 12, 13]  # Indexes of currency fields
+# Format currency fields correctly
+currency_fields = [5, 6, 7, 8, 9, 10, 11, 12, 13]
 for row in split_rows:
     for idx in currency_fields:
         try:
-            row[idx] = f"${float(row[idx]):,.2f}"
+            value = float(row[idx])
+            if value < 0:
+                row[idx] = f"(${abs(value):,.2f})"
+            else:
+                row[idx] = f"${value:,.2f}"
         except (ValueError, IndexError):
             row[idx] = "$0.00"
 
-# Ensure row has exactly 14 fields (shift fields correctly)
+# Fix Unapplied Balance to display N/A if empty
+for row in split_rows:
+    if row[12] in ['', '0', '$0.00']:
+        row[12] = 'N/A'
+
+# Ensure row has exactly 14 fields
 for row in split_rows:
     if len(row) > 14:
         row = row[:14]
@@ -104,8 +133,8 @@ for row in split_rows:
 # Convert to DataFrame
 cleaned_table = pd.DataFrame(split_rows, columns=[
     'Claim Number', 'Service Date', 'Procedure', 'Units', 'Unit Rate', 'Total Charge',
-    'Patient Charge', 'Total Paid', 'Ins. Paid', 'Patient Paid', 'Total Adj.', 'Total Balance',
-    'Unapplied Balance', 'Other Balance'
+    'Patient Charge', 'Total Paid', 'Ins. Paid', 'Patient Paid', 'Adjustment', 'Balance',
+    'Unapplied Balance', 'Total Due'
 ])
 
 # Save cleaned table to a new Excel file
