@@ -159,9 +159,8 @@ function formatDate(date) {
 function parseCurrency(value) {
     return parseFloat(value.replace(/,/g, '').replace('$', '')) || 0;
 }
-
 function extractData(rows) {
-    const regex = /^\s*(?:(\d{6}-CL-\d{5})|(?:Service Line\s*#\s*(\d+)))\s+(\d{2}[\/-]\d{2}[\/-]\d{4})\s+(.+?)\s+(\d+)?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?/;
+    const regex = /^(?:(\d{6}-CL-\d{5})|(Service Line\s*#\s*\d+))\s+(\d{2}[\/-]\d{2}[\/-]\d{4})\s+(.*?)\s+(\d+)?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?/;
 
     const tableBody = document.querySelector('#dataTable tbody');
     tableBody.innerHTML = '';
@@ -173,7 +172,7 @@ function extractData(rows) {
                 let [
                     _,
                     claimNumber,
-                    serviceLineNumber,
+                    serviceLine,
                     serviceDate,
                     procedureCode,
                     units,
@@ -184,51 +183,66 @@ function extractData(rows) {
                     insurancePaid,
                     patientPaid,
                     adjustment,
-                    totalbalance,
-                    insurancebalance,
+                    totalBalance,
+                    insuranceBalance,
                     balanceOwed
                 ] = match;
 
- // Set Unit Rate to null for claim number rows
- if (claimNumber) {
+                // Ensure Unit Rate is null for claim rows
+                if (claimNumber) {
                     unitRate = null;
-                    procedureCode = null
-                } else if (serviceLineNumber) {
+                    procedureCode = null;
+
+                    // Fix Balance Owed for claim rows (should match Patient Charge)
+                    balanceOwed = patientCharge || '0.00';
+                } else if (serviceLine) {
                     if (!unitRate && totalCharge && units) {
                         unitRate = (parseFloat(totalCharge) / parseInt(units)).toFixed(2);
                     }
                 }
+                    // ✅ Set Unit Rate to null for claim rows (only apply to service lines)
+                    if (claimNumber) {
+                        unitRate = null;
+                        procedureCode = null;
+                    } else if (serviceLineNumber) {
+                        if (!unitRate && totalCharge && units) {
+                            unitRate = (parseCurrency(totalCharge) / parseInt(units)).toFixed(2);
+                        }
+                    }
 
-// Ensure Unit Rate, Adjustment, and Balance Owed are always assigned
-unitRate = unitRate || '';
-                adjustment = adjustment || '';
-                balanceOwed = balanceOwed || '';
-
-                // Keep Procedure Code for service lines, allow claim rows to have null value
+                    // Ensure consistent formatting for numeric values
+                totalPaid = totalPaid ? parseFloat(totalPaid).toFixed(2) : '0.00';
+                insurancePaid = insurancePaid ? parseFloat(insurancePaid).toFixed(2) : '0.00';
+                patientPaid = patientPaid ? parseFloat(patientPaid).toFixed(2) : '0.00';
+                adjustment = adjustment ? parseFloat(adjustment).toFixed(2) : '0.00';
+                totalBalance = totalBalance ? parseFloat(totalBalance).toFixed(2) : '0.00';
+                insuranceBalance = insuranceBalance ? parseFloat(insuranceBalance).toFixed(2) : '0.00';
+                balanceOwed = balanceOwed ? parseFloat(balanceOwed).toFixed(2) : '0.00';
 
                 tableBody.innerHTML += `
                     <tr>
-                        <td>${claimNumber || `Service Line# ${serviceLineNumber}` || ''}</td>
+                        <td>${claimNumber || serviceLine || ''}</td>
                         <td>${formatDate(serviceDate) || ''}</td>
                         <td>${procedureCode || ''}</td>
                         <td>${units || ''}</td>
                         <td>${unitRate || ''}</td>
                         <td>${totalCharge || ''}</td>
                         <td>${patientCharge || ''}</td>
-                        <td>${totalPaid || ''}</td>
-                        <td>${insurancePaid || ''}</td>
-                        <td>${patientPaid || ''}</td>
-                        <td>${adjustment || ''}</td>
-                        <td>${totalbalance || ''}</td>
-                        <td>${insurancebalance || ''}</td>
-                        <td>${balanceOwed || ''}</td>
+                        <td>${totalPaid}</td>
+                        <td>${insurancePaid}</td>
+                        <td>${patientPaid}</td>
+                        <td>${adjustment}</td>
+                        <td>${totalBalance}</td>
+                        <td>${insuranceBalance}</td>
+                        <td>${balanceOwed}</td>
                     </tr>
                 `;
             }
         }
     });
-        document.getElementById('clientName').innerText = clientName;
-        document.getElementById('clinicName').innerText = clinicName;
+
+    document.getElementById('clientName').innerText = clientName;
+    document.getElementById('clinicName').innerText = clinicName;
     }
 </script>
 </body>
