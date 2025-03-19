@@ -62,6 +62,8 @@
                 <th>Insurance Paid</th>
                 <th>Patient Paid</th>
                 <th>Total Adjustment</th>
+                <th>Total Balance</th>
+                <th>Insurance Balance</th>
                 <th>Balance Owed</th>
             </tr>
         </thead>
@@ -182,9 +184,20 @@ function extractData(rows) {
                     insurancePaid,
                     patientPaid,
                     adjustment,
+                    totalbalance,
+                    insurancebalance,
                     balanceOwed
                 ] = match;
 
+ // Set Unit Rate to null for claim number rows
+ if (claimNumber) {
+                    unitRate = null;
+                    procedureCode = null
+                } else if (serviceLineNumber) {
+                    if (!unitRate && totalCharge && units) {
+                        unitRate = (parseFloat(totalCharge) / parseInt(units)).toFixed(2);
+                    }
+                }
 
 // Ensure Unit Rate, Adjustment, and Balance Owed are always assigned
 unitRate = unitRate || '';
@@ -206,6 +219,8 @@ unitRate = unitRate || '';
                         <td>${insurancePaid || ''}</td>
                         <td>${patientPaid || ''}</td>
                         <td>${adjustment || ''}</td>
+                        <td>${totalbalance || ''}</td>
+                        <td>${insurancebalance || ''}</td>
                         <td>${balanceOwed || ''}</td>
                     </tr>
                 `;
