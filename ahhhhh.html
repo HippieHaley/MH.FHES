@@ -160,7 +160,8 @@ function parseCurrency(value) {
     return parseFloat(value.replace(/,/g, '').replace('$', '')) || 0;
 }
 function extractData(rows) {
-    const regex = /^(?:(\d{6}-CL-\d{5})|(Service Line\s*#\s*\d+))\s+(\d{2}[\/-]\d{2}[\/-]\d{4})\s+(.*?)\s+(\d+)?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?/;
+    // Updated regex to require procedure codes to start with 5 digits and units to be 1 or 2 digits
+    const regex = /^\s*(\d{6}-CL-\d{5})?\s*(Service Line\s*#\s*\d+)?\s*(\d{2}[\/-]\d{2}[\/-]\d{4})?\s*(\d{5})\s*-\s*(.*?)\s+(\d{1,2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?/;
 
     const tableBody = document.querySelector('#dataTable tbody');
     tableBody.innerHTML = '';
@@ -188,36 +189,11 @@ function extractData(rows) {
                     balanceOwed
                 ] = match;
 
-                // Ensure Unit Rate is null for claim rows
+                // ✅ Keep fields exactly as extracted (NO CALCULATIONS)
                 if (claimNumber) {
                     unitRate = null;
                     procedureCode = null;
-
-                    // Fix Balance Owed for claim rows (should match Patient Charge)
-                    balanceOwed = patientCharge || '0.00';
-                } else if (serviceLine) {
-                    if (!unitRate && totalCharge && units) {
-                        unitRate = (parseFloat(totalCharge) / parseInt(units)).toFixed(2);
-                    }
                 }
-                    // ✅ Set Unit Rate to null for claim rows (only apply to service lines)
-                    if (claimNumber) {
-                        unitRate = null;
-                        procedureCode = null;
-                    } else if (serviceLineNumber) {
-                        if (!unitRate && totalCharge && units) {
-                            unitRate = (parseCurrency(totalCharge) / parseInt(units)).toFixed(2);
-                        }
-                    }
-
-                    // Ensure consistent formatting for numeric values
-                totalPaid = totalPaid ? parseFloat(totalPaid).toFixed(2) : '0.00';
-                insurancePaid = insurancePaid ? parseFloat(insurancePaid).toFixed(2) : '0.00';
-                patientPaid = patientPaid ? parseFloat(patientPaid).toFixed(2) : '0.00';
-                adjustment = adjustment ? parseFloat(adjustment).toFixed(2) : '0.00';
-                totalBalance = totalBalance ? parseFloat(totalBalance).toFixed(2) : '0.00';
-                insuranceBalance = insuranceBalance ? parseFloat(insuranceBalance).toFixed(2) : '0.00';
-                balanceOwed = balanceOwed ? parseFloat(balanceOwed).toFixed(2) : '0.00';
 
                 tableBody.innerHTML += `
                     <tr>
@@ -228,22 +204,24 @@ function extractData(rows) {
                         <td>${unitRate || ''}</td>
                         <td>${totalCharge || ''}</td>
                         <td>${patientCharge || ''}</td>
-                        <td>${totalPaid}</td>
-                        <td>${insurancePaid}</td>
-                        <td>${patientPaid}</td>
-                        <td>${adjustment}</td>
-                        <td>${totalBalance}</td>
-                        <td>${insuranceBalance}</td>
-                        <td>${balanceOwed}</td>
+                        <td>${totalPaid || ''}</td>
+                        <td>${insurancePaid || ''}</td>
+                        <td>${patientPaid || ''}</td>
+                        <td>${adjustment || ''}</td>
+                        <td>${totalBalance || ''}</td>
+                        <td>${insuranceBalance || ''}</td>
+                        <td>${balanceOwed || ''}</td>
                     </tr>
                 `;
             }
         }
     });
 
+    // ✅ Display Client and Clinic Name
     document.getElementById('clientName').innerText = clientName;
     document.getElementById('clinicName').innerText = clinicName;
-    }
+}
+
 </script>
 </body>
 </html>
