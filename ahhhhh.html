@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <title>Excel Invoice Cleaner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+            white-space: nowrap;
+        }
+        th {
+            background-color: #f0f0f0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Upload Invoice File</h2>
+
+<!-- File Upload Button -->
+<input type="file" id="fileUpload" accept=".xlsx" />
+<button onclick="processFile()">Process File</button>
+
+<!-- Display Results -->
+<table id="resultTable">
+    <thead>
+        <tr>
+            <th>Claim Number</th>
+            <th>Service Date</th>
+            <th>Procedure</th>
+            <th>Units</th>
+            <th>Unit Rate</th>
+            <th>Total Charge</th>
+            <th>Patient Charge</th>
+            <th>Total Paid</th>
+            <th>Ins. Paid</th>
+            <th>Patient Paid</th>
+            <th>Total Adj.</th>
+            <th>Total Balance</th>
+            <th>Unapplied Balance</th>
+            <th>Other Balance</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<button onclick="downloadExcel()">Download Cleaned File</button>
+
+<script>
+    let cleanedData = [];
+
+    // Function to process the uploaded file
+    function processFile() {
+        const file = document.getElementById('fileUpload').files[0];
+        if (!file) {
+            alert("Please select a file first.");
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const data = new Uint8Array(event.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            
+            // Read first sheet
+            const sheetName = workbook.SheetNames[0];
+            const sheet = workbook.Sheets[sheetName];
+            const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+            // Find where the table starts
+            let tableStartIdx = rows.findIndex(row => row && row[0] && row[0].includes("Claim Number"));
+            if (tableStartIdx === -1) {
+                alert("Invalid file format.");
+                return;
+            }
+
+            // Extract table data — only rows starting with "Service Line#" or "105692-CL"
+            cleanedData = rows.slice(tableStartIdx + 1).filter(row =>
+                row[0]?.startsWith('Service Line#') || row[0]?.startsWith('105692-CL')
+            ).map(row => {
+                // Split row using regex for consistent spacing
+                let fields = row.join(' ').split(/\s+/).slice(0, 14).map(cell => cell.trim() || "0");
+
+                // Ensure Service Line# is under Claim Number
+                if (fields[0].startsWith('Service Line#')) {
+                    const lineMatch = fields[0].match(/Service Line#\s*(\d+)/);
+                    if (lineMatch) {
+                        fields[0] = `Service Line# ${lineMatch[1]}`; // Keep Service Line# with line number
+                        fields[2] = lineMatch[1]; // Put line number in the procedure column
+                    }
+                }
+
+                // Fix Service Date (if valid)
+                const datePattern = /^\d{2}\/\d{2}\/\d{4}$/;
+                if (!datePattern.test(fields[1])) {
+                    const dateMatch = fields.find(value => datePattern.test(value));
+                    fields[1] = dateMatch || "";
+                }
+
+                // Fix Procedure Code extraction (if it starts with a CPU code)
+                const cpuCodePattern = /\b\d{5,7}\b/;
+                const procedureMatch = fields.find(value => cpuCodePattern.test(value));
+                if (procedureMatch) {
+                    fields[2] = procedureMatch + ' ' + fields[2];
+                }
+
+                // Fix Unit Rate Formatting
+                try {
+                    if (!isNaN(fields[4])) {
+                        if (fields[4].length <= 2) {
+                            fields[4] = `${parseInt(fields[4])}`; // Keep as a number if 1 or 2 digits
+                        } else {
+                            fields[4] = `$${parseFloat(fields[4]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`; // Format as currency if larger
+                        }
+                    }
+                } catch (error) {
+                    fields[4] = "0";
+                }
+
+                // Format currency fields correctly
+                for (let i = 5; i <= 13; i++) {
+                    if (!isNaN(fields[i])) {
+                        fields[i] = `$${parseFloat(fields[i]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
+                    } else {
+                        fields[i] = "$0.00";
+                    }
+                }
+
+                // Ensure row length is exactly 14 fields
+                while (fields.length < 14) {
+                    fields.push("0");
+                }
+
+                return fields;
+            });
+
+            // Display data in table
+            displayTable(cleanedData);
+        };
+
+        reader.readAsArrayBuffer(file);
+    }
+
+    // Function to display data in the table
+    function displayTable(data) {
+        const tableBody = document.querySelector("#resultTable tbody");
+        tableBody.innerHTML = ""; // Clear existing data
+        
+        data.forEach(row => {
+            const tr = document.createElement('tr');
+            row.forEach(cell => {
+                const td = document.createElement('td');
+                td.innerText = cell;
+                tr.appendChild(td);
+            });
+            tableBody.appendChild(tr);
+        });
+    }
+
+    // Function to download cleaned data as an Excel file
+    function downloadExcel() {
+        if (cleanedData.length === 0) {
+            alert("No data to download!");
+            return;
+        }
+
+        const worksheet = XLSX.utils.aoa_to_sheet([
+            ['Claim Number', 'Service Date', 'Procedure', 'Units', 'Unit Rate', 'Total Charge',
+             'Patient Charge', 'Total Paid', 'Ins. Paid', 'Patient Paid', 'Total Adj.', 'Total Balance',
+             'Unapplied Balance', 'Other Balance'],
+            ...cleanedData
+        ]);
+
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Cleaned Data");
+
+        XLSX.writeFile(workbook, 'cleaned_invoice.xlsx');
+    }
+</script>
+
+</body>
+</html>

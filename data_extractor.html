@@ -64,6 +64,7 @@
   <input type="file" id="fileInput" accept="application/pdf" />
   <button id="exportExcelBtn" onclick="exportToExcel()" disabled>Export to Excel</button>
 
+
   <script>
     let extractedData = [];
 
@@ -112,8 +113,7 @@
           alert('Failed to extract data. Check the console for details.');
         }
       }
-    });
-
+    })
     function exportToExcel() {
       if (extractedData.length === 0) {
         alert('No data to export.');
