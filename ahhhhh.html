@@ -36,137 +36,133 @@
         button:hover {
             background-color: #45a049;
         }
-        .printable-document {
-            margin: 20px;
-        }
-        .balances-section {
-            margin-top: 20px;
-        }
-        .balances-section table {
-            width: auto;
-            margin-top: 10px;
-        }
     </style>
 </head>
 <body>
 
-    <h2>Upload Invoice File</h2>
+<h2>Upload Invoice File</h2>
+<input type="file" id="fileUpload" accept=".xlsx" />
+<button onclick="processFile()">Process File</button>
 
-    <!-- File Upload Button -->
-    <input type="file" id="fileUpload" accept=".xlsx" />
-    <button onclick="processFile()">Process File</button>
-    
-    <!-- Printable Document -->
-    <div id="printableDocument" class="printable-document">
-        <h2 id="clientName"></h2>
-        <h3 id="clinicName"></h3>
-        <table id="dataTable" border="1">
+<!-- Output Section -->
+<div id="printableDocument">
+    <h2 id="clientName"></h2>
+    <h3 id="clinicName"></h3>
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>Claim Number</th>
+                <th>Service Date</th>
+                <th>Procedure (and Codes)</th>
+                <th>Units</th>
+                <th>Unit Rate</th>
+                <th>Total Charge</th>
+                <th>Patient Charge</th>
+                <th>Total Paid</th>
+                <th>Insurance Paid</th>
+                <th>Patient Paid</th>
+                <th>Total Adjustment</th>
+                <th>Balance Owed</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+       <!-- Patient's Unapplied Balance -->
+       <div id="unappliedBalance" style="margin-top: 10px;">
+        <strong>Patient's Unapplied Balance:</strong> $0.00
+    </div>
+
+    <!-- Totals -->
+    <div id="totals" style="margin-top: 10px;">
+        <strong>Totals:</strong> $0.00
+    </div>
+
+    <!-- Balances by Days Past -->
+    <div class="balances-section">
+        <h4>Balances by Days Past</h4>
+        <table >
             <thead>
                 <tr>
-                    <th>Claim Number</th>
-                    <th>Service Date</th>
-                    <th>Procedure (and Codes)</th>
-                    <th>Units</th>
-                    <th>Unit Rate</th>
-                    <th>Total Charge</th>
-                    <th>Patient Charge</th>
-                    <th>Total Paid</th>
-                    <th>Insurance Paid</th>
-                    <th>Patient Paid</th>
-                    <th>Total Adjustment</th>
-                    <th>Balance Owed</th>
+                    <th>0 - 30</th>
+                    <th>31 - 60</th>
+                    <th>61 - 90</th>
+                    <th>Over 90</th>
+                    <th>Total</th>
                 </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+                <tr>
+                    <td>$0.00</td>
+                    <td>$0.00</td>
+                    <td>$0.00</td>
+                    <td>$0.00</td>
+                    <td>$0.00</td>
+                </tr>
+            </tbody>
         </table>
-    
-        <!-- Patient's Unapplied Balance -->
-        <div id="unappliedBalance" style="margin-top: 10px;">
-            <strong>Patient's Unapplied Balance:</strong> $0.00
-        </div>
-    
-        <!-- Totals -->
-        <div id="totals" style="margin-top: 10px;">
-            <strong>Totals:</strong> $0.00
-        </div>
-    
-        <!-- Balances by Days Past -->
-        <div class="balances-section">
-            <h4>Balances by Days Past</h4>
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th>0 - 30</th>
-                        <th>31 - 60</th>
-                        <th>61 - 90</th>
-                        <th>Over 90</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>$0.00</td>
-                        <td>$0.00</td>
-                        <td>$0.00</td>
-                        <td>$0.00</td>
-                        <td>$0.00</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div style="margin-top: 10px;">
-                <strong>All Other Payers:</strong> $0.00<br>
-                <strong>Patient:</strong> $94.00
-            </div>
+        <div style="margin-top: 10px;">
+            <strong>All Other Payers:</strong> $0.00<br>
+            <strong>Patient:</strong> $94.00
         </div>
     </div>
+</div>
+
 
 <script>
     let sortedData = [];
     let clientName = "";
     let clinicName = "";
 
+    function parseMoney(value) {
+        if (!value) return 0;
+        return parseFloat(value.replace(/[$,]/g, "")) || 0;
+    }
+
     function processFile() {
-        const file = document.getElementById('fileUpload').files[0];
-        if (!file) {
-            alert("Please select a file first.");
+    const file = document.getElementById('fileUpload').files[0];
+    if (!file) {
+        alert("Please select a file first.");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
+
+        clientName = jsonData[0]?.[0] || "Client Name Not Found";
+        clinicName = jsonData[1]?.[0] || "Clinic Name Not Found";
+
+        const tableStartIndex = jsonData.findIndex(row => 
+            row[0] && (row[0].match(/^\d{6}-CL-\d{5}/) || row[0].startsWith("Service Line #"))
+        );
+        if (tableStartIndex === -1) {
+            alert("Invalid file format. Could not find claim numbers.");
             return;
         }
 
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, { type: 'array' });
-            const sheetName = workbook.SheetNames[0];
-            const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
-
-            clientName = jsonData[0]?.[0] || "Client Name Not Found";
-            clinicName = jsonData[1]?.[0] || "Clinic Name Not Found";
-
-            const tableStartIndex = jsonData.findIndex(row => 
-                row[0] && (row[0].match(/^\d{6}-CL-\d{5}/) || row[0].startsWith("Service Line #"))
-            );
-            if (tableStartIndex === -1) {
-                alert("Invalid file format. Could not find claim numbers.");
-                return;
-            }
-
-            sortedData = jsonData
-                .slice(tableStartIndex)
-                .filter(row => row[0] && !row[0].includes("Disclaimer:"))
-                .map(row => parseRow(row[0]))
-                .filter(row => row !== null);
-
-                extractData(rows);
+        sortedData = jsonData.slice(tableStartIndex).filter(row => row[0]);
+        extractData(sortedData);
     };
 
     reader.readAsArrayBuffer(file);
 }
 
-function extractData(rows) {
-    const regex = /(?:Service Line#\s*(\d+)|(\d{6}-CL-\d{5}))\s+(\d{2}[/-]\d{2}[/-]\d{4})\s+([\w\s-]+)\s+(\d+)\s+\$?([\d,]*\.?\d*)\s+\$?([\d,]*\.?\d*)\s+\$?([\d,]*\.?\d*)\s+\$?([\d,]*\.?\d*)\s+\$?([\d,]*\.?\d*)\s+\$?([\d,]*\.?\d*)\s+\$?([\d,]*\.?\d*)\s+\$?([\d,]*\.?\d*)/;
+function formatDate(date) {
+    return date.replace(/-/g, '/'); // Convert to consistent MM/DD/YYYY format
+}
 
-    const outputTable = document.querySelector('#outputTable tbody');
-    outputTable.innerHTML = ''; // Clear previous results
+function parseCurrency(value) {
+    return parseFloat(value.replace(/,/g, '').replace('$', '')) || 0;
+}
+
+function extractData(rows) {
+    const regex = /^\s*(?:(\d{6}-CL-\d{5})|(?:Service Line\s*#\s*(\d+)))\s+(\d{2}[\/-]\d{2}[\/-]\d{4})\s+(.+?)\s+(\d+)?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?/;
+
+    const tableBody = document.querySelector('#dataTable tbody');
+    tableBody.innerHTML = '';
 
     rows.forEach(row => {
         if (typeof row[0] === 'string') {
@@ -174,8 +170,8 @@ function extractData(rows) {
             if (match) {
                 let [
                     _,
-                    serviceLine,
                     claimNumber,
+                    serviceLineNumber,
                     serviceDate,
                     procedureCode,
                     units,
@@ -189,24 +185,18 @@ function extractData(rows) {
                     balanceOwed
                 ] = match;
 
-                // ✅ Fix: Assign unit rate and total charge properly for service lines
-                if (serviceLine) {
-                    if (!unitRate && totalCharge && units) {
-                        unitRate = totalCharge;
-                        totalCharge = null;
-                    }
-                }
 
-                // ✅ Fix: Ignore procedure code for claim rows
-                if (claimNumber) {
-                    procedureCode = null;
-                }
+// Ensure Unit Rate, Adjustment, and Balance Owed are always assigned
+unitRate = unitRate || '';
+                adjustment = adjustment || '';
+                balanceOwed = balanceOwed || '';
 
-                // ✅ Add to table
-                const rowHtml = `
+                // Keep Procedure Code for service lines, allow claim rows to have null value
+
+                tableBody.innerHTML += `
                     <tr>
-                        <td>${claimNumber || `Service Line# ${serviceLine}` || ''}</td>
-                        <td>${serviceDate || ''}</td>
+                        <td>${claimNumber || `Service Line# ${serviceLineNumber}` || ''}</td>
+                        <td>${formatDate(serviceDate) || ''}</td>
                         <td>${procedureCode || ''}</td>
                         <td>${units || ''}</td>
                         <td>${unitRate || ''}</td>
@@ -219,28 +209,11 @@ function extractData(rows) {
                         <td>${balanceOwed || ''}</td>
                     </tr>
                 `;
-
-                outputTable.insertAdjacentHTML('beforeend', rowHtml);
             }
         }
     });
-
-
-        // Update client and clinic names
         document.getElementById('clientName').innerText = clientName;
         document.getElementById('clinicName').innerText = clinicName;
-
-        // Update totals
-        document.getElementById('totals').innerHTML = `
-            <strong>Totals:</strong>
-            Total Charge: $${totals.totalCharge.toFixed(2)} |
-            Patient Charge: $${totals.patientCharge.toFixed(2)} |
-            Total Paid: $${totals.totalPaid.toFixed(2)} |
-            Insurance Paid: $${totals.insurancePaid.toFixed(2)} |
-            Patient Paid: $${totals.patientPaid.toFixed(2)} |
-            Adjustment: $${totals.adjustment.toFixed(2)} |
-            Balance Owed: $${totals.balanceOwed.toFixed(2)}
-        `;
     }
 </script>
 </body>
