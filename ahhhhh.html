@@ -160,8 +160,7 @@ function parseCurrency(value) {
 function extractData(rows) {
     console.log("extractData() called with rows:", rows);
 
-    const claimRegex = /^(\d{6}-CL-\d{5})?\s*(Service Line\s*#\d+)?\s*(\d{2}[\/-]\d{2}[\/-]\d{4})?\s*(\d{5})?\s*-\s*(.*?)\s+(\d{1,2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?$/;
-
+    const claimRegex = /^\s*(\d{6}-CL-\d{5})?\s*(Service Line\s*#\s*\d+)?\s*(\d{2}[\/-]\d{2}[\/-]\d{4})?\s*(\d{5})?\s*-\s*(.*?)?\s+(\d{1,2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+([^\s]*)?\s+([^\s]*)?\s+([^\s]*)?$/;
     const serviceLineRegex = /^(Service Line\s*#\d+)\s*(\d{2}[\/\-]\d{2}[\/\-]\d{4})?\s*(\d{5})\s*-\s*(.*?)\s+(\d{1,2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?/;
 
     const tableBody = document.querySelector('#dataTable tbody');
@@ -191,8 +190,8 @@ function extractData(rows) {
             ] = claimMatch;
 
             // ✅ Keep claim row formatting unchanged
-            if (claimNumber && /^\d{6}-CL-\d{5}$/.test(claimNumber)) {               
-                 tableBody.innerHTML += `
+            if (claimNumber && /^\d{6}-CL-\d{5}$/.test(claimNumber)) {
+                tableBody.innerHTML += `
                     <tr>
                         <td>${claimNumber || ''}</td>
                         <td>${formatDate(serviceDate) || ''}</td>
@@ -201,13 +200,13 @@ function extractData(rows) {
                         <td>${unitRate || ''}</td>
                         <td>${totalCharge || ''}</td>
                         <td>${patientCharge || ''}</td>
-                        <td>${totalPaid || '0.00'}</td>
-                        <td>${insurancePaid || '0.00'}</td>
-                        <td>${patientPaid || '0.00'}</td>
-                        <td>${adjustment || '0.00'}</td>
-                        <td>${totalBalance || '0.00'}</td>
-                        <td>${insuranceBalance || '0.00'}</td>
-                        <td>${balanceOwed || '0.00'}</td>
+                        <td>${totalPaid || ''}</td>
+                        <td>${insurancePaid || ''}</td>
+                        <td>${patientPaid || ''}</td>
+                        <td>${adjustment || ''}</td>
+                        <td>${totalBalance || ''}</td>
+                        <td>${insuranceBalance || ''}</td>
+                        <td>${balanceOwed || ''}</td>
                     </tr>
                 `;
                 return;
@@ -239,18 +238,17 @@ function extractData(rows) {
                     <td>${unitRate || ''}</td>
                     <td>${totalCharge || ''}</td>
                     <td>${patientCharge || ''}</td>
-                    <td>${totalPaid || '0.00'}</td>
-                    <td>${insurancePaid || '0.00'}</td>
-                    <td>${patientPaid || '0.00'}</td>
-                    <td>${adjustment || '0.00'}</td>
-                    <td>${totalBalance || '0.00'}</td>
-                    <td>${insuranceBalance || '0.00'}</td>
-                    <td>${balanceOwed || '0.00'}</td>
+                    <td>${totalPaid || ''}</td>
+                    <td>${insurancePaid || ''}</td>
+                    <td>${patientPaid || ''}</td>
+                    <td>${adjustment || ''}</td>
+                    <td>${totalBalance || ''}</td>
+                    <td>${insuranceBalance || ''}</td>
+                    <td>${balanceOwed || ''}</td>
                 </tr>
             `;
         }
     });
-
     // ✅ Display Client and Clinic Name
     document.getElementById('clientName').innerText = clientName;
     document.getElementById('clinicName').innerText = clinicName;
