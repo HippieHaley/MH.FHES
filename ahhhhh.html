@@ -49,9 +49,6 @@
     <h2 id="clientName"></h2>
     <h3 id="clinicName"></h3>
     <div id="clientAddress">
-        <p>[ADDRESS LINE 1]</p>
-        <p>[ADDRESS LINE 2]</p>
-        <p>[CITY, STATE, ZIP]</p>
     </div>
     <table id="dataTable">
         <thead>
@@ -74,15 +71,11 @@
         </thead>
         <tbody></tbody>
     </table>
-       <!-- Patient's Unapplied Balance -->
-       <div id="unappliedBalance" style="margin-top: 10px;">
-        <strong>Patient's Unapplied Balance:</strong> $0.00
-    </div>
 
-    <!-- Totals -->
-    <div id="totals" style="margin-top: 10px;">
-        <strong>Totals:</strong> $0.00
-    </div>
+    <tr>
+        <td colspan="13" style="text-align: right; font-weight: bold;">Totals:</td>
+        <td id="totals" style="font-weight: bold;">$0.00</td>
+    </tr>
 
     <!-- Balances by Days Past -->
     <div class="balances-section">
@@ -270,6 +263,7 @@ function extractData(rows) {
             </tr>
         `;
     });
+    document.getElementById('totals').innerHTML = `<strong>Totals:</strong> $${totalBalanceOwed.toFixed(2)}`;
 }
 </script>
 </body>
