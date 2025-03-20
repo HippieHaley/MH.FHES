@@ -48,6 +48,11 @@
 <div id="printableDocument">
     <h2 id="clientName"></h2>
     <h3 id="clinicName"></h3>
+    <div id="clientAddress">
+        <p>[ADDRESS LINE 1]</p>
+        <p>[ADDRESS LINE 2]</p>
+        <p>[CITY, STATE, ZIP]</p>
+    </div>
     <table id="dataTable">
         <thead>
             <tr>
@@ -136,12 +141,29 @@ function processFile() {
 
         console.log("Extracted Data (Cleaned):", JSON.stringify(jsonData, null, 2));
 
-        clientName = jsonData[0]?.[0] || "Client Name Not Found";
-        clinicName = jsonData[1]?.[0] || "Clinic Name Not Found";
+       // ✅ Extract client name and clinic name
+       clientName = jsonData[0]?.[0] || "[CLIENT NAME]";
+        clinicName = jsonData[1]?.[0] || "[CLINIC NAME]";
 
         // ✅ Display Client and Clinic Name
         document.getElementById('clientName').innerText = clientName;
         document.getElementById('clinicName').innerText = clinicName;
+
+        // ✅ Extract client address (lines 9–12)
+        let addressLines = jsonData.slice(8, 12).map(row => row[0] || "").filter(line => line);
+
+        // ✅ Remove unwanted phrases
+        addressLines = addressLines.map(line =>
+            line
+                .replace("Family Health Education Services", "")
+                .replace("930 North 10th St", "")
+                .trim()
+        ).filter(line => line);
+
+        // ✅ Populate address placeholders
+        document.getElementById('clientAddress').innerHTML = addressLines
+            .map(line => `<p>${line}</p>`)
+            .join("");
 
         // ✅ Find the starting row based on actual content
         const tableStartIndex = jsonData.findIndex(row =>
