@@ -104,21 +104,21 @@
         </table>
         <div style="margin-top: 10px;">
             <strong>All Other Payers:</strong> $0.00<br>
-            <strong>Patient:</strong> $94.00
+            <strong>Patient:</strong> $0.00
         </div>
     </div>
 </div>
 <script>
-    let sortedData = [];
-    let clientName = "";
-    let clinicName = "";
+let sortedData = [];
+let clientName = "";
+let clinicName = "";
 
-    function parseMoney(value) {
-        if (!value) return 0;
-        return parseFloat(value.replace(/[$,]/g, "")) || 0;
-    }
+function parseMoney(value) {
+    if (!value) return 0;
+    return parseFloat(value.replace(/[$,]/g, "")) || 0;
+}
 
-    function processFile() {
+function processFile() {
     const file = document.getElementById('fileUpload').files[0];
     if (!file) {
         alert("Please select a file first.");
@@ -130,20 +130,46 @@
         const data = new Uint8Array(e.target.result);
         const workbook = XLSX.read(data, { type: 'array' });
         const sheetName = workbook.SheetNames[0];
-        const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
+        let jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
+
+        // ✅ Clean up whitespace and hidden characters
+        jsonData = jsonData.map(row => row.map(cell => 
+            typeof cell === 'string' 
+                ? cell.replace(/[\r\n\t]+/g, ' ').trim() 
+                : cell
+        ));
+
+        console.log("Extracted Data (Cleaned):", JSON.stringify(jsonData, null, 2));
 
         clientName = jsonData[0]?.[0] || "Client Name Not Found";
         clinicName = jsonData[1]?.[0] || "Clinic Name Not Found";
 
-        const tableStartIndex = jsonData.findIndex(row => 
-            row[0] && (row[0].match(/^\d{6}-CL-\d{5}/) || row[0].startsWith("Service Line #"))
+        // ✅ Display Client and Clinic Name
+        document.getElementById('clientName').innerText = clientName;
+        document.getElementById('clinicName').innerText = clinicName;
+
+        // ✅ Find the starting row based on actual content
+        const tableStartIndex = jsonData.findIndex(row =>
+            row[0] &&
+            (row[0].includes('CL-') || row[0].includes('Service Line#'))
         );
+
+        console.log("Table Start Index:", tableStartIndex);
+
         if (tableStartIndex === -1) {
-            alert("Invalid file format. Could not find claim numbers.");
+            alert("Invalid file format. Could not find claim numbers or service lines.");
             return;
         }
 
-        sortedData = jsonData.slice(tableStartIndex).filter(row => row[0]);
+        // ✅ Extract all valid rows
+        sortedData = jsonData
+            .slice(tableStartIndex)
+            .filter(row => row[0] &&
+                (row[0].includes('CL-') || row[0].includes('Service Line#'))
+            );
+
+        console.log("Sorted Data:", sortedData);
+
         extractData(sortedData);
     };
 
@@ -151,45 +177,50 @@
 }
 
 function formatDate(date) {
-    return date.replace(/-/g, '/'); // Convert to consistent MM/DD/YYYY format
+    if (!date) return '';
+    return date.replace(/-/g, '/'); 
 }
 
 function parseCurrency(value) {
+    if (!value) return 0;
     return parseFloat(value.replace(/,/g, '').replace('$', '')) || 0;
 }
+
 function extractData(rows) {
     console.log("extractData() called with rows:", rows);
-
-    const claimRegex = /^\s*(\d{6}-CL-\d{5}|Service Line\s*#\d+)?\s*(\d{2}[\/\-]\d{2}[\/\-]\d{4})?\s*(\d{5})?\s*-\s*(.*?)?\s+(\d{1,2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+([^\s]*)?\s+([^\s]*)?\s+([^\s]*)?$/;
-    const serviceLineRegex = /^\s*(Service Line\s*#\d+)\s*(\d{2}[\/\-]\d{2}[\/\-]\d{4})?\s*(\d{5})?\s*-\s*(.*?)?\s+(\d{1,2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s*([^\s]*)?\s*([^\s]*)?\s*([^\s]*)?$/;
 
     const tableBody = document.querySelector('#dataTable tbody');
     tableBody.innerHTML = '';
 
     rows.forEach(row => {
-    if (!row[0]) return; // Skip empty rows
+        if (!row[0]) return;
 
-    const match = row[0].match(claimRegex);
-    if (match) {
-        const [
-            _,
-            claimOrServiceLine, // Handles both claims and service lines
-            serviceDate,
-            procedureCode,
-            procedureDescription,
-            units,
-            unitRate,
-            totalCharge,
-            patientCharge,
-            totalPaid,
-            insurancePaid,
-            patientPaid,
-            adjustment,
-            totalBalance,
-            insuranceBalance,
-            balanceOwed
-        ] = match;
+        let isClaimRow = row[0].includes('CL-');
+        let isServiceLineRow = row[0].includes('Service Line#');
 
+        // ✅ Split row based on consistent field boundaries using regex:
+        // Match patterns like dates, numbers, and dollar amounts
+        let fields = row[0].match(/(\d{2}\/\d{2}\/\d{4}|\d+|\$[\d,]+\.\d{2}|\w.*?)(?=\s+\d{2}\/|\s+\$|\s+\d|\s*$)/g) || [];
+
+        console.log("Fields Extracted:", fields);
+
+        let claimOrServiceLine = isClaimRow ? fields[0] : `${fields[0]} ${fields[1]}`;
+        let serviceDate = isClaimRow ? fields[1] : fields[2];
+        let procedureCode = isClaimRow ? fields[2] : fields[3];
+        let procedureDescription = isClaimRow ? fields[3] : fields[4];
+        let units = isClaimRow ? fields[4] : fields[5];
+        let unitRate = isClaimRow ? fields[5] : fields[6];
+        let totalCharge = isClaimRow ? fields[6] : fields[7];
+        let patientCharge = isClaimRow ? fields[7] : fields[8];
+        let totalPaid = isClaimRow ? fields[8] : fields[9];
+        let insurancePaid = isClaimRow ? fields[9] : fields[10];
+        let patientPaid = isClaimRow ? fields[10] : fields[11];
+        let adjustment = isClaimRow ? fields[11] : fields[12];
+        let totalBalance = isClaimRow ? fields[12] : fields[13];
+        let insuranceBalance = isClaimRow ? fields[13] : fields[14];
+        let balanceOwed = isClaimRow ? fields[14] : fields[15];
+
+        // ✅ Build row in table
         tableBody.innerHTML += `
             <tr>
                 <td>${claimOrServiceLine || ''}</td>
@@ -208,12 +239,7 @@ function extractData(rows) {
                 <td>${balanceOwed || ''}</td>
             </tr>
         `;
-    }
-});
-
-    // ✅ Display Client and Clinic Name
-    document.getElementById('clientName').innerText = clientName;
-    document.getElementById('clinicName').innerText = clinicName;
+    });
 }
 </script>
 </body>
