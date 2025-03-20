@@ -182,7 +182,7 @@ function extractData(rows) {
         let isClaimRow = row[0].includes('CL-');
         let isServiceLineRow = row[0].includes('Service Line#');
 
-        // ✅ Improved regex to capture procedure ending with text (not a number)
+        // ✅ Updated regex to extract numeric value at the end as Units
         let fields = row[0].match(/(\d{2}\/\d{2}\/\d{4}|\d+|\$[\d,]+\.\d{2}|\w.*?)(?=\s+\d{2}\/|\s+\$|\s+\d|\s*$)/g) || [];
 
         let claimOrServiceLine = isClaimRow ? fields[0] : `${fields[0]} ${fields[1]}`;
@@ -192,15 +192,30 @@ function extractData(rows) {
         let procedureCode = isClaimRow ? null : fields[3];
         let procedureDescription = isClaimRow ? null : fields[4];
 
+        // ✅ If procedure ends with a number, extract it as Units
+        if (!isClaimRow && procedureDescription) {
+            let match = procedureDescription.match(/(.*?)(\d+)$/);
+            if (match) {
+                procedureDescription = match[1].trim(); // Keep only the text part
+                fields[5] = match[2]; // Treat last number as Units
+            }
+        }
+
         let units = isClaimRow ? fields[4] : fields[5];
         let unitRate = isClaimRow ? null : fields[6];
         let totalCharge = isClaimRow ? fields[6] : fields[7];
 
-        // ✅ Fix shifting issue when units are numeric but misaligned
-        if (!isClaimRow && !isNaN(parseFloat(units)) && fields[6] && !fields[6].startsWith('$')) {
-            console.log("Misaligned numeric data detected — shifting values...");
-            unitRate = fields[5]; // Shift unit rate left
-            totalCharge = fields[6]; // Shift total charge left
+        // ✅ Fix shifting issue for numeric misalignment cases
+        if (!isClaimRow) {
+            if (!isNaN(parseFloat(units)) && fields[6] && !fields[6].startsWith('$')) {
+                console.log("Misaligned numeric data detected — shifting values...");
+                unitRate = fields[5];
+                totalCharge = fields[6];
+            } else if (fields[5] && fields[5].startsWith('$')) {
+                console.log("Misaligned monetary data detected — shifting values...");
+                unitRate = fields[6];
+                totalCharge = fields[7];
+            }
         }
 
         let patientCharge = isClaimRow ? fields[7] : fields[8];
