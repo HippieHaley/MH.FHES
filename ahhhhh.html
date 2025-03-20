@@ -193,16 +193,24 @@ function extractData(rows) {
         let procedureDescription = isClaimRow ? null : fields[4];
 
         let units = isClaimRow ? fields[4] : fields[5];
-        let unitRate = isClaimRow ? null : (fields[5] && fields[5].startsWith('$') ? fields[6] : fields[5]);
-        let totalCharge = isClaimRow ? fields[6] : (fields[5] && fields[5].startsWith('$') ? fields[7] : fields[6]);
-        let patientCharge = isClaimRow ? fields[7] : (fields[5] && fields[5].startsWith('$') ? fields[8] : fields[7]);
-        let totalPaid = isClaimRow ? fields[8] : (fields[5] && fields[5].startsWith('$') ? fields[9] : fields[8]);
-        let insurancePaid = isClaimRow ? fields[9] : (fields[5] && fields[5].startsWith('$') ? fields[10] : fields[9]);
-        let patientPaid = isClaimRow ? fields[10] : (fields[5] && fields[5].startsWith('$') ? fields[11] : fields[10]);
-        let adjustment = isClaimRow ? fields[11] : (fields[5] && fields[5].startsWith('$') ? fields[12] : fields[11]);
-        let totalBalance = isClaimRow ? fields[12] : (fields[5] && fields[5].startsWith('$') ? fields[13] : fields[12]);
-        let insuranceBalance = isClaimRow ? fields[13] : (fields[5] && fields[5].startsWith('$') ? fields[14] : fields[13]);
-        let balanceOwed = isClaimRow ? fields[14] : (fields[5] && fields[5].startsWith('$') ? fields[15] : fields[14]);
+        let unitRate = isClaimRow ? null : fields[6];
+        let totalCharge = isClaimRow ? fields[6] : fields[7];
+
+        // ✅ Fix shifting issue when units are numeric but misaligned
+        if (!isClaimRow && !isNaN(parseFloat(units)) && fields[6] && !fields[6].startsWith('$')) {
+            console.log("Misaligned numeric data detected — shifting values...");
+            unitRate = fields[5]; // Shift unit rate left
+            totalCharge = fields[6]; // Shift total charge left
+        }
+
+        let patientCharge = isClaimRow ? fields[7] : fields[8];
+        let totalPaid = isClaimRow ? fields[8] : fields[9];
+        let insurancePaid = isClaimRow ? fields[9] : fields[10];
+        let patientPaid = isClaimRow ? fields[10] : fields[11];
+        let adjustment = isClaimRow ? fields[11] : fields[12];
+        let totalBalance = isClaimRow ? fields[12] : fields[13];
+        let insuranceBalance = isClaimRow ? fields[13] : fields[14];
+        let balanceOwed = isClaimRow ? fields[14] : fields[15];
 
         // ✅ Build row in table
         tableBody.innerHTML += `
