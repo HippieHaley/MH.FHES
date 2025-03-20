@@ -182,7 +182,7 @@ function extractData(rows) {
         let isClaimRow = row[0].includes('CL-');
         let isServiceLineRow = row[0].includes('Service Line#');
 
-        // ✅ Updated regex to extract numeric value at the end as Units
+        // ✅ Improved regex to extract numeric value at the end as Units
         let fields = row[0].match(/(\d{2}\/\d{2}\/\d{4}|\d+|\$[\d,]+\.\d{2}|\w.*?)(?=\s+\d{2}\/|\s+\$|\s+\d|\s*$)/g) || [];
 
         let claimOrServiceLine = isClaimRow ? fields[0] : `${fields[0]} ${fields[1]}`;
@@ -203,7 +203,7 @@ function extractData(rows) {
 
         let units = isClaimRow ? fields[4] : fields[5];
         let unitRate = isClaimRow ? null : fields[6];
-        let totalCharge = isClaimRow ? fields[6] : fields[7];
+        let totalCharge = isClaimRow ? fields[6] : (isServiceLineRow ? null : fields[7]);
 
         // ✅ Fix shifting issue for numeric misalignment cases
         if (!isClaimRow) {
@@ -218,14 +218,15 @@ function extractData(rows) {
             }
         }
 
-        let patientCharge = isClaimRow ? fields[7] : fields[8];
-        let totalPaid = isClaimRow ? fields[8] : fields[9];
-        let insurancePaid = isClaimRow ? fields[9] : fields[10];
-        let patientPaid = isClaimRow ? fields[10] : fields[11];
-        let adjustment = isClaimRow ? fields[11] : fields[12];
-        let totalBalance = isClaimRow ? fields[12] : fields[13];
-        let insuranceBalance = isClaimRow ? fields[13] : fields[14];
-        let balanceOwed = isClaimRow ? fields[14] : fields[15];
+        // ✅ NULL out all fields to the right of total charge for service lines
+        let patientCharge = isClaimRow ? fields[7] : (isServiceLineRow ? null : fields[8]);
+        let totalPaid = isClaimRow ? fields[8] : (isServiceLineRow ? null : fields[9]);
+        let insurancePaid = isClaimRow ? fields[9] : (isServiceLineRow ? null : fields[10]);
+        let patientPaid = isClaimRow ? fields[10] : (isServiceLineRow ? null : fields[11]);
+        let adjustment = isClaimRow ? fields[11] : (isServiceLineRow ? null : fields[12]);
+        let totalBalance = isClaimRow ? fields[12] : (isServiceLineRow ? null : fields[13]);
+        let insuranceBalance = isClaimRow ? fields[13] : (isServiceLineRow ? null : fields[14]);
+        let balanceOwed = isClaimRow ? fields[14] : (isServiceLineRow ? null : fields[15]);
 
         // ✅ Build row in table
         tableBody.innerHTML += `
