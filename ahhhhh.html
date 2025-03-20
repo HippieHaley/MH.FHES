@@ -113,11 +113,6 @@ let sortedData = [];
 let clientName = "";
 let clinicName = "";
 
-function parseMoney(value) {
-    if (!value) return 0;
-    return parseFloat(value.replace(/[$,]/g, "")) || 0;
-}
-
 function processFile() {
     const file = document.getElementById('fileUpload').files[0];
     if (!file) {
@@ -154,8 +149,6 @@ function processFile() {
             (row[0].includes('CL-') || row[0].includes('Service Line#'))
         );
 
-        console.log("Table Start Index:", tableStartIndex);
-
         if (tableStartIndex === -1) {
             alert("Invalid file format. Could not find claim numbers or service lines.");
             return;
@@ -168,8 +161,6 @@ function processFile() {
                 (row[0].includes('CL-') || row[0].includes('Service Line#'))
             );
 
-        console.log("Sorted Data:", sortedData);
-
         extractData(sortedData);
     };
 
@@ -181,14 +172,7 @@ function formatDate(date) {
     return date.replace(/-/g, '/'); 
 }
 
-function parseCurrency(value) {
-    if (!value) return 0;
-    return parseFloat(value.replace(/,/g, '').replace('$', '')) || 0;
-}
-
 function extractData(rows) {
-    console.log("extractData() called with rows:", rows);
-
     const tableBody = document.querySelector('#dataTable tbody');
     tableBody.innerHTML = '';
 
@@ -198,27 +182,27 @@ function extractData(rows) {
         let isClaimRow = row[0].includes('CL-');
         let isServiceLineRow = row[0].includes('Service Line#');
 
-        // ✅ Split row based on consistent field boundaries using regex:
-        // Match patterns like dates, numbers, and dollar amounts
+        // ✅ Improved regex to capture procedure ending with text (not a number)
         let fields = row[0].match(/(\d{2}\/\d{2}\/\d{4}|\d+|\$[\d,]+\.\d{2}|\w.*?)(?=\s+\d{2}\/|\s+\$|\s+\d|\s*$)/g) || [];
-
-        console.log("Fields Extracted:", fields);
 
         let claimOrServiceLine = isClaimRow ? fields[0] : `${fields[0]} ${fields[1]}`;
         let serviceDate = isClaimRow ? fields[1] : fields[2];
-        let procedureCode = isClaimRow ? fields[2] : fields[3];
-        let procedureDescription = isClaimRow ? fields[3] : fields[4];
+
+        // ✅ Null out procedure code and description for claim rows
+        let procedureCode = isClaimRow ? null : fields[3];
+        let procedureDescription = isClaimRow ? null : fields[4];
+
         let units = isClaimRow ? fields[4] : fields[5];
-        let unitRate = isClaimRow ? fields[5] : fields[6];
-        let totalCharge = isClaimRow ? fields[6] : fields[7];
-        let patientCharge = isClaimRow ? fields[7] : fields[8];
-        let totalPaid = isClaimRow ? fields[8] : fields[9];
-        let insurancePaid = isClaimRow ? fields[9] : fields[10];
-        let patientPaid = isClaimRow ? fields[10] : fields[11];
-        let adjustment = isClaimRow ? fields[11] : fields[12];
-        let totalBalance = isClaimRow ? fields[12] : fields[13];
-        let insuranceBalance = isClaimRow ? fields[13] : fields[14];
-        let balanceOwed = isClaimRow ? fields[14] : fields[15];
+        let unitRate = isClaimRow ? null : (fields[5] && fields[5].startsWith('$') ? fields[6] : fields[5]);
+        let totalCharge = isClaimRow ? fields[6] : (fields[5] && fields[5].startsWith('$') ? fields[7] : fields[6]);
+        let patientCharge = isClaimRow ? fields[7] : (fields[5] && fields[5].startsWith('$') ? fields[8] : fields[7]);
+        let totalPaid = isClaimRow ? fields[8] : (fields[5] && fields[5].startsWith('$') ? fields[9] : fields[8]);
+        let insurancePaid = isClaimRow ? fields[9] : (fields[5] && fields[5].startsWith('$') ? fields[10] : fields[9]);
+        let patientPaid = isClaimRow ? fields[10] : (fields[5] && fields[5].startsWith('$') ? fields[11] : fields[10]);
+        let adjustment = isClaimRow ? fields[11] : (fields[5] && fields[5].startsWith('$') ? fields[12] : fields[11]);
+        let totalBalance = isClaimRow ? fields[12] : (fields[5] && fields[5].startsWith('$') ? fields[13] : fields[12]);
+        let insuranceBalance = isClaimRow ? fields[13] : (fields[5] && fields[5].startsWith('$') ? fields[14] : fields[13]);
+        let balanceOwed = isClaimRow ? fields[14] : (fields[5] && fields[5].startsWith('$') ? fields[15] : fields[14]);
 
         // ✅ Build row in table
         tableBody.innerHTML += `
