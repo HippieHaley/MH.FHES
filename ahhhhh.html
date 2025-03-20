@@ -160,95 +160,98 @@ function parseCurrency(value) {
 function extractData(rows) {
     console.log("extractData() called with rows:", rows);
 
-    const claimRegex = /^\s*(\d{6}-CL-\d{5})?\s*(Service Line\s*#\s*\d+)?\s*(\d{2}[\/-]\d{2}[\/-]\d{4})?\s*(\d{5})?\s*-\s*(.*?)?\s+(\d{1,2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+([^\s]*)?\s+([^\s]*)?\s+([^\s]*)?$/;
-    const serviceLineRegex = /^(Service Line\s*#\d+)\s*(\d{2}[\/\-]\d{2}[\/\-]\d{4})?\s*(\d{5})\s*-\s*(.*?)\s+(\d{1,2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?/;
+    const claimRegex = /^\s*(\d{6}-CL-\d{5}|Service Line\s*#\d+)?\s*(\d{2}[\/\-]\d{2}[\/\-]\d{4})?\s*(\d{5})?\s*-\s*(.*?)?\s+(\d{1,2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+([^\s]*)?\s+([^\s]*)?\s+([^\s]*)?$/;
+    const serviceLineRegex = /^\s*(Service Line\s*#\d+)\s*(\d{2}[\/\-]\d{2}[\/\-]\d{4})?\s*(\d{5})?\s*-\s*(.*?)?\s+(\d{1,2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s+\$?([\d,]+\.\d{2})?\s*([^\s]*)?\s*([^\s]*)?\s*([^\s]*)?$/;
 
     const tableBody = document.querySelector('#dataTable tbody');
     tableBody.innerHTML = '';
 
     rows.forEach(row => {
-        const claimMatch = row[0]?.match(claimRegex);
-        if (claimMatch) {
-            const [
-                _,
-                claimNumber,
-                serviceLine,
-                serviceDate,
-                procedureCode,
-                procedureDescription,
-                units,
-                unitRate,
-                totalCharge,
-                patientCharge,
-                totalPaid,
-                insurancePaid,
-                patientPaid,
-                adjustment,
-                totalBalance,
-                insuranceBalance,
-                balanceOwed
-            ] = claimMatch;
+    if (!row[0]) return; // Skip empty rows
 
-            // ✅ Keep claim row formatting unchanged
-            if (claimNumber && /^\d{6}-CL-\d{5}$/.test(claimNumber)) {
-                tableBody.innerHTML += `
-                    <tr>
-                        <td>${claimNumber || ''}</td>
-                        <td>${formatDate(serviceDate) || ''}</td>
-                        <td>${procedureCode ? `${procedureCode} - ${procedureDescription}` : ''}</td>
-                        <td>${units || ''}</td>
-                        <td>${unitRate || ''}</td>
-                        <td>${totalCharge || ''}</td>
-                        <td>${patientCharge || ''}</td>
-                        <td>${totalPaid || ''}</td>
-                        <td>${insurancePaid || ''}</td>
-                        <td>${patientPaid || ''}</td>
-                        <td>${adjustment || ''}</td>
-                        <td>${totalBalance || ''}</td>
-                        <td>${insuranceBalance || ''}</td>
-                        <td>${balanceOwed || ''}</td>
-                    </tr>
-                `;
-                return;
-            }
-        }
+    const claimMatch = row[0].match(claimRegex);
+    if (claimMatch) {
+        const [
+            _,
+            claimNumber,
+            serviceDate,
+            procedureCode,
+            procedureDescription,
+            units,
+            unitRate,
+            totalCharge,
+            patientCharge,
+            totalPaid,
+            insurancePaid,
+            patientPaid,
+            adjustment,
+            totalBalance,
+            insuranceBalance,
+            balanceOwed
+        ] = claimMatch;
 
-        const serviceLineMatch = row[0]?.match(serviceLineRegex);
-        if (serviceLineMatch) {
-            const [
-                _,
-                serviceLine,
-                serviceDate,
-                procedureCode,
-                procedureDescription,
-                units,
-                unitRate,
-                totalCharge,
-                patientCharge,
-                totalPaid,
-                insurancePaid
-            ] = serviceLineMatch;
+        tableBody.innerHTML += `
+            <tr>
+                <td>${claimNumber || ''}</td>
+                <td>${formatDate(serviceDate) || ''}</td>
+                <td>${procedureCode ? `${procedureCode} - ${procedureDescription}` : ''}</td>
+                <td>${units || ''}</td>
+                <td>${unitRate || ''}</td>
+                <td>${totalCharge || ''}</td>
+                <td>${patientCharge || ''}</td>
+                <td>${totalPaid || ''}</td>
+                <td>${insurancePaid || ''}</td>
+                <td>${patientPaid || ''}</td>
+                <td>${adjustment || ''}</td>
+                <td>${totalBalance || ''}</td>
+                <td>${insuranceBalance || ''}</td>
+                <td>${balanceOwed || ''}</td>
+            </tr>
+        `;
+        // 🔥 ✅ No return here so the loop can continue
+    }
 
-            tableBody.innerHTML += `
-                <tr>
-                    <td>${serviceLine || ''}</td>
-                    <td>${formatDate(serviceDate) || ''}</td>
-                    <td>${procedureCode ? `${procedureCode} - ${procedureDescription}` : ''}</td>
-                    <td>${units || ''}</td>
-                    <td>${unitRate || ''}</td>
-                    <td>${totalCharge || ''}</td>
-                    <td>${patientCharge || ''}</td>
-                    <td>${totalPaid || ''}</td>
-                    <td>${insurancePaid || ''}</td>
-                    <td>${patientPaid || ''}</td>
-                    <td>${adjustment || ''}</td>
-                    <td>${totalBalance || ''}</td>
-                    <td>${insuranceBalance || ''}</td>
-                    <td>${balanceOwed || ''}</td>
-                </tr>
-            `;
-        }
-    });
+    const serviceLineMatch = row[0].match(serviceLineRegex);
+    if (serviceLineMatch) {
+        const [
+            _,
+            serviceLine,
+            serviceDate,
+            procedureCode,
+            procedureDescription,
+            units,
+            unitRate,
+            totalCharge,
+            patientCharge,
+            totalPaid,
+            insurancePaid,
+            patientPaid,
+            adjustment,
+            totalBalance,
+            insuranceBalance,
+            balanceOwed
+        ] = serviceLineMatch;
+
+        tableBody.innerHTML += `
+            <tr>
+                <td>${serviceLine || ''}</td>
+                <td>${formatDate(serviceDate) || ''}</td>
+                <td>${procedureCode ? `${procedureCode} - ${procedureDescription}` : ''}</td>
+                <td>${units || ''}</td>
+                <td>${unitRate || ''}</td>
+                <td>${totalCharge || ''}</td>
+                <td>${patientCharge || ''}</td>
+                <td>${totalPaid || ''}</td>
+                <td>${insurancePaid || ''}</td>
+                <td>${patientPaid || ''}</td>
+                <td>${adjustment || ''}</td>
+                <td>${totalBalance || ''}</td>
+                <td>${insuranceBalance || ''}</td>
+                <td>${balanceOwed || ''}</td>
+            </tr>
+        `;
+    }
+});
     // ✅ Display Client and Clinic Name
     document.getElementById('clientName').innerText = clientName;
     document.getElementById('clinicName').innerText = clinicName;
