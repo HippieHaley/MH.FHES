@@ -169,11 +169,11 @@ function extractData(rows) {
     rows.forEach(row => {
     if (!row[0]) return; // Skip empty rows
 
-    const claimMatch = row[0].match(claimRegex);
-    if (claimMatch) {
+    const match = row[0].match(claimRegex);
+    if (match) {
         const [
             _,
-            claimNumber,
+            claimOrServiceLine, // Handles both claims and service lines
             serviceDate,
             procedureCode,
             procedureDescription,
@@ -188,53 +188,11 @@ function extractData(rows) {
             totalBalance,
             insuranceBalance,
             balanceOwed
-        ] = claimMatch;
+        ] = match;
 
         tableBody.innerHTML += `
             <tr>
-                <td>${claimNumber || ''}</td>
-                <td>${formatDate(serviceDate) || ''}</td>
-                <td>${procedureCode ? `${procedureCode} - ${procedureDescription}` : ''}</td>
-                <td>${units || ''}</td>
-                <td>${unitRate || ''}</td>
-                <td>${totalCharge || ''}</td>
-                <td>${patientCharge || ''}</td>
-                <td>${totalPaid || ''}</td>
-                <td>${insurancePaid || ''}</td>
-                <td>${patientPaid || ''}</td>
-                <td>${adjustment || ''}</td>
-                <td>${totalBalance || ''}</td>
-                <td>${insuranceBalance || ''}</td>
-                <td>${balanceOwed || ''}</td>
-            </tr>
-        `;
-        // 🔥 ✅ No return here so the loop can continue
-    }
-
-    const serviceLineMatch = row[0].match(serviceLineRegex);
-    if (serviceLineMatch) {
-        const [
-            _,
-            serviceLine,
-            serviceDate,
-            procedureCode,
-            procedureDescription,
-            units,
-            unitRate,
-            totalCharge,
-            patientCharge,
-            totalPaid,
-            insurancePaid,
-            patientPaid,
-            adjustment,
-            totalBalance,
-            insuranceBalance,
-            balanceOwed
-        ] = serviceLineMatch;
-
-        tableBody.innerHTML += `
-            <tr>
-                <td>${serviceLine || ''}</td>
+                <td>${claimOrServiceLine || ''}</td>
                 <td>${formatDate(serviceDate) || ''}</td>
                 <td>${procedureCode ? `${procedureCode} - ${procedureDescription}` : ''}</td>
                 <td>${units || ''}</td>
@@ -252,6 +210,7 @@ function extractData(rows) {
         `;
     }
 });
+
     // ✅ Display Client and Clinic Name
     document.getElementById('clientName').innerText = clientName;
     document.getElementById('clinicName').innerText = clinicName;
