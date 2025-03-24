@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/docx@7.1.1/build/index.js"></script>
     <title>Excel Invoice Cleaner</title>
     <style>
         body {
@@ -43,6 +44,7 @@
 <h2>Upload Invoice File</h2>
 <input type="file" id="fileUpload" accept=".xlsx" />
 <button onclick="processFile()">Process File</button>
+<button onclick="downloadWord()">Download Word</button>
 
 <!-- Output Section -->
 <div id="printableDocument">
@@ -99,13 +101,9 @@ function processFile() {
 
         console.log("Extracted Data (Cleaned):", JSON.stringify(jsonData, null, 2));
 
-       // ✅ Extract client name and clinic name
-       clientName = jsonData[0]?.[0] || "[CLIENT NAME]";
-        clinicName = jsonData[1]?.[0] || "[CLINIC NAME]";
-
-        // ✅ Display Client and Clinic Name
+        // ✅ Extract client name only
+        clientName = jsonData[0]?.[0] || "[CLIENT NAME]";
         document.getElementById('clientName').innerText = clientName;
-        document.getElementById('clinicName').innerText = clinicName;
 
         // ✅ Extract client address (lines 9–12)
         let addressLines = jsonData.slice(8, 12).map(row => row[0] || "").filter(line => line);
@@ -228,7 +226,61 @@ function extractData(rows) {
             </tr>
         `;
     });
-    document.getElementById('totals').innerHTML = `<strong>Totals:</strong> $${totalBalanceOwed.toFixed(2)}`;
+}
+    function downloadWord() {
+    const { Document, Packer, Paragraph, Table, TableRow, TableCell, WidthType, TextRun } = window.docx;
+
+    const doc = new Document({
+        sections: [{
+            properties: {
+                page: {
+                    size: { orientation: 'landscape' } // ✅ Landscape Mode
+                }
+            },
+            children: [
+                new Paragraph({
+                    children: [
+                        new TextRun({ text: clientName, bold: true, size: 28 }),
+                    ],
+                }),
+                ...Array.from(document.querySelectorAll('#clientAddress p')).map(p =>
+                    new Paragraph({
+                        children: [new TextRun(p.innerText)]
+                    })
+                ),
+                new Table({
+                    width: { size: 100, type: WidthType.PERCENTAGE },
+                    rows: [
+                        new TableRow({
+                            children: Array.from(document.querySelectorAll('#dataTable thead th')).map(th =>
+                                new TableCell({
+                                    children: [new Paragraph(th.innerText)],
+                                })
+                            )
+                        }),
+                        ...sortedData.map(row =>
+                            new TableRow({
+                                children: row.map(cell =>
+                                    new TableCell({
+                                        children: [new Paragraph(cell || '')],
+                                    })
+                                )
+                            })
+                        )
+                    ],
+                }),
+            ],
+        }],
+    });
+
+    Packer.toBlob(doc).then(blob => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${clientName}_invoice.docx`;
+        link.click();
+        URL.revokeObjectURL(url);
+    });
 }
 </script>
 </body>
