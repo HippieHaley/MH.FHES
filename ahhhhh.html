@@ -72,11 +72,12 @@
             </tr>
         </thead>
         <tbody></tbody>
-    </table>
+        </table>
+    <tbody><h2>Disclaimer: if you have any questions please call 1234567</h2></tbody>
 <script>
 let sortedData = [];
 let clientName = "";
-let clinicName = "";
+let balanceOwed = 0; // ✅ Define globally
 
 function processFile() {
     const file = document.getElementById('fileUpload').files[0];
@@ -153,6 +154,7 @@ function formatDate(date) {
 function extractData(rows) {
     const tableBody = document.querySelector('#dataTable tbody');
     tableBody.innerHTML = '';
+    balanceOwed = 0; // ✅ Reset balance owed
 
     rows.forEach(row => {
         if (!row[0]) return;
@@ -160,22 +162,19 @@ function extractData(rows) {
         let isClaimRow = row[0].includes('CL-');
         let isServiceLineRow = row[0].includes('Service Line#');
 
-        // ✅ Improved regex to extract numeric value at the end as Units
         let fields = row[0].match(/(\d{2}\/\d{2}\/\d{4}|\d+|\$[\d,]+\.\d{2}|\w.*?)(?=\s+\d{2}\/|\s+\$|\s+\d|\s*$)/g) || [];
 
         let claimOrServiceLine = isClaimRow ? fields[0] : `${fields[0]} ${fields[1]}`;
         let serviceDate = isClaimRow ? fields[1] : fields[2];
 
-        // ✅ Null out procedure code and description for claim rows
         let procedureCode = isClaimRow ? null : fields[3];
         let procedureDescription = isClaimRow ? null : fields[4];
 
-        // ✅ If procedure ends with a number, extract it as Units
         if (!isClaimRow && procedureDescription) {
             let match = procedureDescription.match(/(.*?)(\d+)$/);
             if (match) {
-                procedureDescription = match[1].trim(); // Keep only the text part
-                fields[5] = match[2]; // Treat last number as Units
+                procedureDescription = match[1].trim();
+                fields[5] = match[2];
             }
         }
 
@@ -183,20 +182,16 @@ function extractData(rows) {
         let unitRate = isClaimRow ? null : fields[6];
         let totalCharge = isClaimRow ? fields[6] : (isServiceLineRow ? null : fields[7]);
 
-        // ✅ Fix shifting issue for numeric misalignment cases
         if (!isClaimRow) {
             if (!isNaN(parseFloat(units)) && fields[6] && !fields[6].startsWith('$')) {
-                console.log("Misaligned numeric data detected — shifting values...");
                 unitRate = fields[5];
                 totalCharge = fields[6];
             } else if (fields[5] && fields[5].startsWith('$')) {
-                console.log("Misaligned monetary data detected — shifting values...");
                 unitRate = fields[6];
                 totalCharge = fields[7];
             }
         }
 
-        // ✅ NULL out all fields to the right of total charge for service lines
         let patientCharge = isClaimRow ? fields[7] : (isServiceLineRow ? null : fields[8]);
         let totalPaid = isClaimRow ? fields[8] : (isServiceLineRow ? null : fields[9]);
         let insurancePaid = isClaimRow ? fields[9] : (isServiceLineRow ? null : fields[10]);
@@ -204,9 +199,12 @@ function extractData(rows) {
         let adjustment = isClaimRow ? fields[11] : (isServiceLineRow ? null : fields[12]);
         let totalBalance = isClaimRow ? fields[12] : (isServiceLineRow ? null : fields[13]);
         let insuranceBalance = isClaimRow ? fields[13] : (isServiceLineRow ? null : fields[14]);
-        let balanceOwed = isClaimRow ? fields[14] : (isServiceLineRow ? null : fields[15]);
+        let balanceOwedRow = isClaimRow ? fields[14] : (isServiceLineRow ? null : fields[15]);
 
-        // ✅ Build row in table
+        if (balanceOwedRow) {
+            balanceOwed += parseFloat(balanceOwedRow.replace('$', '').replace(',', '')) || 0;
+        }
+
         tableBody.innerHTML += `
             <tr>
                 <td>${claimOrServiceLine || ''}</td>
@@ -222,57 +220,149 @@ function extractData(rows) {
                 <td>${adjustment || ''}</td>
                 <td>${totalBalance || ''}</td>
                 <td>${insuranceBalance || ''}</td>
-                <td>${balanceOwed || ''}</td>
+                <td>${balanceOwedRow || ''}</td>
             </tr>
         `;
     });
 }
-    function downloadWord() {
-    const { Document, Packer, Paragraph, Table, TableRow, TableCell, WidthType, TextRun } = window.docx;
+
+function downloadWord() {
+    const { Document, Packer, Paragraph, Table, TableRow, TableCell, WidthType, TextRun, AlignmentType, BorderStyle } = window.docx;
+
+    // ✅ Get current date
+    const currentDate = new Date().toLocaleDateString('en-US', {
+        year: 'numeric', month: '2-digit', day: '2-digit'
+    });
+
+    // ✅ Table Header (Extract directly from the HTML table)
+    const tableHeader = new TableRow({
+        children: Array.from(document.querySelectorAll('#dataTable thead th')).map(th =>
+            new TableCell({
+                children: [
+                    new Paragraph({
+                        children: [new TextRun({ text: th.innerText, bold: true, size: 18 })],
+                        alignment: AlignmentType.CENTER
+                    }),
+                ],
+                width: { size: 100 / 10, type: WidthType.PERCENTAGE },
+                shading: { fill: 'D3D3D3' } // ✅ Light gray shading for header
+            })
+        )
+    });
+
+    // ✅ Table Body (Extract row-by-row from HTML)
+    const tableBody = Array.from(document.querySelectorAll('#dataTable tbody tr')).map(row =>
+        new TableRow({
+            children: Array.from(row.querySelectorAll('td')).map(cell =>
+                new TableCell({
+                    children: [
+                        new Paragraph({
+                            children: [new TextRun({ text: cell.innerText || '', size: 18 })],
+                            alignment: AlignmentType.CENTER
+                        }),
+                    ],
+                    width: { size: 100 / 10, type: WidthType.PERCENTAGE }
+                })
+            )
+        })
+    );
+
+    // ✅ Total Row (At the bottom of the table)
+    const totalRow = new TableRow({
+        children: [
+            new TableCell({
+                children: [new Paragraph({ children: [new TextRun({ text: "Total", bold: true, size: 18 })] })],
+                columnSpan: 9,
+                shading: { fill: 'D3D3D3' }
+            }),
+            new TableCell({
+                children: [new Paragraph({ children: [new TextRun({ text: `$${balanceOwed.toFixed(2)}`, bold: true, size: 18 })] })],
+                width: { size: 100 / 10, type: WidthType.PERCENTAGE },
+                shading: { fill: 'D3D3D3' }
+            })
+        ]
+    });
 
     const doc = new Document({
         sections: [{
             properties: {
                 page: {
-                    size: { orientation: 'landscape' } // ✅ Landscape Mode
+                    size: { orientation: 'landscape' },
+                    margin: { top: 300, bottom: 300, left: 300, right: 300 } // ✅ Narrow margins
                 }
             },
             children: [
+                // ✅ Statement Date (Left aligned)
                 new Paragraph({
+                    alignment: AlignmentType.LEFT,
                     children: [
-                        new TextRun({ text: clientName, bold: true, size: 28 }),
+                        new TextRun({
+                            text: `Statement Date: ${currentDate}`, 
+                            bold: true,
+                            size: 22
+                        }),
                     ],
                 }),
-                ...Array.from(document.querySelectorAll('#clientAddress p')).map(p =>
-                    new Paragraph({
-                        children: [new TextRun(p.innerText)]
-                    })
-                ),
+
+                // ✅ PAY THIS AMOUNT (Boxed and centered)
                 new Table({
-                    width: { size: 100, type: WidthType.PERCENTAGE },
+                    width: { size: 50, type: WidthType.PERCENTAGE },
                     rows: [
                         new TableRow({
-                            children: Array.from(document.querySelectorAll('#dataTable thead th')).map(th =>
+                            children: [
                                 new TableCell({
-                                    children: [new Paragraph(th.innerText)],
-                                })
-                            )
+                                    children: [
+                                        new Paragraph({
+                                            alignment: AlignmentType.CENTER,
+                                            children: [
+                                                new TextRun({
+                                                    text: `PAY THIS AMOUNT: $${balanceOwed.toFixed(2)}`,
+                                                    bold: true,
+                                                    size: 24
+                                                }),
+                                            ],
+                                        }),
+                                    ],
+                                    borders: {
+                                        top: { style: BorderStyle.SINGLE, size: 6 },
+                                        bottom: { style: BorderStyle.SINGLE, size: 6 },
+                                        left: { style: BorderStyle.SINGLE, size: 6 },
+                                        right: { style: BorderStyle.SINGLE, size: 6 }
+                                    },
+                                }),
+                            ],
                         }),
-                        ...sortedData.map(row =>
-                            new TableRow({
-                                children: row.map(cell =>
-                                    new TableCell({
-                                        children: [new Paragraph(cell || '')],
-                                    })
-                                )
-                            })
-                        )
                     ],
+                }),
+
+                // ✅ Client Info Section (EXTRACTED DATA)
+                new Paragraph({
+                    children: [
+                        new TextRun({
+                            text: `Client: ${clientName || '________________________'}`, // ✅ Pull from extracted data
+                            size: 22
+                        }),
+                    ],
+                }),
+                new Paragraph({
+                    children: [
+                        new TextRun({
+                            text: `Client Address: ${document.getElementById('clientAddress').innerText || '____________________________'}`, // ✅ Pull from extracted data
+                            size: 22
+                        }),
+                    ],
+                }),
+
+                // ✅ Table with header, body, and total row
+                new Table({
+                    width: { size: 100, type: WidthType.PERCENTAGE },
+                    rows: [tableHeader, ...tableBody, totalRow],
                 }),
             ],
         }],
     });
 
+    // ✅ Create and download the Word file
     Packer.toBlob(doc).then(blob => {
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
