@@ -78,6 +78,8 @@
 let sortedData = [];
 let clientName = "";
 let balanceOwed = 0; // ✅ Define globally
+let formattedAddressLines = []; // ✅ Global address storage
+
 
 function processFile() {
     const file = document.getElementById('fileUpload').files[0];
@@ -96,8 +98,6 @@ function processFile() {
 let clientNameRow = jsonData.find(row => row[0]?.includes("Client Name(s):"));
 clientName = clientNameRow ? clientNameRow[0].split("Client Name(s):")[1].trim().split(" (")[0] : "[CLIENT NAME]";
 document.getElementById('clientName').innerText = clientName;
-// Original extraction:
-clientName = clientNameRow ? clientNameRow[0].split("Client Name(s):")[1].trim().split(" (")[0] : "[CLIENT NAME]";
 
 // ✅ Reformat clientName to "Firstname Lastname"
 if (clientName.includes(',')) {
@@ -107,18 +107,24 @@ if (clientName.includes(',')) {
 
 document.getElementById('clientName').innerText = clientName;
 
-// Extract Client Address (directly below 'Amount Enclosed' section)
-let addressStartIndex = jsonData.findIndex(row => row[0]?.includes("Amount Enclosed:")) + 2; // Skip the client's name line
-let addressLines = jsonData.slice(addressStartIndex, addressStartIndex + 3)
+// Extract Client Address accurately (starting after client's name)
+let addressStartIndex = jsonData.findIndex(row => row[0]?.includes("Amount Enclosed:")) + 2;
+let rawAddressLines = jsonData.slice(addressStartIndex, addressStartIndex + 3)
     .map(row => row[0]?.replace("Family Health Education Services", "")
                        .replace("930 North 10th St", "")
                        .trim())
     .filter(line => line && line.length > 0 && !line.includes(clientName));
 
-// Populate Address
-document.getElementById('clientAddress').innerHTML = addressLines
-    .map(line => `<p>${line}</p>`)
-    .join("");
+// Properly define streetLine and cityStateZipLine
+formattedAddressLines = rawAddressLines; // Update global variable
+let streetLine = formattedAddressLines[0] || '';
+let cityStateZipLine = formattedAddressLines[1] || '';
+
+// Populate HTML clearly
+document.getElementById('clientAddress').innerHTML = `
+    <p>${streetLine}</p>
+    <p>${cityStateZipLine}</p>
+`;
 
         // ✅ Clean up whitespace and hidden characters
         jsonData = jsonData.map(row => row.map(cell => 
@@ -340,25 +346,24 @@ function downloadWord() {
                         }),
                     ],
                 }),
-
-                // ✅ Client Info Section (EXTRACTED DATA)
-                new Paragraph({
-                    children: [
-                        new TextRun({
-                            text: ` ${clientName || '________________________'}`, // ✅ Pull from extracted data
-                            size: 22
-                        }),
-                    ],
-                }),
-                new Paragraph({
-                    children: [
-                        new TextRun({
-                            text: document.getElementById('clientAddress').innerText || '____________________________', // ✅ Pull from extracted data
-                            size: 22
-                        }),
-                    ],
-                }),
-
+                // Client Name as one paragraph
+new Paragraph({
+    children: [
+        new TextRun({ text: clientName || '________________________', size: 22 }),
+    ],
+}),
+// Street address as a separate paragraph
+new Paragraph({
+    children: [
+        new TextRun({ text: formattedAddressLines[0] || '________________________', size: 22 }),
+    ],
+}),
+// City, state, and zip as a separate paragraph
+new Paragraph({
+    children: [
+        new TextRun({ text: formattedAddressLines[1] || '', size: 22 }),
+    ],
+}),
                 // ✅ Table with header, body, and total row
                 new Table({
                     width: { size: 100, type: WidthType.PERCENTAGE },
