@@ -306,7 +306,7 @@ function downloadWord() {
             children: [
                 // ✅ Statement Date (Left aligned)
                 new Paragraph({
-                    alignment: AlignmentType.LEFT,
+                    alignment: AlignmentType.CENTER,
                     children: [
                         new TextRun({
                             text: `Statement Date: ${currentDate}`, 
@@ -316,36 +316,35 @@ function downloadWord() {
                     ],
                 }),
 
-                // ✅ PAY THIS AMOUNT (Boxed and centered)
                 new Table({
-                    width: { size: 50, type: WidthType.PERCENTAGE },
-                    rows: [
-                        new TableRow({
+    alignment: AlignmentType.CENTER, // explicitly center the entire table
+    width: { size: 50, type: WidthType.PERCENTAGE },
+    rows: [
+        new TableRow({
+            children: [
+                new TableCell({
+                    children: [
+                        new Paragraph({
+                            alignment: AlignmentType.CENTER, // explicitly center text inside the table
                             children: [
-                                new TableCell({
-                                    children: [
-                                        new Paragraph({
-                                            alignment: AlignmentType.CENTER,
-                                            children: [
-                                                new TextRun({
-                                                    text: `PAY THIS AMOUNT: $${balanceOwed.toFixed(2)}`,
-                                                    bold: true,
-                                                    size: 24
-                                                }),
-                                            ],
-                                        }),
-                                    ],
-                                    borders: {
-                                        top: { style: BorderStyle.SINGLE, size: 6 },
-                                        bottom: { style: BorderStyle.SINGLE, size: 6 },
-                                        left: { style: BorderStyle.SINGLE, size: 6 },
-                                        right: { style: BorderStyle.SINGLE, size: 6 }
-                                    },
+                                new TextRun({
+                                    text: `PAY THIS AMOUNT: $${balanceOwed.toFixed(2)}`,
+                                    bold: true,
+                                    size: 24
                                 }),
                             ],
                         }),
                     ],
+                    borders: {
+                        top: { style: BorderStyle.SINGLE, size: 6 },
+                        bottom: { style: BorderStyle.SINGLE, size: 6 },
+                        left: { style: BorderStyle.SINGLE, size: 6 },
+                        right: { style: BorderStyle.SINGLE, size: 6 }
+                    },
                 }),
+            ],
+        }),
+    ],}),
                 // Client Name as one paragraph
 new Paragraph({
     children: [
