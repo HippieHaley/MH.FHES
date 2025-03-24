@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://unpkg.com/docx@7.1.1/build/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docx@7.5.0/build/index.js"></script>
     <title>Excel Invoice Cleaner</title>
     <style>
         body {
@@ -36,6 +36,14 @@
         }
         button:hover {
             background-color: #45a049;
+        }
+        .window {
+            position: absolute;
+            top: 120px;
+            left: 300px;
+            width: 250px;
+            height: 100px;
+            border: 2px dashed #888;
         }
     </style>
 </head>
@@ -73,7 +81,7 @@
         </thead>
         <tbody></tbody>
         </table>
-    <tbody><h2>Disclaimer: if you have any questions please call 1234567</h2></tbody>
+    <h2>Disclaimer: if you have any questions please call 1234567</h2>
 <script>
 let sortedData = [];
 let clientName = "";
@@ -237,16 +245,13 @@ function extractData(rows) {
         `;
     });
 }
-
 function downloadWord() {
-    const { Document, Packer, Paragraph, Table, TableRow, TableCell, WidthType, TextRun, AlignmentType, BorderStyle } = window.docx;
+    const { Document, Packer, Paragraph, Table, TableRow, TableCell, WidthType, TextRun, AlignmentType, BorderStyle, PageOrientation } = docx;
 
-    // ✅ Get current date
     const currentDate = new Date().toLocaleDateString('en-US', {
         year: 'numeric', month: '2-digit', day: '2-digit'
     });
 
-    // ✅ Table Header (Extract directly from the HTML table)
     const tableHeader = new TableRow({
         children: Array.from(document.querySelectorAll('#dataTable thead th')).map(th =>
             new TableCell({
@@ -256,13 +261,11 @@ function downloadWord() {
                         alignment: AlignmentType.CENTER
                     }),
                 ],
-                width: { size: 100 / 10, type: WidthType.PERCENTAGE },
-                shading: { fill: 'D3D3D3' } // ✅ Light gray shading for header
+                shading: { fill: 'D3D3D3' }
             })
         )
     });
 
-    // ✅ Table Body (Extract row-by-row from HTML)
     const tableBody = Array.from(document.querySelectorAll('#dataTable tbody tr')).map(row =>
         new TableRow({
             children: Array.from(row.querySelectorAll('td')).map(cell =>
@@ -273,23 +276,23 @@ function downloadWord() {
                             alignment: AlignmentType.CENTER
                         }),
                     ],
-                    width: { size: 100 / 10, type: WidthType.PERCENTAGE }
                 })
             )
         })
     );
 
-    // ✅ Total Row (At the bottom of the table)
     const totalRow = new TableRow({
         children: [
+            ...Array(13).fill(new TableCell({
+                children: [new Paragraph({ text: "" })],
+                shading: { fill: 'D3D3D3' }
+            })),
             new TableCell({
                 children: [new Paragraph({ children: [new TextRun({ text: "Total", bold: true, size: 18 })] })],
-                columnSpan: 9,
                 shading: { fill: 'D3D3D3' }
             }),
             new TableCell({
                 children: [new Paragraph({ children: [new TextRun({ text: `$${balanceOwed.toFixed(2)}`, bold: true, size: 18 })] })],
-                width: { size: 100 / 10, type: WidthType.PERCENTAGE },
                 shading: { fill: 'D3D3D3' }
             })
         ]
@@ -299,71 +302,72 @@ function downloadWord() {
         sections: [{
             properties: {
                 page: {
-                    size: { orientation: 'landscape' },
-                    margin: { top: 300, bottom: 300, left: 300, right: 300 } // ✅ Narrow margins
-                }
+                    size: { orientation: PageOrientation.PORTRAIT },
+                    margin: { top: 360, bottom: 360, left: 360, right: 360 } // ≈0.25-inch margins (minimal, printer-friendly)
+        }
             },
             children: [
-                // ✅ Statement Date (Left aligned)
+                // Statement Date centered
                 new Paragraph({
                     alignment: AlignmentType.CENTER,
                     children: [
-                        new TextRun({
-                            text: `Statement Date: ${currentDate}`, 
-                            bold: true,
-                            size: 22
-                        }),
+                        new TextRun({ text: `Statement Date: ${currentDate}`, bold: true, size: 22 }),
+                    ],
+                    spacing: { after: 200 }
+                }),
+
+                // PAY THIS AMOUNT centered
+                new Table({
+                    alignment: AlignmentType.CENTER,
+                    width: { size: 50, type: WidthType.PERCENTAGE },
+                    rows: [new TableRow({
+                        children: [new TableCell({
+                            children: [new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({ text: `PAY THIS AMOUNT: $${balanceOwed.toFixed(2)}`, bold: true, size: 24 }),
+                                ],
+                            })],
+                            borders: {
+                                top: { style: BorderStyle.SINGLE, size: 6 },
+                                bottom: { style: BorderStyle.SINGLE, size: 6 },
+                                left: { style: BorderStyle.SINGLE, size: 6 },
+                                right: { style: BorderStyle.SINGLE, size: 6 }
+                            },
+                        })],
+                    })],
+                }),
+                // Client Name bold, size 12
+            new Paragraph({
+                    alignment: AlignmentType.LEFT,
+                    spacing: { after: 160 },
+                    indent: { left: 600 },
+                    children: [
+                    new TextRun({ text: clientName, size: 24, bold: true }),
                     ],
                 }),
 
-                new Table({
-    alignment: AlignmentType.CENTER, // explicitly center the entire table
-    width: { size: 50, type: WidthType.PERCENTAGE },
-    rows: [
-        new TableRow({
-            children: [
-                new TableCell({
+                // Street Address bold, size 12
+                new Paragraph({
+                    alignment: AlignmentType.LEFT,
+                    spacing: { after: 160 },
+                    indent: { left: 600 },
                     children: [
-                        new Paragraph({
-                            alignment: AlignmentType.CENTER, // explicitly center text inside the table
-                            children: [
-                                new TextRun({
-                                    text: `PAY THIS AMOUNT: $${balanceOwed.toFixed(2)}`,
-                                    bold: true,
-                                    size: 24
-                                }),
-                            ],
-                        }),
+                        new TextRun({ text: formattedAddressLines[0], size: 24, bold: true }),
                     ],
-                    borders: {
-                        top: { style: BorderStyle.SINGLE, size: 6 },
-                        bottom: { style: BorderStyle.SINGLE, size: 6 },
-                        left: { style: BorderStyle.SINGLE, size: 6 },
-                        right: { style: BorderStyle.SINGLE, size: 6 }
-                    },
                 }),
-            ],
-        }),
-    ],}),
-                // Client Name as one paragraph
-new Paragraph({
-    children: [
-        new TextRun({ text: clientName || '________________________', size: 22 }),
-    ],
-}),
-// Street address as a separate paragraph
-new Paragraph({
-    children: [
-        new TextRun({ text: formattedAddressLines[0] || '________________________', size: 22 }),
-    ],
-}),
-// City, state, and zip as a separate paragraph
-new Paragraph({
-    children: [
-        new TextRun({ text: formattedAddressLines[1] || '', size: 22 }),
-    ],
-}),
-                // ✅ Table with header, body, and total row
+
+                // City, State, ZIP bold, size 12
+                new Paragraph({
+                    alignment: AlignmentType.LEFT,
+                    spacing: { after: 160 },
+                    indent: { left: 600 },
+                    children: [
+                        new TextRun({ text: formattedAddressLines[1], size: 24, bold: true }),
+                    ],
+                }),
+
+                // Invoice Table
                 new Table({
                     width: { size: 100, type: WidthType.PERCENTAGE },
                     rows: [tableHeader, ...tableBody, totalRow],
@@ -372,7 +376,6 @@ new Paragraph({
         }],
     });
 
-    // ✅ Create and download the Word file
     Packer.toBlob(doc).then(blob => {
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
