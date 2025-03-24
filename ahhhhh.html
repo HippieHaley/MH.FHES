@@ -92,6 +92,33 @@ function processFile() {
         const workbook = XLSX.read(data, { type: 'array' });
         const sheetName = workbook.SheetNames[0];
         let jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
+        // Extract Client Name correctly from row containing "Client Name(s):"
+let clientNameRow = jsonData.find(row => row[0]?.includes("Client Name(s):"));
+clientName = clientNameRow ? clientNameRow[0].split("Client Name(s):")[1].trim().split(" (")[0] : "[CLIENT NAME]";
+document.getElementById('clientName').innerText = clientName;
+// Original extraction:
+clientName = clientNameRow ? clientNameRow[0].split("Client Name(s):")[1].trim().split(" (")[0] : "[CLIENT NAME]";
+
+// ✅ Reformat clientName to "Firstname Lastname"
+if (clientName.includes(',')) {
+    let parts = clientName.split(',');
+    clientName = `${parts[1].trim()} ${parts[0].trim()}`;
+}
+
+document.getElementById('clientName').innerText = clientName;
+
+// Extract Client Address (directly below 'Amount Enclosed' section)
+let addressStartIndex = jsonData.findIndex(row => row[0]?.includes("Amount Enclosed:")) + 2; // Skip the client's name line
+let addressLines = jsonData.slice(addressStartIndex, addressStartIndex + 3)
+    .map(row => row[0]?.replace("Family Health Education Services", "")
+                       .replace("930 North 10th St", "")
+                       .trim())
+    .filter(line => line && line.length > 0 && !line.includes(clientName));
+
+// Populate Address
+document.getElementById('clientAddress').innerHTML = addressLines
+    .map(line => `<p>${line}</p>`)
+    .join("");
 
         // ✅ Clean up whitespace and hidden characters
         jsonData = jsonData.map(row => row.map(cell => 
@@ -101,27 +128,6 @@ function processFile() {
         ));
 
         console.log("Extracted Data (Cleaned):", JSON.stringify(jsonData, null, 2));
-
-        // ✅ Extract client name only
-        clientName = jsonData[0]?.[0] || "[CLIENT NAME]";
-        document.getElementById('clientName').innerText = clientName;
-
-        // ✅ Extract client address (lines 9–12)
-        let addressLines = jsonData.slice(8, 12).map(row => row[0] || "").filter(line => line);
-
-        // ✅ Remove unwanted phrases
-        addressLines = addressLines.map(line =>
-            line
-                .replace("Family Health Education Services", "")
-                .replace("930 North 10th St", "")
-                .trim()
-        ).filter(line => line);
-
-        // ✅ Populate address placeholders
-        document.getElementById('clientAddress').innerHTML = addressLines
-            .map(line => `<p>${line}</p>`)
-            .join("");
-
         // ✅ Find the starting row based on actual content
         const tableStartIndex = jsonData.findIndex(row =>
             row[0] &&
@@ -339,7 +345,7 @@ function downloadWord() {
                 new Paragraph({
                     children: [
                         new TextRun({
-                            text: `Client: ${clientName || '________________________'}`, // ✅ Pull from extracted data
+                            text: ` ${clientName || '________________________'}`, // ✅ Pull from extracted data
                             size: 22
                         }),
                     ],
@@ -347,7 +353,7 @@ function downloadWord() {
                 new Paragraph({
                     children: [
                         new TextRun({
-                            text: `Client Address: ${document.getElementById('clientAddress').innerText || '____________________________'}`, // ✅ Pull from extracted data
+                            text: document.getElementById('clientAddress').innerText || '____________________________', // ✅ Pull from extracted data
                             size: 22
                         }),
                     ],

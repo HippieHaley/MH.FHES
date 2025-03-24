@@ -64,31 +64,44 @@
    <input type="file" id="fileInput" accept="application/pdf" />
    <button id="exportExcelBtn" onclick="exportToExcel()" disabled>Export to Excel</button>
  
- <script>
-   let extractedData = [];
-   let sheets = [];
-   let currentSheetData = [];
- 
-   document.getElementById('fileInput').addEventListener('change', async (event) => {
-     const file = event.target.files[0];
-     if (file) {
-       try {
-         const arrayBuffer = await file.arrayBuffer();
-         const pdfData = new Uint8Array(arrayBuffer);
- 
-         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
-         const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
- 
-         extractedData = [];
-         sheets = [];
-         currentSheetData = [];
- 
-         for (let i = 1; i <= pdf.numPages; i++) {
-           const page = await pdf.getPage(i);
-           const textContent = await page.getTextContent();
- 
-           let line = '';
-           let lastY = null;
+   <script>
+let sheets = [];
+
+async function extractClientInfo(lines) {
+  let clientInfo = {};
+
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].includes(",")) { // Assume lastname, firstname format
+      clientInfo.name = lines[i].trim();
+      clientInfo.address = lines.slice(i + 1, i + 4).join('<br>').trim();
+      break;
+    }
+  }
+
+  document.getElementById('clientInfo').innerHTML = `<strong>Client Name:</strong><br>${clientInfo.name}<br><br><strong>Address:</strong><br>${clientInfo.address}`;
+}
+
+
+document.getElementById('fileInput').addEventListener('change', async (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdfData = new Uint8Array(arrayBuffer);
+
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+      const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
+
+      sheets = [];
+      let currentSheetData = [];
+      let firstPageLines = [];
+
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const textContent = await page.getTextContent();
+
+        let line = '';
+        let lastY = null;
  
            textContent.items.forEach((item) => {
              if (lastY !== null && Math.abs(item.transform[5] - lastY) > 10) {
