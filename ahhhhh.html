@@ -37,14 +37,6 @@
         button:hover {
             background-color: #45a049;
         }
-        .window {
-            position: absolute;
-            top: 120px;
-            left: 300px;
-            width: 250px;
-            height: 100px;
-            border: 2px dashed #888;
-        }
     </style>
 </head>
 <body>
@@ -53,9 +45,6 @@
 <input type="file" id="fileUpload" accept=".xlsx" />
 <button onclick="processFile()">Process File</button>
 <button onclick="downloadWord()">Download Word</button>
-
-<!-- Output Section -->
-<div id="printableDocument">
     <h2 id="clientName"></h2>
     <h3 id="clinicName"></h3>
     <div id="clientAddress">
@@ -309,6 +298,10 @@ function downloadWord() {
             children: [
                 // Statement Date centered
                 new Paragraph({
+                    alignment: AlignmentType.LEFT,
+                    spacing: { after: 540 }, // 
+                }),
+                new Paragraph({
                     alignment: AlignmentType.CENTER,
                     children: [
                         new TextRun({ text: `Statement Date: ${currentDate}`, bold: true, size: 22 }),
@@ -337,6 +330,12 @@ function downloadWord() {
                         })],
                     })],
                 }),
+                // Add spacing of 3/8 of an inch before the client name
+new Paragraph({
+    alignment: AlignmentType.LEFT,
+    spacing: { after: 540 }, // 3/8 inch = 540 twips
+}),
+
                 // Client Name bold, size 12
             new Paragraph({
                     alignment: AlignmentType.LEFT,
@@ -366,7 +365,11 @@ function downloadWord() {
                         new TextRun({ text: formattedAddressLines[1], size: 24, bold: true }),
                     ],
                 }),
-
+// Add spacing of 0.4 inches before the client name
+new Paragraph({
+                    alignment: AlignmentType.LEFT,
+                    spacing: { after: 540 }, // 
+                }),
                 // Invoice Table
                 new Table({
                     width: { size: 100, type: WidthType.PERCENTAGE },
