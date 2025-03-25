@@ -81,74 +81,62 @@ function processFile() {
         alert("Please select a file first.");
         return;
     }
+
     const reader = new FileReader();
     reader.onload = (e) => {
         const data = new Uint8Array(e.target.result);
         const workbook = XLSX.read(data, { type: 'array' });
-        const sheetName = workbook.SheetNames[0];
-        let jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
-        // Extract Client Name correctly from row containing "Client Name(s):"
-let clientNameRow = jsonData.find(row => row[0]?.includes("Client Name(s):"));
-clientName = clientNameRow ? clientNameRow[0].split("Client Name(s):")[1].trim().split(" (")[0] : "[CLIENT NAME]";
-document.getElementById('clientName').innerText = clientName;
 
-// ✅ Reformat clientName to "Firstname Lastname"
-if (clientName.includes(',')) {
-    let parts = clientName.split(',');
-    clientName = `${parts[1].trim()} ${parts[0].trim()}`;
-}
-document.getElementById('clientName').innerText = clientName;
-// Extract Client Address accurately (starting after client's name)
-let addressStartIndex = jsonData.findIndex(row => row[0]?.includes("Amount Enclosed:")) + 3;
-let rawAddressLines = jsonData.slice(addressStartIndex, addressStartIndex + 3)
-    .map(row => row[0]?.replace("Family Health Education Services", "")
-                       .replace("930 North 10th St", "")
-                       .trim())
-    .filter(line => line && line.length > 0 && !line.includes(clientName));
+        window.clientDocs = []; // store per-client extracted data
 
-// Properly define streetLine and cityStateZipLine
-formattedAddressLines = rawAddressLines; // Update global variable
-let streetLine = formattedAddressLines[0] || '';
-let cityStateZipLine = formattedAddressLines[1] || '';
+        workbook.SheetNames.forEach(sheetName => {
+            const sheet = workbook.Sheets[sheetName];
+            let jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-// Populate HTML clearly
-document.getElementById('clientAddress').innerHTML = `
-    <p>${streetLine}</p>
-    <p>${cityStateZipLine}</p>
-`;
+            // --- Extract client name ---
+            let clientNameRow = jsonData.find(row => row[0]?.includes("Client Name(s):"));
+            let rawClientName = clientNameRow ? clientNameRow[0].split("Client Name(s):")[1].trim().split(" (")[0] : "[CLIENT NAME]";
+            if (rawClientName.includes(',')) {
+                let parts = rawClientName.split(',');
+                rawClientName = `${parts[1].trim()} ${parts[0].trim()}`;
+            }
 
-        // ✅ Clean up whitespace and hidden characters
-        jsonData = jsonData.map(row => row.map(cell => 
-            typeof cell === 'string' 
-                ? cell.replace(/[\r\n\t]+/g, ' ').trim() 
-                : cell
-        ));
+            // --- Extract address ---
+            let addressStartIndex = jsonData.findIndex(row => row[0]?.includes("Amount Enclosed:")) + 3;
+            let rawAddressLines = jsonData.slice(addressStartIndex, addressStartIndex + 3)
+                .map(row => row[0]?.replace("Family Health Education Services", "")
+                                   .replace("930 North 10th St", "")
+                                   .trim())
+                .filter(line => line && line.length > 0 && !line.includes(rawClientName));
+            let streetLine = rawAddressLines[0] || '';
+            let cityStateZipLine = rawAddressLines[1] || '';
 
-        console.log("Extracted Data (Cleaned):", JSON.stringify(jsonData, null, 2));
-        // ✅ Find the starting row based on actual content
-        const tableStartIndex = jsonData.findIndex(row =>
-            row[0] &&
-            (row[0].includes('CL-') || row[0].includes('Service Line#'))
-        );
-
-        if (tableStartIndex === -1) {
-            alert("Invalid file format. Could not find claim numbers or service lines.");
-            return;
-        }
-
-        // ✅ Extract all valid rows
-        sortedData = jsonData
-            .slice(tableStartIndex)
-            .filter(row => row[0] &&
+            // --- Extract table data ---
+            const tableStartIndex = jsonData.findIndex(row =>
+                row[0] &&
                 (row[0].includes('CL-') || row[0].includes('Service Line#'))
             );
+            if (tableStartIndex === -1) return;
 
-        extractData(sortedData);
+            let sortedRows = jsonData
+                .slice(tableStartIndex)
+                .filter(row => row[0] &&
+                    (row[0].includes('CL-') || row[0].includes('Service Line#'))
+                );
+
+            // Push per-client data for Word export
+            window.clientDocs.push({
+                clientName: rawClientName,
+                address: [streetLine, cityStateZipLine],
+                data: sortedRows
+            });
+        });
+
+        alert("Upload complete. Now click 'Download Word' to export all clients.");
     };
 
     reader.readAsArrayBuffer(file);
 }
-
 function formatDate(date) {
     if (!date) return '';
     return date.replace(/-/g, '/'); 
