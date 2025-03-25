@@ -40,7 +40,6 @@
     </style>
 </head>
 <body>
-
 <h2>Upload Invoice File</h2>
 <input type="file" id="fileUpload" accept=".xlsx" />
 <button onclick="processFile()">Process File</button>
@@ -76,15 +75,12 @@ let sortedData = [];
 let clientName = "";
 let balanceOwed = 0; // ✅ Define globally
 let formattedAddressLines = []; // ✅ Global address storage
-
-
 function processFile() {
     const file = document.getElementById('fileUpload').files[0];
     if (!file) {
         alert("Please select a file first.");
         return;
     }
-
     const reader = new FileReader();
     reader.onload = (e) => {
         const data = new Uint8Array(e.target.result);
@@ -101,9 +97,7 @@ if (clientName.includes(',')) {
     let parts = clientName.split(',');
     clientName = `${parts[1].trim()} ${parts[0].trim()}`;
 }
-
 document.getElementById('clientName').innerText = clientName;
-
 // Extract Client Address accurately (starting after client's name)
 let addressStartIndex = jsonData.findIndex(row => row[0]?.includes("Amount Enclosed:")) + 3;
 let rawAddressLines = jsonData.slice(addressStartIndex, addressStartIndex + 3)
@@ -159,7 +153,6 @@ function formatDate(date) {
     if (!date) return '';
     return date.replace(/-/g, '/'); 
 }
-
 function extractData(rows) {
     const tableBody = document.querySelector('#dataTable tbody');
     tableBody.innerHTML = '';
@@ -218,18 +211,20 @@ function extractData(rows) {
             <tr>
                 <td>${claimOrServiceLine || ''}</td>
                 <td>${formatDate(serviceDate) || ''}</td>
-                <td>${procedureCode ? `${procedureCode} - ${procedureDescription}` : ''}</td>
-                <td>${units || ''}</td>
-                <td>${unitRate || ''}</td>
-                <td>${totalCharge || ''}</td>
-                <td>${patientCharge || ''}</td>
-                <td>${totalPaid || ''}</td>
-                <td>${insurancePaid || ''}</td>
-                <td>${patientPaid || ''}</td>
-                <td>${adjustment || ''}</td>
-                <td>${totalBalance || ''}</td>
-                <td>${insuranceBalance || ''}</td>
-                <td>${balanceOwedRow || ''}</td>
+                <td style="color: ${procedureCode ? 'black' : 'white'};">
+                    ${procedureCode ? `${procedureCode} - ${procedureDescription}` : ''}
+                </td>
+                <td style="color: ${units ? 'black' : 'white'};">${units || ''}</td>
+                <td style="color: ${unitRate ? 'black' : 'white'};">${unitRate || ''}</td>
+                <td style="color: ${totalCharge ? 'black' : 'white'};">${totalCharge || ''}</td>
+                <td style="color: ${patientCharge ? 'black' : 'white'};">${patientCharge || ''}</td>
+                <td style="color: ${totalPaid ? 'black' : 'white'};">${totalPaid || ''}</td>
+                <td style="color: ${insurancePaid ? 'black' : 'white'};">${insurancePaid || ''}</td>
+                <td style="color: ${patientPaid ? 'black' : 'white'};">${patientPaid || ''}</td>
+                <td style="color: ${adjustment ? 'black' : 'white'};">${adjustment || ''}</td>
+                <td style="color: ${totalBalance ? 'black' : 'white'};">${totalBalance || ''}</td>
+                <td style="color: ${insuranceBalance ? 'black' : 'white'};">${insuranceBalance || ''}</td>
+                <td style="color: ${balanceOwedRow ? 'black' : 'white'};">${balanceOwedRow || ''}</td>
             </tr>
         `;
     });
