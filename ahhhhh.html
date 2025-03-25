@@ -105,7 +105,7 @@ if (clientName.includes(',')) {
 document.getElementById('clientName').innerText = clientName;
 
 // Extract Client Address accurately (starting after client's name)
-let addressStartIndex = jsonData.findIndex(row => row[0]?.includes("Amount Enclosed:")) + 2;
+let addressStartIndex = jsonData.findIndex(row => row[0]?.includes("Amount Enclosed:")) + 3;
 let rawAddressLines = jsonData.slice(addressStartIndex, addressStartIndex + 3)
     .map(row => row[0]?.replace("Family Health Education Services", "")
                        .replace("930 North 10th St", "")
