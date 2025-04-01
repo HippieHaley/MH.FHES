@@ -446,15 +446,15 @@ async function downloadWord() {
                 new Paragraph({
                     children: [new TextRun({ text: clientName, bold: true, size: 24 })],
                     indent: { left: 1440 },
-                    spacing: { after: 100 }
+                    spacing: { after: 750 }
                 }),
                 ...addressLines.map(line =>
                     new Paragraph({
                         children: [new TextRun({ text: line, size: 24, bold: true })],
                         indent: { left: 1440 },
-                        spacing: { after: 100 }
+                        spacing: { after: 750 }
                     })
-                ),
+                 ),
                 new Paragraph({
                     border: {
                         bottom: {
@@ -462,8 +462,10 @@ async function downloadWord() {
                             size: 6,
                             color: "000000",
                             space: 1,
+                            spacing: { before: 500, after: 750 }, // Added spacing before the dotted line
                         },
                     },
+                    
                     spacing: { after: 750 }
                 }),
                 new Table({
