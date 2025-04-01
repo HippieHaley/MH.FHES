@@ -671,7 +671,7 @@ modalOverlay2.addEventListener('click', function(e) {
   // Debugging: Log the values to the console
   console.log("Household Size:", householdSize);
   console.log("Yearly Income:", yearlyIncome);
-  console.log("Client Pay:", coverageLevel);
+  console.log("Coverage Level:", coverageLevel);
   console.log("AWC Qualification:", awcQualification);
 
   // Begin building the string with header info
@@ -789,7 +789,7 @@ modalOverlay2.addEventListener('click', function(e) {
   // Append additional household information and timestamp
   infoToCopy += 
 `Yearly Income: $${yearlyIncome}\n` +
-`Coverage Level: ${coverageLevel}\n` +
+`Client Pay ${coverageLevel}\n` +
 `AWC! qualification: ${awcQualification}\n` +
 `Insurance:\n` +
 `${new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit', year: 'numeric', month: '2-digit', day: '2-digit' })}\n` +
