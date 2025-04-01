@@ -7,40 +7,111 @@
     <script src="https://cdn.jsdelivr.net/npm/docx@7.5.0/build/index.js"></script>
     <title>Excel Invoice Cleaner</title>
     <style>
+        /* Basic Reset */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+      
+        /* General Body Style */
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+          font-family: Arial, sans-serif;
+          margin: 0 auto;
+          background-color: #acdbf9; /* Light blue */
+          color: #333;
+          padding-top: 50px;
+          padding-bottom: 50px;
         }
+        h2 {
+            margin-top: 40px;
+        }
+        /* Table Styling */
         table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
+          width: 100%;
+          border-collapse: collapse;
+          background-color: #acdbf9; /* Light blue */
+          border: 2px solid #333;
+          border-radius: 8px;
+          overflow: hidden;
+          margin-top: 20px;
         }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-            white-space: nowrap;
+      
+        th,
+        td {
+          text-align: left;
+          padding: 15px;
+          background-color: #acdbf9;
+          color: #333;
+          white-space: nowrap;
+          border: 1px solid #333;
         }
+      
         th {
-            background-color: #f0f0f0;
-            font-weight: bold;
+          background-color: #f8c9f9; /* Soft pink */
+          font-weight: bold;
+          color: #000;
         }
+      
+        th:first-child,
+        td:first-child {
+          background-color: #f8c9f9;
+        }
+      
+        /* Button Styling */
         button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            margin-top: 10px;
+          display: inline-block;
+          padding: 12px 24px;
+          background-color: #f8c9f9;
+          color: #333;
+          font-size: 1rem;
+          font-weight: bold;
+          border: 1px solid #000;
+          border-radius: 30px;
+          text-align: center;
+          cursor: pointer;
+          margin-top: 20px;
+          transition: background-color 0.2s ease;
         }
+      
         button:hover {
-            background-color: #45a049;
+          background-color: #e8b3e8;
         }
-    </style>
-</head>
+      
+        button:disabled {
+          background-color: #f0d4f0;
+          color: #999;
+          border: 1px solid #999;
+          cursor: not-allowed;
+        }
+      
+        /* Optional: Back Home Button */
+        .back-home {
+          display: inline-block;
+          padding: 12px 24px;
+          background-color: #f8c9f9;
+          color: #333;
+          text-decoration: none;
+          font-size: 1rem;
+          font-weight: bold;
+          border-radius: 30px;
+          text-align: center;
+          border: 1px solid #000;
+          position: absolute;
+          top: 20px;
+          left: 20px;
+          z-index: 999;
+          transition: background-color 0.2s ease;
+        }
+      
+        .back-home:hover {
+          background-color: #e8b3e8;
+        }
+      </style>
+      
+</head> 
 <body>
-
+    <a href="index.html" class="back-home">Back to Home</a>
 <h2>Upload Invoice File</h2>
 <input type="file" id="fileUpload" accept=".xlsx" />
 <button onclick="processFile()">Process File</button>
@@ -70,7 +141,6 @@
         </thead>
         <tbody></tbody>
         </table>
-    <h2>Disclaimer: if you have any questions please call 1234567</h2>
 <script>
     function styledCell(value) {
     return `<td style="color: ${value ? 'black' : 'white'}">${value ?? ''}</td>`;
