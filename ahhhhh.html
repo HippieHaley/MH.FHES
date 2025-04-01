@@ -320,184 +320,146 @@ async function downloadWord() {
         year: 'numeric', month: '2-digit', day: '2-digit'
     });
 
-    const sections = allClients.map((client, index) => {
-        const {
-            clientName,
-            addressLines,
-            tableRows,
-            balanceOwed
-        } = client;
-
-        // Filter out any tableRows that contain the disclaimer text.
-        const validRows = tableRows.filter(row => 
-            !row.claimOrServiceLine?.includes("Disclaimer: Charges/Adjustments made after statement date will appear on your next statement")
-        );
-
-        // Header row
-        const headerRow = new TableRow({
-            children: [
-                "Claim Number", "Service Date", "Procedure (and Codes)", "Units", "Unit Rate", "Total Charge",
-                "Patient Charge", "Total Paid", "Insurance Paid", "Patient Paid", "Total Adjustment",
-                "Total Balance", "Insurance Balance", "Balance Owed"
-            ].map(text =>
-                new TableCell({
-                    children: [new Paragraph({ text, bold: true })],
-                    shading: { fill: "D3D3D3" }
-                })
-            )
-        });
-
-        // Body rows built from validRows only
-        const bodyRows = validRows.map((row, index) => {
-            const isClaimRow = row.claimOrServiceLine?.includes("CL-");
-            const nextRow = validRows[index + 1];
-            const nextIsServiceLine = nextRow && nextRow.claimOrServiceLine?.includes("Service Line#");
-            const whiteOut = isClaimRow && nextIsServiceLine;
-
-            const blackText = (text) => new TextRun({ text: text ?? '', size: 22, color: '000000' });
-            const whiteText = (text) => new TextRun({ text: text ?? '', size: 22, color: 'FFFFFF' });
-
-            return new TableRow({
+    const tableHeader = new TableRow({
+        children: Array.from(document.querySelectorAll('#dataTable thead th')).map(th =>
+            new TableCell({
                 children: [
-                    new TableCell({ children: [new Paragraph({ children: [blackText(row.claimOrServiceLine)] })] }),
-                    new TableCell({ children: [new Paragraph({ children: [blackText(row.serviceDate)] })] }),
-                    new TableCell({ children: [new Paragraph({ children: [whiteOut ? whiteText(row.procedure) : blackText(row.procedure)] })] }),
-                    new TableCell({ children: [new Paragraph({ children: [whiteOut ? whiteText(row.units) : blackText(row.units)] })] }),
-                    new TableCell({ children: [new Paragraph({ children: [whiteOut ? whiteText(row.unitRate) : blackText(row.unitRate)] })] }),
-                    new TableCell({ children: [new Paragraph({ children: [blackText(row.totalCharge)] })] }),
-                    new TableCell({ children: [new Paragraph({ children: [blackText(row.patientCharge)] })] }),
-                    new TableCell({ children: [new Paragraph({ children: [blackText(row.totalPaid)] })] }),
-                    new TableCell({ children: [new Paragraph({ children: [blackText(row.insurancePaid)] })] }),
-                    new TableCell({ children: [new Paragraph({ children: [blackText(row.patientPaid)] })] }),
-                    new TableCell({ children: [new Paragraph({ children: [blackText(row.adjustment)] })] }),
-                    new TableCell({ children: [new Paragraph({ children: [blackText(row.totalBalance)] })] }),
-                    new TableCell({ children: [new Paragraph({ children: [blackText(row.insuranceBalance)] })] }),
-                    new TableCell({ children: [new Paragraph({ children: [blackText(row.balanceOwedRow)] })] }),
-                ]
-            });
-        });
-
-        // Total row
-        const totalRow = new TableRow({
-            children: [
-                new TableCell({
-                    children: [new Paragraph({ text: "Total", bold: true })],
-                    columnSpan: 13,
-                    shading: { fill: "D3D3D3" }
-                }),
-                new TableCell({
-                    children: [new Paragraph({ text: `$${balanceOwed.toFixed(2)}`, bold: true })],
-                    shading: { fill: "D3D3D3" }
-                })
-            ]
-        });
-
-        // PAY THIS AMOUNT table box
-        const payAmountBox = new Table({
-            alignment: AlignmentType.RIGHT,
-            width: { size: 50, type: WidthType.PERCENTAGE },
-            rows: [
-                new TableRow({
-                    children: [
-                        new TableCell({
-                            children: [
-                                new Paragraph({
-                                    alignment: AlignmentType.CENTER,
-                                    indent: { left: 750 },
-                                    children: [
-                                        new TextRun({
-                                            text: `PAY THIS AMOUNT: $${balanceOwed.toFixed(2)}`,
-                                            bold: true,
-                                            size: 28
-                                        })
-                                    ]
-                                })
-                            ],
-                            borders: {
-                                top: { style: BorderStyle.SINGLE, size: 4 },
-                                bottom: { style: BorderStyle.SINGLE, size: 4 },
-                                left: { style: BorderStyle.SINGLE, size: 4 },
-                                right: { style: BorderStyle.SINGLE, size: 4 }
-                            }
-                        })
-                    ]
-                })
-            ]
-        });
-
-        return {
-            properties: {
-                page: {
-                    size: { width: 12240, height: 15840, orientation: PageOrientation.PORTRAIT },
-                    margin: { top: 360, bottom: 360, left: 360, right: 360 }
-                }
-            },
-            children: [
-                new Paragraph({
-                    alignment: AlignmentType.RIGHT,
-                    children: [new TextRun({ text: `Statement Date: ${currentDate}`, bold: true, size: 24 })],
-                    spacing: { after: 200 },
-                    indent: { left: 750 }
-                }),
-                payAmountBox,
-                new Paragraph({ spacing: { after: 200 }, alignment: AlignmentType.RIGHT, indent: { left: 750 } }),
-                new Paragraph({ text: "", spacing: { after: 800 } }),
-                // Client Info
-                new Paragraph({
-                    children: [new TextRun({ text: clientName, bold: true, size: 24 })],
-                    indent: { left: 1440 },
-                    spacing: { after: 100 }
-                }),
-                ...addressLines.map(line =>
                     new Paragraph({
-                        children: [new TextRun({ text: line, size: 24, bold: true })],
-                        indent: { left: 1440 },
-                        spacing: { after: 100 }
-                    })
-                ),
-                new Paragraph({
-                    border: {
-                        bottom: {
-                            style: BorderStyle.DOTTED,
-                            size: 6,
-                            color: "000000",
-                            space: 1,
-                        },
-                    },
-                    spacing: { after: 750 }
-                }),
-                new Table({
-                    width: { size: 100, type: WidthType.PERCENTAGE },
-                    rows: [headerRow, ...bodyRows, totalRow]
-                }),
-                new Paragraph({
-    children: [
-        new TextRun({
-            text: "Disclaimer: The Adjustment column shows total reductions applied to your charges. These include write-offs and adjustments from your insurance provider, as well as any discounts you received through our South Dakota sliding fee scale program. These amounts are not owed and have already been deducted from your balance.",
-            italics: true
-        })
-    ],
-    spacing: { before: 200 } // Optional: adjust spacing as needed
-}),
-new Paragraph({
-    children: [
-        new TextRun({
-            text: "For any questions, concerns, or to make a payment over the phone, please call Family Health Education Services at (605) 717-8920. Our billing team is available Monday - Thursday, 8:00 AM to 5:00 PM. We offer payment plans in any amount and are happy to work with you on a schedule that fits your needs. Please note that accounts with no payment activity or effort to resolve the balance within 90 days of the billing date may be subject to collections.",
-             bold: true
-        })
-    ],
-    spacing: { before: 200 } // Optional spacing adjustments
-}),
-                // Page break after each section (except last)
-                ...(index < allClients.length - 1 ? [new Paragraph({ children: [], pageBreakBefore: true })] : [])
-            ]
-        };
+                        children: [new TextRun({ text: th.innerText, bold: true, size: 18 })],
+                        alignment: AlignmentType.CENTER
+                    }),
+                ],
+                shading: { fill: 'D3D3D3' }
+            })
+        )
     });
 
-    const doc = new Document({ sections });
+    const tableBody = Array.from(document.querySelectorAll('#dataTable tbody tr')).map(row =>
+        new TableRow({
+            children: Array.from(row.querySelectorAll('td')).map(cell =>
+                new TableCell({
+                    children: [
+                        new Paragraph({
+                            children: [new TextRun({ text: cell.innerText || '', size: 18 })],
+                            alignment: AlignmentType.CENTER
+                        }),
+                    ],
+                })
+            )
+        })
+    );
 
-    try {
-        const blob = await Packer.toBlob(doc);
+    const totalRow = new TableRow({
+        children: [
+            ...Array(13).fill(new TableCell({
+                children: [new Paragraph({ text: "" })],
+                shading: { fill: 'D3D3D3' }
+            })),
+            new TableCell({
+                children: [new Paragraph({ children: [new TextRun({ text: "Total", bold: true, size: 18 })] })],
+                shading: { fill: 'D3D3D3' }
+            }),
+            new TableCell({
+                children: [new Paragraph({ children: [new TextRun({ text: `$${balanceOwed.toFixed(2)}`, bold: true, size: 18 })] })],
+                shading: { fill: 'D3D3D3' }
+            })
+        ]
+    });
+
+    const doc = new Document({
+        sections: [{
+            properties: {
+                page: {
+                    size: { orientation: PageOrientation.PORTRAIT },
+                    margin: { top: 360, bottom: 360, left: 360, right: 360 } // ≈0.25-inch margins (minimal, printer-friendly)
+        }
+            },
+            children: [
+                // Statement Date centered
+                new Paragraph({
+                    alignment: AlignmentType.LEFT,
+                    spacing: { after: 540 }, // 
+                }),
+                new Paragraph({
+                    alignment: AlignmentType.CENTER,
+                    children: [
+                        new TextRun({ text: `Statement Date: ${currentDate}`, bold: true, size: 22 }),
+                    ],
+                    spacing: { after: 200 }
+                }),
+
+                // PAY THIS AMOUNT centered
+                new Table({
+                    alignment: AlignmentType.CENTER,
+                    width: { size: 50, type: WidthType.PERCENTAGE },
+                    rows: [new TableRow({
+                        children: [new TableCell({
+                            children: [new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({ text: `PAY THIS AMOUNT: $${balanceOwed.toFixed(2)}`, bold: true, size: 24 }),
+                                ],
+                            })],
+                            borders: {
+                                top: { style: BorderStyle.SINGLE, size: 6 },
+                                bottom: { style: BorderStyle.SINGLE, size: 6 },
+                                left: { style: BorderStyle.SINGLE, size: 6 },
+                                right: { style: BorderStyle.SINGLE, size: 6 }
+                            },
+                        })],
+                    })],
+                }),
+                // Add spacing of 3/8 of an inch before the client name
+new Paragraph({
+    alignment: AlignmentType.LEFT,
+    spacing: { after: 540 }, // 3/8 inch = 540 twips
+}),
+
+                // Client Name bold, size 12
+            new Paragraph({
+                    alignment: AlignmentType.LEFT,
+                    spacing: { after: 160 },
+                    indent: { left: 600 },
+                    children: [
+                    new TextRun({ text: clientName, size: 24, bold: true }),
+                    ],
+                }),
+
+                // Street Address bold, size 12
+                new Paragraph({
+                    alignment: AlignmentType.LEFT,
+                    spacing: { after: 160 },
+                    indent: { left: 600 },
+                    children: [
+                        new TextRun({ text: formattedAddressLines[0], size: 24, bold: true }),
+                    ],
+                }),
+
+                // City, State, ZIP bold, size 12
+                new Paragraph({
+                    alignment: AlignmentType.LEFT,
+                    spacing: { after: 160 },
+                    indent: { left: 600 },
+                    children: [
+                        new TextRun({ text: formattedAddressLines[1], size: 24, bold: true }),
+                    ],
+                }),
+// Add spacing of 0.4 inches before the client name
+new Paragraph({
+                    alignment: AlignmentType.LEFT,
+                    spacing: { after: 540 }, // 
+                }),
+                // Invoice Table
+                new Table({
+                    width: { size: 100, type: WidthType.PERCENTAGE },
+                    rows: [tableHeader, ...tableBody, totalRow],
+                }),
+            ],
+        }],
+    });
+
+    Packer.toBlob(doc).then(blob => {
+        const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
         link.download = `Invoices_${currentDate.replaceAll('/', '-')}.docx`;
