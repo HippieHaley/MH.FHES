@@ -820,10 +820,16 @@ function addToTotal(service, price) {
   document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
 }
 function copyReceipt() {
-  const serviceTextElements = document.querySelectorAll('#itemizedList .service-text');
+  const listItems = document.querySelectorAll('#itemizedList .list-item');
   let receiptLines = [];
-  serviceTextElements.forEach(span => {
-    receiptLines.push(span.textContent.trim());
+  listItems.forEach(li => {
+    // Assume the first child contains the service text
+    let text = li.firstChild.textContent.trim();
+    // Remove any percent values (e.g., " 100%" or " 75%")
+    text = text.replace(/\s*\d+%/, "");
+    // If quantity is exactly 1 (e.g., " x1:"), remove the quantity display
+    text = text.replace(/\sx1\b/, "");
+    receiptLines.push(text);
   });
   const totalText = document.getElementById('grandTotal').innerText;
   const receiptText = `Services:\n${receiptLines.join("\n")}\nTotal: ${totalText}`;
