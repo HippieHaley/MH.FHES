@@ -174,56 +174,54 @@
           text-decoration: none;
           color: #333;
           font-weight: bold;
-          font-size: 1rem;
-}
-        /* The Fee Selector */
-        select#percentSelector {
-          width: 100%;
-          max-width: 300px;
-          padding: 10px 15px;
-          margin: 10px 0;
-          border: 2px solid #f8c9f9; /* Soft pink border */
-          border-radius: 30px;       /* Rounded edges */
-          background-color: #f8c9f9; /* Soft pink background */
-          color: #333;
-          font-size: 1rem;
-          outline: none;
-          transition: background-color 0.3s ease, border-color 0.3s ease;
-          text-align: center;
+        font-size: 1rem;
         }
-        select#percentSelector:hover {
-          background-color: #f0d4f0; /* Slightly lighter pink */
-        }
-        select#percentSelector:focus {
-          border-color: #e8b8e8;
-          background-color: #fff;
-          box-shadow: 0 0 5px rgba(232, 184, 232, 0.5);
-        }
-      </style>
-</head>
-<body>
-    <a href="index.html" class="back-home">Back to Home</a>
-    <div class="container">
-       <h1>Price Sheet</h1> <!-- Left Side -->    <div style="margin-bottom: 20px;">
-        <label for="percentSelector">Select Fee Percentage:</label>
-        <select id="percentSelector" onchange="updateVisibleColumn()">
-            <option value="100">100%</option>
-            <option value="75">75%</option>
-            <option value="50">50%</option>
-            <option value="25">25%</option>
-        </select>
-    </div>
-        <div class="left-side">
-            <!-- Services/Procedures Table -->
-            <table id="Services/Procedures" class="price-table">
+            /* The Fee Selector */
+            select#percentSelector {
+              width: 100%;
+              max-width: 300px;
+              padding: 10px 15px;
+              margin: 10px 0;
+              border: 2px solid #f8c9f9; /* Soft pink border */
+              border-radius: 30px;       /* Rounded edges */
+              background-color: #f8c9f9; /* Soft pink background */
+              color: #333;
+              font-size: 1rem;
+              outline: none;
+              transition: background-color 0.3s ease, border-color 0.3s ease;
+              text-align: center;
+            }
+            select#percentSelector:hover {
+              background-color: #f0d4f0; /* Slightly lighter pink */
+            }
+            select#percentSelector:focus {
+              border-color: #e8b8e8;
+              background-color: #fff;
+              box-shadow: 0 0 5px rgba(232, 184, 232, 0.5);
+            }
+              </style>
+        </head>
+        <body>
+            <a href="index.html" class="back-home">Back to Home</a>
+            <div class="container">
+               <h1>Price Sheet</h1> <!-- Left Side -->    <div style="margin-bottom: 20px;">
+            <label for="percentSelector">Select Fee Percentage:</label>
+            <select id="percentSelector" onchange="updateVisibleColumn()">
+                <option value="100">100%</option>
+                <option value="75">75%</option>
+                <option value="50">50%</option>
+                <option value="25">25%</option>
+            </select>
+            </div>
+            <div class="left-side">
+                <!-- Services/Procedures Table -->
+                <table id="Services/Procedures" class="price-table">
                 <thead>
                     <tr>
-                        <th>Services/Procedure</th>
-                        <th>100% Fee</th>
-                
+                    <th>Services/Procedure</th>
+                    <th id="percentSelectorvalue"></th>
                     </tr>
-                </thead>
-                <tbody>
+                </thead>     <tbody></tbody>
                     <tr>
                         <td><span class="service-name"><strong>Limited-New</strong></span><span class="cpt-code">99202</span></td>
                         <td colspan="4">
@@ -303,7 +301,7 @@
                 <thead>
                     <tr>
                         <th>Procedure</th>
-                        <th>100% Fee</th>
+                        <th id="percentSelectorvalue"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -376,7 +374,7 @@
                 <thead>
                     <tr>
                         <th>Labs</th>
-                        <th>100% Fee</th>
+                        <th id="percentSelectorvalue"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -478,7 +476,7 @@
                 <thead>
                     <tr>
                         <th>Supplies</th>
-                        <th>100% Fee</th>
+                        <th id="percentSelectorvalue"></th>
                     </tr>
                 </thead>
                 <tbody>
