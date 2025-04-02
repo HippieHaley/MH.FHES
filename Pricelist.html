@@ -636,16 +636,18 @@
     
         // Decide if a service should have a "Multiple" button
         function isMultipleAllowed(service) {
-          const allowedItems = [
-            "InternalCondom", "Diaphragm", "DepoProvera", "MedroxyProgesterone",
-            "VCFFoam", "GynolII", "LilettaIUD", "ParagardIUD", "Xulane", "Chlamydia",
-            "Gonorrhea", "NuvaRing", "Nexplanon", "Alese", "Apri", "Aubra", "Aviane",
-            "Bicillin", "Camila", "Ceftriaxone", "Chateal", "Cryselle", "Cyred",
-            "Doxycycline", "Enpresse", "Jolivette", "Levora", "Lutera", "Lyza",
-            "Mononessa", "NorQD", "Nordette", "Norethindrone", "Nortrel777",
-            "Orsythia", "Portia", "Reclipsen", "Sprintec", "Sronyx", "Tri-LoMarzia",
-            "Tri-LoSprintec", "TriNessaLo", "Triphasil", "Trivora", "Vilibra"
-          ];
+  const allowedItems = [
+    "InternalCondom", "Diaphragm", "DepoProvera", "MedroxyProgesterone",
+    "VCFFoam", "GynolII", "LilettaIUD", "ParagardIUD", "Xulane", "Chlamydia",
+    "Gonorrhea", "NuvaRing", "Nexplanon", "Alese", "Apri", "Aubra", "Aviane",
+    "Bicillin", "Camila", "Ceftriaxone", "Chateal", "Cryselle", "Cyred",
+    "Doxycycline", "Enpresse", "Jolivette", "Levora", "Lutera", "Lyza",
+    "Mononessa", "Nor QD", "Nordette", "Norethindrone", "Nortrel777",
+    "Orsythia", "Portia", "Reclipsen", "Sprintec", "Sronyx", "Tri-LoMarzia",
+    "Tri-LoSprintec", "TriNessaLo", "Triphasil", "Trivora", "Vilibra", "Nortrel 777", "Vilbra", "TriNessa Lo",
+    "BasalThermometer"  // Newly added
+  ];
+
           // If the item name is in the array, we show a Multiple button
           return allowedItems.some(item => service.includes(item));
         }
