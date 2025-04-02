@@ -1,265 +1,211 @@
-<!DOCTYPE html> 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Price Sheet</title> 
-<style>
 
-  /* Basic Reset */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  /* General Body Style */
-  body {
-    font-family: Arial, sans-serif;
-    max-width: 1500px;
-    margin: 0 auto;
-    background-color: #acdbf9;     /* Light blue background */
-    color: #333;
-    padding-top: 50px;
-  }
-/* Back Home Button */
-.back-home {
-  display: inline-block;
-  padding: 12px 24px;
-  background-color: #f8c9f9;
-  color: #333;
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: bold;
-  border-radius: 20px;
-  text-align: center;
-  border: 1px solid #000;
-  top: 20px;
-  left: 20px;
-  z-index: 999; /* Ensures it stays above other elements */
-  transition: background-color 0.2s ease;
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <title>Price Sheet</title>
+      <style>
+        /* Basic Reset */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        /* General Body Style */
+        body {
+          font-family: Arial, sans-serif;
+          max-width: 1500px;
+          margin: 0 auto;
+          background-color: #acdbf9; /* Light blue background */
+          color: #333;
+          padding-top: 50px;
+        }
+        /* Back Home Button */
+        .back-home {
+          display: inline-block;
+          padding: 12px 24px;
+          background-color: #f8c9f9;
+          color: #333;
+          text-decoration: none;
+          font-size: 1rem;
+          font-weight: bold;
+          border-radius: 20px;
+          text-align: center;
+          border: 1px solid #000;
+          top: 20px;
+          left: 20px;
+          z-index: 999; /* Ensures it stays above other elements */
+          transition: background-color 0.2s ease;
+          position: absolute;
+        }
+        .back-home:hover {
+          background-color: #e8b3e8;
+        }
+    
+        /* Container for Left-Aligned Layout */
+        .container {
+          width: 100%;
+          max-width: 1500px;
+          background-color: #acdbf9; /* Light blue background */
+          border-radius: 10px;
+          padding: 20px;
+          box-shadow: 0 0 10px rgba(233, 208, 218, 0.1); /* Optional shadow */
+        }
+        /* Left Side - Price Sheet (2/3 of the screen) */
+        .left-side {
+          flex: 1;
+          padding-right: 20px;
+          margin-right: 35%; /* Pushes content left to make space for .right-side */
+        }
+        /* Right Side - Itemized List and Grand Total (Fixed Position) */
+        .right-side {
+          width: 30%;
+          padding: 20px;
+          border-radius: 10px;
+          background-color: #f8c9f9;
+          text-align: left;
+          font-size: 1rem;
+          color: #333;
+          position: fixed;
+          top: 20px;
+          right: 10px;
+        }
+    
+        /* Price Button Styling */
+        .price-button {
+          display: inline-block;
+          padding: 0.5rem 1.5rem;
+          background-color: #f8c9f9;
+          border: 1px solid #000;
+          border-radius: 20px;
+          text-decoration: none;
+          color: #333;
+          font-weight: bold;
+          font-size: 1rem;
+          cursor: pointer;
+          margin: 5px;
+        }
+        .price-button:hover {
+          background-color: #e8b8e8; /* Slightly darker pink */
+        }
+    
+        /* Table Styling */
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          background-color: #acdbf9; /* Light blue background */
+          border: 2px solid #333;    /* Solid border */
+          border-radius: 8px;        /* Rounded corners */
+          overflow: hidden;
+          margin: 20px 0;
+        }
+        /* Table Rows */
+        tr {
+          border: 2px solid #333;
+        }
+        /* Table Cells */
+        th,
+        td {
+          text-align: center;
+          padding: 15px;
+          background-color: #acdbf9;
+          color: #333;
+        }
+        /* Table Header */
+        th {
+          background-color: #f8c9f9;
+          font-weight: bold;
+          font-size: 1rem;
+          cursor: pointer;
+          margin: 5px;
+        }
+        th:first-child,
+        td:first-child {
+          background-color: #f8c9f9; /* Soft pink */
+          font-weight: bold;
+        }
+        /* CPT Code Styling */
+        .cpt-code {
+          font-size: 0.8rem;
+          color: #333;
+          margin-top: 0.3rem;
+          display: block;
+          font-style: italic;
+        }
+    
+        /* Itemized List Styling */
+        .itemized-list {
+          margin-bottom: 20px;
+          font-size: 1rem;
+          background-color: #f8c9f9;
+        }
+    
+ .remove-button {
+          background-color: #f8c9f9;
+          border: 1px solid #000;
+          border-radius: 5px;
+          padding: 2px 5px;
+          cursor: pointer;
+          margin-left: 5px;
+          font-weight: bold;
+        }
+    
+        /* Multiple Button Styling */
+        .multiple-button {
+          background-color: #f8c9f9;
+          border: 1px solid #000;
+          border-radius: 5px;
+          padding: 2px 5px;
+          cursor: pointer;
+          margin-left: 5px;
+          font-weight: bold;
+        }
+        .multiple-button:hover {
+          background-color: #f7bdf7;
+        }
+    
+        /* Copy Receipt Button (different from price buttons) */
+.copy-button{ 
+          margin-top: 10px;
+          padding: 0.5rem 1.5rem;
+          background-color: #f8c9f9;
+          border: 1px solid #000;
+          border-radius: 20px;
+          text-decoration: none;
+          color: #333;
+          font-weight: bold;
+          font-size: 1rem;
 }
-
-.back-home:hover {
-  background-color: #e8b3e8;
-}
-.thead {
-    text-align: center;
-    padding: 15px;  
-}
-  /* Container for Left-Aligned Layout */
-  .container {
-    width: 100%;
-    max-width: 1500px;
-    background-color: #acdbf9;     /* Light blue background */
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(233, 208, 218, 0.1); /* Optional shadow */
-  }
-
-  /* Left Side - Price Sheet (2/3 of the screen) */
-  .left-side {
-    flex: 1;
-    padding-right: 20px;
-    margin-right: 35%;           /* Pushes content left to make space for .right-side */
-  }
-
-  /* Right Side - Itemized List and Grand Total (Fixed Position) */
-  .right-side {
-    width: 30%;                 /* Adjust width to fit content */
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #f8c9f9;
-    text-align: left;
-    font-size: 1rem;
-    color: #333;
-    position: fixed;            /* Fixed position to keep it on screen */
-    top: 20px;                  /* Distance from the top */
-    right: 10px;                /* Distance from the right edge of the screen */
-  }
-
-  /* Price Button Styling */
-  .price-button {
-    display: inline-block;
-    padding: 0.5rem 1.5rem;
-    background-color: #f8c9f9;
-    border: 1px solid #000;
-    border-radius: 20px;
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    margin: 5px;
-  }
-  .price-button:hover {
-    background-color: #e8b8e8;    /* Slightly darker pink */
-  }
-
-  /* Table Styling */
-  table {
-    width: 100%;
-    border-collapse: collapse;   /* Ensures borders are clean */
-    background-color: #acdbf9;     /* Light blue background */
-    border: 2px solid #333;        /* Solid border to match your style */
-    border-radius: 8px;            /* Rounded corners */
-    overflow: hidden;              /* Ensures rounded corners apply properly */
-    margin: 20px 0;               /* Spacing on top/bottom */
-  }
-
-  /* Table Rows */
-  tr {
-    border: 2px solid #333;        /* Border around each row */
-  }
-
-  /* Table Cells */
-  th,
-  td {
-    text-align: center;
-    padding: 15px;
-    background-color: #acdbf9;     /* Same as table background */
-    color: #333;
-  }
-
-  /* Table Header */
-  th {
-    background-color: #f8c9f9;
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    margin: 5px;
-  }
-th:first-child,
-td:first-child {
-    background-color: #f8c9f9; /* Soft pink */
-    font-weight: bold;
-
-}
-  /* CPT Code Styling */
-  .cpt-code {
-    font-size: 0.8rem;
-    color: #333;
-    margin-top: 0.3rem;
-    display: block;
-    font-style: italic;
-  }
-
-  /* Itemized List Styling */
-  .itemized-list {
-    margin-bottom: 20px;
-    font-size: 1rem;
-    background-color: #f8c9f9;
-  }
-
-  /* Remove Button Styling */
-  .remove-button {
-    background-color: #f8c9f9;
-    border: 1px solid #000;
-    border-radius: 5px;
-    padding: 2px 5px;
-    cursor: pointer;
-    margin-right: 5px;
-    font-weight: bold;
-  }
-
-  /* Multiple Button Styling */
-  .multiple-button {
-    background-color: #f8c9f9;
-    border: 1px solid #000;
-    border-radius: 5px;
-    padding: 2px 5px;
-    cursor: pointer;
-    margin-left: 5px;
-    font-weight: bold;
-  }
-  .multiple-button:hover {
-    background-color: #f7bdf7;
-  }
-  .icon-button {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 40px;
-      height: 40px;
-    }
-    /* Trigger Buttons */
-    .modal-trigger {
-      cursor: pointer;
-      font-size: 18px;
-      border-radius: 4px;
-      padding: 0 5px;
-      margin-left: 5px;
-      display: inline-block;
-    }
-    /* Modal Overlay (common style for both modals) */
-    .modal-overlay {
-      display: none; /* Hidden by default */
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #f8c9f9;
-      z-index: 9000; /* Above most content */
-      justify-content: center;
-      align-items: center;
-    }
-    /* Modal Window */
-    .modal {
-      background-color: #f8c9f9;
-      padding: 10px;
-      width: 100%;
-      max-width: 1000px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    }
-    .button {
-      display: inline-flex;
-      position: fixed-bottom;
-      justify-content: center;
-      background-color: #f8c9f9; /* Pink background */
-      color: #333;              /* Text/icon color */
-      font-size: 1rem;
-      font-weight: bold;
-      border: 1px solid #000;   /* Black border */
-      cursor: pointer;
-      padding: 0.5rem;
-      margin-top: 10px;
-    }
-    .button:hover {
-      background-color: #e8b8e8; /* Slightly darker pink */
-    }
-    select#percentSelector {
-  width: 100%;
-  max-width: 300px;
-  padding: 10px 15px;
-  margin: 10px 0;
-  border: 2px solid #f8c9f9; /* Soft pink border */
-  border-radius: 30px;       /* Rounded edges */
-  background-color: #f8c9f9; /* Soft pink background */
-  color: #333;
-  font-size: 1rem;
-  outline: none;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-  text-align: center;
-}
-
-select#percentSelector:hover {
-  background-color: #f0d4f0; /* Slightly lighter pink */
-}
-
-select#percentSelector:focus {
-  border-color: #e8b8e8;
-  background-color: #fff;
-  box-shadow: 0 0 5px rgba(232, 184, 232, 0.5);
-}
-
-</style>
+          .copy-button{  :hover
+          background-color: #e8b8e8;
+        }
+        /* The Fee Selector */
+        select#percentSelector {
+          width: 100%;
+          max-width: 300px;
+          padding: 10px 15px;
+          margin: 10px 0;
+          border: 2px solid #f8c9f9; /* Soft pink border */
+          border-radius: 30px;       /* Rounded edges */
+          background-color: #f8c9f9; /* Soft pink background */
+          color: #333;
+          font-size: 1rem;
+          outline: none;
+          transition: background-color 0.3s ease, border-color 0.3s ease;
+          text-align: center;
+        }
+        select#percentSelector:hover {
+          background-color: #f0d4f0; /* Slightly lighter pink */
+        }
+        select#percentSelector:focus {
+          border-color: #e8b8e8;
+          background-color: #fff;
+          box-shadow: 0 0 5px rgba(232, 184, 232, 0.5);
+        }
+      </style>
 </head>
 <body>
     <a href="index.html" class="back-home">Back to Home</a>
-
-    
     <div class="container">
        <h1>Price Sheet</h1> <!-- Left Side -->    <div style="margin-bottom: 20px;">
         <label for="percentSelector">Select Fee Percentage:</label>
@@ -684,160 +630,166 @@ select#percentSelector:focus {
             </div>
             <h2>Total</h2>
             <div id="grandTotal">$0.00</div>
-            <button onclick="copyReceipt()" class="button">Copy Receipt</button>
-        </div>
+            <copy-button onclick="copyReceipt()" class="button">Copy Receipt</copy-button>
+</div> 
     </div>
-
     <script>
         let grandTotal = 0;
-
-        // Function to add items to the selected list
+        const selectedItems = {};
+    
+        // Decide if a service should have a "Multiple" button
+        function isMultipleAllowed(service) {
+          const allowedItems = [
+            "InternalCondom", "Diaphragm", "DepoProvera", "MedroxyProgesterone",
+            "VCFFoam", "GynolII", "LilettaIUD", "ParagardIUD", "Xulane", "Chlamydia",
+            "Gonorrhea", "NuvaRing", "Nexplanon", "Alese", "Apri", "Aubra", "Aviane",
+            "Bicillin", "Camila", "Ceftriaxone", "Chateal", "Cryselle", "Cyred",
+            "Doxycycline", "Enpresse", "Jolivette", "Levora", "Lutera", "Lyza",
+            "Mononessa", "NorQD", "Nordette", "Norethindrone", "Nortrel777",
+            "Orsythia", "Portia", "Reclipsen", "Sprintec", "Sronyx", "Tri-LoMarzia",
+            "Tri-LoSprintec", "TriNessaLo", "Triphasil", "Trivora", "Vilibra"
+          ];
+          // If the item name is in the array, we show a Multiple button
+          return allowedItems.some(item => service.includes(item));
+        }
+    
+        // Single complete definition of addToTotal
         function addToTotal(service, price) {
+          // Check if this service is already in the selectedItems
+          if (selectedItems.hasOwnProperty(service)) {
+            // If it exists, increment its quantity and update
+            const existingItem = selectedItems[service];
+            existingItem.quantity++;
+            existingItem.totalPrice = existingItem.price * existingItem.quantity;
+            // Update the displayed text
+            existingItem.span.textContent = 
+              `${service} x${existingItem.quantity}: $${existingItem.totalPrice.toFixed(2)}`;
+            // Update grandTotal
+            grandTotal += price;
+            document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+          } else {
+            // Otherwise, create a new entry for this service
             const itemizedList = document.getElementById('itemizedList');
             const listItem = document.createElement('div');
             listItem.className = 'list-item';
-
-            // Track the total price for this item (including quantity)
+    
             let totalPrice = price;
             let quantity = 1;
-
-            // Display the item and its price
-            listItem.textContent = `${service} x${quantity}: $${totalPrice.toFixed(2)}`;
-
-            // Add "Multiple" button for specific items
+    
+            // Create a span to hold the service text
+            const serviceTextSpan = document.createElement('span');
+            serviceTextSpan.className = 'service-text';
+            serviceTextSpan.textContent = `${service} x${quantity}: $${totalPrice.toFixed(2)}`;
+            listItem.appendChild(serviceTextSpan);
+    
+            // Create a Multiple button if allowed
             if (isMultipleAllowed(service)) {
-                const multipleButton = document.createElement('button');
-                multipleButton.textContent = "Multiple";
-                multipleButton.className = 'multiple-button';
-                multipleButton.onclick = function () {
-                    const newQuantity = parseInt(prompt("Enter quantity:", quantity), 10);
-                    if (!isNaN(newQuantity) && newQuantity > 0) {
-                        // Update the total price based on the new quantity
-                        grandTotal -= totalPrice; // Remove the old total
-                        quantity = newQuantity;
-                        totalPrice = price * quantity;
-                        grandTotal += totalPrice; // Add the new total
-
-                        // Update the displayed item and total
-                        listItem.textContent = `${service} x${quantity}: $${totalPrice.toFixed(2)}`;
-                        listItem.appendChild(multipleButton);
-                        listItem.appendChild(removeButton);
-                        document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
-                    }
-                };
-                listItem.appendChild(multipleButton);
+              const multipleButton = document.createElement('button');
+              multipleButton.textContent = "Multiple";
+              multipleButton.className = 'multiple-button';
+              multipleButton.onclick = function () {
+                let newQuantity = parseInt(prompt("Enter quantity:", quantity), 10);
+                if (!isNaN(newQuantity) && newQuantity > 0) {
+                  // Subtract the old total
+                  grandTotal -= totalPrice;
+                  // Update quantity
+                  quantity = newQuantity;
+                  totalPrice = price * quantity;
+                  // Add the new total
+                  grandTotal += totalPrice;
+                  // Update the displayed text
+                  serviceTextSpan.textContent = 
+                    `${service} x${quantity}: $${totalPrice.toFixed(2)}`;
+                  document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+                  // Update the stored item
+                  selectedItems[service] = {
+                    quantity,
+                    totalPrice,
+                    span: serviceTextSpan,
+                    price,
+                    listItem
+                  };
+                }
+              };
+              listItem.appendChild(multipleButton);
             }
-
-            // Add "Remove" button
+    
+            // Create a Remove button
             const removeButton = document.createElement('button');
             removeButton.textContent = "X";
             removeButton.className = 'remove-button';
             removeButton.onclick = function () {
-                itemizedList.removeChild(listItem);
-                grandTotal -= totalPrice; // Subtract the total price (including quantity)
-                document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+              itemizedList.removeChild(listItem);
+              grandTotal -= totalPrice;
+              document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+              delete selectedItems[service];
             };
-
             listItem.appendChild(removeButton);
+    
+            // Append the new list item
             itemizedList.appendChild(listItem);
-
+    
+            // Save the new service details in selectedItems
+            selectedItems[service] = {
+              quantity,
+              totalPrice,
+              span: serviceTextSpan,
+              price,
+              listItem
+            };
+    
             // Update the grand total
             grandTotal += totalPrice;
             document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+          }
         }
-
-        // Check if the "Multiple" button is allowed for the item
-        function isMultipleAllowed(service) {
-            const allowedItems = [
-                "InternalCondom", "Diaphragm", "DepoProvera", "MedroxyProgesterone",
-                "VCFFoam", "GynolII", "LilettaIUD", "ParagardIUD", "Xulane", "Chlamydia",
-                "Gonorrhea", "NuvaRing", "Nexplanon", "Alese", "Apri", "Aubra", "Aviane",
-                "Bicillin", "Camila", "Ceftriaxone", "Chateal", "Cryselle", "Cyred",
-                "Doxycycline", "Enpresse", "Jolivette", "Levora", "Lutera", "Lyza",
-                "Mononessa", "NorQD", "Nordette", "Norethindrone", "Nortrel777",
-                "Orsythia", "Portia", "Reclipsen", "Sprintec", "Sronyx", "Tri-LoMarzia",
-                "Tri-LoSprintec", "TriNessaLo", "Triphasil", "Trivora", "Vilibra"
-            ];
-            return allowedItems.some(item => service.includes(item));
+    
+        // Function to copy the receipt text
+        function copyReceipt() {
+          const listItems = document.querySelectorAll('#itemizedList .list-item');
+          let receiptLines = [];
+          listItems.forEach(li => {
+            // Assume the first child (the span) holds the service text
+            let text = li.firstChild.textContent.trim();
+            // Optionally remove any " 100%" or " x1" text if you want
+            text = text.replace(/\s*\d+%/, "");
+            text = text.replace(/\sx1\b/, "");
+            receiptLines.push(text);
+          });
+          const totalText = document.getElementById('grandTotal').innerText;
+          const receiptText = `Services:\n${receiptLines.join("\n")}\nTotal: ${totalText}`;
+          navigator.clipboard.writeText(receiptText)
+            .then(() => alert('Receipt copied to clipboard!'))
+            .catch(() => alert('Failed to copy receipt.'));
         }
+    
+        // Update price buttons based on the selected fee percentage
         function updateVisibleColumn() {
-    const selectedPercent = parseFloat(document.getElementById('percentSelector').value) / 100;
-
-    // Get all price buttons
-    const priceButtons = document.querySelectorAll('.price-button');
-
-    priceButtons.forEach(button => {
-        const fullPrice = parseFloat(button.getAttribute('data-price')); // Get 100% price
-        const newPrice = (fullPrice * selectedPercent).toFixed(2);
-
-        // Update the button's text and onclick function based on selected percentage
-        button.textContent = `$${newPrice}`;
-        button.setAttribute('onclick', `addToTotal('${button.getAttribute('data-name')} ${selectedPercent * 100}%', ${newPrice})`);
-    });
-
-    // Update table header to match selected percentage
-    const headerCells = document.querySelectorAll('th');
-    headerCells[1].textContent = `${selectedPercent * 100}% Fee`;
-}
-
-// Initialize prices at 100% on page load
-document.addEventListener('DOMContentLoaded', updateVisibleColumn);
-
-// Initialize the table to only show the 100% column
-document.addEventListener('DOMContentLoaded', () => {
-    updateVisibleColumn();
-});
-function addToTotal(service, price) {
-  const itemizedList = document.getElementById('itemizedList');
-  const listItem = document.createElement('div');
-  listItem.className = 'list-item';
-  
-  let totalPrice = price;
-  let quantity = 1;
-  
-  // Create a span for the service text
-  const serviceTextSpan = document.createElement('span');
-  serviceTextSpan.className = 'service-text';
-  serviceTextSpan.textContent = `${service} x${quantity}: $${totalPrice.toFixed(2)}`;
-
-  
-  listItem.appendChild(serviceTextSpan);
-  
-  // Create a remove button for this item
-  const removeButton = document.createElement('button');
-  removeButton.textContent = "X";
-  removeButton.className = 'remove-button';
-  removeButton.onclick = function () {
-    itemizedList.removeChild(listItem);
-    grandTotal -= totalPrice;
-    document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
-  };
-  
-  listItem.appendChild(removeButton);
-  itemizedList.appendChild(listItem);
-  
-  grandTotal += totalPrice;
-  document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
-}
-function copyReceipt() {
-  const listItems = document.querySelectorAll('#itemizedList .list-item');
-  let receiptLines = [];
-  listItems.forEach(li => {
-    // Assume the first child contains the service text
-    let text = li.firstChild.textContent.trim();
-    // Remove any percent values (e.g., " 100%" or " 75%")
-    text = text.replace(/\s*\d+%/, "");
-    // If quantity is exactly 1 (e.g., " x1:"), remove the quantity display
-    text = text.replace(/\sx1\b/, "");
-    receiptLines.push(text);
-  });
-  const totalText = document.getElementById('grandTotal').innerText;
-  const receiptText = `Services:\n${receiptLines.join("\n")}\nTotal: ${totalText}`;
-  
-  navigator.clipboard.writeText(receiptText)
-    .then(() => alert('Receipt copied to clipboard!'))
-    .catch(() => alert('Failed to copy receipt.'));
-}
-    </script>
+          const selectedPercent = parseFloat(document.getElementById('percentSelector').value) / 100;
+          const priceButtons = document.querySelectorAll('.price-button');
+    
+          priceButtons.forEach(button => {
+            const fullPrice = parseFloat(button.getAttribute('data-price'));
+            // If there's no data-price, skip
+            if (!fullPrice) return;
+    
+            const newPrice = (fullPrice * selectedPercent).toFixed(2);
+            button.textContent = `$${newPrice}`;
+            // Update the onclick attribute dynamically
+            button.setAttribute('onclick', `addToTotal('${button.getAttribute('data-name')} ${selectedPercent * 100}%', ${newPrice})`);
+          });
+    
+          // Update table header to match selected percentage
+          const headerCells = document.querySelectorAll('th');
+          if (headerCells.length > 1) {
+            headerCells[1].textContent = `${selectedPercent * 100}% Fee`;
+          }
+        }
+    
+        // Initialize prices on page load
+        document.addEventListener('DOMContentLoaded', () => {
+          updateVisibleColumn();
+        });
+      </script>
 </body>
 </html>
