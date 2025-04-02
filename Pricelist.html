@@ -176,6 +176,84 @@ td:first-child {
   .multiple-button:hover {
     background-color: #f7bdf7;
   }
+  .icon-button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 40px;
+      height: 40px;
+    }
+    /* Trigger Buttons */
+    .modal-trigger {
+      cursor: pointer;
+      font-size: 18px;
+      border-radius: 4px;
+      padding: 0 5px;
+      margin-left: 5px;
+      display: inline-block;
+    }
+    /* Modal Overlay (common style for both modals) */
+    .modal-overlay {
+      display: none; /* Hidden by default */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #f8c9f9;
+      z-index: 9000; /* Above most content */
+      justify-content: center;
+      align-items: center;
+    }
+    /* Modal Window */
+    .modal {
+      background-color: #f8c9f9;
+      padding: 10px;
+      width: 100%;
+      max-width: 1000px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .button {
+      display: inline-flex;
+      position: fixed-bottom;
+      justify-content: center;
+      background-color: #f8c9f9; /* Pink background */
+      color: #333;              /* Text/icon color */
+      font-size: 1rem;
+      font-weight: bold;
+      border: 1px solid #000;   /* Black border */
+      cursor: pointer;
+      padding: 0.5rem;
+      margin-top: 10px;
+    }
+    .button:hover {
+      background-color: #e8b8e8; /* Slightly darker pink */
+    }
+    select#percentSelector {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px 15px;
+  margin: 10px 0;
+  border: 2px solid #f8c9f9; /* Soft pink border */
+  border-radius: 30px;       /* Rounded edges */
+  background-color: #f8c9f9; /* Soft pink background */
+  color: #333;
+  font-size: 1rem;
+  outline: none;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  text-align: center;
+}
+
+select#percentSelector:hover {
+  background-color: #f0d4f0; /* Slightly lighter pink */
+}
+
+select#percentSelector:focus {
+  border-color: #e8b8e8;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(232, 184, 232, 0.5);
+}
+
 </style>
 </head>
 <body>
@@ -606,6 +684,7 @@ td:first-child {
             </div>
             <h2>Total</h2>
             <div id="grandTotal">$0.00</div>
+            <button onclick="copyReceipt()" class="button">Copy Receipt</button>
         </div>
     </div>
 
@@ -708,7 +787,51 @@ document.addEventListener('DOMContentLoaded', updateVisibleColumn);
 document.addEventListener('DOMContentLoaded', () => {
     updateVisibleColumn();
 });
+function addToTotal(service, price) {
+  const itemizedList = document.getElementById('itemizedList');
+  const listItem = document.createElement('div');
+  listItem.className = 'list-item';
+  
+  let totalPrice = price;
+  let quantity = 1;
+  
+  // Create a span for the service text
+  const serviceTextSpan = document.createElement('span');
+  serviceTextSpan.className = 'service-text';
+  serviceTextSpan.textContent = `${service} x${quantity}: $${totalPrice.toFixed(2)}`;
 
+  
+  listItem.appendChild(serviceTextSpan);
+  
+  // Create a remove button for this item
+  const removeButton = document.createElement('button');
+  removeButton.textContent = "X";
+  removeButton.className = 'remove-button';
+  removeButton.onclick = function () {
+    itemizedList.removeChild(listItem);
+    grandTotal -= totalPrice;
+    document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+  };
+  
+  listItem.appendChild(removeButton);
+  itemizedList.appendChild(listItem);
+  
+  grandTotal += totalPrice;
+  document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+}
+function copyReceipt() {
+  const serviceTextElements = document.querySelectorAll('#itemizedList .service-text');
+  let receiptLines = [];
+  serviceTextElements.forEach(span => {
+    receiptLines.push(span.textContent.trim());
+  });
+  const totalText = document.getElementById('grandTotal').innerText;
+  const receiptText = `Services:\n${receiptLines.join("\n")}\nTotal: ${totalText}`;
+  
+  navigator.clipboard.writeText(receiptText)
+    .then(() => alert('Receipt copied to clipboard!'))
+    .catch(() => alert('Failed to copy receipt.'));
+}
     </script>
 </body>
 </html>
