@@ -107,104 +107,127 @@
   <a href="index.html" class="back-home">Back to Home</a>
   <input type="file" id="fileInput" accept="application/pdf" />
   <button id="exportExcelBtn" onclick="exportToExcel()" disabled>Export to Excel</button>
-
   <script>
     let sheets = [];
-    
-async function extractClientInfo(lines) {
-  let clientInfo = {};
+    let clientInfo = [];
+  
+    // Attach listener to file input
+    document.getElementById('fileInput').addEventListener('change', handleFile);
+  
+    async function handleFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
 
-  for (let i = 0; i < lines.length; i++) {
-    if (lines[i].includes(",")) { // Assume lastname, firstname format
-      clientInfo.name = lines[i].trim();
-      clientInfo.address = lines.slice(i + 1, i + 4).join('<br>').trim();
-      break;
-    }
-  }
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdfData = new Uint8Array(arrayBuffer);
 
-  document.getElementById('clientInfo').innerHTML = `<strong>Client Name:</strong><br>${clientInfo.name}<br><br><strong>Address:</strong><br>${clientInfo.address}`;
-}
-    document.getElementById('fileInput').addEventListener('change', async (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        try {
-          const arrayBuffer = await file.arrayBuffer();
-          const pdfData = new Uint8Array(arrayBuffer);
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+    const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
 
-          pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
-          const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
+    sheets = [];
+    clientInfo = [];
 
-          sheets = [];
-          let currentSheetData = [];
+    let currentSheetData = [];
 
-          for (let i = 1; i <= pdf.numPages; i++) {
-            const page = await pdf.getPage(i);
-            const textContent = await page.getTextContent();
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const textContent = await page.getTextContent();
 
-            let line = '';
-            let lastY = null;
+      let line = '';
+      let lastY = null;
 
-            textContent.items.forEach((item) => {
-              if (lastY !== null && Math.abs(item.transform[5] - lastY) > 10) {
-                line = cleanText(line);
+      textContent.items.forEach(item => {
+        if (lastY !== null && Math.abs(item.transform[5] - lastY) > 10) {
+          line = cleanText(line);
 
-                // If the disclaimer is found, create a new sheet
-                if (line.includes("Disclaimer: Charges/Adjustments made after statement date")) {
-                  if (currentSheetData.length > 0) {
-                    sheets.push([...currentSheetData]);
-                    currentSheetData = [];
-                  }
-                } else {
-                  currentSheetData.push([line.trim()]);
-                }
-
-                line = '';
-              }
-
-              line += item.str + ' ';
-              lastY = item.transform[5];
-            });
-
-            // Capture remaining data after parsing the page
-            if (line.trim()) {
-              line = cleanText(line);
-              if (line.includes("Disclaimer: Charges/Adjustments made after statement date")) {
-                if (currentSheetData.length > 0) {
-                  sheets.push([...currentSheetData]);
-                  currentSheetData = [];
-                }
-              } else {
-                currentSheetData.push([line.trim()]);
-              }
+          if (line.includes("Disclaimer: Charges/Adjustments made after statement date")) {
+            if (currentSheetData.length > 0) {
+              processExtractedSheet(currentSheetData);
+              currentSheetData = [];
             }
-          }
-
-          // If there’s leftover data after the last page, save it as a new sheet
-          if (currentSheetData.length > 0) {
-            sheets.push([...currentSheetData]);
-          }
-
-          console.log('Extracted Sheets:', sheets);
-          if (sheets.length > 0) {
-            alert('PDF data extracted successfully!');
-            document.getElementById('exportExcelBtn').disabled = false;
           } else {
-            alert('No readable text extracted.');
+            currentSheetData.push([line.trim()]);
           }
-        } catch (error) {
-          console.error('Error extracting PDF data:', error);
-          alert('Failed to extract data. Check the console for details.');
+
+          line = '';
+        }
+
+        line += item.str + ' ';
+        lastY = item.transform[5];
+      });
+
+      // Capture last dangling line from the page
+      if (line.trim()) {
+        line = cleanText(line);
+        if (line.includes("Disclaimer: Charges/Adjustments made after statement date")) {
+          if (currentSheetData.length > 0) {
+            processExtractedSheet(currentSheetData);
+            currentSheetData = [];
+          }
+        } else {
+          currentSheetData.push([line.trim()]);
         }
       }
-    });
-
-    function cleanText(text) {
-      // Remove specific text patterns without leaving a gap or inserting "null"
-      text = text.replace(/State\s+of\s+South\s+Dakota\s+Department\s+of\s+Health/gi, '');
-      text = text.replace(/600\s+E\s+Capitol\s+Ave/gi, '');
-      text = text.replace(/Pierre,\s+SD\s+57501/gi, '');
-      return text;
     }
+
+    // Final sheet after last page
+    if (currentSheetData.length > 0) {
+      processExtractedSheet(currentSheetData);
+    }
+
+    console.log("✅ Extracted sheets:", sheets);
+    if (sheets.length > 0) {
+      alert('PDF data extracted successfully!');
+      document.getElementById('exportExcelBtn').disabled = false;
+    } else {
+      alert('No readable text extracted.');
+    }
+  } catch (error) {
+    console.error('Error extracting PDF data:', error);
+    alert('Failed to extract data. Check the console for details.');
+  }
+}
+function cleanText(text) {
+  return text
+    .replace(/State\s+of\s+South\s+Dakota\s+Department\s+of\s+Health/gi, '')
+    .replace(/600\s+E\s+Capitol\s+Ave/gi, '')
+    .replace(/Pierre,\s+SD\s+57501/gi, '')
+    .trim();
+}
+function processExtractedSheet(rawLines) {
+  const flattened = rawLines.map(r => r[0]?.trim()).filter(Boolean);
+  const name = extractClientName(flattened);
+  const address = extractClientAddress(flattened);
+  clientInfo.push({ name, address });
+
+  const headerIndex = flattened.findIndex(line => line.startsWith("Claim Number"));
+  const rawTop = flattened.slice(0, headerIndex).map(line => [line]);
+
+  const tableRows = extractTableRows(flattened, headerIndex);
+  const structured = buildStructuredTable(tableRows);
+
+  const wsData = [
+    ...rawTop,
+    [],
+    ...structured
+  ];
+
+  sheets.push(wsData);
+}
+function extractClientName(lines) {
+  const nameLine = lines.find(line => line.includes("Client Name(s):"));
+  if (!nameLine) return "[CLIENT NAME]";
+
+  let name = nameLine.split("Client Name(s):")[1].trim().split(" (")[0];
+
+  if (name.includes(",")) {
+    const [last, first] = name.split(",");
+    name = `${first.trim()} ${last.trim()}`;
+  }
+
+  return name;
+}
 
     function exportToExcel() {
       if (sheets.length === 0) {
