@@ -99,7 +99,6 @@
     background-color: #e8b3e8;
   }
 </style>
-  </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
@@ -107,6 +106,7 @@
   <a href="index.html" class="back-home">Back to Home</a>
   <input type="file" id="fileInput" accept="application/pdf" />
   <button id="exportExcelBtn" onclick="exportToExcel()" disabled>Export to Excel</button>
+  <div id="notification" style="position: fixed; top: 10px; right: 10px; background-color: #f8c9f9; color: #333; padding: 10px 20px; border-radius: 5px; display: none; z-index: 1000;"></div>
   <script>
     let sheets = [];
     let clientInfo = [];
@@ -123,6 +123,7 @@
     const pdfData = new Uint8Array(arrayBuffer);
 
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+
     const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
 
     sheets = [];
@@ -175,11 +176,9 @@
     if (currentSheetData.length > 0) {
       processExtractedSheet(currentSheetData);
     }
-
     console.log("✅ Extracted sheets:", sheets);
     if (sheets.length > 0) {
-      alert('PDF data extracted successfully!');
-      document.getElementById('exportExcelBtn').disabled = false;
+      showNotification('PDF data extracted successfully!');
     } else {
       alert('No readable text extracted.');
     }
@@ -201,7 +200,9 @@ function processExtractedSheet(rawLines) {
   const address = extractClientAddress(flattened);
   clientInfo.push({ name, address });
 
-  const headerIndex = flattened.findIndex(line => line.startsWith("Claim Number"));
+  const headerIndex = flattened.findIndex(line =>
+  line.toLowerCase().includes("claim number")
+);
   const rawTop = flattened.slice(0, headerIndex).map(line => [line]);
 
   const tableRows = extractTableRows(flattened, headerIndex);
@@ -228,25 +229,122 @@ function extractClientName(lines) {
 
   return name;
 }
+function extractClientAddress(lines) {
+  const index = lines.findIndex(line => line.includes(","));
+  if (index === -1) return ["[ADDRESS LINE 1]", "[CITY, STATE ZIP]"];
 
-    function exportToExcel() {
-      if (sheets.length === 0) {
-        alert('No data to export.');
-        return;
+  const raw = lines.slice(index + 1, index + 4)
+    .map(line => line.trim())
+    .filter(line => line.length > 0);
+
+  return [
+    raw[0] || "[ADDRESS LINE 1]",
+    raw.find(line => /\d{5}/.test(line)) || "[CITY, STATE ZIP]"
+  ];
+}
+function extractTableRows(lines, headerIndex) {
+  if (headerIndex === -1) return [];
+
+  return lines
+    .slice(headerIndex + 1)
+    .filter(line =>
+      line.includes("CL-") || line.includes("Service Line#")
+    );
+}
+function buildStructuredTable(rows) {
+  const headers = [
+    "Claim Number", "Service Date", "Procedure (and Codes)", "Units", "Unit Rate",
+    "Total Charge", "Patient Charge", "Total Paid", "Insurance Paid", "Patient Paid",
+    "Total Adjustment", "Total Balance", "Insurance Balance", "Balance Owed"
+  ];
+
+  const body = [];
+
+  rows.forEach((line, index) => {
+    const fields = [];
+    const dateMatch = line.match(/\d{2}\/\d{2}\/\d{4}/);
+
+    if (dateMatch) {
+      const dateIndex = line.indexOf(dateMatch[0]);
+      const left = line.substring(0, dateIndex).trim();
+      const right = line.substring(dateMatch[0].length + dateIndex).trim();
+
+      const leftParts = left.split(/\s{2,}/);
+      const rightParts = right.split(/\s{2,}/);
+
+      fields.push(leftParts[0]);
+      fields.push(dateMatch[0]);
+      fields.push(rightParts[0] || "");
+
+      for (let i = 1; i < rightParts.length; i++) {
+        fields.push(rightParts[i]);
       }
-
-      const wb = XLSX.utils.book_new();
-
-      // Create a new sheet for each set of extracted data
-      sheets.forEach((sheetData, index) => {
-        const ws = XLSX.utils.aoa_to_sheet(sheetData);
-        XLSX.utils.book_append_sheet(wb, ws, `Invoice ${index + 1}`);
-      });
-
-      // Save the workbook as an Excel file
-      XLSX.writeFile(wb, "Invoice_Statement.xlsx");
+    } else {
+      fields.push(...line.split(/\s{2,}/));
     }
-  </script>
 
+    while (fields.length < 14) fields.push("");
+
+    const isClaimRow = fields[0]?.includes("CL-");
+    const isServiceLineRow = fields[0]?.includes("Service Line#");
+    const nextLine = rows[index + 1];
+    const nextIsServiceLine = nextLine && nextLine.includes("Service Line#");
+
+    console.log(`[${fields[0]}] ➜ next line is service?`, nextIsServiceLine);
+
+    body.push([
+      fields[0],
+      fields[1],
+      isServiceLineRow ? fields[2] : "",
+      fields[3],
+      isClaimRow && nextIsServiceLine ? "" : fields[4],
+      isClaimRow && nextIsServiceLine ? "" : fields[5],
+      isClaimRow && nextIsServiceLine ? "" : fields[6],
+      isClaimRow && nextIsServiceLine ? "" : fields[7],
+      isClaimRow && nextIsServiceLine ? "" : fields[8],
+      isClaimRow && nextIsServiceLine ? "" : fields[9],
+      isClaimRow && nextIsServiceLine ? "" : fields[10],
+      isClaimRow && nextIsServiceLine ? "" : fields[11],
+      isClaimRow && nextIsServiceLine ? "" : fields[12],
+      fields[13] || ""
+    ]);
+  });
+
+  return [headers, ...body];
+}
+function exportToExcel() {
+  if (sheets.length === 0) {
+    alert("No sheets were generated from the PDF. Please check the file and try again.");
+    return;
+  }
+
+  const wb = XLSX.utils.book_new();
+
+  sheets.forEach((sheetData, index) => {
+    const ws = XLSX.utils.aoa_to_sheet(sheetData);
+
+    ws['!cols'] = [
+      { wch: 20 }, { wch: 15 }, { wch: 40 }, { wch: 8 }, { wch: 12 },
+      { wch: 14 }, { wch: 14 }, { wch: 12 }, { wch: 14 }, { wch: 12 },
+      { wch: 16 }, { wch: 14 }, { wch: 18 }, { wch: 14 }
+    ];
+
+    XLSX.utils.book_append_sheet(wb, ws, `Invoice ${index + 1}`);
+  });
+
+  XLSX.writeFile(wb, "Invoice_Statement.xlsx");
+}
+    function showNotification(message) {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.style.display = 'block';   
+      document.getElementById('exportExcelBtn').disabled = false;
+      setTimeout(() => {
+        notification.style.display = 'none';
+      }, 3000); // Hide after 3 seconds
+    }
+ 
+
+  </script>
 </body>
 </html>
