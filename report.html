@@ -286,30 +286,30 @@ function buildStructuredTable(rows) {
     while (fields.length < 14) fields.push("");
 
     const isClaimRow = fields[0]?.includes("CL-");
-    const isServiceLineRow = fields[0]?.includes("Service Line#");
-    const nextLine = rows[index + 1];
-    const nextIsServiceLine = nextLine && nextLine.includes("Service Line#");
+const isServiceLineRow = fields[0]?.includes("Service Line#");
+const nextLine = rows[index + 1];
+const nextIsServiceLine = nextLine && nextLine.includes("Service Line#");
+const shouldClear = isClaimRow && nextIsServiceLine;
 
-    console.log(`[${fields[0]}] ➜ next line is service?`, nextIsServiceLine);
+console.log(`[${fields[0]}] ➜ next line is service?`, nextIsServiceLine);
 
-    body.push([
-      fields[0],
-      fields[1],
-      isServiceLineRow ? fields[2] : "",
-      fields[3],
-      isClaimRow && nextIsServiceLine ? "" : fields[4],
-      isClaimRow && nextIsServiceLine ? "" : fields[5],
-      isClaimRow && nextIsServiceLine ? "" : fields[6],
-      isClaimRow && nextIsServiceLine ? "" : fields[7],
-      isClaimRow && nextIsServiceLine ? "" : fields[8],
-      isClaimRow && nextIsServiceLine ? "" : fields[9],
-      isClaimRow && nextIsServiceLine ? "" : fields[10],
-      isClaimRow && nextIsServiceLine ? "" : fields[11],
-      isClaimRow && nextIsServiceLine ? "" : fields[12],
-      fields[13] || ""
-    ]);
+body.push([
+  fields[0] || "",
+  fields[1] || "",
+  isServiceLineRow ? fields[2] : (shouldClear ? "" : fields[2] || ""),
+  fields[3] || "",
+  shouldClear ? "" : fields[4] || "",
+  fields[5] || "",
+  fields[6] || "",
+  fields[7] || "",
+  fields[8] || "",
+  fields[9] || "",
+  fields[10] || "",
+  fields[11] || "",
+  fields[12] || "",
+  fields[13] || ""
+]);
   });
-
   return [headers, ...body];
 }
 function exportToExcel() {
