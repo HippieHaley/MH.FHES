@@ -260,56 +260,50 @@ function buildStructuredTable(rows) {
 
   const body = [];
 
-  rows.forEach((line, index) => {
-    const fields = [];
-    const dateMatch = line.match(/\d{2}\/\d{2}\/\d{4}/);
+  rows.forEach((line, rowIndex) => {
+    const parts = line.trim().split(/\s+/); // basic split, then we slice cleanly
+    const dateIndex = parts.findIndex(part => /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(part));
 
-    if (dateMatch) {
-      const dateIndex = line.indexOf(dateMatch[0]);
-      const left = line.substring(0, dateIndex).trim();
-      const right = line.substring(dateMatch[0].length + dateIndex).trim();
+    const claimOrServiceLine = parts.slice(0, dateIndex).join(' ');
+    const serviceDate = parts[dateIndex];
 
-      const leftParts = left.split(/\s{2,}/);
-      const rightParts = right.split(/\s{2,}/);
-
-      fields.push(leftParts[0]);
-      fields.push(dateMatch[0]);
-      fields.push(rightParts[0] || "");
-
-      for (let i = 1; i < rightParts.length; i++) {
-        fields.push(rightParts[i]);
-      }
-    } else {
-      fields.push(...line.split(/\s{2,}/));
+    // Find the first numeric value after the date (typically units)
+    let unitsIndex = dateIndex + 1;
+    while (unitsIndex < parts.length && isNaN(parts[unitsIndex].replace(/[$,]/g, ''))) {
+      unitsIndex++;
     }
 
-    while (fields.length < 14) fields.push("");
+    const procedure = parts.slice(dateIndex + 1, unitsIndex).join(' ');
+    const units = parts[unitsIndex] || '';
+    const unitRate = parts[unitsIndex + 1] || '';
+    const totalCharge = parts[unitsIndex + 2] || '';
+    const patientCharge = parts[unitsIndex + 3] || '';
+    const totalPaid = parts[unitsIndex + 4] || '';
+    const insurancePaid = parts[unitsIndex + 5] || '';
+    const patientPaid = parts[unitsIndex + 6] || '';
+    const adjustment = parts[unitsIndex + 7] || '';
+    const totalBalance = parts[unitsIndex + 8] || '';
+    const insuranceBalance = parts[unitsIndex + 9] || '';
+    const balanceOwedRow = parts[unitsIndex + 10] || '';
 
-    const isClaimRow = fields[0]?.includes("CL-");
-const isServiceLineRow = fields[0]?.includes("Service Line#");
-const nextLine = rows[index + 1];
-const nextIsServiceLine = nextLine && nextLine.includes("Service Line#");
-const shouldClear = isClaimRow && nextIsServiceLine;
-
-console.log(`[${fields[0]}] ➜ next line is service?`, nextIsServiceLine);
-
-body.push([
-  fields[0] || "",
-  fields[1] || "",
-  isServiceLineRow ? fields[2] : (shouldClear ? "" : fields[2] || ""),
-  fields[3] || "",
-  shouldClear ? "" : fields[4] || "",
-  fields[5] || "",
-  fields[6] || "",
-  fields[7] || "",
-  fields[8] || "",
-  fields[9] || "",
-  fields[10] || "",
-  fields[11] || "",
-  fields[12] || "",
-  fields[13] || ""
-]);
+    body.push([
+      claimOrServiceLine,
+      serviceDate,
+      procedure,
+      units,
+      unitRate,
+      totalCharge,
+      patientCharge,
+      totalPaid,
+      insurancePaid,
+      patientPaid,
+      adjustment,
+      totalBalance,
+      insuranceBalance,
+      balanceOwedRow
+    ]);
   });
+
   return [headers, ...body];
 }
 function exportToExcel() {
