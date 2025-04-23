@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Due-Date Formatter</title>
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+  
+    /* General Body Style */
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1500px;
+      margin: 0 auto;
+      background-color: #acdbf9;
+      color: #333;
+      padding-top: 50px;
+    }
+  
+    /* Formatter Container */
+    .container {
+      width: 100%;
+      max-width: 800px;
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+  
+    /* Title */
+    h1 {
+      text-align: center;
+      font-size: 1.5rem;
+      color: #333;
+    }
+  
+    /* Input Textarea */
+    textarea {
+      width: 100%;
+      height: 120px;
+      font-family: monospace;
+      padding: 10px;
+      border: 2px solid #333;
+      border-radius: 8px;
+      resize: vertical;
+    }
+  
+    /* Controls Section */
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  
+    /* Pink Radio Buttons */
+    input[type="radio"] {
+      accent-color: #f8c9f9;
+      margin-right: 5px;
+      width: 1rem;
+      height: 1rem;
+    }
+  
+    .controls label {
+      font-size: 1rem;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+  
+    /* Pink Format Button */
+    .controls button,
+    #format {
+      padding: 10px 20px;
+      background-color: #f8c9f9;
+      border: 2px solid #333;
+      border-radius: 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      color: #333;
+      transition: background-color 0.2s ease;
+    }
+  
+    .controls button:hover,
+    #format:hover {
+      background-color: #e8b3e8;
+    }
+  
+    /* Output Preformatted Text */
+    #output {
+      white-space: pre;
+      background-color: #f6f6f6;
+      padding: 20px;
+      border: 2px solid #333;
+      border-radius: 8px;
+      min-height: 200px;
+      overflow-x: auto;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <h1>Due-Date Formatter</h1>
+  <textarea id="input" rows="4" placeholder="Paste your text here..."></textarea>
+  <p>
+    <label><input type="radio" name="mode" value="filled" checked> Filled</label>
+    <label><input type="radio" name="mode" value="blank"> Blank</label>
+    <button id="format">Format</button>
+  </p>
+  <pre id="output"></pre>
+
+  <script>
+    // 1) Define your keys in the fixed order:
+    const KEYS = ['ARU','AE','Pap','Mammo','Depo'];
+
+    // 2) Regex captures due patterns, even if date is empty:
+    const KEY_DATE_REGEX = /\b(ARU|AE|Pap|Mammo|Depo)\b[^;]*?\bdue:?\s*([^;]*)(?:;|$)/gi;
+
+    // 3) Parse raw text: record each key's date (may be empty string)
+    function parseRaw(raw) {
+      const map = {};
+      let m;
+      while ((m = KEY_DATE_REGEX.exec(raw)) !== null) {
+        const key = m[1];
+        const val = m[2].trim();
+        map[key] = val;
+      }
+      return map;
+    }
+
+    // 4) Extract leftover lines (non-due content)
+    function extractLeftover(raw) {
+      return raw
+        .split(/\n/)
+        .map(line => line.trim())
+        .filter(line => {
+          if (!line) return false;
+          const temp = /\b(ARU|AE|Pap|Mammo|Depo)\b[^;]*?due:?\s*([^;]*)(?:;|$)/gi;
+          const match = temp.exec(line);
+          temp.lastIndex = 0;
+          // skip due-lines without dates
+          if (match && match[2].trim() === '') return false;
+          return true;
+        })
+        .map(line => line.replace(KEY_DATE_REGEX, '').replace(/;+/g, '').trim())
+        .filter(line => line)
+        .join('\n');
+    }
+    // (inside your <script>)
+
+// 5) Build each line, showing any key found in the raw text when filled,
+//    or all keys when blank:
+function makeLines(raw, data, blank) {
+  const TOTAL_WIDTH = 40;
+  const keysToShow = blank
+    ? KEYS
+    : KEYS.filter(key => new RegExp(`\\b${key}\\b`, 'i').test(raw));
+
+  return keysToShow.map(key => {
+    const label = `${key} Due: `;
+    const val   = blank ? '' : (data[key] || '');
+    const base  = label + val;
+    const pad   = Math.max(0, TOTAL_WIDTH - base.length);
+    return base + '_'.repeat(pad);
+  }).join('\n');
+}
+
+// 6) Top-level formatter now passes raw into makeLines:
+function formatAll(raw, blank = false) {
+  const data  = parseRaw(raw);
+  const lines = makeLines(raw, data, blank);
+
+  if (!blank) {
+    const leftover = extractLeftover(raw);
+    return leftover
+      ? lines + '\n' + leftover
+      : lines;
+  }
+  return lines;
+}
+
+    document.getElementById('format').addEventListener('click', () => {
+      KEY_DATE_REGEX.lastIndex = 0;
+      const raw   = document.getElementById('input').value;
+      const blank = document.querySelector('input[name="mode"]:checked').value === 'blank';
+      document.getElementById('output').textContent = formatAll(raw, blank);
+    });
+  </script>
+</body>
+</html>
