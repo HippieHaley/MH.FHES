@@ -164,15 +164,14 @@ button:hover {
         <td><input type="date"></td>
         <td><input type="time"></td>
         <td>
-          <button onclick="createDraft(this)">Create Draft</button>
+        <button onclick="addRow()">+ Add Row</button>
           <button onclick="deleteRow(this)">Delete</button>
-
-  <button onclick="addRow()">+ Add Row</button>
-  <button onclick="previewAll()">Preview All</button>     
+      <button onclick="createDraft(this)">Create Draft</button>
    </td>
       </tr>
     </tbody>
   </table>
+ <button onclick="previewAll()">Preview All</button>
   <div id="preview" class="alert-preview"></div>
   <script>
     function addRow() {
