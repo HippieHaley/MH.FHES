@@ -151,7 +151,7 @@ function makeLines(raw, data, blank) {
     const content = label + val;
 
     // Only pad ARU, AE, Pap — leave others alone
-    if (['ARU', 'AE', 'Pap'].includes(key)) {
+    if (['ARU', 'AE', 'Pap', "Mammo"].includes(key)) {
       const dots = '.'.repeat(Math.max(10, TARGET_INDENT - content.length));
       return `${dots} ${content}`;
     } else {
