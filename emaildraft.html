@@ -51,19 +51,34 @@ button {
   font-size: 0.9rem;
   font-weight: bold;
   color: #333;
-  background-color: #f8c9f9;
+  background-color: #acdbf9; 
   border: 1px solid #000;
   border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 button:hover {
-  background-color: #e8b8e8;
+  background-color: #acdbf9; 
 }
+.alt-button {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #333;
+  background-color: #f8c9f9; /* pastel pink */
+  border: 1px solid #000;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.alt-button:hover {
+  background-color: #e8b3e8; /* slightly darker pink on hover */
+}
+
 #preview {
   margin-top: 30px;
-  background-color: #e8b8e8;
-  padding: 20px;
+  background-color:#e8b3e8;
   border-radius: 30px;
   color: #333;
   font-size: 1rem;
@@ -95,7 +110,7 @@ button:hover {
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  background-color: #f8c9f9;
+  background-color: #e8b3e8;
   padding: 20px;
   border-radius: 50%;
   width: 40px;   /* suspect issue here */
@@ -112,7 +127,7 @@ button:hover {
   right: 20px;
   top: 50%;
   transform: translateY(-50%);
-  background-color: #f8c9f9;
+  background-color: #e8b3e8;
   padding: 15px;
   border-radius: 10px;
   border: 1px solid #000;
@@ -126,7 +141,7 @@ button:hover {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #f8c9f9;
+  background-color: #acdbf9; 
   color: #333;
   padding: 10px 15px;
   border: 2px solid #333;
@@ -141,6 +156,47 @@ button:hover {
 }
 .notification.show {
   opacity: 1;
+}
+.template-selector {
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: 1px solid #333;
+  background-color: #acdbf9; 
+  color: #333;
+  font-size: 1rem;
+  font-weight: bold;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-left: 8px;
+  margin-right: 8px;
+}
+.template-selector:focus {
+  outline: none;
+  border-color: #000;
+  background-color:  #acdbf9; 
+}
+.sms-email-input {
+  padding: 10px 15px;
+  border-radius: 30px;
+  border: 1px solid #333;
+  font-size: 1rem;
+  font-weight: normal;
+  background-color:  #acdbf9; 
+  color: #333;
+  width: 100%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.sms-email-input::placeholder {
+  color: #030303; 
+}
+.sms-email-input:focus {
+  outline: none;
+  border-color: #000;
+  background-color:  #acdbf9; 
 }
 
   </style>
@@ -167,11 +223,16 @@ button:hover {
         <button onclick="addRow()">+ Add Row</button>
           <button onclick="deleteRow(this)">Delete</button>
       <button onclick="createDraft(this)">Create Draft</button>
+      <select class="template-selector">
+        <option value="default">Reminder</option>
+        <option value="reschedule">Reschedule</option>
+        <option value="followup">Follow-Up</option>
+      </select>      
    </td>
       </tr>
     </tbody>
   </table>
- <button onclick="previewAll()">Preview All</button>
+ <button class="alt-button" onclick="previewAll()">Preview All</button>
   <div id="preview" class="alert-preview"></div>
   <script>
     function addRow() {
@@ -275,20 +336,31 @@ button:hover {
       }
     }
     function getEmailRowData(row) {
-      const inputs = row.getElementsByTagName('input');
-      const email = inputs[0].value;
-      const date = inputs[1].value;
-      const time = inputs[2].value;
-      const subject = 'SECUREMAIL From Monument Health FHES.';
-      const body = `Please send YES to confirm your appt on ${date} @ ${time}.\nCall to cancel, reschedule, or if you have questions.\n605-717-8920. Thank you.`;
-      return { email, subject, body };
-    }
-    function createDraft(button) {
-      const row = button.closest('tr');
-      const { email, subject, body } = getEmailRowData(row);
-      const mailto = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      window.location.href = mailto;
-    }
+  const inputs = row.getElementsByTagName('input');
+  const email = inputs[0].value;
+  const date = inputs[1].value;
+  const time = inputs[2].value;
+
+  const templateSelector = row.querySelector('.template-selector');
+  const selectedTemplate = templateSelector ? templateSelector.value : 'default';
+
+  const templates = {
+    default: `Please send YES to confirm your appt on ${date} @ ${time}.\nCall to cancel, reschedule, or if you have questions.\n605-717-8920. Thank you.`,
+    reschedule: `We need to reschedule your appointment originally set for ${date} @ ${time}.\nPlease call us at 605-717-8920. Thank you.`,
+    followup: `Just following up on your visit.\nYour original appt was on ${date} @ ${time}.\nCall 605-717-8920 if you have any questions.`
+  };
+
+  const subject = 'SECUREMAIL From Monument Health FHES.';
+  const body = templates[selectedTemplate] || templates.default;
+
+  return { email, subject, body };
+}
+function createDraft(button) {
+  const row = button.closest('tr');
+  const { email, subject, body } = getEmailRowData(row);
+  const mailto = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailto;
+}
     function previewAll() {
   const rows = document.getElementById('emailTable').getElementsByTagName('tbody')[0].rows;
   let previewHTML = '';
