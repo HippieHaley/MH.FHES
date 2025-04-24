@@ -107,62 +107,68 @@
       const map = {};
       let m;
       while ((m = KEY_DATE_REGEX.exec(raw)) !== null) {
-        const key = m[1];
+        const key = m[1].charAt(0).toUpperCase() + m[1].slice(1); // normalize casing
         const val = m[2].trim();
         map[key] = val;
       }
       return map;
     }
-
-    // 4) Extract leftover lines (non-due content)
     function extractLeftover(raw) {
-      return raw
-        .split(/\n/)
-        .map(line => line.trim())
-        .filter(line => {
-          if (!line) return false;
-          const temp = /\b(ARU|AE|Pap|Mammo|Depo)\b[^;]*?due:?\s*([^;]*)(?:;|$)/gi;
-          const match = temp.exec(line);
-          temp.lastIndex = 0;
-          // skip due-lines without dates
-          if (match && match[2].trim() === '') return false;
-          return true;
-        })
-        .map(line => line.replace(KEY_DATE_REGEX, '').replace(/;+/g, '').trim())
-        .filter(line => line)
-        .join('\n');
-    }
-    // (inside your <script>)
+  return raw
+    .split(/\n/)
+    .map(line => line.trim())
+    .filter(line => {
+      if (!line) return false;
+      const temp = /\b(ARU|AE|Pap|Mammo|Depo)\b[^;]*?due:?\s*([^;]*)(?:;|$)/gi;
+      const match = temp.exec(line);
+      temp.lastIndex = 0;
+      // skip due-lines without dates
+      if (match && match[2].trim() === '') return false;
+      return true;
+    })
+    .map(line => {
+  // Remove "Next" but keep the rest of the line
+  line = line.replace(/\bNext\b:?/gi, '').trim();
 
-// 5) Build each line, showing any key found in the raw text when filled,
-//    or all keys when blank:
+  return line
+    .replace(KEY_DATE_REGEX, '') // Remove due date phrases
+    .replace(/;+/g, '')          // Clean up any leftover semicolons
+    .trim();
+})
+    .filter(line => line)
+    .join('\n');
+}
 function makeLines(raw, data, blank) {
-  const TOTAL_WIDTH = 40;
+  const TARGET_INDENT = 65; // controls how far dots push to the right
+
   const keysToShow = blank
     ? KEYS
     : KEYS.filter(key => new RegExp(`\\b${key}\\b`, 'i').test(raw));
 
   return keysToShow.map(key => {
     const label = `${key} Due: `;
-    const val   = blank ? '' : (data[key] || '');
-    const base  = label + val;
-    const pad   = Math.max(0, TOTAL_WIDTH - base.length);
-    return base + '_'.repeat(pad);
+    const val = (blank || !data[key]) ? '__________' : data[key];
+    const content = label + val;
+
+    // Only pad ARU, AE, Pap — leave others alone
+    if (['ARU', 'AE', 'Pap'].includes(key)) {
+      const dots = '.'.repeat(Math.max(10, TARGET_INDENT - content.length));
+      return `${dots} ${content}`;
+    } else {
+      return content;
+    }
   }).join('\n');
 }
 
-// 6) Top-level formatter now passes raw into makeLines:
 function formatAll(raw, blank = false) {
-  const data  = parseRaw(raw);
+  const data = parseRaw(raw);
   const lines = makeLines(raw, data, blank);
+  const leftover = extractLeftover(raw);
+  const cleanedLeftover = leftover === '.' ? '' : leftover;
 
-  if (!blank) {
-    const leftover = extractLeftover(raw);
-    return leftover
-      ? lines + '\n' + leftover
-      : lines;
-  }
-  return lines;
+  return blank
+    ? lines
+    : (cleanedLeftover ? lines + '\n' + cleanedLeftover : lines);
 }
 
 function showNotification() {
