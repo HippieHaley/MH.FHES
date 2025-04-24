@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    body {
+            font-family: Arial, sans-serif;
+            background-color: #acdbf9; /* Light blue background */
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  background-color: #f8c9f9;
+  border: 2px solid #333;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+th, td {
+  padding: 15px;
+  border: 1px solid #333;
+  background-color: #f8c9f9;
+  color: #333;
+  text-align: center;
+}
+input[type="email"],
+input[type="date"],
+input[type="time"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #000;
+  border-radius: 20px;
+  background-color: #f8c9f9;
+  color: #333;
+  font-size: 1rem;
+  text-align: center;
+}
+input:focus {
+  background-color: #acdbf9; 
+  outline: none;
+  box-shadow: 0 0 5px rgba(232, 184, 232, 0.5);
+}
+button {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #333;
+  background-color: #f8c9f9;
+  border: 1px solid #000;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+button:hover {
+  background-color: #e8b8e8;
+}
+#preview {
+  margin-top: 30px;
+  background-color: #e8b8e8;
+  padding: 20px;
+  border-radius: 30px;
+  color: #333;
+  font-size: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+  </style>
+</head>
+<body>
+  <h2>Email Draft Generator</h2>
+  <table id="emailTable">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="email" placeholder="example@domain.com"></td>
+        <td><input type="date"></td>
+        <td><input type="time"></td>
+        <td>
+          <button onclick="createDraft(this)">Create Draft</button>
+          <button onclick="deleteRow(this)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <button onclick="addRow()">+ Add Row</button>
+  <button onclick="previewAll()">Preview All</button>
+  <div id="preview"></div>
+  <script>
+    function addRow() {
+      const table = document.getElementById('emailTable').getElementsByTagName('tbody')[0];
+      const newRow = table.rows[0].cloneNode(true);
+      const inputs = newRow.getElementsByTagName('input');
+      for (let input of inputs) {
+        input.value = '';
+      }
+      table.appendChild(newRow);
+    }
+    function deleteRow(button) {
+      const row = button.closest('tr');
+      const table = document.getElementById('emailTable').getElementsByTagName('tbody')[0];
+      if (table.rows.length > 1) {
+        row.remove();
+      } else {
+        alert("You must have at least one row.");
+      }
+    }
+    function getEmailRowData(row) {
+      const inputs = row.getElementsByTagName('input');
+      const email = inputs[0].value;
+      const date = inputs[1].value;
+      const time = inputs[2].value;
+      const subject = 'SECUREMAIL From Monument Health FHES.';
+      const body = `Please send YES to confirm your appt on ${date} @ ${time}.\nCall to cancel, reschedule, or if you have questions.\n605-717-8920. Thank you.`;
+      return { email, subject, body };
+    }
+    function createDraft(button) {
+      const row = button.closest('tr');
+      const { email, subject, body } = getEmailRowData(row);
+      const mailto = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = mailto;
+    }
+    function previewAll() {
+      const rows = document.getElementById('emailTable').getElementsByTagName('tbody')[0].rows;
+      let previewHTML = '';
+      for (let row of rows) {
+        const { email, subject, body } = getEmailRowData(row);
+        if (email) {
+          previewHTML += `<strong>To:</strong> ${email}<br><strong>Subject:</strong> ${subject}<br><strong>Body:</strong><br>${body.replace(/\n/g, '<br>')}<br><hr>`;
+        }
+      }
+      document.getElementById('preview').innerHTML = previewHTML || '<em>No valid emails to preview.</em>';
+    }
+  </script>
+</body>
+</html>
