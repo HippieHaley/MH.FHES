@@ -160,7 +160,7 @@ button:hover {
     </thead>
     <tbody>
       <tr>
-        <td><input type="email" placeholder="example@domain.com"></td>
+        <td><input type="email" class="sms-email-input" placeholder="example@domain.com"></td>
         <td><input type="date"></td>
         <td><input type="time"></td>
         <td>
@@ -184,6 +184,88 @@ button:hover {
       }
       table.appendChild(newRow);
     }
+    function setupSmsAutocomplete() {
+    const inputs = document.querySelectorAll('.sms-email-input');
+    inputs.forEach(input => {
+      // Avoid attaching twice
+      if (!input.dataset.bound) {
+        input.dataset.bound = 'true';
+        input.addEventListener('input', handleSmsAutocomplete);
+      }
+    });
+  }
+
+  function handleSmsAutocomplete(e) {
+    const input = e.target;
+    const sanitized = input.value.replace(/\D/g, '');
+
+    const providers = [
+      '@txt.att.net',
+      '@tmomail.net',
+      '@vtext.com',
+      '@messaging.sprintpcs.com',
+      '@vmobl.com',
+      '@mypixmessages.com',
+      '@mymetropcs.com',
+      '@sms.cricketwireless.net'
+    ];
+
+    if (sanitized.length >= 7) {
+      showSmsSuggestions(input, sanitized, providers);
+    } else {
+      clearSmsSuggestions();
+    }
+  }
+
+  function showSmsSuggestions(input, number, providers) {
+    clearSmsSuggestions();
+
+    const container = document.createElement('div');
+    container.setAttribute('id', 'smsSuggestionContainer');
+    container.style.border = '1px solid #333';
+    container.style.background = '#fff';
+    container.style.position = 'absolute';
+    container.style.zIndex = '9999';
+    container.style.width = `${input.offsetWidth}px`;
+    container.style.left = `${input.getBoundingClientRect().left}px`;
+    container.style.top = `${input.getBoundingClientRect().bottom + window.scrollY}px`;
+
+    providers.forEach(domain => {
+      const item = document.createElement('div');
+      item.textContent = number + domain;
+      item.style.padding = '8px';
+      item.style.cursor = 'pointer';
+      item.style.backgroundColor = '#f8c9f9';
+      item.addEventListener('click', () => {
+        input.value = item.textContent;
+        clearSmsSuggestions();
+      });
+      container.appendChild(item);
+    });
+
+    document.body.appendChild(container);
+  }
+
+  function clearSmsSuggestions() {
+    const existing = document.getElementById('smsSuggestionContainer');
+    if (existing) existing.remove();
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.classList.contains('sms-email-input')) {
+      clearSmsSuggestions();
+    }
+  });
+
+  // Hook it on load
+  window.addEventListener('DOMContentLoaded', setupSmsAutocomplete);
+
+  // Also hook it every time a new row is added
+  const originalAddRow = addRow;
+  addRow = function () {
+    originalAddRow();
+    setupSmsAutocomplete();
+  };
     function deleteRow(button) {
       const row = button.closest('tr');
       const table = document.getElementById('emailTable').getElementsByTagName('tbody')[0];
