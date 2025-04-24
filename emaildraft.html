@@ -69,10 +69,86 @@ button:hover {
   font-size: 1rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+/* Back Home Button */
+.back-home {
+          display: inline-block;
+          padding: 12px 24px;
+          background-color: #f8c9f9;
+          color: #333;
+          text-decoration: none;
+          font-size: 1rem;
+          font-weight: bold;
+          border-radius: 20px;
+          text-align: center;
+          border: 1px solid #000;
+          top: 20px;
+          left: 20px;
+          z-index: 999; /* Ensures it stays above other elements */
+          transition: background-color 0.2s ease;
+          position: absolute;
+        }
+        .back-home:hover {
+          background-color: #e8b3e8;
+        }
+        .alert-preview {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #f8c9f9;
+  padding: 20px;
+  border-radius: 50%;
+  width: 40px;   /* suspect issue here */
+  height: 40px;  /* suspect issue here */
+  display: none; /* should be hidden by default */
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 1000;
+}
+#preview {
+  display: none; /* initially hidden, JS shows this as needed */
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #f8c9f9;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #000;
+  max-width: 300px;
+  z-index: 1000;
+  overflow-y: auto;
+  text-align: center; /* makes your default message look nice */
+}
+.notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f8c9f9;
+  color: #333;
+  padding: 10px 15px;
+  border: 2px solid #333;
+  border-radius: 20px;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  z-index: 9999;
+  max-width: 90%;
+  text-align: center;
+}
+.notification.show {
+  opacity: 1;
+}
+
   </style>
 </head>
 <body>
-  <h2>Email Draft Generator</h2>
+  <a href="index.html" class="back-home">Back to Home</a>
+  <h1>Email Draft Generator</h1><div style="margin-bottom: 20px;"></div>
+  <div id="previewPopup" class="notification"></div>
   <table id="emailTable">
     <thead>
       <tr>
@@ -90,13 +166,14 @@ button:hover {
         <td>
           <button onclick="createDraft(this)">Create Draft</button>
           <button onclick="deleteRow(this)">Delete</button>
-        </td>
+
+  <button onclick="addRow()">+ Add Row</button>
+  <button onclick="previewAll()">Preview All</button>     
+   </td>
       </tr>
     </tbody>
   </table>
-  <button onclick="addRow()">+ Add Row</button>
-  <button onclick="previewAll()">Preview All</button>
-  <div id="preview"></div>
+  <div id="preview" class="alert-preview"></div>
   <script>
     function addRow() {
       const table = document.getElementById('emailTable').getElementsByTagName('tbody')[0];
@@ -132,16 +209,28 @@ button:hover {
       window.location.href = mailto;
     }
     function previewAll() {
-      const rows = document.getElementById('emailTable').getElementsByTagName('tbody')[0].rows;
-      let previewHTML = '';
-      for (let row of rows) {
-        const { email, subject, body } = getEmailRowData(row);
-        if (email) {
-          previewHTML += `<strong>To:</strong> ${email}<br><strong>Subject:</strong> ${subject}<br><strong>Body:</strong><br>${body.replace(/\n/g, '<br>')}<br><hr>`;
-        }
-      }
-      document.getElementById('preview').innerHTML = previewHTML || '<em>No valid emails to preview.</em>';
+  const rows = document.getElementById('emailTable').getElementsByTagName('tbody')[0].rows;
+  let previewHTML = '';
+
+  for (let row of rows) {
+    const { email, subject, body } = getEmailRowData(row);
+    if (email && email.trim() !== '') {
+      previewHTML += `<strong>To:</strong> ${email}<br>
+                      <strong>Subject:</strong> ${subject}<br>
+                      <strong>Body:</strong><br>${body.replace(/\n/g, '<br>')}<br><hr>`;
     }
+  }
+
+  const popup = document.getElementById('previewPopup');
+
+  popup.innerHTML = previewHTML || '<em>No valid emails to preview.</em>';
+  popup.classList.add('show');
+
+  // Hide it after 3 seconds
+  setTimeout(() => {
+    popup.classList.remove('show');
+  }, 3000);
+}
   </script>
 </body>
 </html>
