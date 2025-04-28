@@ -94,10 +94,13 @@
   </p>
   <pre id="output"></pre>
   <div id="notify" class="notification">Copied to clipboard!</div>
-
   <script>
-const KEYS = ['ARU','AE','Pap','Mammo','Depo'];
-const KEY_DATE_REGEX = /\b(?:Next\s+)?(ARU|AE|Pap|Mammo|Depo)\b[^:\n;]*[:\s]+\s*([^\n;]*?)(?=(\bARU\b|\bAE\b|\bPap\b|\bMammo\b|\bDepo\b|$))/gi;
+    // 1) Define your keys in the fixed order:
+    const KEYS = ['ARU','AE','Pap','Mammo','Depo'];
+
+    // 2) Regex captures due patterns, even if date is empty:
+    const KEY_DATE_REGEX = /\b(ARU|AE|Pap|Mammo|Depo)\b[^;]*?\bdue:?\s*([^;]*)(?:;|$)/gi;
+
     // 3) Parse raw text: record each key's date (may be empty string)
     function parseRaw(raw) {
       const map = {};
@@ -115,46 +118,42 @@ const KEY_DATE_REGEX = /\b(?:Next\s+)?(ARU|AE|Pap|Mammo|Depo)\b[^:\n;]*[:\s]+\s*
     .map(line => line.trim())
     .filter(line => {
       if (!line) return false;
-
-      const match = KEY_DATE_REGEX.exec(line);
-      KEY_DATE_REGEX.lastIndex = 0;
-
-      // skip due-lines with or without valid date
-      if (match) {
-        const val = match[2].trim();
-        if (val !== '') return false;
-      }
-
+      const temp = /\b(ARU|AE|Pap|Mammo|Depo)\b[^;]*?due:?\s*([^;]*)(?:;|$)/gi;
+      const match = temp.exec(line);
+      temp.lastIndex = 0;
+      // skip due-lines without dates
+      if (match && match[2].trim() === '') return false;
       return true;
     })
     .map(line => {
-      line = line.replace(/\bNext\b:?/gi, '').trim();
+  // Remove "Next" but keep the rest of the line
+  line = line.replace(/\bNext\b:?/gi, '').trim();
 
-      return line
-        .replace(KEY_DATE_REGEX, '') // Remove matched phrases
-        .replace(/;+/g, '')          // Clean up any leftover semicolons
-        .trim();
-    })
+  return line
+    .replace(KEY_DATE_REGEX, '') // Remove due date phrases
+    .replace(/;+/g, '')          // Clean up any leftover semicolons
+    .trim();
+})
     .filter(line => line)
     .join('\n');
 }
 function makeLines(raw, data, blank) {
-  const TARGET_INDENT = 65; // controls how far dots push to the right
+  const KEYS = ['ARU', 'AE', 'Pap', 'Mammo', 'Depo'];
+  const TARGET_LINE_LENGTH = 52; // Tightened up for raw text EMR compatibility
 
-  const keysToShow = blank ? KEYS : Object.keys(data);
+  const keysToShow = blank
+    ? KEYS
+    : KEYS.filter(key => new RegExp(`\\b${key}\\b`, 'i').test(raw));
 
   return keysToShow.map(key => {
     const label = `${key} Due: `;
     const val = (blank || !data[key] || data[key].trim() === '') ? '__________' : data[key];
-    const content = label + val;
+    const fullText = label + val;
 
-    // Pad ARU, AE, Pap, Mammo
-    if (['ARU', 'AE', 'Pap', 'Mammo', 'Depo'].includes(key)) {
-      const dots = '.'.repeat(Math.max(10, TARGET_INDENT - content.length));
-      return `${dots} ${content}`;
-    } else {
-      return content;
-    }
+    const dotsNeeded = Math.max(0, TARGET_LINE_LENGTH - fullText.length);
+    const dots = '.'.repeat(dotsNeeded);
+
+    return `${dots} ${fullText}`;
   }).join('\n');
 }
 function formatAll(raw, blank = false) {
@@ -162,10 +161,11 @@ function formatAll(raw, blank = false) {
   const lines = makeLines(raw, data, blank);
   const leftover = extractLeftover(raw);
   const cleanedLeftover = leftover === '.' ? '' : leftover;
-    return blank
+
+  return blank
     ? lines
     : (cleanedLeftover ? lines + '\n' + cleanedLeftover : lines);
-  }
+}
 
 function showNotification() {
       const note = document.getElementById('notify');
@@ -177,10 +177,10 @@ function showNotification() {
       const raw = document.getElementById('input').value;
       const blank = document.querySelector('input[name="mode"]:checked').value === 'blank';
       const out = formatAll(raw, blank);
-const outputBox = document.getElementById('output');
-outputBox.textContent = ''; // 💥 Clear first
-outputBox.textContent = out;
+      document.getElementById('output').textContent = out;
+      navigator.clipboard.writeText(out).then(showNotification);
     });
+
     document.getElementById('copy').addEventListener('click', () => {
       const text = document.getElementById('output').textContent;
       navigator.clipboard.writeText(text).then(showNotification);
