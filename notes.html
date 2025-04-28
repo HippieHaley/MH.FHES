@@ -139,23 +139,42 @@
 }
 function makeLines(raw, data, blank) {
   const KEYS = ['ARU', 'AE', 'Pap', 'Mammo', 'Depo'];
-  const TARGET_LINE_LENGTH = 52; // Tightened up for raw text EMR compatibility
+  const SAFE_LINE_LENGTH = 50; // Max safe characters to prevent EMR wrapping
+  const UNDERSCORE_LENGTH = 13; // 13 underscores for blank fields
 
   const keysToShow = blank
     ? KEYS
     : KEYS.filter(key => new RegExp(`\\b${key}\\b`, 'i').test(raw));
 
-  return keysToShow.map(key => {
+  // First: Build all raw label+value parts
+  const rawLines = keysToShow.map(key => {
     const label = `${key} Due: `;
-    const val = (blank || !data[key] || data[key].trim() === '') ? '__________' : data[key];
+    const val = (blank || !data[key] || data[key].trim() === '')
+      ? '_'.repeat(UNDERSCORE_LENGTH)
+      : data[key];
+
+    return { label, val };
+  });
+
+  // Now build the final lines
+  const finalLines = rawLines.map(({ label, val }) => {
     const fullText = label + val;
+    const totalLength = fullText.length;
 
-    const dotsNeeded = Math.max(0, TARGET_LINE_LENGTH - fullText.length);
-    const dots = '.'.repeat(dotsNeeded);
+    if (totalLength >= SAFE_LINE_LENGTH - 5) {
+      // Long line → no dots, just label + value directly
+      return `${label}${val}`;
+    } else {
+      // Shorter line → pad with dots until label+value safely fits
+      const dotsNeeded = Math.max(0, SAFE_LINE_LENGTH - totalLength);
+      const dots = '.'.repeat(dotsNeeded);
+      return `${dots} ${label}${val}`;
+    }
+  });
 
-    return `${dots} ${fullText}`;
-  }).join('\n');
+  return finalLines.join('\n');
 }
+
 function formatAll(raw, blank = false) {
   const data = parseRaw(raw);
   const lines = makeLines(raw, data, blank);
@@ -181,10 +200,6 @@ function showNotification() {
       navigator.clipboard.writeText(out).then(showNotification);
     });
 
-    document.getElementById('copy').addEventListener('click', () => {
-      const text = document.getElementById('output').textContent;
-      navigator.clipboard.writeText(text).then(showNotification);
-    });
   </script>
 </body>
 </html>
