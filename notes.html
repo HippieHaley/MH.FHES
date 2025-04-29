@@ -2,107 +2,163 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Due-Date Formatter</title>
+<title>Note Reformatter (Auto Copy)</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: Arial, sans-serif;
-    max-width: 1500px;
-    margin: 0 auto;
+    max-width: 800px;
+    margin: 20px auto;
     background-color: #acdbf9;
-    color: #333;
-    padding-top: 50px;
-  }
-  .container {
-    position: relative;
-    width: 100%; max-width: 800px;
-    background-color: #fff;
-    border-radius: 10px;
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    margin: 0 auto;
-    display: flex; flex-direction: column; gap: 20px;
   }
-  h1 { text-align: center; font-size: 1.5rem; }
-  textarea { width: 100%; height: 120px; font-family: monospace; padding: 10px; border: 2px solid #333; border-radius: 8px; resize: vertical; }
-  .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-  label { font-size: 1rem; display: flex; align-items: center; gap: 5px; }
-  input[type="checkbox"] { accent-color: #f8c9f9; width: 1rem; height: 1rem; }
-  button { padding: 10px 20px; background-color: #f8c9f9; border: 2px solid #333; border-radius: 20px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: background-color 0.2s ease; }
-  button:hover { background-color: #e8b3e8; }
-  #output { white-space: pre-wrap; background-color: #f6f6f6; padding: 20px; border: 2px solid #333; border-radius: 8px; min-height: 200px; overflow-x: auto; font-family: monospace; }
+  textarea {
+    width: 100%;
+    height: 200px;
+    padding: 10px;
+    font-family: monospace;
+    font-size: 1rem;
+    border: 2px solid #333;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  button {
+    padding: 10px 20px;
+    font-weight: bold;
+    border: 2px solid #333;
+    border-radius: 20px;
+    background-color: #f8c9f9;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  button:hover {
+    background-color: #e8b3e8;
+  }
+  pre {
+    white-space: pre-wrap;
+    background-color: #f6f6f6;
+    padding: 20px;
+    border: 2px solid #333;
+    border-radius: 8px;
+    min-height: 200px;
+    font-family: monospace;
+    overflow-x: auto;
+  }
+  .notification {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #d4edda;
+    border: 2px solid #155724;
+    border-radius: 8px;
+    color: #155724;
+    font-weight: bold;
+    display: none;
+    text-align: center;
+  }
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>Due-Date Formatter</h1>
-  <div class="controls">
-    <label><input type="checkbox" class="label-option" value="ARU" checked> ARU</label>
-    <label><input type="checkbox" class="label-option" value="AE" checked> AE</label>
-    <label><input type="checkbox" class="label-option" value="Pap" checked> Pap</label>
-    <label><input type="checkbox" class="label-option" value="Mammo" checked> Mammo</label>
-    <label><input type="checkbox" class="label-option" value="Depo" checked> Depo</label>
-    <label><input type="checkbox" id="keepExtra" checked> Keep Extra Notes</label>
-  </div>
-  <textarea id="input" placeholder="Paste your text here..."></textarea>
-  <button id="format">Format</button>
-  <pre id="output"></pre>
-</div>
+
+<h1>Note Reformatter</h1>
+
+<textarea id="input" placeholder="Type or paste your note here..."></textarea>
+<br>
+<button id="format">Format & Copy</button>
+
+<pre id="output"></pre>
+
+<div id="notification" class="notification">Copied to clipboard!</div>
 
 <script>
-const DEFAULT_LABELS = ['ARU', 'AE', 'Pap', 'Mammo', 'Depo'];
-const UNDERSCORES = '_____________';
-function parseRaw(raw) {
-  const regex = /\b(ARU|AE|Pap|Mammo|Depo)\b[^;]*?due:?:?\s*([^;]*)([^\n]*)/gi;
-  const map = {};
-  let match;
-  while ((match = regex.exec(raw)) !== null) {
-    const key = match[1];
-    const date = match[2].trim();
-    const extra = match[3].trim().replace(/;/g, ''); // <<< ONLY remove semicolons from extras!
-    map[key] = { date: date || '', extra: extra || '' };
-  }
-  return map;
-}
-
-
-function measureText(text) {
-  const canvas = measureText.canvas || (measureText.canvas = document.createElement("canvas"));
-  const context = canvas.getContext("2d");
-  context.font = "16px monospace";
-  return context.measureText(text).width;
-}
-function buildLines(raw, selectedLabels, keepExtra) {
-  const parsed = parseRaw(raw);
-  const fixedParts = [];
-  const fullLines = [];
-
-  selectedLabels.forEach(label => {
-    const data = parsed[label] || { date: '', extra: '' };
-    let fixed = `${label} Due: `;
-    fixed += (data.date ? data.date : UNDERSCORES); 
-    fixedParts.push(fixed);
-    fullLines.push({ fixed, extra: keepExtra && data.extra ? data.extra : '' });
-  });
-
-  const MIN_WIDTH = 300; // about 50 characters worth — you can tweak this
-  const widestFixed = Math.max(MIN_WIDTH, ...fixedParts.map(measureText));
-
-  const paddedLines = fullLines.map(({ fixed, extra }) => {
-    const dotsNeeded = Math.ceil((widestFixed - measureText(fixed)) / measureText('.'));
-    const dots = '.'.repeat(dotsNeeded);
-    return dots + ' ' + fixed + (extra ? ' ' + extra : '');
-  });
-
-  return paddedLines.join('\n');
-}
-
 document.getElementById('format').addEventListener('click', () => {
-  const raw = document.getElementById('input').value;
-  const selectedLabels = Array.from(document.querySelectorAll('.label-option:checked')).map(cb => cb.value);
-  const keepExtra = document.getElementById('keepExtra').checked;
-  const formatted = buildLines(raw, selectedLabels, keepExtra);
-  document.getElementById('output').textContent = formatted;
+  const input = document.getElementById('input').value;
+  
+  const lines = input
+    .replace(/;/g, '') // Remove semicolons
+    .split(/\r?\n/);    // Split at line breaks
+
+  const today = new Date();
+  const threeMonthsFromNow = new Date();
+  threeMonthsFromNow.setMonth(today.getMonth() + 3);
+
+  const wrappedLines = lines
+    .filter(line => line.trim() !== '') // Ignore empty lines
+    .map(line => {
+      const trimmed = line.trim();
+
+      // Split into label and rest
+      const parts = trimmed.split('Due:');
+      if (parts.length === 2) {
+        const label = `<b>${parts[0].trim()} Due:</b>`;
+        let dateAndExtra = parts[1].trim();
+
+        // Try to pull out the first date in the text
+        const dateMatch = dateAndExtra.match(/(\d{1,2}\/\d{4}|\d{1,2}\/\d{1,2}\/\d{2,4}|\b\w+\s\d{4}\b)/);
+        if (dateMatch) {
+          const dateText = dateMatch[1];
+          let parsedDate = null;
+
+          if (/\d{1,2}\/\d{4}/.test(dateText)) {
+            // format M/YYYY or MM/YYYY
+            const parts = dateText.split('/');
+            const month = parseInt(parts[0]) - 1; // JS months are 0-indexed
+            const year = parseInt(parts[1]);
+            parsedDate = new Date(year, month, 1); // Assume day 1
+          } else if (dateText.includes('/')) {
+            // format MM/DD/YYYY or MM/DD/YY
+            const parts = dateText.split('/');
+            const month = parseInt(parts[0]) - 1;
+            const day = parseInt(parts[1]);
+            let year = parseInt(parts[2]);
+            if (year < 100) { year += 2000; }
+            parsedDate = new Date(year, month, day);
+          } else {
+            // format Month YYYY
+            parsedDate = new Date(dateText);
+          }
+
+          if (parsedDate instanceof Date && !isNaN(parsedDate)) {
+            const dateMonth = parsedDate.getMonth();
+            const dateYear = parsedDate.getFullYear();
+
+            const currentMonth = today.getMonth();
+            const currentYear = today.getFullYear();
+
+            const currentTotalMonths = currentYear * 12 + currentMonth;
+            const dateTotalMonths = dateYear * 12 + dateMonth;
+            const threeMonthsLaterTotal = threeMonthsFromNow.getFullYear() * 12 + threeMonthsFromNow.getMonth();
+
+            if (dateTotalMonths < currentTotalMonths) {
+              // Past month
+              dateAndExtra = dateAndExtra.replace(dateText, `<span style="color:red;">${dateText}</span>`);
+            } else if (dateTotalMonths <= threeMonthsLaterTotal) {
+              // This month or next 3 months
+              dateAndExtra = dateAndExtra.replace(dateText, `<span style="color:orange;">${dateText}</span>`);
+            }
+          }
+        }
+
+        return `<p>${label} ${dateAndExtra}</p>`;
+      } else {
+        // fallback if something doesn't match the expected pattern
+        return `<p>${trimmed}</p>`;
+      }
+    });
+
+  const result = wrappedLines.join('\n');
+  document.getElementById('output').textContent = result;
+
+  // Auto-copy to clipboard
+  navigator.clipboard.writeText(result)
+    .then(() => {
+      const notif = document.getElementById('notification');
+      notif.style.display = 'block';
+      setTimeout(() => {
+        notif.style.display = 'none';
+      }, 2000);
+    })
+    .catch(err => {
+      console.error('Could not copy text: ', err);
+    });
 });
 </script>
 </body>
