@@ -486,7 +486,11 @@ body {
       </div>
     </div>
     <div class=" space"></div>
-  </div>
+  
+    </div>    
+  <div id="householdMembersSection" class="section" style="margin-top: 20px;">
+      <h2>Other Household Members</h2>
+      <div id="householdMembersContainer"></div></div>
   <script>
     /***************************************************
      * 1) Coverage Chart & Coverage Level Logic
@@ -620,12 +624,62 @@ body {
     function updateHouseholdIncome() {
       const householdSize = parseInt(document.getElementById('householdSize').value) || 0;
       const yearlyIncome = parseFloat(document.getElementById('grandTotal').textContent) || 0;
+      function updateHouseholdMemberFields() {
+  const container = document.getElementById('householdMembersContainer');
+  const size = parseInt(document.getElementById('householdSize').value || 1);
+
+  // Clear previous fields
+  container.innerHTML = '';
+
+  // Start at 2, since person #1 is the client
+  for (let i = 2; i <= size; i++) {
+    const wrapper = document.createElement('div');
+    wrapper.style.display = 'flex';
+    wrapper.style.gap = '10px';
+    wrapper.style.marginBottom = '10px';
+
+    // Dropdown for relationship
+    const select = document.createElement('select');
+    select.name = `relationship${i}`;
+    select.innerHTML = `
+      <option value="">Select Relationship</option>
+      <option>Son</option>
+      <option>Daughter</option>
+      <option>Fiancé</option>
+      <option>Fiancée</option>
+      <option>Spouse</option>
+      <option>Brother</option>
+      <option>Sister</option>
+      <option>Parent</option>
+      <option>Friend</option>
+      <option>Roommate</option>
+      <option>Other</option>
+    `;
+    select.style.flex = '1';
+    select.style.padding = '8px';
+    select.style.borderRadius = '10px';
+
+    // Text input for name
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.name = `name${i}`;
+    input.placeholder = `Name of person ${i}`;
+    input.style.flex = '2';
+    input.style.padding = '8px';
+    input.style.borderRadius = '10px';
+
+    wrapper.appendChild(select);
+    wrapper.appendChild(input);
+    container.appendChild(wrapper);
+  }
+}
 
       const coverageLevel = determineCoverageLevel(householdSize, yearlyIncome);
       document.getElementById('coverageLevel').textContent = coverageLevel;
 
       const awcQualification = determineAWCQualification(householdSize, yearlyIncome);
       document.getElementById('awcQualification').textContent = awcQualification;
+      updateHouseholdMemberFields();
     }
 // Modal 1 functionality
 const triggerModal1 = document.getElementById('triggerModal1');
@@ -772,8 +826,20 @@ modalOverlay2.addEventListener('click', function(e) {
       infoToCopy += `  Other Annual Income: $${otherAnnual}\n`;
     }
     infoToCopy += "\n";
-  }
+      // Add Other Household Members (if any)
+  const membersSection = document.getElementById('householdMembersContainer');
+  const members = membersSection.querySelectorAll('div');
 
+  if (members.length > 0) {
+    infoToCopy += "Other Household Members:\n";
+    members.forEach((member, index) => {
+      const relationship = member.querySelector('select')?.value || "N/A";
+      const name = member.querySelector('input')?.value || "N/A";
+      infoToCopy += `  ${index + 1}. ${relationship}: ${name}\n`;
+    });
+    infoToCopy += "\n";
+  }
+}
   // If no income details were added, indicate that no data was entered.
   if (
       infoToCopy.indexOf("Biweekly Income:") === -1 &&
@@ -781,6 +847,7 @@ modalOverlay2.addEventListener('click', function(e) {
       infoToCopy.indexOf("Twice a Month Income:") === -1 &&
       infoToCopy.indexOf("Weekly Verbal Income:") === -1 &&
       infoToCopy.indexOf("Extra Income:") === -1
+        // Add Other Household Members (if any)
   ) {
     infoToCopy += "No income data entered.\n";
   }
