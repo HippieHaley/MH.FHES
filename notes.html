@@ -1,205 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Due-Date Formatter</title>
-  <style>
-    /* Basic Reset */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    /* General Body Style */
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 1500px;
-      margin: 0 auto;
-      background-color: #acdbf9;
-      color: #333;
-      padding-top: 50px;
-    }
-    /* Formatter Container */
-    .container {
-      position: relative;
-      width: 100%; max-width: 800px;
-      background-color: #fff;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      margin: 0 auto;
-      display: flex; flex-direction: column; gap: 20px;
-    }
-    /* Notification Popup */
-    .notification {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #f8c9f9;
-      color: #333;
-      padding: 10px 15px;
-      border: 2px solid #333;
-      border-radius: 20px;
-      font-weight: bold;
-      opacity: 0;
-      transition: opacity 0.10s ease;
-      pointer-events: none;
-    }
-    .notification.show {
-      opacity: 1;
-    }
-    /* Title */
-    h1 { text-align: center; font-size: 1.5rem; color: #333; }
-    /* Input Textarea */
-    textarea { width: 100%; height: 120px; font-family: monospace; padding: 10px; border: 2px solid #333; border-radius: 8px; resize: vertical; }
-    /* Controls Section */
-    .controls { display: flex; align-items: center; gap: 10px; }
-    input[type="radio"] { accent-color: #f8c9f9; margin-right: 5px; width: 1rem; height: 1rem; }
-    .controls label { font-size: 1rem; color: #333; display: flex; align-items: center; gap: 5px; }
-    /* Format & Copy Buttons */
-    button { padding: 10px 20px; background-color: #f8c9f9; border: 2px solid #333; border-radius: 20px; font-size: 1rem; font-weight: bold; cursor: pointer; color: #333; transition: background-color 0.2s ease; }
-    button:hover { background-color: #e8b3e8; }
-    #copy { margin-left: auto; }
-    /* Output Preformatted Text */
-    #output { white-space: pre; background-color: #f6f6f6; padding: 20px; border: 2px solid #333; border-radius: 8px; min-height: 200px; overflow-x: auto; font-family: monospace; }
-      /* Optional: Back Home Button */
-      .back-home {
-          display: inline-block;
-          padding: 12px 24px;
-          background-color: #f8c9f9;
-          color: #333;
-          text-decoration: none;
-          font-size: 1rem;
-          font-weight: bold;
-          border-radius: 30px;
-          text-align: center;
-          border: 1px solid #000;
-          position: absolute;
-          top: 20px;
-          left: 20px;
-          z-index: 999;
-          transition: background-color 0.2s ease;
-        }
-      
-        .back-home:hover {
-          background-color: #e8b3e8;
-        }
-  </style>
+<meta charset="UTF-8">
+<title>Due-Date Formatter</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 1500px;
+    margin: 0 auto;
+    background-color: #acdbf9;
+    color: #333;
+    padding-top: 50px;
+  }
+  .container {
+    position: relative;
+    width: 100%; max-width: 800px;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin: 0 auto;
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  h1 { text-align: center; font-size: 1.5rem; }
+  textarea { width: 100%; height: 120px; font-family: monospace; padding: 10px; border: 2px solid #333; border-radius: 8px; resize: vertical; }
+  .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  label { font-size: 1rem; display: flex; align-items: center; gap: 5px; }
+  input[type="checkbox"] { accent-color: #f8c9f9; width: 1rem; height: 1rem; }
+  button { padding: 10px 20px; background-color: #f8c9f9; border: 2px solid #333; border-radius: 20px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: background-color 0.2s ease; }
+  button:hover { background-color: #e8b3e8; }
+  #output { white-space: pre-wrap; background-color: #f6f6f6; padding: 20px; border: 2px solid #333; border-radius: 8px; min-height: 200px; overflow-x: auto; font-family: monospace; }
+</style>
 </head>
 <body>
-  <a href="index.html" class="back-home">Back to Home</a>
+<div class="container">
   <h1>Due-Date Formatter</h1>
-  <textarea id="input" rows="4" placeholder="Paste your text here..."></textarea>
-  <p>
-    <label><input type="radio" name="mode" value="filled" checked> Filled</label>
-    <label><input type="radio" name="mode" value="blank"> Blank</label>
-    <button id="format">Format</button>
-  </p>
+  <div class="controls">
+    <label><input type="checkbox" class="label-option" value="ARU" checked> ARU</label>
+    <label><input type="checkbox" class="label-option" value="AE" checked> AE</label>
+    <label><input type="checkbox" class="label-option" value="Pap" checked> Pap</label>
+    <label><input type="checkbox" class="label-option" value="Mammo" checked> Mammo</label>
+    <label><input type="checkbox" class="label-option" value="Depo" checked> Depo</label>
+    <label><input type="checkbox" id="keepExtra" checked> Keep Extra Notes</label>
+  </div>
+  <textarea id="input" placeholder="Paste your text here..."></textarea>
+  <button id="format">Format</button>
   <pre id="output"></pre>
-  <div id="notify" class="notification">Copied to clipboard!</div>
-  <script>
-    // 1) Define your keys in the fixed order:
-    const KEYS = ['ARU','AE','Pap','Mammo','Depo'];
+</div>
 
-    // 2) Regex captures due patterns, even if date is empty:
-    const KEY_DATE_REGEX = /\b(ARU|AE|Pap|Mammo|Depo)\b[^;]*?\bdue:?\s*([^;]*)(?:;|$)/gi;
+<script>
+const DEFAULT_LABELS = ['ARU', 'AE', 'Pap', 'Mammo', 'Depo'];
+const UNDERSCORES = '_____________';
 
-    // 3) Parse raw text: record each key's date (may be empty string)
-    function parseRaw(raw) {
-      const map = {};
-      let m;
-      while ((m = KEY_DATE_REGEX.exec(raw)) !== null) {
-        const key = m[1].charAt(0).toUpperCase() + m[1].slice(1); // normalize casing
-        const val = m[2].trim();
-        map[key] = val;
-      }
-      return map;
-    }
-    function extractLeftover(raw) {
-  return raw
-    .split(/\n/)
-    .map(line => line.trim())
-    .filter(line => {
-      if (!line) return false;
-      const temp = /\b(ARU|AE|Pap|Mammo|Depo)\b[^;]*?due:?\s*([^;]*)(?:;|$)/gi;
-      const match = temp.exec(line);
-      temp.lastIndex = 0;
-      // skip due-lines without dates
-      if (match && match[2].trim() === '') return false;
-      return true;
-    })
-    .map(line => {
-  // Remove "Next" but keep the rest of the line
-  line = line.replace(/\bNext\b:?/gi, '').trim();
-
-  return line
-    .replace(KEY_DATE_REGEX, '') // Remove due date phrases
-    .replace(/;+/g, '')          // Clean up any leftover semicolons
-    .trim();
-})
-    .filter(line => line)
-    .join('\n');
+function parseRaw(raw) {
+  const regex = /\b(ARU|AE|Pap|Mammo|Depo)\b[^;]*?due:?:?\s*([^;]*)([^\n]*)/gi;
+  const map = {};
+  let match;
+  while ((match = regex.exec(raw)) !== null) {
+    const key = match[1];
+    const date = match[2].trim();
+    const extra = match[3].trim();
+    map[key] = { date: date || '', extra: extra || '' };
+  }
+  return map;
 }
-function makeLines(raw, data, blank) {
-  const KEYS = ['ARU', 'AE', 'Pap', 'Mammo', 'Depo'];
-  const SAFE_LINE_LENGTH = 50; // Max safe characters to prevent EMR wrapping
-  const UNDERSCORE_LENGTH = 13; // 13 underscores for blank fields
 
-  const keysToShow = blank
-    ? KEYS
-    : KEYS.filter(key => new RegExp(`\\b${key}\\b`, 'i').test(raw));
+function measureText(text) {
+  const canvas = measureText.canvas || (measureText.canvas = document.createElement("canvas"));
+  const context = canvas.getContext("2d");
+  context.font = "16px monospace";
+  return context.measureText(text).width;
+}
 
-  // First: Build all raw label+value parts
-  const rawLines = keysToShow.map(key => {
-    const label = `${key} Due: `;
-    const val = (blank || !data[key] || data[key].trim() === '')
-      ? '_'.repeat(UNDERSCORE_LENGTH)
-      : data[key];
+function buildLines(raw, selectedLabels, keepExtra) {
+  const parsed = parseRaw(raw);
+  const fixedParts = [];
+  const fullLines = [];
 
-    return { label, val };
+  selectedLabels.forEach(label => {
+    const data = parsed[label] || { date: '', extra: '' };
+    let fixed = `${label} Due: `;
+    fixed += (data.date ? data.date : UNDERSCORES);
+    fixed += ' '; // Always add a semicolon after date (even blank)
+    fixedParts.push(fixed);
+    fullLines.push({ fixed, extra: keepExtra && data.extra ? data.extra : '' });
   });
 
-  // Now build the final lines
-  const finalLines = rawLines.map(({ label, val }) => {
-    const fullText = label + val;
-    const totalLength = fullText.length;
+  const widestFixed = Math.max(...fixedParts.map(measureText));
 
-    if (totalLength >= SAFE_LINE_LENGTH - 5) {
-      // Long line → no dots, just label + value directly
-      return `${label}${val}`;
-    } else {
-      // Shorter line → pad with dots until label+value safely fits
-      const dotsNeeded = Math.max(0, SAFE_LINE_LENGTH - totalLength);
-      const dots = '.'.repeat(dotsNeeded);
-      return `${dots} ${label}${val}`;
-    }
+  const paddedLines = fullLines.map(({ fixed, extra }) => {
+    const dotsNeeded = Math.ceil((widestFixed - measureText(fixed)) / measureText('.'));
+    const dots = '.'.repeat(dotsNeeded);
+    return dots + ' ' + fixed + (extra ? ' ' + extra : '');
   });
 
-  return finalLines.join('\n');
+  return paddedLines.join('\n');
 }
 
-function formatAll(raw, blank = false) {
-  const data = parseRaw(raw);
-  const lines = makeLines(raw, data, blank);
-  const leftover = extractLeftover(raw);
-  const cleanedLeftover = leftover === '.' ? '' : leftover;
-
-  return blank
-    ? lines
-    : (cleanedLeftover ? lines + '\n' + cleanedLeftover : lines);
-}
-
-function showNotification() {
-      const note = document.getElementById('notify');
-      note.classList.add('show');
-      setTimeout(() => note.classList.remove('show'), 1500);
-    }
-
-    document.getElementById('format').addEventListener('click', () => {
-      const raw = document.getElementById('input').value;
-      const blank = document.querySelector('input[name="mode"]:checked').value === 'blank';
-      const out = formatAll(raw, blank);
-      document.getElementById('output').textContent = out;
-      navigator.clipboard.writeText(out).then(showNotification);
-    });
-
-  </script>
+document.getElementById('format').addEventListener('click', () => {
+  const raw = document.getElementById('input').value;
+  const selectedLabels = Array.from(document.querySelectorAll('.label-option:checked')).map(cb => cb.value);
+  const keepExtra = document.getElementById('keepExtra').checked;
+  const formatted = buildLines(raw, selectedLabels, keepExtra);
+  document.getElementById('output').textContent = formatted;
+});
+</script>
 </body>
 </html>
