@@ -144,7 +144,14 @@
         }
       });
   
-    const result = wrappedLines.join('\n');
+      let result;
+if (wrappedLines.length === 0) {
+  const defaultLabels = ['ARU', 'AE', 'Pap', 'Mammo', 'Depo'];
+  result = defaultLabels.map(label => `<p>${label} Due: _____________</p>`).join('\n');
+} else {
+  result = wrappedLines.join('\n');
+}
+
     document.getElementById('output').textContent = result;
   
     // Auto-copy to clipboard
