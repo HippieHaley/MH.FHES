@@ -621,24 +621,34 @@ body {
     /***************************************************
      * 5) Household Info (Coverage + AWC) Display
      ***************************************************/
-    function updateHouseholdIncome() {
-      const householdSize = parseInt(document.getElementById('householdSize').value) || 0;
-      const yearlyIncome = parseFloat(document.getElementById('grandTotal').textContent) || 0;
-      function updateHouseholdMemberFields() {
+     function updateHouseholdIncome() {
+  const householdSize = parseInt(document.getElementById('householdSize').value) || 0;
+  const yearlyIncome = parseFloat(document.getElementById('grandTotal').textContent) || 0;
+
+  const coverageLevel = determineCoverageLevel(householdSize, yearlyIncome);
+  document.getElementById('coverageLevel').textContent = coverageLevel;
+
+  const awcQualification = determineAWCQualification(householdSize, yearlyIncome);
+  document.getElementById('awcQualification').textContent = awcQualification;
+
+  // ✅ Correct: call updateHouseholdMemberFields separately
+  updateHouseholdMemberFields();
+}
+
+function updateHouseholdMemberFields() {
   const container = document.getElementById('householdMembersContainer');
   const size = parseInt(document.getElementById('householdSize').value || 1);
 
-  // Clear previous fields
-  container.innerHTML = '';
+  container.innerHTML = ''; // Always clear
 
-  // Start at 2, since person #1 is the client
+  if (size <= 1) return; // Stop if only 1
+
   for (let i = 2; i <= size; i++) {
     const wrapper = document.createElement('div');
     wrapper.style.display = 'flex';
     wrapper.style.gap = '10px';
     wrapper.style.marginBottom = '10px';
 
-    // Dropdown for relationship
     const select = document.createElement('select');
     select.name = `relationship${i}`;
     select.innerHTML = `
@@ -659,7 +669,6 @@ body {
     select.style.padding = '8px';
     select.style.borderRadius = '10px';
 
-    // Text input for name
     const input = document.createElement('input');
     input.type = 'text';
     input.name = `name${i}`;
@@ -672,9 +681,8 @@ body {
     wrapper.appendChild(input);
     container.appendChild(wrapper);
   }
-}
 
-      const coverageLevel = determineCoverageLevel(householdSize, yearlyIncome);
+const coverageLevel = determineCoverageLevel(householdSize, yearlyIncome);
       document.getElementById('coverageLevel').textContent = coverageLevel;
 
       const awcQualification = determineAWCQualification(householdSize, yearlyIncome);
@@ -813,33 +821,35 @@ modalOverlay2.addEventListener('click', function(e) {
   const otherAnnual = parseFloat(otherAnnualValue) || 0;
 
   if (tips !== 0 || otherMonthly !== 0 || otherAnnual !== 0) {
-    infoToCopy += "Extra Income:\n";
-    if (tips !== 0) {
-      let annualTips = tips * 52;
-      infoToCopy += `  Tips per week: $${tips} (Annualized: $${annualTips.toFixed(2)})\n`;
-    }
-    if (otherMonthly !== 0) {
-      let annualOtherMonthly = otherMonthly * 12;
-      infoToCopy += `  Other Income per Month: $${otherMonthly} (Annualized: $${annualOtherMonthly.toFixed(2)})\n`;
-    }
-    if (otherAnnual !== 0) {
-      infoToCopy += `  Other Annual Income: $${otherAnnual}\n`;
-    }
-    infoToCopy += "\n";
-      // Add Other Household Members (if any)
-  const membersSection = document.getElementById('householdMembersContainer');
-  const members = membersSection.querySelectorAll('div');
-
-  if (members.length > 0) {
-    infoToCopy += "Other Household Members:\n";
-    members.forEach((member, index) => {
-      const relationship = member.querySelector('select')?.value || "N/A";
-      const name = member.querySelector('input')?.value || "N/A";
-      infoToCopy += `  ${index + 1}. ${relationship}: ${name}\n`;
-    });
-    infoToCopy += "\n";
+  infoToCopy += "Extra Income:\n";
+  if (tips !== 0) {
+    let annualTips = tips * 52;
+    infoToCopy += `  Tips per week: $${tips} (Annualized: $${annualTips.toFixed(2)})\n`;
   }
+  if (otherMonthly !== 0) {
+    let annualOtherMonthly = otherMonthly * 12;
+    infoToCopy += `  Other Income per Month: $${otherMonthly} (Annualized: $${annualOtherMonthly.toFixed(2)})\n`;
+  }
+  if (otherAnnual !== 0) {
+    infoToCopy += `  Other Annual Income: $${otherAnnual}\n`;
+  }
+  infoToCopy += "\n";
 }
+
+// ✅ Always include household members — outside the above block
+const membersSection = document.getElementById('householdMembersContainer');
+const members = membersSection.querySelectorAll('div');
+
+if (members.length > 0) {
+  infoToCopy += "Members of Household (besides client):\n";
+  members.forEach((member, index) => {
+    const relationship = member.querySelector('select')?.value || "N/A";
+    const name = member.querySelector('input')?.value || "N/A";
+    infoToCopy += `  ${index + 1}. ${relationship}: ${name}\n`;
+  });
+  infoToCopy += "\n";
+}
+
   // If no income details were added, indicate that no data was entered.
   if (
       infoToCopy.indexOf("Biweekly Income:") === -1 &&
@@ -876,6 +886,7 @@ modalOverlay2.addEventListener('click', function(e) {
 }
     // Initialize everything on page load
     calculateGrandTotal();
+    updateHouseholdIncome();
   </script>
 </body>
 </html>
