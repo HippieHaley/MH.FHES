@@ -52,7 +52,6 @@
 <script>
 const DEFAULT_LABELS = ['ARU', 'AE', 'Pap', 'Mammo', 'Depo'];
 const UNDERSCORES = '_____________';
-
 function parseRaw(raw) {
   const regex = /\b(ARU|AE|Pap|Mammo|Depo)\b[^;]*?due:?:?\s*([^;]*)([^\n]*)/gi;
   const map = {};
@@ -60,11 +59,12 @@ function parseRaw(raw) {
   while ((match = regex.exec(raw)) !== null) {
     const key = match[1];
     const date = match[2].trim();
-    const extra = match[3].trim();
+    const extra = match[3].trim().replace(/;/g, ''); // <<< ONLY remove semicolons from extras!
     map[key] = { date: date || '', extra: extra || '' };
   }
   return map;
 }
+
 
 function measureText(text) {
   const canvas = measureText.canvas || (measureText.canvas = document.createElement("canvas"));
@@ -72,7 +72,6 @@ function measureText(text) {
   context.font = "16px monospace";
   return context.measureText(text).width;
 }
-
 function buildLines(raw, selectedLabels, keepExtra) {
   const parsed = parseRaw(raw);
   const fixedParts = [];
@@ -82,12 +81,12 @@ function buildLines(raw, selectedLabels, keepExtra) {
     const data = parsed[label] || { date: '', extra: '' };
     let fixed = `${label} Due: `;
     fixed += (data.date ? data.date : UNDERSCORES); 
-    // No semicolon here anymore!
     fixedParts.push(fixed);
     fullLines.push({ fixed, extra: keepExtra && data.extra ? data.extra : '' });
   });
 
-  const widestFixed = Math.max(...fixedParts.map(measureText));
+  const MIN_WIDTH = 300; // about 50 characters worth — you can tweak this
+  const widestFixed = Math.max(MIN_WIDTH, ...fixedParts.map(measureText));
 
   const paddedLines = fullLines.map(({ fixed, extra }) => {
     const dotsNeeded = Math.ceil((widestFixed - measureText(fixed)) / measureText('.'));
