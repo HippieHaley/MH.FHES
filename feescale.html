@@ -137,6 +137,54 @@ body {
       align-items: center; /* Centers text vertically */
       border: 2px solid #333;
     }
+    input[type="text"] {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px 15px;
+  margin: 10px 0;
+  border: 2px solid #f8c9f9;
+  border-radius: 30px;
+  background-color: #f8c9f9;
+  color: #333;
+  font-size: 1rem;
+  outline: none;
+  transition: 0.3s ease;
+}
+input[type="text"]:hover {
+  background-color: #f0d4f0;
+}
+input[type="text"]:focus {
+  border-color: #e8b8e8;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(232, 184, 232, 0.5);
+}
+/* Style for ALL select dropdowns */
+select {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px 15px;
+  margin: 10px 0;
+  border: 2px solid #f8c9f9; /* Soft pink border */
+  border-radius: 30px; /* Rounded edges */
+  background-color: #f8c9f9; /* Soft pink background */
+  color: #333;
+  font-size: 1rem;
+  outline: none;
+  transition: 0.3s ease;
+}
+
+/* Hover effect for selects */
+select:hover {
+  background-color: #f0d4f0; /* Slightly lighter pink */
+}
+
+/* Focus effect for selects */
+select:focus {
+  border-color: #e8b8e8;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(232, 184, 232, 0.5);
+}
+
 .icon-button {
   position: absolute;
   top: 0;
@@ -199,6 +247,15 @@ body {
 <body>
     <a href="index.html" class="back-home">Back to Home</a>
     <h1>Income Calculator</h1>
+    <div style="margin: 20px 0;">
+      <label for="incomeType"><strong>Income Type:</strong></label>
+      <select id="incomeType" style="padding: 6px 10px; border-radius: 10px; margin-left: 10px;">
+        <option value="" selected disabled hidden>Select one...</option>
+        <option value="W2">W2</option>
+        <option value="Paycheck">Paycheck</option>
+        <option value="NEED INCOME DOCS">NEED INCOME DOCS</option>
+      </select>
+    </div>      
     <div class="container">
       <!-- Column 1: Biweekly and Weekly Income Sections -->
       <div class="column">
@@ -736,7 +793,13 @@ modalOverlay2.addEventListener('click', function(e) {
   console.log("AWC Qualification:", awcQualification);
 
   // Begin building the string with header info
-  let infoToCopy = `NO - INCOME DOCS NEEDED - VERBAL INCOME\n`;
+  const incomeType = document.getElementById('incomeType').value;
+if (!incomeType) {
+  alert("❌ Please select an Income Type before copying.");
+  return;
+}
+let infoToCopy = `${incomeType}\n`;
+
   infoToCopy += `People in Household: ${householdSize}\n\n`;
 
 // ✅ Always include household members — outside the above block
