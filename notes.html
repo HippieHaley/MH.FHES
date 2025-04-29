@@ -33,6 +33,42 @@
   button:hover {
     background-color: #e8b3e8;
   }
+  .back-home {
+      display: inline-block;  
+      padding: 10px 20px;
+      background-color: #f8c9f9; 
+      color: #333;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 30px;
+      text-align: center;
+      border: 1px solid #000;
+      position: absolute; 
+      top: 20px;
+      left: 20px;
+    }
+    .back-home:hover {
+      background-color: #e8b3e8;
+    }
+    .button {
+  display: inline-flex;
+  position: fixed-bottom;
+  justify-content: center;
+  background-color: #f8c9f9; /* Pink background */
+  color: #333;              /* Text/icon color */
+  font-size: 1rem;
+  font-weight: bold;
+  border: 1px solid #000;   /* Black border */
+  border-radius: 50%;       /* Circle shape */
+  cursor: pointer;
+  /* The padding ensures the icon has some space. 
+     Adjust to your preference. */
+  padding: 0.5rem;
+}
+.button:hover {
+  background-color: #e8b8e8; /* Slightly darker pink */
+}
   pre {
     white-space: pre-wrap;
     background-color: #f6f6f6;
@@ -57,7 +93,7 @@
 </style>
 </head>
 <body>
-
+  <a href="index.html" class="back-home">Back to Home</a>
 <h1>Note Reformatter</h1>
 
 <textarea id="input" placeholder="Type or paste your note here..."></textarea>
