@@ -81,8 +81,8 @@ function buildLines(raw, selectedLabels, keepExtra) {
   selectedLabels.forEach(label => {
     const data = parsed[label] || { date: '', extra: '' };
     let fixed = `${label} Due: `;
-    fixed += (data.date ? data.date : UNDERSCORES);
-    fixed += ' '; // Always add a semicolon after date (even blank)
+    fixed += (data.date ? data.date : UNDERSCORES); 
+    // No semicolon here anymore!
     fixedParts.push(fixed);
     fullLines.push({ fixed, extra: keepExtra && data.extra ? data.extra : '' });
   });
