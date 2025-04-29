@@ -728,7 +728,7 @@ modalOverlay2.addEventListener('click', function(e) {
   const yearlyIncome = document.getElementById('grandTotal').textContent || "0";
   const coverageLevel = document.getElementById('coverageLevel').textContent || "N/A";
   const awcQualification = document.getElementById('awcQualification').textContent || "N/A";
-
+  
   // Debugging: Log the values to the console
   console.log("Household Size:", householdSize);
   console.log("Yearly Income:", yearlyIncome);
@@ -738,7 +738,21 @@ modalOverlay2.addEventListener('click', function(e) {
   // Begin building the string with header info
   let infoToCopy = `NO - INCOME DOCS NEEDED - VERBAL INCOME\n`;
   infoToCopy += `People in Household: ${householdSize}\n\n`;
-  infoToCopy += "Income Details:\n----------------------\n";
+
+// ✅ Always include household members — outside the above block
+const membersSection = document.getElementById('householdMembersContainer');
+const members = membersSection.querySelectorAll('div');
+
+if (members.length > 0) {
+  infoToCopy += "Members of Household (besides client):\n";
+  members.forEach((member, index) => {
+    const relationship = member.querySelector('select')?.value || "N/A";
+    const name = member.querySelector('input')?.value || "N/A";
+    infoToCopy += `  ${index + 1}. ${relationship}: ${name}\n`;
+  });
+  infoToCopy += "\n";
+}
+
 
   // Biweekly Income
   const biweeklyAnnual = parseFloat(document.getElementById('biweeklyAnnual').textContent) || 0;
@@ -833,20 +847,6 @@ modalOverlay2.addEventListener('click', function(e) {
   if (otherAnnual !== 0) {
     infoToCopy += `  Other Annual Income: $${otherAnnual}\n`;
   }
-  infoToCopy += "\n";
-}
-
-// ✅ Always include household members — outside the above block
-const membersSection = document.getElementById('householdMembersContainer');
-const members = membersSection.querySelectorAll('div');
-
-if (members.length > 0) {
-  infoToCopy += "Members of Household (besides client):\n";
-  members.forEach((member, index) => {
-    const relationship = member.querySelector('select')?.value || "N/A";
-    const name = member.querySelector('input')?.value || "N/A";
-    infoToCopy += `  ${index + 1}. ${relationship}: ${name}\n`;
-  });
   infoToCopy += "\n";
 }
 
