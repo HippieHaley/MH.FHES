@@ -88,8 +88,9 @@ document.getElementById('format').addEventListener('click', () => {
       // Split into label and rest
       const parts = trimmed.split('Due:');
       if (parts.length === 2) {
-        const label = `<b>${parts[0].trim()} Due:</b>`;
+        const labelPart = `${parts[0].trim()} Due:`;
         let dateAndExtra = parts[1].trim();
+        let needsBold = false; // New flag to decide if the full line needs bold
 
         // Try to pull out the first date in the text
         const dateMatch = dateAndExtra.match(/(\d{1,2}\/\d{4}|\d{1,2}\/\d{1,2}\/\d{2,4}|\b\w+\s\d{4}\b)/);
@@ -100,7 +101,7 @@ document.getElementById('format').addEventListener('click', () => {
           if (/\d{1,2}\/\d{4}/.test(dateText)) {
             // format M/YYYY or MM/YYYY
             const parts = dateText.split('/');
-            const month = parseInt(parts[0]) - 1; // JS months are 0-indexed
+            const month = parseInt(parts[0]) - 1;
             const year = parseInt(parts[1]);
             parsedDate = new Date(year, month, 1); // Assume day 1
           } else if (dateText.includes('/')) {
@@ -128,16 +129,23 @@ document.getElementById('format').addEventListener('click', () => {
             const threeMonthsLaterTotal = threeMonthsFromNow.getFullYear() * 12 + threeMonthsFromNow.getMonth();
 
             if (dateTotalMonths < currentTotalMonths) {
-              // Past month
+              // Past month = RED
               dateAndExtra = dateAndExtra.replace(dateText, `<span style="color:red;">${dateText}</span>`);
+              needsBold = true;
             } else if (dateTotalMonths <= threeMonthsLaterTotal) {
-              // This month or next 3 months
+              // This month or next 3 months = ORANGE
               dateAndExtra = dateAndExtra.replace(dateText, `<span style="color:orange;">${dateText}</span>`);
+              needsBold = true;
             }
           }
         }
 
-        return `<p>${label} ${dateAndExtra}</p>`;
+        const fullLine = `${labelPart} ${dateAndExtra}`;
+        if (needsBold) {
+          return `<p><b>${fullLine}</b></p>`;
+        } else {
+          return `<p>${fullLine}</p>`;
+        }
       } else {
         // fallback if something doesn't match the expected pattern
         return `<p>${trimmed}</p>`;
@@ -160,6 +168,7 @@ document.getElementById('format').addEventListener('click', () => {
       console.error('Could not copy text: ', err);
     });
 });
+
 </script>
 </body>
 </html>
