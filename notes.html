@@ -69,16 +69,14 @@
 <div id="notification" class="notification">Copied to clipboard!</div>
 
 <script>
-document.getElementById('format').addEventListener('click', () => {
+ document.getElementById('format').addEventListener('click', () => {
   const input = document.getElementById('input').value;
   
   const lines = input
     .replace(/;/g, '') // Remove semicolons
-    .split(/\r?\n/);    // Split at line breaks
+    .split(/\r?\n/);   // Split at line breaks
 
   const today = new Date();
-  const threeMonthsFromNow = new Date();
-  threeMonthsFromNow.setMonth(today.getMonth() + 3);
 
   const wrappedLines = lines
     .filter(line => line.trim() !== '') // Ignore empty lines
@@ -90,7 +88,7 @@ document.getElementById('format').addEventListener('click', () => {
       if (parts.length === 2) {
         const labelPart = `${parts[0].trim()} Due:`;
         let dateAndExtra = parts[1].trim();
-        let needsBold = false; // New flag to decide if the full line needs bold
+        let needsBold = false;
 
         // Try to pull out the first date in the text
         const dateMatch = dateAndExtra.match(/(\d{1,2}\/\d{4}|\d{1,2}\/\d{1,2}\/\d{2,4}|\b\w+\s\d{4}\b)/);
@@ -98,13 +96,7 @@ document.getElementById('format').addEventListener('click', () => {
           const dateText = dateMatch[1];
           let parsedDate = null;
 
-          if (/\d{1,2}\/\d{4}/.test(dateText)) {
-            // format M/YYYY or MM/YYYY
-            const parts = dateText.split('/');
-            const month = parseInt(parts[0]) - 1;
-            const year = parseInt(parts[1]);
-            parsedDate = new Date(year, month, 1); // Assume day 1
-          } else if (dateText.includes('/')) {
+          if (/\d{1,2}\/\d{1,2}\/\d{2,4}/.test(dateText)) {
             // format MM/DD/YYYY or MM/DD/YY
             const parts = dateText.split('/');
             const month = parseInt(parts[0]) - 1;
@@ -112,28 +104,26 @@ document.getElementById('format').addEventListener('click', () => {
             let year = parseInt(parts[2]);
             if (year < 100) { year += 2000; }
             parsedDate = new Date(year, month, day);
+          } else if (/\d{1,2}\/\d{4}/.test(dateText)) {
+            // format MM/YYYY
+            const parts = dateText.split('/');
+            const month = parseInt(parts[0]) - 1;
+            const year = parseInt(parts[1]);
+            parsedDate = new Date(year, month, 1); // Assume day 1
           } else {
             // format Month YYYY
             parsedDate = new Date(dateText);
           }
 
           if (parsedDate instanceof Date && !isNaN(parsedDate)) {
-            const dateMonth = parsedDate.getMonth();
-            const dateYear = parsedDate.getFullYear();
-
-            const currentMonth = today.getMonth();
-            const currentYear = today.getFullYear();
-
-            const currentTotalMonths = currentYear * 12 + currentMonth;
-            const dateTotalMonths = dateYear * 12 + dateMonth;
-            const threeMonthsLaterTotal = threeMonthsFromNow.getFullYear() * 12 + threeMonthsFromNow.getMonth();
+            const currentTotalMonths = today.getFullYear() * 12 + today.getMonth();
+            const dateTotalMonths = parsedDate.getFullYear() * 12 + parsedDate.getMonth();
+            const warningThresholdMonths = currentTotalMonths + 3;
 
             if (dateTotalMonths < currentTotalMonths) {
-              // Past month = RED
               dateAndExtra = dateAndExtra.replace(dateText, `<span style="color:red;">${dateText}</span>`);
               needsBold = true;
-            } else if (dateTotalMonths <= threeMonthsLaterTotal) {
-              // This month or next 3 months = ORANGE
+            } else if (dateTotalMonths <= warningThresholdMonths) {
               dateAndExtra = dateAndExtra.replace(dateText, `<span style="color:orange;">${dateText}</span>`);
               needsBold = true;
             }
@@ -141,13 +131,8 @@ document.getElementById('format').addEventListener('click', () => {
         }
 
         const fullLine = `${labelPart} ${dateAndExtra}`;
-        if (needsBold) {
-          return `<p><b>${fullLine}</b></p>`;
-        } else {
-          return `<p>${fullLine}</p>`;
-        }
+        return needsBold ? `<p><b>${fullLine}</b></p>` : `<p>${fullLine}</p>`;
       } else {
-        // fallback if something doesn't match the expected pattern
         return `<p>${trimmed}</p>`;
       }
     });
@@ -168,7 +153,6 @@ document.getElementById('format').addEventListener('click', () => {
       console.error('Could not copy text: ', err);
     });
 });
-
 </script>
 </body>
 </html>
