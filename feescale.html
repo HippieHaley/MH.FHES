@@ -845,7 +845,7 @@ modalOverlay2.addEventListener('click', function(e) {
   const yearlyIncome = document.getElementById('grandTotal').textContent || "0";
   const coverageLevel = document.getElementById('coverageLevel').textContent || "N/A";
   const awcQualification = document.getElementById('awcQualification').textContent || "N/A";
-  const workingAt = document.getElementById('workingAt').value || "N/A";
+  const workingAt = document.getElementById('workingAt').value || "Unemployed";
 
   const incomeType = document.getElementById('incomeType').value;
   if (!incomeType) {
@@ -866,6 +866,8 @@ Array.from(members).forEach((member) => {
   const income = member.querySelector('input[name^="memberIncome"]')?.value || "";
   const freq = member.querySelector('select[name^="memberFrequency"]')?.value || "";
 
+  infoToCopy += `- ${relationship}: ${name}\n`;
+
   if (income) {
     const val = parseFloat(income);
     let annual = 0;
@@ -876,13 +878,18 @@ Array.from(members).forEach((member) => {
       case 'annually': annual = val; break;
       default: annual = val;
     }
-    infoToCopy += `${relationship}: ${name} - ${freq}: $${val} (Annual: $${annual.toFixed(2)})\n`;
-  } else {
-    infoToCopy += `${relationship}: ${name}\n`;
+
+    const formattedVal = `$${val.toLocaleString()}`;
+    const formattedAnnual = `$${annual.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+
+    if (freq.toLowerCase() === 'annually') {
+      infoToCopy += `   • Income: ${formattedAnnual} annually\n`;
+    } else {
+      infoToCopy += `   • Income: ${formattedVal} ${freq} (Annual: ${formattedAnnual})\n`;
+    }
   }
 });
 infoToCopy += "\n";
-
   // Biweekly Income
   const biweeklyAnnual = parseFloat(document.getElementById('biweeklyAnnual').textContent) || 0;
   if (biweeklyAnnual !== 0) {
