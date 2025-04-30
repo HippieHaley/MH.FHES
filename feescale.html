@@ -814,7 +814,6 @@ if (members.length > 0) {
   infoToCopy += "\n";
 }
 
-
   // Biweekly Income
   const biweeklyAnnual = parseFloat(document.getElementById('biweeklyAnnual').textContent) || 0;
   if (biweeklyAnnual !== 0) {
@@ -864,11 +863,8 @@ if (members.length > 0) {
   Paystub 2: $${twiceMonthPaystub2}
   Total:     $${twiceMonthTotal}
   Average:   $${twiceMonthAverage.toFixed(2)}
-  Annual:    $${twiceMonthAnnual.toFixed(2)}
-
-`;
+  Annual:    $${twiceMonthAnnual.toFixed(2)}`;
   }
-
   // Weekly Verbal Income
   const verbalAnnual = parseFloat(document.getElementById('verbalAnnual').textContent) || 0;
   if (verbalAnnual !== 0) {
@@ -882,11 +878,8 @@ if (members.length > 0) {
   Hourly Rate:  $${verbalRate}
   Total:        $${verbalTotal}
   Average:      $${verbalAverage.toFixed(2)}
-  Annual:       $${verbalAnnual.toFixed(2)}
-
-`;
+  Annual:       $${verbalAnnual.toFixed(2)}`;
   }
-
   // Extra Income Section
   const tipsValue = document.getElementById('AnnualTips').value || "0";
   const tips = parseFloat(tipsValue) || 0;
@@ -894,7 +887,6 @@ if (members.length > 0) {
   const otherMonthly = parseFloat(otherMonthlyValue) || 0;
   const otherAnnualValue = document.getElementById('OtherAnnual').value || "0";
   const otherAnnual = parseFloat(otherAnnualValue) || 0;
-
   if (tips !== 0 || otherMonthly !== 0 || otherAnnual !== 0) {
   infoToCopy += "Extra Income:\n";
   if (tips !== 0) {
@@ -947,7 +939,6 @@ if (members.length > 0) {
 }
     // Initialize everything on page load
     calculateGrandTotal();
-    updateHouseholdIncome();
   </script>
 </body>
 </html>
