@@ -543,7 +543,6 @@ select:focus {
       </div>
     </div>
     <div class=" space"></div>
-  
     </div>    
   <div id="householdMembersSection" class="section" style="margin-top: 20px;">
       <h2>Other Household Members</h2>
@@ -928,7 +927,7 @@ if (members.length > 0) {
   infoToCopy += 
 `Yearly Income: $${yearlyIncome}\n` +
 `Client Pay: ${coverageLevel}\n` +
-`AWC! qualification: ${awcQualification}\n -If Applicable` +
+`AWC! qualification: ${awcQualification} -If Applicable\n` +
 `Insurance:\n` +
 `${new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit', year: 'numeric', month: '2-digit', day: '2-digit' })}\n` +
 `Staff: H\n`;
