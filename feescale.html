@@ -98,6 +98,28 @@ body {
 .button:hover {
   background-color: #e8b8e8; /* Slightly darker pink */
 }
+#toggleNotes {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8c9f9;  /* Soft pink background */
+  color: #333;                /* Dark text */
+  font-size: 1rem;
+  font-weight: bold;
+  border: 1px solid #000;     /* Black border */
+  border-radius: 50%;         /* Make it circular */
+  cursor: pointer;
+  padding: 0.5rem;
+  width: 130px;
+  height: 40px;
+  margin-left: 10px;
+  transition: background-color 0.2s ease;
+}
+
+#toggleNotes:hover {
+  background-color: #e8b8e8;  /* Slightly darker pink on hover */
+}
+
     input[type="number"] {
       width: 100%;
       max-width: 300px;
@@ -257,6 +279,11 @@ select:focus {
       </select>
       <label for="workingAt" style="margin-left: 20px;">Working @</label>
 <input type="text" id="workingAt" placeholder="Where?" style="padding: 8px; border-radius: 10px; border: 1px solid #ccc;" />
+<button id="toggleNotes" style="margin-left: 10px; padding: 6px 12px; border-radius: 10px;">+ Add Notes</button>
+<div id="notesContainer" style="display: none; margin-top: 10px;">
+  <label for="userNotes">Notes:</label><br>
+  <textarea id="userNotes" placeholder="Enter any additional notes..." rows="4" style="width: 100%; border-radius: 10px; padding: 10px; border: 1px solid #ccc;"></textarea>
+</div>
     </div>      
     <div class="container">
       <!-- Column 1: Biweekly and Weekly Income Sections -->
@@ -992,7 +1019,11 @@ infoToCopy += "\n";
     `Insurance:\n` +
     `${new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit', year: 'numeric', month: '2-digit', day: '2-digit' })}\n` +
     `Staff: H\n`;
-  
+    const notes = document.getElementById('userNotes').value.trim();
+if (notes) {
+  infoToCopy += `\nAdditional Notes:\n${notes}\n`;
+}
+
   navigator.clipboard.writeText(infoToCopy)
     .then(() => alert("Household info copied to clipboard!"))
     .catch(err => {
@@ -1003,10 +1034,14 @@ infoToCopy += "\n";
 
     // Initialize everything on page load
     calculateGrandTotal();
-    document.getElementById('householdSize').addEventListener('change', () => {
+document.getElementById('householdSize').addEventListener('change', () => {
   updateHouseholdMemberFields();
 });
 
+document.getElementById('toggleNotes').addEventListener('click', () => {
+  const container = document.getElementById('notesContainer');
+  container.style.display = container.style.display === 'none' ? 'block' : 'none';
+});
   </script>
 </body>
 </html>
