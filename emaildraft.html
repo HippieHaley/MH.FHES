@@ -46,6 +46,12 @@ input:focus {
   outline: none;
   box-shadow: 0 0 5px rgba(232, 184, 232, 0.5);
 }
+input.dimmed {
+  background-color: #e0e0e0 !important;
+  color: #666 !important;
+  pointer-events: none;
+}
+
 button {
   padding: 8px 16px;
   font-size: 0.9rem;
@@ -320,6 +326,38 @@ labeledProviders.forEach(({ label, domain }) => {
     const existing = document.getElementById('smsSuggestionContainer');
     if (existing) existing.remove();
   }
+  function updateInputVisibility(row) {
+  const templateSelector = row.querySelector('.template-selector');
+  const selectedTemplate = templateSelector ? templateSelector.value : 'default';
+
+  const dateInput = row.querySelector('input[type="date"]');
+  const timeInput = row.querySelector('input[type="time"]');
+
+  // Reset all inputs first
+  dateInput.classList.remove('dimmed');
+  timeInput.classList.remove('dimmed');
+  dateInput.removeAttribute('disabled');
+  timeInput.removeAttribute('disabled');
+
+  // Apply dimmed style based on template logic
+  if (selectedTemplate === 'AEDue') {
+    timeInput.classList.add('dimmed');
+    timeInput.setAttribute('disabled', true);
+  } else if (selectedTemplate === 'CallClinic') {
+    dateInput.classList.add('dimmed');
+    dateInput.setAttribute('disabled', true);
+    timeInput.classList.add('dimmed');
+    timeInput.setAttribute('disabled', true);
+  }
+}
+function setupTemplateListeners() {
+  document.querySelectorAll('.template-selector').forEach(selector => {
+    selector.addEventListener('change', () => {
+      const row = selector.closest('tr');
+      updateInputVisibility(row); // This is the function from Step 2
+    });
+  });
+}
 
   document.addEventListener('click', (e) => {
     if (!e.target.classList.contains('sms-email-input')) {
@@ -330,12 +368,13 @@ labeledProviders.forEach(({ label, domain }) => {
   // Hook it on load
   window.addEventListener('DOMContentLoaded', setupSmsAutocomplete);
 
-  // Also hook it every time a new row is added
   const originalAddRow = addRow;
-  addRow = function () {
-    originalAddRow();
-    setupSmsAutocomplete();
-  };
+addRow = function () {
+  originalAddRow();
+  setupSmsAutocomplete();
+  setupTemplateListeners(); // NEW!
+};
+
     function deleteRow(button) {
       const row = button.closest('tr');
       const table = document.getElementById('emailTable').getElementsByTagName('tbody')[0];
@@ -396,6 +435,11 @@ function createDraft(button) {
     popup.classList.remove('show');
   }, 3000);
 }
+window.addEventListener('DOMContentLoaded', () => {
+  setupSmsAutocomplete();
+  setupTemplateListeners(); // NEW!
+});
+
   </script>
 </body>
 </html>
