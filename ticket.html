@@ -99,6 +99,11 @@
       padding: 6px;
       font-size: 1rem;
     }
+    .pregnancy-section {
+  max-width: 400px;
+  padding: 20px;
+}
+
   </style>
 </head>
 <body>
@@ -117,13 +122,25 @@
   </div>
     <div class="top-row">
     <div class="price-grid" id="priceGrid">
-      <!-- Service sections will be dynamically generated here -->
-    </div>
+</div>   
     <div class="receipt-box" id="receiptBox">
       <strong>Receipt:</strong><br>
       None selected.
     </div>
   </div>
+<div class="pregnancy-section">
+    <div class="section-title"><p>Pregnancy Test:</p></div>
+    <label class="bubble-label">
+      <input type="radio" name="pregnancyTest" class="bubble-input" data-name="POS hCG - 232.01" data-baseprice="20">
+       POS hCG (232.01)
+    </label>
+    <label class="bubble-label">
+      <input type="radio" name="pregnancyTest" class="bubble-input" data-name="NEG hCG - 232.02" data-baseprice="20">
+      NEG hCG (232.02)
+    </label>
+  </div>
+    
+
 
   <script>
     const services = [
@@ -148,7 +165,7 @@
         { code: '99396', label: 'Established (40–64)', basePrice: 285 },
       ]}
     ];
-
+   
     const priceGrid = document.getElementById('priceGrid');
     const receiptBox = document.getElementById('receiptBox');
 
