@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Visit Pricing</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #eaf6ff;
+      margin: 0;
+      padding: 40px;
+    }
+
+    .back-home {
+      padding: 10px 20px;
+      border: 1px solid #000;
+      background-color: #fff;
+      font-weight: bold;
+      margin-bottom: 30px;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 40px;
+    }
+
+    .price-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      flex-grow: 1;
+    }
+
+    .price-section {
+      border: 2px solid #000;
+      padding: 20px;
+      background-color: #fff;
+      text-align: center;
+    }
+
+    .section-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .bubble-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 6px 0;
+      cursor: pointer;
+    }
+
+    .bubble-input {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #333;
+      border-radius: 50%;
+      position: relative;
+      margin: 0;
+    }
+
+    .bubble-input:checked::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 8px;
+      height: 8px;
+      background-color: #333;
+      border-radius: 50%;
+    }
+
+    .receipt-box {
+      width: 280px;
+      min-height: 100px;
+      background: #fff;
+      border: 2px dashed #888;
+      padding: 15px;
+      font-family: monospace;
+    }
+
+    .controls {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    select {
+      padding: 6px;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="back-home">Back Home</a>
+  <h2>Prices</h2>
+
+  <div class="controls">
+   <p><label for="percentSelector">Select Fee Percentage: </label>
+    <select id="percentSelector" onchange="updateAllPrices()">
+      <option value="100">100%</option>
+      <option value="75">75%</option>
+      <option value="50">50%</option>
+      <option value="25">25%</option>
+    </select></p> 
+  </div>
+    <div class="top-row">
+    <div class="price-grid" id="priceGrid">
+      <!-- Service sections will be dynamically generated here -->
+    </div>
+    <div class="receipt-box" id="receiptBox">
+      <strong>Receipt:</strong><br>
+      None selected.
+    </div>
+  </div>
+
+  <script>
+    const services = [
+      { section: 'NEW PT', options: [
+        { code: '99202', label: 'Limited-New', basePrice: 170 },
+        { code: '99203', label: 'Intermediate-New', basePrice: 240 },
+        { code: '99204', label: 'Comprehensive-New', basePrice: 365 },
+      ]},
+      { section: 'EST PT', options: [
+        { code: '99211', label: 'Minimal-Established', basePrice: 51 },
+        { code: '99212', label: 'Limited-Established', basePrice: 101 },
+        { code: '99213', label: 'Intermediate-Established', basePrice: 166 },
+      ]},
+      { section: 'IE/ New PT', options: [
+        { code: '99384', label: 'Preventive (12–17)', basePrice: 306 },
+        { code: '99385', label: 'Preventive (18–39)', basePrice: 296 },
+        { code: '99386', label: 'Preventive (40–64)', basePrice: 310 },
+      ]},
+      { section: 'AE/ est PT', options: [
+        { code: '99394', label: 'Established (12–17)', basePrice: 262 },
+        { code: '99395', label: 'Established (18–39)', basePrice: 267 },
+        { code: '99396', label: 'Established (40–64)', basePrice: 285 },
+      ]}
+    ];
+
+    const priceGrid = document.getElementById('priceGrid');
+    const receiptBox = document.getElementById('receiptBox');
+
+    function createServiceSections() {
+      services.forEach(group => {
+        const div = document.createElement('div');
+        div.className = 'price-section';
+
+        const title = document.createElement('div');
+        title.className = 'section-title';
+        title.textContent = group.section;
+        div.appendChild(title);
+
+        group.options.forEach(option => {
+          const label = document.createElement('label');
+          label.className = 'bubble-label';
+
+          const input = document.createElement('input');
+          input.type = 'radio';
+          input.name = 'visitType';
+          input.className = 'bubble-input';
+          input.dataset.name = `${option.code} - ${option.label}`;
+          input.dataset.baseprice = option.basePrice;
+
+          const span = document.createElement('span');
+          span.className = 'option-text';
+          span.textContent = `${option.code}`;
+
+          label.appendChild(input);
+          label.appendChild(span);
+          div.appendChild(label);
+        });
+
+        priceGrid.appendChild(div);
+      });
+    }
+
+    function updateAllPrices() {
+      const percent = parseFloat(document.getElementById('percentSelector').value) / 100;
+
+      document.querySelectorAll('.bubble-input').forEach(input => {
+        const span = input.nextElementSibling;
+        const base = parseFloat(input.dataset.baseprice);
+        const newPrice = (base * percent).toFixed(2);
+        span.textContent = `${input.dataset.name.split(" - ")[0]} ($${newPrice})`;
+      });
+
+      // If something is selected, update receipt
+      const selected = document.querySelector('.bubble-input:checked');
+      if (selected) updateReceipt(selected);
+    }
+
+    function updateReceipt(input) {
+      const percent = parseFloat(document.getElementById('percentSelector').value) / 100;
+      const base = parseFloat(input.dataset.baseprice);
+      const price = (base * percent).toFixed(2);
+      receiptBox.innerHTML = `<strong>Receipt:</strong><br>${input.dataset.name}: $${price}<br><strong>Total: $${price}</strong>`;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      createServiceSections();
+      updateAllPrices();
+
+      document.addEventListener('change', e => {
+        if (e.target.classList.contains('bubble-input')) {
+          updateReceipt(e.target);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
