@@ -654,25 +654,47 @@ select:focus {
     /***************************************************
      * 4) Summation of All Incomes
      ***************************************************/
-    function calculateGrandTotal() {
-      const biweeklyAnnual = parseFloat(document.getElementById('biweeklyAnnual').textContent) || 0;
-      const weeklyAnnual = parseFloat(document.getElementById('weeklyAnnual').textContent) || 0;
-      const twiceMonthAnnual = parseFloat(document.getElementById('twiceMonthAnnual').textContent) || 0;
-      const verbalAnnual = parseFloat(document.getElementById('verbalAnnual').textContent) || 0;
+     function calculateGrandTotal() {
+  const biweeklyAnnual = parseFloat(document.getElementById('biweeklyAnnual').textContent) || 0;
+  const weeklyAnnual = parseFloat(document.getElementById('weeklyAnnual').textContent) || 0;
+  const twiceMonthAnnual = parseFloat(document.getElementById('twiceMonthAnnual').textContent) || 0;
+  const verbalAnnual = parseFloat(document.getElementById('verbalAnnual').textContent) || 0;
 
-      const weeklyTips = parseFloat(document.getElementById('AnnualTips').value) || 0;
-      const annualTips = weeklyTips * 52;
+  const weeklyTips = parseFloat(document.getElementById('AnnualTips').value) || 0;
+  const annualTips = weeklyTips * 52;
 
-      const otherMonthlyIncome = parseFloat(document.getElementById('AnnualOtherMonthly').value) || 0;
-      const annualOtherMonthlyIncome = otherMonthlyIncome * 12;
+  const otherMonthlyIncome = parseFloat(document.getElementById('AnnualOtherMonthly').value) || 0;
+  const annualOtherMonthlyIncome = otherMonthlyIncome * 12;
 
-      const otherAnnualIncome = parseFloat(document.getElementById('OtherAnnual').value) || 0;
+  const otherAnnualIncome = parseFloat(document.getElementById('OtherAnnual').value) || 0;
 
-      const grandTotal = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + annualTips + annualOtherMonthlyIncome + otherAnnualIncome;
+  // ✅ Use 'let' so we can add to it later
+  let grandTotal = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + annualTips + annualOtherMonthlyIncome + otherAnnualIncome;
 
-      document.getElementById('grandTotal').textContent = grandTotal.toFixed(2);
-      updateHouseholdIncome();
+  // ✅ Add incomes from household members
+  const memberDivs = document.querySelectorAll('#householdMembersContainer > div');
+  memberDivs.forEach((div, index) => {
+    const incomeInput = div.querySelector('input[name^="memberIncome"]');
+const freqSelect = div.querySelector('select[name^="memberFrequency"]');
+
+    if (incomeInput && freqSelect && incomeInput.value) {
+      const amount = parseFloat(incomeInput.value) || 0;
+      let annual = 0;
+      switch (freqSelect.value) {
+        case 'weekly': annual = amount * 52; break;
+        case 'biweekly': annual = amount * 26; break;
+        case 'monthly': annual = amount * 12; break;
+        case 'annually': annual = amount; break;
+      }
+      grandTotal += annual;
     }
+  });
+
+  document.getElementById('grandTotal').textContent = grandTotal.toFixed(2);
+
+  // ✅ Trigger updates
+  updateHouseholdIncome();
+}
 
     /***************************************************
      * 5) Household Info (Coverage + AWC) Display
@@ -687,23 +709,25 @@ select:focus {
   const awcQualification = determineAWCQualification(householdSize, yearlyIncome);
   document.getElementById('awcQualification').textContent = awcQualification;
 
-  // ✅ Correct: call updateHouseholdMemberFields separately
-  updateHouseholdMemberFields();
+  // ✅ Do NOT call updateHouseholdMemberFields() here to avoid infinite loop
 }
-
 function updateHouseholdMemberFields() {
   const container = document.getElementById('householdMembersContainer');
   const size = parseInt(document.getElementById('householdSize').value || 1);
 
-  container.innerHTML = ''; // Always clear
-
-  if (size <= 1) return; // Stop if only 1
+  container.innerHTML = '';
+  if (size <= 1) return;
 
   for (let i = 2; i <= size; i++) {
     const wrapper = document.createElement('div');
     wrapper.style.display = 'flex';
+    wrapper.style.flexDirection = 'column';
     wrapper.style.gap = '10px';
     wrapper.style.marginBottom = '10px';
+
+    const topRow = document.createElement('div');
+    topRow.style.display = 'flex';
+    topRow.style.gap = '10px';
 
     const select = document.createElement('select');
     select.name = `relationship${i}`;
@@ -733,18 +757,54 @@ function updateHouseholdMemberFields() {
     input.style.padding = '8px';
     input.style.borderRadius = '10px';
 
-    wrapper.appendChild(select);
-    wrapper.appendChild(input);
+    const plusBtn = document.createElement('button');
+    plusBtn.type = 'button';
+    plusBtn.textContent = '+';
+    plusBtn.style.flex = '0 0 40px';
+    plusBtn.style.borderRadius = '10px';
+
+    topRow.appendChild(select);
+    topRow.appendChild(input);
+    topRow.appendChild(plusBtn);
+
+    const incomeSection = document.createElement('div');
+    incomeSection.style.display = 'none';
+    incomeSection.style.marginTop = '10px';
+    incomeSection.innerHTML = `
+      <label>Income Amount: <input type="number" step="0.01" name="memberIncome${i}" /></label>
+      <label>Frequency:
+        <select name="memberFrequency${i}">
+          <option value="weekly">Weekly</option>
+          <option value="biweekly">Biweekly</option>
+          <option value="monthly">Monthly</option>
+          <option value="annually">Annually</option>
+        </select>
+      </label>
+    `;
+// Add event listeners to recalculate when user changes inputs
+const incomeInput = incomeSection.querySelector(`input[name="memberIncome${i}"]`);
+const freqSelect = incomeSection.querySelector(`select[name="memberFrequency${i}"]`);
+
+incomeInput.addEventListener('input', calculateGrandTotal);
+freqSelect.addEventListener('change', calculateGrandTotal);
+
+    incomeSection.querySelectorAll('input, select').forEach(el => {
+      el.style.marginLeft = '10px';
+      el.style.marginRight = '20px';
+    });
+
+    plusBtn.addEventListener('click', () => {
+  incomeSection.style.display = (incomeSection.style.display === 'none') ? 'block' : 'none';
+  calculateGrandTotal(); // Recalculate after revealing the field
+});
+
+
+    wrapper.appendChild(topRow);
+    wrapper.appendChild(incomeSection);
     container.appendChild(wrapper);
   }
+}
 
-const coverageLevel = determineCoverageLevel(householdSize, yearlyIncome);
-      document.getElementById('coverageLevel').textContent = coverageLevel;
-
-      const awcQualification = determineAWCQualification(householdSize, yearlyIncome);
-      document.getElementById('awcQualification').textContent = awcQualification;
-      updateHouseholdMemberFields();
-    }
 // Modal 1 functionality
 const triggerModal1 = document.getElementById('triggerModal1');
 const modalOverlay1 = document.getElementById('modalOverlay1');
@@ -779,166 +839,94 @@ modalOverlay2.addEventListener('click', function(e) {
      * 6) Copy Button Function
      ***************************************************/
      function copyIncomeInfo() {
-  // Get household-related data
   const householdSize = document.getElementById('householdSize').value || "1";
   const yearlyIncome = document.getElementById('grandTotal').textContent || "0";
   const coverageLevel = document.getElementById('coverageLevel').textContent || "N/A";
   const awcQualification = document.getElementById('awcQualification').textContent || "N/A";
-  
-  // Debugging: Log the values to the console
-  console.log("Household Size:", householdSize);
-  console.log("Yearly Income:", yearlyIncome);
-  console.log("Coverage Level:", coverageLevel);
-  console.log("AWC Qualification:", awcQualification);
 
-  // Begin building the string with header info
   const incomeType = document.getElementById('incomeType').value;
-if (!incomeType) {
-  alert("❌ Please select an Income Type before copying.");
-  return;
-}
-let infoToCopy = `Income Type: ${incomeType}\n`;
-  infoToCopy += `People in Household: ${householdSize}\n\n`;
-
-// ✅ Always include household members — outside the above block
-const membersSection = document.getElementById('householdMembersContainer');
-const members = membersSection.querySelectorAll('div');
-
-if (members.length > 0) {
-  infoToCopy += "Members of Household (besides client):\n";
-  members.forEach((member, index) => {
-    const relationship = member.querySelector('select')?.value || "N/A";
-    const name = member.querySelector('input')?.value || "N/A";
-    infoToCopy += `  ${index + 1}. ${relationship}: ${name}\n`;
-  });
-  infoToCopy += "\n";
-}
-
-  // Biweekly Income
-  const biweeklyAnnual = parseFloat(document.getElementById('biweeklyAnnual').textContent) || 0;
-  if (biweeklyAnnual !== 0) {
-    const paystub1 = document.getElementById('paystub1').value || "0";
-    const paystub2 = document.getElementById('paystub2').value || "0";
-    const biweeklyTotal = document.getElementById('biweeklyTotal').textContent || "0";
-    const biweeklyAverage = parseFloat(document.getElementById('biweeklyAverage').textContent) || 0;
-    infoToCopy += 
-`Biweekly Income:
-  Paystub 1: $${paystub1}
-  Paystub 2: $${paystub2}
-  Total:     $${biweeklyTotal}
-  Average:   $${biweeklyAverage.toFixed(2)}
-  Annual:    $${biweeklyAnnual.toFixed(2)}
-
-`;
+  if (!incomeType) {
+    alert("❌ Please select an Income Type before copying.");
+    return;
   }
 
-  // Weekly Income
-  const weeklyAnnual = parseFloat(document.getElementById('weeklyAnnual').textContent) || 0;
-  if (weeklyAnnual !== 0) {
-    const weeklyPaystub1 = document.getElementById('weeklyPaystub1').value || "0";
-    const weeklyPaystub2 = document.getElementById('weeklyPaystub2').value || "0";
-    const weeklyTotal = document.getElementById('weeklyTotal').textContent || "0";
-    const weeklyAverage = parseFloat(document.getElementById('weeklyAverage').textContent) || 0;
-    infoToCopy += 
-`Weekly Income:
-  Paystub 1: $${weeklyPaystub1}
-  Paystub 2: $${weeklyPaystub2}
-  Total:     $${weeklyTotal}
-  Average:   $${weeklyAverage.toFixed(2)}
-  Annual:    $${weeklyAnnual.toFixed(2)}
+  let infoToCopy = `Income Type: ${incomeType}\nPeople in Household: ${householdSize}\n\n`;
 
-`;
-  }
+  const membersSection = document.getElementById('householdMembersContainer');
+const members = membersSection.children; // ✅ Only top-level divs
 
-  // Twice a Month Income
-  const twiceMonthAnnual = parseFloat(document.getElementById('twiceMonthAnnual').textContent) || 0;
-  if (twiceMonthAnnual !== 0) {
-    const twiceMonthPaystub1 = document.getElementById('twiceMonthPaystub1').value || "0";
-    const twiceMonthPaystub2 = document.getElementById('twiceMonthPaystub2').value || "0";
-    const twiceMonthTotal = document.getElementById('twiceMonthTotal').textContent || "0";
-    const twiceMonthAverage = parseFloat(document.getElementById('twiceMonthAverage').textContent) || 0;
-    infoToCopy += 
-`Twice a Month Income:
-  Paystub 1: $${twiceMonthPaystub1}
-  Paystub 2: $${twiceMonthPaystub2}
-  Total:     $${twiceMonthTotal}
-  Average:   $${twiceMonthAverage.toFixed(2)}
-  Annual:    $${twiceMonthAnnual.toFixed(2)}`;
-  }
-  // Weekly Verbal Income
-  const verbalAnnual = parseFloat(document.getElementById('verbalAnnual').textContent) || 0;
-  if (verbalAnnual !== 0) {
-    const verbalHours = document.getElementById('verbalHours').value || "0";
-    const verbalRate = document.getElementById('verbalRate').value || "0";
-    const verbalTotal = document.getElementById('verbalTotal').textContent || "0";
-    const verbalAverage = parseFloat(document.getElementById('verbalAverage').textContent) || 0;
-    infoToCopy += 
-`Weekly Verbal Income:
-  Hours Worked: ${verbalHours}
-  Hourly Rate:  $${verbalRate}
-  Total:        $${verbalTotal}
-  Average:      $${verbalAverage.toFixed(2)}
-  Annual:       $${verbalAnnual.toFixed(2)}`;
-  }
-  // Extra Income Section
-  const tipsValue = document.getElementById('AnnualTips').value || "0";
-  const tips = parseFloat(tipsValue) || 0;
-  const otherMonthlyValue = document.getElementById('AnnualOtherMonthly').value || "0";
-  const otherMonthly = parseFloat(otherMonthlyValue) || 0;
-  const otherAnnualValue = document.getElementById('OtherAnnual').value || "0";
-  const otherAnnual = parseFloat(otherAnnualValue) || 0;
-  if (tips !== 0 || otherMonthly !== 0 || otherAnnual !== 0) {
-  infoToCopy += "Extra Income:\n";
-  if (tips !== 0) {
-    let annualTips = tips * 52;
-    infoToCopy += `  Tips per week: $${tips} (Annualized: $${annualTips.toFixed(2)})\n`;
-  }
-  if (otherMonthly !== 0) {
-    let annualOtherMonthly = otherMonthly * 12;
-    infoToCopy += `  Other Income per Month: $${otherMonthly} (Annualized: $${annualOtherMonthly.toFixed(2)})\n`;
-  }
-  if (otherAnnual !== 0) {
-    infoToCopy += `  Other Annual Income: $${otherAnnual}\n`;
-  }
-  infoToCopy += "\n";
-}
+// ✅ 1. Household Member Incomes (with amounts)
+let hasMemberIncome = false;
+infoToCopy += "Household Member Incomes:\n";
+Array.from(members).forEach((member, index) => {
+  const relationship = member.querySelector('select[name^="relationship"]')?.value || "N/A";
+  const name = member.querySelector('input[name^="name"]')?.value || "N/A";
+  const income = member.querySelector('input[name^="memberIncome"]')?.value || "";
+  const freq = member.querySelector('select[name^="memberFrequency"]')?.value || "";
 
-  // If no income details were added, indicate that no data was entered.
+  if (income) {
+    const val = parseFloat(income);
+    let annual = 0;
+    switch (freq.toLowerCase()) {
+      case 'weekly': annual = val * 52; break;
+      case 'biweekly': annual = val * 26; break;
+      case 'monthly': annual = val * 12; break;
+      case 'annually': annual = val; break;
+      default: annual = val;
+    }
+    infoToCopy += `  ${index + 1}. ${name} (${relationship}) - ${freq}: $${val} (Annual: $${annual.toFixed(2)})\n`;
+    hasMemberIncome = true;
+  }
+});
+if (!hasMemberIncome) infoToCopy += "  None\n";
+
+infoToCopy += "\n";
+
+// ✅ 2. Member Names/Relationships only
+infoToCopy += "Members of Household (besides client):\n";
+Array.from(members).forEach((member, index) => {
+  const relationship = member.querySelector('select[name^="relationship"]')?.value || "N/A";
+  const name = member.querySelector('input[name^="name"]')?.value || "N/A";
+  infoToCopy += `  ${index + 1}. ${relationship}: ${name}\n`;
+});
+infoToCopy += "\n";
+
+  // ✅ Add client income sections like biweekly, weekly, etc.
+  // (...keep all your existing client income sections unchanged)
+
+  // ✅ Final details
   if (
-      infoToCopy.indexOf("Biweekly Income:") === -1 &&
-      infoToCopy.indexOf("Weekly Income:") === -1 &&
-      infoToCopy.indexOf("Twice a Month Income:") === -1 &&
-      infoToCopy.indexOf("Weekly Verbal Income:") === -1 &&
-      infoToCopy.indexOf("Extra Income:") === -1
-        // Add Other Household Members (if any)
+    infoToCopy.indexOf("Biweekly Income:") === -1 &&
+    infoToCopy.indexOf("Weekly Income:") === -1 &&
+    infoToCopy.indexOf("Twice a Month Income:") === -1 &&
+    infoToCopy.indexOf("Weekly Verbal Income:") === -1 &&
+    infoToCopy.indexOf("Extra Income:") === -1
   ) {
     infoToCopy += "No income data entered.\n";
   }
 
-  // Append additional household information and timestamp
   infoToCopy += 
-`Yearly Income: $${yearlyIncome}\n` +
-`Client Pay: ${coverageLevel}\n` +
-`AWC! qualification: ${awcQualification} -If Applicable\n` +
-`Insurance:\n` +
-`${new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit', year: 'numeric', month: '2-digit', day: '2-digit' })}\n` +
-`Staff: H\n`;
+    `Yearly Income: $${yearlyIncome}\n` +
+    `Client Pay: ${coverageLevel}\n` +
+    `AWC! qualification: ${awcQualification} -If Applicable\n` +
+    `Insurance:\n` +
+    `${new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit', year: 'numeric', month: '2-digit', day: '2-digit' })}\n` +
+    `Staff: H\n`;
 
-  // Debugging: Log the final info to copy
-  console.log("Info to Copy:", infoToCopy);
-
-  // Copy the text to the clipboard using the Clipboard API
   navigator.clipboard.writeText(infoToCopy)
-    .then(() => {
-      alert("Household info copied to clipboard!");
-    })
+    .then(() => alert("Household info copied to clipboard!"))
     .catch(err => {
       console.error("Failed to copy text:", err);
       alert("Unable to copy info.");
     });
 }
+
     // Initialize everything on page load
     calculateGrandTotal();
+    document.getElementById('householdSize').addEventListener('change', () => {
+  updateHouseholdMemberFields();
+});
+
   </script>
 </body>
 </html>
