@@ -255,6 +255,8 @@ select:focus {
         <option value="Paycheck">Paycheck</option>
         <option value="NEED INCOME DOCS">NEED INCOME DOCS</option>
       </select>
+      <label for="workingAt" style="margin-left: 20px;">Working @</label>
+<input type="text" id="workingAt" placeholder="Where?" style="padding: 8px; border-radius: 10px; border: 1px solid #ccc;" />
     </div>      
     <div class="container">
       <!-- Column 1: Biweekly and Weekly Income Sections -->
@@ -843,6 +845,7 @@ modalOverlay2.addEventListener('click', function(e) {
   const yearlyIncome = document.getElementById('grandTotal').textContent || "0";
   const coverageLevel = document.getElementById('coverageLevel').textContent || "N/A";
   const awcQualification = document.getElementById('awcQualification').textContent || "N/A";
+  const workingAt = document.getElementById('workingAt').value || "N/A";
 
   const incomeType = document.getElementById('incomeType').value;
   if (!incomeType) {
@@ -850,7 +853,7 @@ modalOverlay2.addEventListener('click', function(e) {
     return;
   }
 
-  let infoToCopy = `Income Type: ${incomeType}\nPeople in Household: ${householdSize}\n\n`;
+  let infoToCopy = `Income Type: ${incomeType}\nWorking @: ${workingAt}\nPeople in Household: ${householdSize}\n\n`;
 
   const membersSection = document.getElementById('householdMembersContainer');
 const members = membersSection.children; // ✅ Only top-level divs
