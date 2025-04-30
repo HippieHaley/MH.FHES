@@ -855,10 +855,9 @@ modalOverlay2.addEventListener('click', function(e) {
   const membersSection = document.getElementById('householdMembersContainer');
 const members = membersSection.children; // ✅ Only top-level divs
 
-// ✅ 1. Household Member Incomes (with amounts)
-let hasMemberIncome = false;
-infoToCopy += "Household Member Incomes:\n";
-Array.from(members).forEach((member, index) => {
+infoToCopy += "\n";
+infoToCopy += "Members of Household (besides client):\n";
+Array.from(members).forEach((member) => {
   const relationship = member.querySelector('select[name^="relationship"]')?.value || "N/A";
   const name = member.querySelector('input[name^="name"]')?.value || "N/A";
   const income = member.querySelector('input[name^="memberIncome"]')?.value || "";
@@ -874,37 +873,106 @@ Array.from(members).forEach((member, index) => {
       case 'annually': annual = val; break;
       default: annual = val;
     }
-    infoToCopy += `  ${index + 1}. ${name} (${relationship}) - ${freq}: $${val} (Annual: $${annual.toFixed(2)})\n`;
-    hasMemberIncome = true;
+    infoToCopy += `${relationship}: ${name} - ${freq}: $${val} (Annual: $${annual.toFixed(2)})\n`;
+  } else {
+    infoToCopy += `${relationship}: ${name}\n`;
   }
-});
-if (!hasMemberIncome) infoToCopy += "  None\n";
-
-infoToCopy += "\n";
-
-// ✅ 2. Member Names/Relationships only
-infoToCopy += "Members of Household (besides client):\n";
-Array.from(members).forEach((member, index) => {
-  const relationship = member.querySelector('select[name^="relationship"]')?.value || "N/A";
-  const name = member.querySelector('input[name^="name"]')?.value || "N/A";
-  infoToCopy += `  ${index + 1}. ${relationship}: ${name}\n`;
 });
 infoToCopy += "\n";
 
-  // ✅ Add client income sections like biweekly, weekly, etc.
-  // (...keep all your existing client income sections unchanged)
+  // Biweekly Income
+  const biweeklyAnnual = parseFloat(document.getElementById('biweeklyAnnual').textContent) || 0;
+  if (biweeklyAnnual !== 0) {
+    const paystub1 = document.getElementById('paystub1').value || "0";
+    const paystub2 = document.getElementById('paystub2').value || "0";
+    const biweeklyTotal = document.getElementById('biweeklyTotal').textContent || "0";
+    const biweeklyAverage = parseFloat(document.getElementById('biweeklyAverage').textContent) || 0;
+    infoToCopy += 
+`Biweekly Income:
+  Paystub 1: $${paystub1}
+  Paystub 2: $${paystub2}
+  Total:     $${biweeklyTotal}
+  Average:   $${biweeklyAverage.toFixed(2)}
+  Annual:    $${biweeklyAnnual.toFixed(2)}
 
-  // ✅ Final details
-  if (
-    infoToCopy.indexOf("Biweekly Income:") === -1 &&
-    infoToCopy.indexOf("Weekly Income:") === -1 &&
-    infoToCopy.indexOf("Twice a Month Income:") === -1 &&
-    infoToCopy.indexOf("Weekly Verbal Income:") === -1 &&
-    infoToCopy.indexOf("Extra Income:") === -1
-  ) {
-    infoToCopy += "No income data entered.\n";
+`;
   }
 
+  // Weekly Income
+  const weeklyAnnual = parseFloat(document.getElementById('weeklyAnnual').textContent) || 0;
+  if (weeklyAnnual !== 0) {
+    const weeklyPaystub1 = document.getElementById('weeklyPaystub1').value || "0";
+    const weeklyPaystub2 = document.getElementById('weeklyPaystub2').value || "0";
+    const weeklyTotal = document.getElementById('weeklyTotal').textContent || "0";
+    const weeklyAverage = parseFloat(document.getElementById('weeklyAverage').textContent) || 0;
+    infoToCopy += 
+`Weekly Income:
+  Paystub 1: $${weeklyPaystub1}
+  Paystub 2: $${weeklyPaystub2}
+  Total:     $${weeklyTotal}
+  Average:   $${weeklyAverage.toFixed(2)}
+  Annual:    $${weeklyAnnual.toFixed(2)}
+
+`;
+  }
+
+  // Twice a Month Income
+  const twiceMonthAnnual = parseFloat(document.getElementById('twiceMonthAnnual').textContent) || 0;
+  if (twiceMonthAnnual !== 0) {
+    const twiceMonthPaystub1 = document.getElementById('twiceMonthPaystub1').value || "0";
+    const twiceMonthPaystub2 = document.getElementById('twiceMonthPaystub2').value || "0";
+    const twiceMonthTotal = document.getElementById('twiceMonthTotal').textContent || "0";
+    const twiceMonthAverage = parseFloat(document.getElementById('twiceMonthAverage').textContent) || 0;
+    infoToCopy += 
+`Twice a Month Income:
+  Paystub 1: $${twiceMonthPaystub1}
+  Paystub 2: $${twiceMonthPaystub2}
+  Total:     $${twiceMonthTotal}
+  Average:   $${twiceMonthAverage.toFixed(2)}
+  Annual:    $${twiceMonthAnnual.toFixed(2)}
+
+`;
+  }
+
+  // Weekly Verbal Income
+  const verbalAnnual = parseFloat(document.getElementById('verbalAnnual').textContent) || 0;
+  if (verbalAnnual !== 0) {
+    const verbalHours = document.getElementById('verbalHours').value || "0";
+    const verbalRate = document.getElementById('verbalRate').value || "0";
+    const verbalTotal = document.getElementById('verbalTotal').textContent || "0";
+    const verbalAverage = parseFloat(document.getElementById('verbalAverage').textContent) || 0;
+    infoToCopy += 
+`Weekly Verbal Income:
+  Hours Worked: ${verbalHours}
+  Hourly Rate:  $${verbalRate}
+  Total:        $${verbalTotal}
+  Average:      $${verbalAverage.toFixed(2)}
+  Annual:       $${verbalAnnual.toFixed(2)}
+
+`;
+  }
+
+  // Extra Income Section
+  const tipsValue = document.getElementById('AnnualTips').value || "0";
+  const tips = parseFloat(tipsValue) || 0;
+  const otherMonthlyValue = document.getElementById('AnnualOtherMonthly').value || "0";
+  const otherMonthly = parseFloat(otherMonthlyValue) || 0;
+  const otherAnnualValue = document.getElementById('OtherAnnual').value || "0";
+  const otherAnnual = parseFloat(otherAnnualValue) || 0;
+
+  if (tips !== 0 || otherMonthly !== 0 || otherAnnual !== 0) {
+  infoToCopy += "Extra Income:\n";
+  if (tips !== 0) {
+    let annualTips = tips * 52;
+    infoToCopy += `  Tips per week: $${tips} (Annualized: $${annualTips.toFixed(2)})\n`;
+  }
+  if (otherMonthly !== 0) {
+    let annualOtherMonthly = otherMonthly * 12;
+    infoToCopy += `  Other Income per Month: $${otherMonthly} (Annualized: $${annualOtherMonthly.toFixed(2)})\n`;
+  }
+  if (otherAnnual !== 0) {
+    infoToCopy += `  Other Annual Income: $${otherAnnual}\n`;
+  } 
   infoToCopy += 
     `Yearly Income: $${yearlyIncome}\n` +
     `Client Pay: ${coverageLevel}\n` +
@@ -912,14 +980,14 @@ infoToCopy += "\n";
     `Insurance:\n` +
     `${new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit', year: 'numeric', month: '2-digit', day: '2-digit' })}\n` +
     `Staff: H\n`;
-
+  }
   navigator.clipboard.writeText(infoToCopy)
     .then(() => alert("Household info copied to clipboard!"))
     .catch(err => {
       console.error("Failed to copy text:", err);
       alert("Unable to copy info.");
     });
-}
+} // ✅ Correct closing of copyIncomeInfo()
 
     // Initialize everything on page load
     calculateGrandTotal();
