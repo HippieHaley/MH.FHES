@@ -961,18 +961,20 @@ infoToCopy += "\n";
   const otherAnnual = parseFloat(otherAnnualValue) || 0;
 
   if (tips !== 0 || otherMonthly !== 0 || otherAnnual !== 0) {
-  infoToCopy += "Extra Income:\n";
-  if (tips !== 0) {
-    let annualTips = tips * 52;
-    infoToCopy += `  Tips per week: $${tips} (Annualized: $${annualTips.toFixed(2)})\n`;
-  }
-  if (otherMonthly !== 0) {
-    let annualOtherMonthly = otherMonthly * 12;
-    infoToCopy += `  Other Income per Month: $${otherMonthly} (Annualized: $${annualOtherMonthly.toFixed(2)})\n`;
-  }
-  if (otherAnnual !== 0) {
-    infoToCopy += `  Other Annual Income: $${otherAnnual}\n`;
-  } 
+    infoToCopy += "Extra Income:\n";
+    if (tips !== 0) {
+      let annualTips = tips * 52;
+      infoToCopy += `  Tips per week: $${tips} (Annualized: $${annualTips.toFixed(2)})\n`;
+    }
+    if (otherMonthly !== 0) {
+      let annualOtherMonthly = otherMonthly * 12;
+      infoToCopy += `  Other Income per Month: $${otherMonthly} (Annualized: $${annualOtherMonthly.toFixed(2)})\n`;
+    }
+    if (otherAnnual !== 0) {
+      infoToCopy += `  Other Annual Income: $${otherAnnual}\n`;
+    }
+  } // Close the "Extra Income Section" block properly
+
   infoToCopy += 
     `Yearly Income: $${yearlyIncome}\n` +
     `Client Pay: ${coverageLevel}\n` +
@@ -980,7 +982,7 @@ infoToCopy += "\n";
     `Insurance:\n` +
     `${new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit', year: 'numeric', month: '2-digit', day: '2-digit' })}\n` +
     `Staff: H\n`;
-  }
+  
   navigator.clipboard.writeText(infoToCopy)
     .then(() => alert("Household info copied to clipboard!"))
     .catch(err => {
