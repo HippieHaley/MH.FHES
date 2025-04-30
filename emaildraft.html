@@ -215,7 +215,7 @@ button:hover {
     </thead>
     <tbody>
       <tr>
-        <td><input type="email" class="sms-email-input" placeholder="example@domain.com"></td>
+        <td><input type="email" class="sms-email-input" placeholder=""></td>
         <td><input type="date"></td>
         <td><input type="time"></td>
         <td>
@@ -287,20 +287,30 @@ button:hover {
     container.style.width = `${input.offsetWidth}px`;
     container.style.left = `${input.getBoundingClientRect().left}px`;
     container.style.top = `${input.getBoundingClientRect().bottom + window.scrollY}px`;
+    const labeledProviders = [
+  { label: 'Verizon', domain: '@vtext.com' },
+  { label: 'AT&T', domain: '@txt.att.net' },
+  { label: 'T-Mobile', domain: '@tmomail.net' },
+  { label: 'Sprint', domain: '@messaging.sprintpcs.com' },
+  { label: 'Virgin', domain: '@vmobl.com' },
+  { label: 'MetroPCS', domain: '@mymetropcs.com' },
+  { label: 'Cricket', domain: '@sms.cricketwireless.net' },
+  { label: 'Pix Wireless', domain: '@mypixmessages.com' }
+];
 
-    providers.forEach(domain => {
-      const item = document.createElement('div');
-      item.textContent = number + domain;
-      item.style.padding = '8px';
-      item.style.cursor = 'pointer';
-      item.style.backgroundColor = '#f8c9f9';
-      item.addEventListener('click', () => {
-        input.value = item.textContent;
-        clearSmsSuggestions();
-      });
-      container.appendChild(item);
-    });
-
+labeledProviders.forEach(({ label, domain }) => {
+  const item = document.createElement('div');
+  const fullAddress = number + domain;
+  item.textContent = `(${label}) ${fullAddress}`;
+  item.style.padding = '8px';
+  item.style.cursor = 'pointer';
+  item.style.backgroundColor = '#f8c9f9';
+  item.addEventListener('click', () => {
+    input.value = fullAddress;
+    clearSmsSuggestions();
+  });
+  container.appendChild(item);
+});
     document.body.appendChild(container);
   }
 
