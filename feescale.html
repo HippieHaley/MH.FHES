@@ -98,22 +98,14 @@ body {
 .button:hover {
   background-color: #e8b8e8; /* Slightly darker pink */
 }
-#toggleNotes {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f8c9f9;  /* Soft pink background */
-  color: #333;                /* Dark text */
-  font-size: 1rem;
-  font-weight: bold;
-  border: 1px solid #000;     /* Black border */
-  border-radius: 50%;         /* Make it circular */
-  cursor: pointer;
-  padding: 0.5rem;
-  width: 130px;
-  height: 40px;
+
+.toggle-notes-button {
   margin-left: 10px;
-  transition: background-color 0.2s ease;
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 2px solid #f8c9f9; /* Soft pink border */
+      border-radius: 30px; /* Rounded edges */
+      background-color: #f8c9f9; /* Soft pink background */
 }
 
 #toggleNotes:hover {
@@ -263,7 +255,28 @@ select:focus {
     .hidden {
       visibility: hidden;
     }
+    #notesContainer {
+  position: absolute;
+  top: 120px;      /* Adjust to align with top of your form */
+  right: 40px;     /* Adjust spacing from right side */
+  width: 300px;
+  display: none;
+  padding: 15px;
+  background-color: #f8c9f9;
+  border: 2px solid #000;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
 
+#notesContainer textarea {
+  width: 100%;
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  resize: vertical;
+  background-color: #ffffff;
+  color: #333;
+}
   </style>
 </head>
 <body>
@@ -278,12 +291,12 @@ select:focus {
         <option value="NEED INCOME DOCS">NEED INCOME DOCS</option>
       </select>
       <label for="workingAt" style="margin-left: 20px;">Working @</label>
-<input type="text" id="workingAt" placeholder="Where?" style="padding: 8px; border-radius: 10px; border: 1px solid #ccc;" />
-<button id="toggleNotes" style="margin-left: 10px; padding: 6px 12px; border-radius: 10px;">+ Add Notes</button>
-<div id="notesContainer" style="display: none; margin-top: 10px;">
-  <label for="userNotes">Notes:</label><br>
-  <textarea id="userNotes" placeholder="Enter any additional notes..." rows="4" style="width: 100%; border-radius: 10px; padding: 10px; border: 1px solid #ccc;"></textarea>
-</div>
+<input type="text" id="workingAt" placeholder="Where?" style="padding: 8px; border-radius: 10px; border: 1px solid #f8c9f9;" />
+<button style="padding: 8px; border-radius: 10px;  width: 130px;
+height: 40px;
+border: 2px solid #f8c9f9;
+border-radius: 30px; /* Rounded edges */
+background-color: #f8c9f9; /* Soft pink background */" class="toggleNotes">+ Add Notes</button>
     </div>      
     <div class="container">
       <!-- Column 1: Biweekly and Weekly Income Sections -->
@@ -572,10 +585,14 @@ select:focus {
       </div>
     </div>
     <div class=" space"></div>
-    </div>    
+    </div>  
   <div id="householdMembersSection" class="section" style="margin-top: 20px;">
       <h2>Other Household Members</h2>
       <div id="householdMembersContainer"></div></div>
+      <div id="notesContainer">
+        <label for="userNotes">Notes:</label><br>
+        <textarea id="userNotes" placeholder="Enter any additional notes..." rows="8"></textarea>
+      </div>      
   <script>
     /***************************************************
      * 1) Coverage Chart & Coverage Level Logic
@@ -1038,9 +1055,11 @@ document.getElementById('householdSize').addEventListener('change', () => {
   updateHouseholdMemberFields();
 });
 
-document.getElementById('toggleNotes').addEventListener('click', () => {
-  const container = document.getElementById('notesContainer');
-  container.style.display = container.style.display === 'none' ? 'block' : 'none';
+document.querySelectorAll('.toggleNotes').forEach(button => {
+    button.addEventListener('click', () => {
+        const notes = document.getElementById('notesContainer');
+        notes.style.display = (notes.style.display === 'none' || notes.style.display === '') ? 'block' : 'none';
+    });
 });
   </script>
 </body>
