@@ -396,7 +396,7 @@ addRow = function () {
   const templates = {
     default: `Please send YES to confirm your appt on ${date} @ ${time}.\nCall to cancel, reschedule, or if you have questions.\n605-717-8920. Thank you.`,
     reschedule: `We need to reschedule your appt originally set for ${date} @ ${time}.\nPlease call us at 605-717-8920. Thank you.`,
-    CallClinic: `We called you around ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}, ${new Date().toLocaleDateString()}.\nIt's important you get in touch with the clinic.\nPlease call us at 605-717-8920. Thank you.`,
+    CallClinic: `We called you on ${new Date().toLocaleDateString()}.\nIt's important you get in touch with the clinic.\nPlease call us at 605-717-8920. Thank you.`,
     AEDue: `Its about that time! Your annual exam is due ${date}.\nPlease call us at 605-717-8920 to schedule your appointment. Thank you.`,
     MissedAppt: `We missed you at your appointment on ${date} @ ${time}.\nPlease call us at 605-717-8920 to reschedule. Thank you.`,
   };
