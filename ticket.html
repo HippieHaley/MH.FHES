@@ -201,12 +201,12 @@
                     input.type = 'radio';
                     input.name = 'visitType';
                     input.className = 'bubble-input';
-                    input.dataset.name = `${option.label} - ${option.code}`;
+                    input.dataset.name = `${option.code} ${option.label}`;
                     input.dataset.baseprice = option.basePrice;
 
                     const span = document.createElement('span');
                     span.className = 'option-text';
-                    span.textContent = `${option.code} (${option.label})`;
+                    span.textContent = `${option.code} ${option.label}`;
 
                     label.appendChild(input);
                     label.appendChild(span);
@@ -233,14 +233,14 @@
 
                     const input = document.createElement('input');
                     input.type = section.type;
-                    input.name = section.name || `${option.label}-${option.code}`;
+                    input.name = section.name || `${option.code}-${option.label}`;
                     input.className = 'bubble-input';
-                    input.dataset.name = `${option.label} - ${option.code}`;
+                    input.dataset.name = `${option.code}  ${option.label}`;
                     input.dataset.baseprice = option.basePrice;
 
                     const span = document.createElement('span');
                     span.className = 'option-text';
-                    span.textContent = `${option.label} (${option.code})`;
+                    span.textContent = `${option.label} ${option.code}`;
 
                     label.appendChild(input);
                     label.appendChild(span);
