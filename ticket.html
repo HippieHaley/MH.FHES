@@ -111,151 +111,210 @@
   </style>
 </head>
 <body>
-
-  <a href="index.html" class="back-home">Back Home</a>
-  <h2>Prices</h2>
-
-  <div class="controls">
-   <p><label for="percentSelector">Select Fee Percentage: </label>
-    <select id="percentSelector" onchange="updateAllPrices()">
-      <option value="100">100%</option>
-      <option value="75">75%</option>
-      <option value="50">50%</option>
-      <option value="25">25%</option>
-    </select></p> 
-  </div>
-    <div class="top-row">
-    <div class="price-grid" id="priceGrid">
-</div>   
-    <div class="receipt-box" id="receiptBox">
-      <strong>Receipt:</strong><br>
-      None selected.
+    <a href="index.html" class="back-home">Back Home</a>
+    <h2>Prices</h2>
+    <div class="controls">
+        <p>
+            <label for="percentSelector">Select Fee Percentage: </label>
+            <select id="percentSelector" onchange="updateAllPrices()">
+                <option value="100">100%</option>
+                <option value="75">75%</option>
+                <option value="50">50%</option>
+                <option value="25">25%</option>
+            </select>
+        </p>
     </div>
-  </div>
-<div class="pregnancy-section">
-    <div class="section-title"><p>Pregnancy Test:</p></div>
-    <label class="bubble-label">
-      <input type="radio" name="pregnancyTest" class="bubble-input" data-name="POS hCG - 232.01" data-baseprice="20">
-       POS hCG (232.01)
-    </label>
-    <label class="bubble-label">
-      <input type="radio" name="pregnancyTest" class="bubble-input" data-name="NEG hCG - 232.02" data-baseprice="20">
-      NEG hCG (232.02)
-    </label>
-  </div>
-  <div class="lab-section">
-    <div class="section-title"></div>
-    <label class="bubble-label">
-      <input type="checkbox" class="bubble-input" data-name="PapConventional - 88164" data-baseprice="23">
-      PapConventional (88164)
-    </label>
-    <label class="bubble-label">
-      <input type="checkbox" class="bubble-input" data-name="Pap Liquid Base - 88142" data-baseprice="30">
-      Pap Liquid Base (88142)
-    </label>
-   <label class="bubble-label">
-      <input type="checkbox" class="bubble-input" data-name="WetMount/GramStain - 87210" data-baseprice="15">
-      WetMount/GramStain (87210)
-    </label>
+    <div class="top-row">
+        <div class="price-grid" id="priceGrid"></div>
+        <div class="receipt-box" id="receiptBox">
+            <strong>Receipt:</strong><br>
+            None selected.
+        </div>
+    </div>
+    <script>
+        const services = [
+            { section: 'NEW PT', options: [
+                { code: '99202', label: 'Limited-New', basePrice: 170 },
+                { code: '99203', label: 'Intermediate-New', basePrice: 240 },
+                { code: '99204', label: 'Comprehensive-New', basePrice: 365 },
+            ]},
+            { section: 'EST PT', options: [
+                { code: '99211', label: 'Minimal-Established', basePrice: 51 },
+                { code: '99212', label: 'Limited-Established', basePrice: 101 },
+                { code: '99213', label: 'Intermediate-Established', basePrice: 166 },
+            ]},
+            { section: 'IE/ New PT', options: [
+                { code: '99384', label: 'Preventive (12–17)', basePrice: 306 },
+                { code: '99385', label: 'Preventive (18–39)', basePrice: 296 },
+                { code: '99386', label: 'Preventive (40–64)', basePrice: 310 },
+            ]},
+            { section: 'AE/ est PT', options: [
+                { code: '99394', label: 'Established (12–17)', basePrice: 262 },
+                { code: '99395', label: 'Established (18–39)', basePrice: 267 },
+                { code: '99396', label: 'Established (40–64)', basePrice: 285 },
+            ]}
+        ];
 
-    <label class="bubble-label">
-      <input type="checkbox" class="bubble-input" data-name="Pathology Interpretation - 88141" data-baseprice="72">
-      Pathology Interpretation (88141)
-    </label>
-   </div>
-  <script>
-    const services = [
-      { section: 'NEW PT', options: [
-        { code: '99202', label: 'Limited-New', basePrice: 170 },
-        { code: '99203', label: 'Intermediate-New', basePrice: 240 },
-        { code: '99204', label: 'Comprehensive-New', basePrice: 365 },
-      ]},
-      { section: 'EST PT', options: [
-        { code: '99211', label: 'Minimal-Established', basePrice: 51 },
-        { code: '99212', label: 'Limited-Established', basePrice: 101 },
-        { code: '99213', label: 'Intermediate-Established', basePrice: 166 },
-      ]},
-      { section: 'IE/ New PT', options: [
-        { code: '99384', label: 'Preventive (12–17)', basePrice: 306 },
-        { code: '99385', label: 'Preventive (18–39)', basePrice: 296 },
-        { code: '99386', label: 'Preventive (40–64)', basePrice: 310 },
-      ]},
-      { section: 'AE/ est PT', options: [
-        { code: '99394', label: 'Established (12–17)', basePrice: 262 },
-        { code: '99395', label: 'Established (18–39)', basePrice: 267 },
-        { code: '99396', label: 'Established (40–64)', basePrice: 285 },
-      ]}
-    ];
-   
-    const priceGrid = document.getElementById('priceGrid');
-    const receiptBox = document.getElementById('receiptBox');
+        const extraSections = [
+            {
+                section: 'Pregnancy Test',
+                type: 'radio',
+                name: 'pregnancyTest',
+                options: [
+                    { code: 'POS hCG', label: '232.01', basePrice: 20 },
+                    { code: 'NEG hCG', label: '232.02', basePrice: 20 }
+                ]
+            },
+            {
+                section: 'Pap & Lab Tests',
+                type: 'checkbox',
+                name: '', // unique checkboxes
+                options: [
+                    { code: 'PapConventional', label: '88164', basePrice: 23 },
+                    { code: 'Pap Liquid Base', label: '88142', basePrice: 30 },
+                    { code: 'WetMount/GramStain', label: '87210', basePrice: 15 },
+                    { code: 'Pathology Interpretation', label: '88141', basePrice: 72 }
+                ]
+            }
+        ];
 
-    function createServiceSections() {
-      services.forEach(group => {
-        const div = document.createElement('div');
-        div.className = 'price-section';
+        const priceGrid = document.getElementById('priceGrid');
+        const receiptBox = document.getElementById('receiptBox');
+        const selectedItems = {};
 
-        const title = document.createElement('div');
-        title.className = 'section-title';
-        title.textContent = group.section;
-        div.appendChild(title);
+        function createServiceSections() {
+            services.forEach(group => {
+                const div = document.createElement('div');
+                div.className = 'price-section';
 
-        group.options.forEach(option => {
-          const label = document.createElement('label');
-          label.className = 'bubble-label';
+                const title = document.createElement('div');
+                title.className = 'section-title';
+                title.textContent = group.section;
+                div.appendChild(title);
 
-          const input = document.createElement('input');
-          input.type = 'radio';
-          input.name = 'visitType';
-          input.className = 'bubble-input';
-          input.dataset.name = `${option.code} - ${option.label}`;
-          input.dataset.baseprice = option.basePrice;
+                group.options.forEach(option => {
+                    const label = document.createElement('label');
+                    label.className = 'bubble-label';
 
-          const span = document.createElement('span');
-          span.className = 'option-text';
-          span.textContent = `${option.code}`;
+                    const input = document.createElement('input');
+                    input.type = 'radio';
+                    input.name = 'visitType';
+                    input.className = 'bubble-input';
+                    input.dataset.name = `${option.code} - ${option.label}`;
+                    input.dataset.baseprice = option.basePrice;
 
-          label.appendChild(input);
-          label.appendChild(span);
-          div.appendChild(label);
-        });
+                    const span = document.createElement('span');
+                    span.className = 'option-text';
+                    span.textContent = `${option.code}`;
 
-        priceGrid.appendChild(div);
-      });
-    }
+                    label.appendChild(input);
+                    label.appendChild(span);
+                    div.appendChild(label);
+                });
 
-    function updateAllPrices() {
-      const percent = parseFloat(document.getElementById('percentSelector').value) / 100;
-
-      document.querySelectorAll('.bubble-input').forEach(input => {
-        const span = input.nextElementSibling;
-        const base = parseFloat(input.dataset.baseprice);
-        const newPrice = (base * percent).toFixed(2);
-        span.textContent = `${input.dataset.name.split(" - ")[0]} ($${newPrice})`;
-      });
-
-      // If something is selected, update receipt
-      const selected = document.querySelector('.bubble-input:checked');
-      if (selected) updateReceipt(selected);
-    }
-
-    function updateReceipt(input) {
-      const percent = parseFloat(document.getElementById('percentSelector').value) / 100;
-      const base = parseFloat(input.dataset.baseprice);
-      const price = (base * percent).toFixed(2);
-      receiptBox.innerHTML = `<strong>Receipt:</strong><br>${input.dataset.name}: $${price}<br><strong>Total: $${price}</strong>`;
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      createServiceSections();
-      updateAllPrices();
-
-      document.addEventListener('change', e => {
-        if (e.target.classList.contains('bubble-input')) {
-          updateReceipt(e.target);
+                priceGrid.appendChild(div);
+            });
         }
-      });
-    });
-  </script>
+
+        function createExtraSections() {
+            extraSections.forEach(section => {
+                const wrapper = document.createElement('div');
+                wrapper.className = section.section.includes('Pregnancy') ? 'pregnancy-section' : 'lab-section';
+
+                const title = document.createElement('div');
+                title.className = 'section-title';
+                title.textContent = section.section;
+                wrapper.appendChild(title);
+
+                section.options.forEach(option => {
+                    const label = document.createElement('label');
+                    label.className = 'bubble-label';
+
+                    const input = document.createElement('input');
+                    input.type = section.type;
+                    input.name = section.name || `${option.code}-${option.label}`;
+                    input.className = 'bubble-input';
+                    input.dataset.name = `${option.code} - ${option.label}`;
+                    input.dataset.baseprice = option.basePrice;
+
+                    const span = document.createElement('span');
+                    span.className = 'option-text';
+                    span.textContent = `${option.code}`;
+
+                    label.appendChild(input);
+                    label.appendChild(span);
+                    wrapper.appendChild(label);
+                });
+
+                document.body.appendChild(wrapper);
+            });
+        }
+
+        function updateAllPrices() {
+            const percent = parseFloat(document.getElementById('percentSelector').value) / 100;
+
+            document.querySelectorAll('.bubble-input').forEach(input => {
+                const label = input.closest('label');
+                const labelText = input.dataset.name.split(" - ")[0];
+                const base = parseFloat(input.dataset.baseprice);
+                const newPrice = (base * percent).toFixed(2);
+
+                let span = label.querySelector('.option-text');
+                if (!span) {
+                    span = document.createElement('span');
+                    span.className = 'option-text';
+                    label.appendChild(span);
+                }
+                span.textContent = `${labelText} ($${newPrice})`;
+
+                if (input.checked && selectedItems[input.dataset.name]) {
+                    selectedItems[input.dataset.name].price = parseFloat(newPrice);
+                }
+            });
+
+            updateReceiptDisplay();
+        }
+
+        function updateReceiptDisplay() {
+            const items = Object.values(selectedItems);
+
+            if (items.length === 0) {
+                receiptBox.innerHTML = '<strong>Receipt:</strong><br>None selected.';
+                return;
+            }
+
+            let receiptContent = '<strong>Receipt:</strong><br>';
+            let total = 0;
+
+            items.forEach(item => {
+                receiptContent += `${item.name}: $${item.price.toFixed(2)}<br>`;
+                total += item.price;
+            });
+
+            receiptContent += `<br><strong>Total: $${total.toFixed(2)}</strong>`;
+            receiptBox.innerHTML = receiptContent;
+        }
+
+        function setupInputListeners() {
+            document.querySelectorAll('.bubble-input').forEach(input => {
+                input.addEventListener('change', () => {
+                    if (input.checked) {
+                        const name = input.dataset.name;
+                        const price = parseFloat(input.dataset.baseprice);
+                        selectedItems[name] = { name, price };
+                    } else {
+                        delete selectedItems[input.dataset.name];
+                    }
+                    updateReceiptDisplay();
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createServiceSections();
+            createExtraSections();
+            setupInputListeners();
+            updateAllPrices();
+        });
+    </script>
 </body>
-</html>
