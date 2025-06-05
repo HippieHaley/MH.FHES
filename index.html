@@ -34,6 +34,7 @@
             align-items: center;
         }
 
+       
         /* Left Section - Title */
         .left-section {
             flex: 1;
@@ -41,22 +42,23 @@
             padding: 2rem;
             color: #fff;
         }
-        .right-section h1 {
+        .left-section h1 {
             font-size: 7rem;
             font-weight: bold;
             line-height: 1.2;
             letter-spacing: 2px;
             color: #f8c9f9; /* Soft pink */
             -webkit-text-stroke: 1px #000; /* Black outline around text */
-            -webkit-text-stroke: #ffffff;
+            text-stroke: 1px #000; /* For non-webkit browsers */
         }
-        .right-section h1::after {
+        .left-section h1::after {
             content: "BY H";
             display: block;
             font-size: 1.2rem;
             margin-top: 1rem;
             color: #fff;
             -webkit-text-stroke: 1px #000;
+            text-stroke: 1px #000;
         }
 
         /* Right Section - Buttons */
@@ -67,6 +69,7 @@
             gap: 1.5rem;
             align-items: flex-start;
         }
+
 
         /* Button Styles */
         .button {
