@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <style>
+        /* Basic Reset */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        /* General Body Style */
+        body {
+          font-family: Arial, sans-serif;
+          max-width: 1500px;
+          margin: 0 auto;
+          background-color: #acdbf9; /* Light blue background */
+          color: #333;
+          padding-top: 50px;
+        }
+        /* Back Home Button */
+        .back-home {
+          display: inline-block;
+          padding: 12px 24px;
+          background-color: #f8c9f9;
+          color: #333;
+          text-decoration: none;
+          font-size: 1rem;
+          font-weight: bold;
+          border-radius: 20px;
+          text-align: center;
+          border: 1px solid #000;
+          top: 20px;
+          left: 20px;
+          z-index: 999; /* Ensures it stays above other elements */
+          transition: background-color 0.2s ease;
+          position: absolute;
+        }
+        .back-home:hover {
+          background-color: #e8b3e8;
+        }
+    
+        /* Container for Left-Aligned Layout */
+        .container {
+          width: 100%;
+          max-width: 1500px;
+          background-color: #acdbf9; /* Light blue background */
+          border-radius: 10px;
+          padding: 20px;
+          box-shadow: 0 0 10px rgba(233, 208, 218, 0.1); /* Optional shadow */
+        }
+        /* Left Side - Price Sheet (2/3 of the screen) */
+        .left-side {
+          flex: 1;
+          padding-right: 20px;
+          margin-right: 35%; /* Pushes content left to make space for .right-side */
+        }
+        /* Right Side - Itemized List and Grand Total (Fixed Position) */
+        .right-side {
+          width: 30%;
+          padding: 20px;
+          border-radius: 10px;
+          background-color: #f8c9f9;
+          text-align: left;
+          font-size: 1rem;
+          color: #333;
+          position: fixed;
+          top: 20px;
+          right: 10px;
+        }
+    
+        /* Price Button Styling */
+        .price-button {
+          display: inline-block;
+          padding: 0.5rem 1.5rem;
+          background-color: #f8c9f9;
+          border: 1px solid #000;
+          border-radius: 20px;
+          text-decoration: none;
+          color: #333;
+          font-weight: bold;
+          font-size: 1rem;
+          cursor: pointer;
+          margin: 5px;
+        }
+        .price-button:hover {
+          background-color: #e8b8e8; /* Slightly darker pink */
+        }
+                  .block-group {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+                flex: 1;
+          padding-right: 30px;
+          margin-right: 30%; /* Pushes content left to make space for .right-side */
+    }
+    .block-group h3 {
+      margin-bottom: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      background: #f8c9f9;
+      padding: 6px;
+      border-radius: 4px;
+    }
+    .code-option {
+      margin-bottom: 8px;
+    }
+    .code-option label {
+      display: flex;
+      align-items: center;
+    }
+    .code-option input[type="checkbox"],
+    .code-option input[type="radio"] {
+      margin-right: 8px;
+    }
+    .highlight-section {
+      font-weight: bold;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      margin-top: 15px;
+      margin-bottom: 8px;
+    }
+        /* Table Styling */
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          background-color: #acdbf9; /* Light blue background */
+          border: 2px solid #333;    /* Solid border */
+          border-radius: 8px;        /* Rounded corners */
+          overflow: hidden;
+          margin: 20px 0;
+        }
+        /* Table Rows */
+        tr {
+          border: 2px solid #333;
+        }
+        /* Table Cells */
+        th,
+        td {
+          text-align: center;
+          padding: 15px;
+          background-color: #acdbf9;
+          color: #333;
+        }
+        /* Table Header */
+        th {
+          background-color: #f8c9f9;
+          font-weight: bold;
+          font-size: 1rem;
+          cursor: pointer;
+          margin: 5px;
+        }
+        th:first-child,
+        td:first-child {
+          background-color: #f8c9f9; /* Soft pink */
+          font-weight: bold;
+        }
+        /* CPT Code Styling */
+        .cpt-code {
+          font-size: 0.8rem;
+          color: #333;
+          margin-top: 0.3rem;
+          display: block;
+          font-style: italic;
+        }
+    
+        /* Itemized List Styling */
+        .itemized-list {
+          margin-bottom: 20px;
+          font-size: 1rem;
+          background-color: #f8c9f9;
+        }
+    
+ .remove-button {
+          background-color: #f8c9f9;
+          border: 1px solid #000;
+          border-radius: 5px;
+          padding: 2px 5px;
+          cursor: pointer;
+          margin-left: 5px;
+          font-weight: bold;
+        }
+    
+        /* Multiple Button Styling */
+        .multiple-button {
+          background-color:#acdbf9;
+          border: 1px solid #000;
+          border-radius: 5px;
+          padding: 2px 5px;
+          cursor: pointer;
+          margin-left: 5px;
+          font-weight: bold;
+        }
+        .multiple-button:hover {
+          background-color: #f7bdf7;
+        }
+    
+        /* Copy Receipt Button (different from price buttons) */
+.copy-button{ 
+          margin-top: 10px;
+          padding: 0.5rem 1.5rem;
+          background-color: #acdbf9;
+          border: 1px solid #000;
+          border-radius: 20px;
+          text-decoration: none;
+          color: #333;
+          font-weight: bold;
+        font-size: 1rem;
+        }
+            /* The Fee Selector */
+            select#percentSelector {
+              width: 100%;
+              max-width: 300px;
+              padding: 10px 15px;
+              margin: 10px 0;
+              border: 2px solid #f8c9f9; /* Soft pink border */
+              border-radius: 30px;       /* Rounded edges */
+              background-color: #f8c9f9; /* Soft pink background */
+              color: #333;
+              font-size: 1rem;
+              outline: none;
+              transition: background-color 0.3s ease, border-color 0.3s ease;
+              text-align: center;
+            }
+            select#percentSelector:hover {
+              background-color: #f0d4f0; /* Slightly lighter pink */
+            }
+            select#percentSelector:focus {
+              border-color: #e8b8e8;
+              background-color: #fff;
+              box-shadow: 0 0 5px rgba(232, 184, 232, 0.5);
+            }
+              </style>
+</head>
+<body>
+  <h1>Price Sheet Interactive Layout</h1>
+  <div class="right-side">
+  <h2>Receipt</h2>
+  <div id="itemizedList" class="itemized-list">
+    <!-- Itemized list of services will appear here -->
+  </div>
+  <h2>Total</h2>
+  <div id="grandTotal">$0.00</div>
+  <button onclick="copyReceipt()" class="copy-button">Copy Receipt</button>
+</div>
+  <div class="container">
+    <div class="block-group">
+      <div>
+        <h3>NEW PT/OFFICE</h3>
+        <div class="code-option"><label><input type="checkbox"> 99201</label></div>
+        <div class="code-option"><label><input type="checkbox"> 99202</label></div>
+        <div class="code-option"><label><input type="checkbox"> 99203</label></div>
+        <div class="code-option"><label><input type="checkbox"> 99204</label></div>
+      </div>
+      <div>
+        <h3>EST. PT/OFFICE</h3>
+        <div class="code-option"><label><input type="checkbox"> 99211 (RN)</label></div>
+        <div class="code-option"><label><input type="checkbox"> 99212</label></div>
+        <div class="code-option"><label><input type="checkbox"> 99213</label></div>
+        <div class="code-option"><label><input type="checkbox"> 99214</label></div>
+      </div>
+      <div>
+        <h3>IE / NEW PT</h3>
+        <div class="code-option"><label><input type="checkbox"> 99384 (12–17)</label></div>
+        <div class="code-option"><label><input type="checkbox"> 99385 (18–39)</label></div>
+        <div class="code-option"><label><input type="checkbox"> 99386 (40–64)</label></div>
+      </div>
+      <div>
+        <h3>AE / EST. PT</h3>
+        <div class="code-option"><label><input type="checkbox"> 99394 (12–17)</label></div>
+        <div class="code-option"><label><input type="checkbox"> 99395 (18–39)</label></div>
+        <div class="code-option"><label><input type="checkbox"> 99396 (40–64)</label></div>
+      </div>
+    </div>
+
+<div class="highlight-section">LABS</div>
+<div class="code-option">
+  <label><input type="checkbox" onclick="addItem(this, 'LIQUID BASED PAP Z12.4 88142', 40)"> LIQUID BASED PAP Z12.4 88142</label>
+</div>
+<div class="code-option">
+  <label><input type="checkbox" onclick="addItem(this, 'CONV PAP Z12.4 88164', 38)"> CONV PAP Z12.4 88164</label>
+</div>
+<div class="code-option">
+  <label><input type="checkbox" onclick="addItem(this, 'HPV Z11.51 87624', 35)"> HPV Z11.51 87624</label>
+</div>
+<div class="code-option">
+  <label><input type="checkbox" onclick="addItem(this, 'PATHOLOGY FEE 88141', 45)"> PATHOLOGY FEE 88141</label>
+</div>
+<div class="code-option">
+  <label><input type="checkbox" onclick="addItem(this, 'WET MOUNT N898 87210', 28)"> WET MOUNT N898 87210</label>
+</div>
+<div class="code-option">
+  <label>
+    <input type="checkbox" onclick="addItem(this, 'CHL Z11.3 87491 x1', 25)"> CHL Z11.3 87491
+  </label>
+  <button onclick="addMultiple('CHL Z11.3 87491', 25, 2)">x2</button>
+  <button onclick="addMultiple('CHL Z11.3 87491', 25, 3)">x3</button>
+</div>
+<div class="code-option">
+  <label>
+    <input type="checkbox" onclick="addItem(this, 'GC Z11.3 87591 x1', 25)"> GC Z11.3 87591
+  </label>
+  <button onclick="addMultiple('GC Z11.3 87591', 25, 2)">x2</button>
+  <button onclick="addMultiple('GC Z11.3 87591', 25, 3)">x3</button>
+</div>
+
+
+    <div class="code-option"><label><input type="checkbox"> GENITAL WART TX A63.0</label></div>
+    <div class="code-option"><label><input type="checkbox"> RAPID HIV 211.4/Z578 86703</label></div>
+    <div class="code-option"><label><input type="checkbox"> SERUM HIV Z11.4 87389</label></div>
+    <div class="code-option"><label><input type="checkbox"> RPR (SYPHILIS) Z11.3 86592</label></div>
+    <div class="code-option"><label><input type="checkbox"> TPPA (SYPHILIS) Z11.3 86780</label></div>
+<label><strong>Pregnancy Test</strong></label>
+    <div class="code-option"><label><input type="radio" name="pregnancy"> POS hCG 232.01 81025</label></div>
+    <div class="code-option"><label><input type="radio" name="pregnancy"> NEG hCG 232.02 81025</label></div>
+    <div class="highlight-section">MEDICATIONS- INITIAL & REPEAT CODES</div>
+    <div class="code-option"><label><input type="checkbox"> APRI Z30.011 / Z30.41</label></div>
+    <div class="code-option"><label><input type="checkbox"> CAMILA Z30.011 / Z30.41</label></div>
+    <div class="code-option"><label><input type="checkbox"> DEPO Z30.013 / Z30.42</label></div>
+    <div class="code-option"><label><input type="checkbox"> NUVA RING Z30.015 / Z30.44</label></div>
+    <div class="code-option"><label><input type="checkbox"> NEXPLANON Z30.017 / (I&R)Z30.46</label></div>
+    <div class="code-option"><label><input type="checkbox"> PARAGARD IUD Z30.430 / (I&R)Z30.46</label></div>
+    <div class="code-option"><label><input type="checkbox"> IMPLANT INSERT Z30.017</label></div>
+    <div class="code-option"><label><input type="checkbox"> IMPLANT REMOVAL Z30.46</label></div>
+    <div class="code-option"><label><input type="checkbox"> DOXYCYCLINE</label></div>
+    <div class="code-option"><label><input type="checkbox"> ROCEPHIN</label></div>
+    <div class="code-option"><label><input type="checkbox"> BICILLIN</label></div>
+    <div class="code-option"><label><input type="checkbox"> AZITHROMYCIN</label></div>
+    <div class="code-option"><label><input type="checkbox"> SUPRAX</label></div>
+    <script>
+  let receipt = [];
+  let total = 0;
+
+  function addItem(checkbox, label, price) {
+    if (checkbox.checked) {
+      receipt.push({ label, price });
+      total += price;
+    } else {
+      const index = receipt.findIndex(item => item.label === label);
+      if (index !== -1) {
+        total -= receipt[index].price;
+        receipt.splice(index, 1);
+      }
+    }
+    updateReceipt();
+  }
+
+  function addMultiple(label, price, qty) {
+    const labelQty = `${label} x${qty}`;
+    receipt.push({ label: labelQty, price: price * qty });
+    total += price * qty;
+    updateReceipt();
+  }
+
+function updateReceipt() {
+    const list = document.getElementById('itemizedList');
+    const totalDisplay = document.getElementById('grandTotal');
+    list.innerHTML = receipt.map(item => `<div>${item.label}: $${item.price.toFixed(2)}</div>`).join('');
+    totalDisplay.textContent = `$${total.toFixed(2)}`;
+  }
+
+  function copyReceipt() {
+    const lines = receipt.map(item => `${item.label}: $${item.price.toFixed(2)}`);
+    lines.push(`Total: $${total.toFixed(2)}`);
+    const receiptText = lines.join('\n');
+    navigator.clipboard.writeText(receiptText)
+      .then(() => alert('Receipt copied to clipboard!'))
+      .catch(() => alert('Failed to copy receipt.'));
+  }
+</script>
