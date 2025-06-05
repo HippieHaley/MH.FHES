@@ -234,7 +234,17 @@
               </style>
 </head>
 <body>
-  <h1>Price Sheet Interactive Layout</h1>
+     <a href="index.html" class="back-home">Back to Home</a>
+            <div class="container">
+               <h1>Price Sheet</h1> <!-- Left Side -->    <div style="margin-bottom: 20px;">
+            <label for="percentSelector">Select Fee Percentage:</label>
+            <select id="percentSelector" onchange="updateVisibleColumn()">
+                <option value="100">100%</option>
+                <option value="75">75%</option>
+                <option value="50">50%</option>
+                <option value="25">25%</option>
+            </select>
+            </div>
   <div class="right-side">
   <h2>Receipt</h2>
   <div id="itemizedList" class="itemized-list">
@@ -243,6 +253,7 @@
   <h2>Total</h2>
   <div id="grandTotal">$0.00</div>
   <button onclick="copyReceipt()" class="copy-button">Copy Receipt</button>
+
 </div>
   <div class="container">
     <div class="block-group">
@@ -273,7 +284,9 @@
         <div class="code-option"><label><input type="checkbox"> 99396 (40–64)</label></div>
       </div>
     </div>
-
+ <div class="container">
+      <div class="column">
+        <div class="section">
 <div class="highlight-section">LABS</div>
 <div class="code-option">
   <label><input type="checkbox" onclick="addItem(this, 'LIQUID BASED PAP Z12.4 88142', 40)"> LIQUID BASED PAP Z12.4 88142</label>
@@ -292,26 +305,25 @@
 </div>
 <div class="code-option">
   <label>
-    <input type="checkbox" onclick="addItem(this, 'CHL Z11.3 87491 x1', 25)"> CHL Z11.3 87491
+    <input type="checkbox" id="chl-checkbox" onclick="addItem(this, 'CHL Z11.3 87491 x1', 25)"> CHL Z11.3 87491
   </label>
-  <button onclick="addMultiple('CHL Z11.3 87491', 25, 2)">x2</button>
-  <button onclick="addMultiple('CHL Z11.3 87491', 25, 3)">x3</button>
+   <button type="button" class="multiple-button" onclick="addMultiple('CHL Z11.3 87491', 25, 2)">x2</button>
+    <button type="button" class="multiple-button" onclick="addMultiple('CHL Z11.3 87491', 25, 3)">x3</button>
 </div>
 <div class="code-option">
-  <label>
-    <input type="checkbox" onclick="addItem(this, 'GC Z11.3 87591 x1', 25)"> GC Z11.3 87591
-  </label>
-  <button onclick="addMultiple('GC Z11.3 87591', 25, 2)">x2</button>
-  <button onclick="addMultiple('GC Z11.3 87591', 25, 3)">x3</button>
+    <label>
+        <input type="checkbox" onclick="addItem(this, 'GC Z11.3 87591 x1', 25)"> GC Z11.3 87591
+    </label>
+    <button type="button" class="multiple-button" onclick="addMultiple('GC Z11.3 87591', 25, 2)">x2</button>
+    <button type="button" class="multiple-button" onclick="addMultiple('GC Z11.3 87591', 25, 3)">x3</button>
 </div>
-
-
     <div class="code-option"><label><input type="checkbox"> GENITAL WART TX A63.0</label></div>
     <div class="code-option"><label><input type="checkbox"> RAPID HIV 211.4/Z578 86703</label></div>
     <div class="code-option"><label><input type="checkbox"> SERUM HIV Z11.4 87389</label></div>
     <div class="code-option"><label><input type="checkbox"> RPR (SYPHILIS) Z11.3 86592</label></div>
     <div class="code-option"><label><input type="checkbox"> TPPA (SYPHILIS) Z11.3 86780</label></div>
-<label><strong>Pregnancy Test</strong></label>
+      <div class="column">
+<div class="code-option"><label><strong>Pregnancy Test</strong></label></div>
     <div class="code-option"><label><input type="radio" name="pregnancy"> POS hCG 232.01 81025</label></div>
     <div class="code-option"><label><input type="radio" name="pregnancy"> NEG hCG 232.02 81025</label></div>
     <div class="highlight-section">MEDICATIONS- INITIAL & REPEAT CODES</div>
@@ -328,6 +340,7 @@
     <div class="code-option"><label><input type="checkbox"> BICILLIN</label></div>
     <div class="code-option"><label><input type="checkbox"> AZITHROMYCIN</label></div>
     <div class="code-option"><label><input type="checkbox"> SUPRAX</label></div>
+    </div>
     <script>
   let receipt = [];
   let total = 0;
