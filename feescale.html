@@ -288,7 +288,7 @@ select:focus {
         <option value="" selected disabled hidden>Select one...</option>
         <option value="W2">W2</option>
         <option value="Paycheck">Paycheck</option>
-        <option value="NEED INCOME DOCS">NEED INCOME DOCS</option>
+        <option value="NEED INCOME DOCS">NEED INCOME DOCS-VERBAL INCOME</option>
       </select>
       <label for="workingAt" style="margin-left: 20px;">Working @</label>
 <input type="text" id="workingAt" placeholder="Where?" style="padding: 8px; border-radius: 10px; border: 1px solid #f8c9f9;" />
@@ -779,14 +779,14 @@ function updateHouseholdMemberFields() {
     select.name = `relationship${i}`;
     select.innerHTML = `
       <option value="">Select Relationship</option>
-      <option>Son</option>
-      <option>Daughter</option>
+      <option>Child</option>
+      <option>Grandchild</option>
+      <option>Significant Other</option>
       <option>Fiancé</option>
-      <option>Fiancée</option>
       <option>Spouse</option>
-      <option>Brother</option>
-      <option>Sister</option>
-      <option>Parent</option>
+      <option>Sibling</option>
+      <option>Parent</option>      
+      <option>Grandparent</option>
       <option>Friend</option>
       <option>Roommate</option>
       <option>Other</option>
