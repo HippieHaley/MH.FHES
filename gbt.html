@@ -233,7 +233,6 @@
               box-shadow: 0 0 5px rgba(232, 184, 232, 0.5);
             }
 </style>
-
 <body>
  <a href="index.html" class="back-home">Back to Home</a>
      <h1>Price Sheet</h1>
@@ -258,30 +257,29 @@
     <div class="block-group">
         <div>
             <h3>NEW PT/OFFICE</h3>
-            <div class="code-option"><label><input type="checkbox"> 99201</label></div>
-            <div class="code-option"><label><input type="checkbox"> 99202</label></div>
-            <div class="code-option"><label><input type="checkbox"> 99203</label></div>
-            <div class="code-option"><label><input type="checkbox"> 99204</label></div>
+            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Limited-New', 170)"> 99202</label></div>
+            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Intermediate-New', 240)"> 99203</label></div>
+            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Comprehensive-New', 365)"> 99204</label></div>
         </div>
         <div>
             <h3>EST. PT/OFFICE</h3>
-            <div class="code-option"><label><input type="checkbox"> 99211 (RN)</label></div>
-            <div class="code-option"><label><input type="checkbox"> 99212</label></div>
-            <div class="code-option"><label><input type="checkbox"> 99213</label></div>
-            <div class="code-option"><label><input type="checkbox"> 99214</label></div>
+            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Minimal-Established', 51)"> 99211 (RN)</label></div>
+            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Limited-Established', 101)"> 99212</label></div>
+            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Intermediate-Established', 166)"> 99213</label></div>
+            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Comprehensive-Established', 243)"> 99214</label></div>
         </div>
         <div>
             <h3>IE / NEW PT</h3>
-            <div class="code-option"><label><input type="checkbox"> 99384 (12–17)</label></div>
-            <div class="code-option"><label><input type="checkbox"> 99385 (18–39)</label></div>
-            <div class="code-option"><label><input type="checkbox"> 99386 (40–64)</label></div>
+            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Preventive 12-17 New', 306)"> 99384 (12–17)</label></div>
+            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Preventive 18-39 New', 296)"> 99385 (18–39)</label></div>
+            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Preventive 40-64 Established', 285)"> 99386 (40–64)</label></div>
         </div>
         <div>
             <h3>AE / EST. PT</h3>
-            <div class="code-option"><label><input type="checkbox"> 99394 (12–17)</label></div>
-            <div class="code-option"><label><input type="checkbox"> 99395 (18–39)</label></div>
-            <div class="code-option"><label><input type="checkbox"> 99396 (40–64)</label></div>
-        </div>
+            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Preventive 12-17 Established', 262)"> 99394 (12–17)</label></div>
+            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Preventive 18-39 Established', 267)"> 99395 (18–39)</label></div>
+            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Preventive 40-64 Established', 285)"> 99396 (40–64)</label></div>
+    </div>
     </div>
     <div class="block-group">
         <div>
@@ -323,7 +321,7 @@
             <div class="code-option"><label><input type="radio" name="pregnancy"> NEG hCG 232.02 81025</label></div>
         </div>
         <div>
-            <div class="highlight-section">MEDICATIONS- INITIAL & REPEAT CODES</div>
+            <label><strong>Medication - Initial & Repeat Codes</strong></label>
             <div class="code-option"><label><input type="checkbox"> APRI Z30.011 / Z30.41</label></div>
             <div class="code-option"><label><input type="checkbox"> CAMILA Z30.011 / Z30.41</label></div>
             <div class="code-option"><label><input type="checkbox"> DEPO Z30.013 / Z30.42</label></div>
@@ -341,44 +339,163 @@
     </div>
     </body>
     <script>
-  let receipt = [];
-  let total = 0;
+        let grandTotal = 0;
+        const selectedItems = {};
+    
+        // Decide if a service should have a "Multiple" button
+        function isMultipleAllowed(service) {
+  const allowedItems = [
+    "InternalCondom", "Diaphragm", "DepoProvera", "MedroxyProgesterone",
+    "VCFFoam", "GynolII", "LilettaIUD", "ParagardIUD", "Xulane", "Chlamydia",
+    "Gonorrhea", "NuvaRing", "Nexplanon", "Alese", "Apri", "Aubra", "Aviane",
+    "Bicillin", "Camila", "Ceftriaxone", "Chateal", "Cryselle", "Cyred",
+    "Doxycycline", "Enpresse", "Jolivette", "Levora", "Lutera", "Lyza",
+    "Mononessa", "Nor QD", "Nordette", "Norethindrone", "Nortrel777",
+    "Orsythia", "Portia", "Reclipsen", "Sprintec", "Sronyx", "Tri-LoMarzia",
+    "Tri-LoSprintec", "TriNessaLo", "Triphasil", "Trivora", "Vilibra", "Nortrel 777", "Vilbra", "TriNessa Lo",
+    "BasalThermometer"  // Newly added
+  ];
 
-  function addItem(checkbox, label, price) {
-    if (checkbox.checked) {
-      receipt.push({ label, price });
-      total += price;
-    } else {
-      const index = receipt.findIndex(item => item.label === label);
-      if (index !== -1) {
-        total -= receipt[index].price;
-        receipt.splice(index, 1);
-      }
-    }
-    updateReceipt();
-  }
-
-  function addMultiple(label, price, qty) {
-    const labelQty = `${label} x${qty}`;
-    receipt.push({ label: labelQty, price: price * qty });
-    total += price * qty;
-    updateReceipt();
-  }
-
-function updateReceipt() {
-    const list = document.getElementById('itemizedList');
-    const totalDisplay = document.getElementById('grandTotal');
-    list.innerHTML = receipt.map(item => `<div>${item.label}: $${item.price.toFixed(2)}</div>`).join('');
-    totalDisplay.textContent = `$${total.toFixed(2)}`;
-  }
-
-  function copyReceipt() {
-    const lines = receipt.map(item => `${item.label}: $${item.price.toFixed(2)}`);
-    lines.push(`Total: $${total.toFixed(2)}`);
-    const receiptText = lines.join('\n');
-    navigator.clipboard.writeText(receiptText)
-      .then(() => alert('Receipt copied to clipboard!'))
-      .catch(() => alert('Failed to copy receipt.'));
-  }
-</script>
+          // If the item name is in the array, we show a Multiple button
+          return allowedItems.some(item => service.includes(item));
+        }
+    
+        // Single complete definition of addToTotal
+        function addToTotal(service, price) {
+          // Check if this service is already in the selectedItems
+          if (selectedItems.hasOwnProperty(service)) {
+            // If it exists, increment its quantity and update
+            const existingItem = selectedItems[service];
+            existingItem.quantity++;
+            existingItem.totalPrice = existingItem.price * existingItem.quantity;
+            // Update the displayed text
+            existingItem.span.textContent = 
+              `${service} x${existingItem.quantity}: $${existingItem.totalPrice.toFixed(2)}`;
+            // Update grandTotal
+            grandTotal += price;
+            document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+          } else {
+            // Otherwise, create a new entry for this service
+            const itemizedList = document.getElementById('itemizedList');
+            const listItem = document.createElement('div');
+            listItem.className = 'list-item';
+    
+            let totalPrice = price;
+            let quantity = 1;
+    
+            // Create a span to hold the service text
+            const serviceTextSpan = document.createElement('span');
+            serviceTextSpan.className = 'service-text';
+            serviceTextSpan.textContent = `${service} x${quantity}: $${totalPrice.toFixed(2)}`;
+            listItem.appendChild(serviceTextSpan);
+    
+            // Create a Multiple button if allowed
+            if (isMultipleAllowed(service)) {
+              const multipleButton = document.createElement('button');
+              multipleButton.textContent = "Multiple";
+              multipleButton.className = 'multiple-button';
+              multipleButton.onclick = function () {
+                let newQuantity = parseInt(prompt("Enter quantity:", quantity), 10);
+                if (!isNaN(newQuantity) && newQuantity > 0) {
+                  // Subtract the old total
+                  grandTotal -= totalPrice;
+                  // Update quantity
+                  quantity = newQuantity;
+                  totalPrice = price * quantity;
+                  // Add the new total
+                  grandTotal += totalPrice;
+                  // Update the displayed text
+                  serviceTextSpan.textContent = 
+                    `${service} x${quantity}: $${totalPrice.toFixed(2)}`;
+                  document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+                  // Update the stored item
+                  selectedItems[service] = {
+                    quantity,
+                    totalPrice,
+                    span: serviceTextSpan,
+                    price,
+                    listItem
+                  };
+                }
+              };
+              listItem.appendChild(multipleButton);
+            }
+    
+            // Create a Remove button
+            const removeButton = document.createElement('button');
+            removeButton.textContent = "X";
+            removeButton.className = 'remove-button';
+            removeButton.onclick = function () {
+              itemizedList.removeChild(listItem);
+              grandTotal -= totalPrice;
+              document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+              delete selectedItems[service];
+            };
+            listItem.appendChild(removeButton);
+    
+            // Append the new list item
+            itemizedList.appendChild(listItem);
+    
+            // Save the new service details in selectedItems
+            selectedItems[service] = {
+              quantity,
+              totalPrice,
+              span: serviceTextSpan,
+              price,
+              listItem
+            };
+    
+            // Update the grand total
+            grandTotal += totalPrice;
+            document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+          }
+        }
+    
+        // Function to copy the receipt text
+        function copyReceipt() {
+          const listItems = document.querySelectorAll('#itemizedList .list-item');
+          let receiptLines = [];
+          listItems.forEach(li => {
+            // Assume the first child (the span) holds the service text
+            let text = li.firstChild.textContent.trim();
+            // Optionally remove any " 100%" or " x1" text if you want
+            text = text.replace(/\s*\d+%/, "");
+            text = text.replace(/\sx1\b/, "");
+            receiptLines.push(text);
+          });
+          const totalText = document.getElementById('grandTotal').innerText;
+          const receiptText = `Services:\n${receiptLines.join("\n")}\nTotal: ${totalText}`;
+          navigator.clipboard.writeText(receiptText)
+            .then(() => alert('Receipt copied to clipboard!'))
+            .catch(() => alert('Failed to copy receipt.'));
+        }
+    
+        // Update price buttons based on the selected fee percentage
+        function updateVisibleColumn() {
+          const selectedPercent = parseFloat(document.getElementById('percentSelector').value) / 100;
+          const priceButtons = document.querySelectorAll('.price-button');
+    
+          priceButtons.forEach(button => {
+            const fullPrice = parseFloat(button.getAttribute('data-price'));
+            // If there's no data-price, skip
+            if (!fullPrice) return;
+    
+            const newPrice = (fullPrice * selectedPercent).toFixed(2);
+            button.textContent = `$${newPrice}`;
+            // Update the onclick attribute dynamically
+            button.setAttribute('onclick', `addToTotal('${button.getAttribute('data-name')} ${selectedPercent * 100}%', ${newPrice})`);
+          });
+    
+          // Update table header to match selected percentage
+          const headerCells = document.querySelectorAll('th');
+          if (headerCells.length > 1) {
+            headerCells[1].textContent = `${selectedPercent * 100}% Fee`;
+          }
+        }
+    
+        // Initialize prices on page load
+        document.addEventListener('DOMContentLoaded', () => {
+          updateVisibleColumn();
+        });
+      </script>
 </html>
