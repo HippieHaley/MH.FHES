@@ -360,6 +360,53 @@
     let grandTotal = 0;
     const selectedItems = {};
 
+    const basePrices = {
+      "Limited-New": 170,
+      "Intermediate-New": 240,
+      "Comprehensive-New": 365,
+      "Minimal-Established": 51,
+      "Limited-Established": 101,
+      "Intermediate-Established": 166,
+      "Comprehensive-Established": 243,
+      "Preventive 12-17 New": 306,
+      "Preventive 18-39 New": 296,
+      "Preventive 40-64 Established": 285,
+      "Preventive 12-17 Established": 262,
+      "Preventive 18-39 Established": 267,
+      "Preventive 40-64 Established": 285,
+      "LIQUID BASED PAP Z12.4 88142": 40,
+      "CONV PAP Z12.4 88164": 38,
+      "HPV Z11.51 87624": 35,
+      "PATHOLOGY FEE 88141": 45,
+      "WET MOUNT N898 87210": 28,
+      "CHL Z11.3 87491": 25,
+      "GC Z11.3 87591": 25,
+      "GENITAL WART TX A63.0": 0,
+      "RAPID HIV 211.4/Z578 86703": 0,
+      "SERUM HIV Z11.4 87389": 0,
+      "RPR (SYPHILIS) Z11.3 86592": 0,
+      "TPPA (SYPHILIS) Z11.3 86780": 0,
+      "HSV PCR": 0,
+      "HSV SERUM": 0,
+      "URINE DIP": 0,
+      "INJ. FEE (STI TX) Z11.3 96372": 0,
+      "INJ. FEE (DEPO) Z30.013/Z30.42": 0,
+      "VENIPUNCTURE Z11.3 36415": 0,
+      "APRI Z30.011 / Z30.41": 0,
+      "CAMILA Z30.011 / Z30.41": 0,
+      "DEPO Z30.013 / Z30.42": 0,
+      "NUVA RING Z30.015 / Z30.44": 0,
+      "NEXPLANON Z30.017 / (I&R)Z30.46": 0,
+      "PARAGARD IUD Z30.430 / (I&R)Z30.46": 0,
+      "IMPLANT INSERT Z30.017": 0,
+      "IMPLANT REMOVAL Z30.46": 0,
+      "DOXYCYCLINE": 0,
+      "ROCEPHIN": 0,
+      "BICILLIN": 0,
+      "AZITHROMYCIN": 0,
+      "SUPRAX": 0
+    };
+
     // Add this function to handle the "x2", "x3" multiple buttons
     function addMultiple(service, price, quantity) {
       // Remove any existing entry for this service (with or without x1)
@@ -372,6 +419,7 @@
             item.listItem.parentNode.removeChild(item.listItem);
           }
           grandTotal -= item.totalPrice;
+          document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
           delete selectedItems[key];
         }
       });
@@ -425,7 +473,13 @@
       });
     }
 
-    function handleCheckbox(checkbox, service, price) {
+    function getSelectedPercent() {
+      return parseFloat(document.getElementById('percentSelector').value) / 100;
+    }
+
+    function handleCheckbox(checkbox, service) {
+      const percent = getSelectedPercent();
+      const price = basePrices[service] * percent;
       if (checkbox.checked) {
         addToTotal(service, price);
       } else {
@@ -571,7 +625,21 @@
       if (headerCells.length > 1) {
         headerCells[1].textContent = `${selectedPercent * 100}% Fee`;
       }
+      updateReceiptPrices();
     }
+
+    function updateReceiptPrices() {
+  const percent = getSelectedPercent();
+  Object.keys(selectedItems).forEach(service => {
+    const item = selectedItems[service];
+    item.price = basePrices[service];
+    item.totalPrice = item.price * item.quantity * percent;
+    item.span.textContent = `${service} x${item.quantity}: $${item.totalPrice.toFixed(2)}`;
+  });
+  // Update grand total
+  grandTotal = Object.values(selectedItems).reduce((sum, item) => sum + item.totalPrice, 0);
+  document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+}
 
     document.addEventListener('DOMContentLoaded', () => {
       updateVisibleColumn();
