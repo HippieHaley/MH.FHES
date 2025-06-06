@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />  
-</head>
-<style>
+    <style>
         /* Basic Reset */
         * {
           margin: 0;
@@ -232,7 +231,8 @@
               background-color: #fff;
               box-shadow: 0 0 5px rgba(232, 184, 232, 0.5);
             }
-</style>
+    </style>
+</head>
 <body>
  <a href="index.html" class="back-home">Back to Home</a>
      <h1>Price Sheet</h1>
@@ -257,126 +257,302 @@
     <div class="block-group">
         <div>
             <h3>NEW PT/OFFICE</h3>
-            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Limited-New', 170)"> 99202</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Intermediate-New', 240)"> 99203</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Comprehensive-New', 365)"> 99204</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'Limited-New', 170)"> 99202</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'Intermediate-New', 240)"> 99203</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'Comprehensive-New', 365)"> 99204</label></div>
         </div>
         <div>
             <h3>EST. PT/OFFICE</h3>
-            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Minimal-Established', 51)"> 99211 (RN)</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Limited-Established', 101)"> 99212</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Intermediate-Established', 166)"> 99213</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Comprehensive-Established', 243)"> 99214</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'Minimal-Established', 51)"> 99211 (RN)</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'Limited-Established', 101)"> 99212</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'Intermediate-Established', 166)"> 99213</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'Comprehensive-Established', 243)"> 99214</label></div>
         </div>
         <div>
             <h3>IE / NEW PT</h3>
-            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Preventive 12-17 New', 306)"> 99384 (12–17)</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Preventive 18-39 New', 296)"> 99385 (18–39)</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Preventive 40-64 Established', 285)"> 99386 (40–64)</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'Preventive 12-17 New', 306)"> 99384 (12–17)</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'Preventive 18-39 New', 296)"> 99385 (18–39)</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'Preventive 40-64 Established', 285)"> 99386 (40–64)</label></div>
         </div>
         <div>
             <h3>AE / EST. PT</h3>
-            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Preventive 12-17 Established', 262)"> 99394 (12–17)</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Preventive 18-39 Established', 267)"> 99395 (18–39)</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addToTotal('Preventive 40-64 Established', 285)"> 99396 (40–64)</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'Preventive 12-17 Established', 262)"> 99394 (12–17)</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'Preventive 18-39 Established', 267)"> 99395 (18–39)</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'Preventive 40-64 Established', 285)"> 99396 (40–64)</label></div>
     </div>
     </div>
     <div class="block-group">
         <div>
             <label><strong>Tests</strong></label>
             <div class="code-option">
-                <label><input type="checkbox" onclick="addItem(this, 'LIQUID BASED PAP Z12.4 88142', 40)"> LIQUID BASED PAP Z12.4 88142</label>
+                <label><input type="checkbox" onchange="handleCheckbox(this, 'LIQUID BASED PAP Z12.4 88142', 40)"> LIQUID BASED PAP Z12.4 88142</label>
             </div>
             <div class="code-option">
-                <label><input type="checkbox" onclick="addItem(this, 'CONV PAP Z12.4 88164', 38)"> CONV PAP Z12.4 88164</label>
+                <label><input type="checkbox" onchange="handleCheckbox(this, 'CONV PAP Z12.4 88164', 38)"> CONV PAP Z12.4 88164</label>
             </div>
             <div class="code-option">
-                <label><input type="checkbox" onclick="addItem(this, 'HPV Z11.51 87624', 35)"> HPV Z11.51 87624</label>
+                <label><input type="checkbox" onchange="handleCheckbox(this, 'HPV Z11.51 87624', 35)"> HPV Z11.51 87624</label>
             </div>
             <div class="code-option">
-                <label><input type="checkbox" onclick="addItem(this, 'PATHOLOGY FEE 88141', 45)"> PATHOLOGY FEE 88141</label>
+                <label><input type="checkbox" onchange="handleCheckbox(this, 'PATHOLOGY FEE 88141', 45)"> PATHOLOGY FEE 88141</label>
             </div>
             <div class="code-option">
-                <label><input type="checkbox" onclick="addItem(this, 'WET MOUNT N898 87210', 28)"> WET MOUNT N898 87210</label>
+                <label><input type="checkbox" onchange="handleCheckbox(this, 'WET MOUNT N898 87210', 28)"> WET MOUNT N898 87210</label>
             </div>
             <div class="code-option">
-                <input type="checkbox" id="chl-checkbox" onclick="addItem(this, 'CHL Z11.3 87491 x1', 25)"> CHL Z11.3 87491
+                <input type="checkbox" id="chl-checkbox" onchange="handleCheckbox(this, 'CHL Z11.3 87491 x1', 25)"> CHL Z11.3 87491
                 <button type="button" class="multiple-button" onclick="addMultiple('CHL Z11.3 87491', 25, 2)">x2</button>
                 <button type="button" class="multiple-button" onclick="addMultiple('CHL Z11.3 87491', 25, 3)">x3</button>
             </div>
             <div class="code-option">
-                <input type="checkbox" onclick="addItem(this, 'GC Z11.3 87591 x1', 25)"> GC Z11.3 87591
+                <input type="checkbox" onchange="handleCheckbox(this, 'GC Z11.3 87591 x1', 25)"> GC Z11.3 87591
                 <button type="button" class="multiple-button" onclick="addMultiple('GC Z11.3 87591', 25, 2)">x2</button>
                 <button type="button" class="multiple-button" onclick="addMultiple('GC Z11.3 87591', 25, 3)">x3</button>
             </div>
-            <div class="code-option"><label><input type="checkbox" onclick="addItem(this, 'GENITAL WART TX A63.0', 0)"> GENITAL WART TX A63.0</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addItem(this, 'RAPID HIV 211.4/Z578 86703', 0)"> RAPID HIV 211.4/Z578 86703</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addItem(this, 'SERUM HIV Z11.4 87389', 0)"> SERUM HIV Z11.4 87389</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addItem(this, 'RPR (SYPHILIS) Z11.3 86592', 0)"> RPR (SYPHILIS) Z11.3 86592</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addItem(this, 'TPPA (SYPHILIS) Z11.3 86780', 0)"> TPPA (SYPHILIS) Z11.3 86780</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'GENITAL WART TX A63.0', 0)"> GENITAL WART TX A63.0</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'RAPID HIV 211.4/Z578 86703', 0)"> RAPID HIV 211.4/Z578 86703</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'SERUM HIV Z11.4 87389', 0)"> SERUM HIV Z11.4 87389</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'RPR (SYPHILIS) Z11.3 86592', 0)"> RPR (SYPHILIS) Z11.3 86592</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'TPPA (SYPHILIS) Z11.3 86780', 0)"> TPPA (SYPHILIS) Z11.3 86780</label></div>
         </div>
         <div>
             <label><strong>Pregnancy Test</strong></label>
-            <div class="code-option"><label><input type="radio" name="pregnancy" onclick="addItem(this, 'POS hCG 232.01 81025', 0)"> POS hCG 232.01 81025</label></div>
-            <div class="code-option"><label><input type="radio" name="pregnancy" onclick="addItem(this, 'NEG hCG 232.02 81025', 0)"> NEG hCG 232.02 81025</label></div>
+            <div class="code-option"><label><input type="radio" name="pregnancy" onclick="addToTotal('POS hCG 232.01 81025', 0)"> POS hCG 232.01 81025</label></div>
+            <div class="code-option"><label><input type="radio" name="pregnancy" onclick="addToTotal('NEG hCG 232.02 81025', 0)"> NEG hCG 232.02 81025</label></div>
         </div>
         <div>
             <label><strong>Medication - Initial & Repeat Codes</strong></label>
-            <div class="code-option"><label><input type="checkbox" onclick="addItem(this, 'APRI Z30.011 / Z30.41', 0)"> APRI Z30.011 / Z30.41</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addItem(this, 'CAMILA Z30.011 / Z30.41', 0)"> CAMILA Z30.011 / Z30.41</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addItem(this, 'DEPO Z30.013 / Z30.42', 0)"> DEPO Z30.013 / Z30.42</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addItem(this, 'NUVA RING Z30.015 / Z30.44', 0)"> NUVA RING Z30.015 / Z30.44</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addItem(this, 'NEXPLANON Z30.017 / (I&R)Z30.46', 0)"> NEXPLANON Z30.017 / (I&R)Z30.46</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addItem(this, 'PARAGARD IUD Z30.430 / (I&R)Z30.46', 0)"> PARAGARD IUD Z30.430 / (I&R)Z30.46</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addItem(this, 'IMPLANT INSERT Z30.017', 0)"> IMPLANT INSERT Z30.017</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addItem(this, 'IMPLANT REMOVAL Z30.46', 0)"> IMPLANT REMOVAL Z30.46</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addItem(this, 'DOXYCYCLINE', 0)"> DOXYCYCLINE</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addItem(this, 'ROCEPHIN', 0)"> ROCEPHIN</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addItem(this, 'BICILLIN', 0)"> BICILLIN</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addItem(this, 'AZITHROMYCIN', 0)"> AZITHROMYCIN</label></div>
-            <div class="code-option"><label><input type="checkbox" onclick="addItem(this, 'SUPRAX', 0)"> SUPRAX</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'APRI Z30.011 / Z30.41', 0)"> APRI Z30.011 / Z30.41</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'CAMILA Z30.011 / Z30.41', 0)"> CAMILA Z30.011 / Z30.41</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'DEPO Z30.013 / Z30.42', 0)"> DEPO Z30.013 / Z30.42</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'NUVA RING Z30.015 / Z30.44', 0)"> NUVA RING Z30.015 / Z30.44</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'NEXPLANON Z30.017 / (I&R)Z30.46', 0)"> NEXPLANON Z30.017 / (I&R)Z30.46</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'PARAGARD IUD Z30.430 / (I&R)Z30.46', 0)"> PARAGARD IUD Z30.430 / (I&R)Z30.46</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'IMPLANT INSERT Z30.017', 0)"> IMPLANT INSERT Z30.017</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'IMPLANT REMOVAL Z30.46', 0)"> IMPLANT REMOVAL Z30.46</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'DOXYCYCLINE', 0)"> DOXYCYCLINE</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'ROCEPHIN', 0)"> ROCEPHIN</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'BICILLIN', 0)"> BICILLIN</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'AZITHROMYCIN', 0)"> AZITHROMYCIN</label></div>
+            <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'SUPRAX', 0)"> SUPRAX</label></div>
         </div>
     </div>
-    </body>
     <script>
-    let receipt = [];
-  let total = 0;
+    let grandTotal = 0;
+    const selectedItems = {};
 
-  function addItem(checkbox, label, price) {
-    if (checkbox.checked) {
-      receipt.push({ label, price });
-      total += price;
-    } else {
-      const index = receipt.findIndex(item => item.label === label);
-      if (index !== -1) {
-        total -= receipt[index].price;
-        receipt.splice(index, 1);
+    // Add this function to handle the "x2", "x3" multiple buttons
+    function addMultiple(service, price, quantity) {
+      // Remove any existing entry for this service (with or without x1)
+      const baseService = service.replace(/\sx\d+$/, "");
+      // Remove both "service x1" and "service" from selectedItems if present
+      Object.keys(selectedItems).forEach(key => {
+        if (key === baseService || key.startsWith(baseService + " x")) {
+          const item = selectedItems[key];
+          if (item.listItem && item.listItem.parentNode) {
+            item.listItem.parentNode.removeChild(item.listItem);
+          }
+          grandTotal -= item.totalPrice;
+          delete selectedItems[key];
+        }
+      });
+      // Add the new entry with the correct quantity
+      const displayService = `${baseService}`;
+      const totalPrice = price * quantity;
+      const itemizedList = document.getElementById('itemizedList');
+      const listItem = document.createElement('div');
+      listItem.className = 'list-item';
+
+      const serviceTextSpan = document.createElement('span');
+      serviceTextSpan.className = 'service-text';
+      serviceTextSpan.textContent = `${displayService} x${quantity}: $${totalPrice.toFixed(2)}`;
+      listItem.appendChild(serviceTextSpan);
+
+      const removeButton = document.createElement('button');
+      removeButton.textContent = "X";
+      removeButton.className = 'remove-button';
+      removeButton.onclick = function () {
+        itemizedList.removeChild(listItem);
+        grandTotal -= totalPrice;
+        document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+        delete selectedItems[displayService + " x" + quantity];
+        // Uncheck the corresponding checkbox if present
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(cb => {
+          if (cb.parentElement && cb.parentElement.textContent.trim().startsWith(baseService)) {
+            cb.checked = false;
+          }
+        });
+      };
+      listItem.appendChild(removeButton);
+
+      itemizedList.appendChild(listItem);
+      selectedItems[displayService + " x" + quantity] = {
+        quantity,
+        totalPrice,
+        span: serviceTextSpan,
+        price,
+        listItem
+      };
+      grandTotal += totalPrice;
+      document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+
+      // Uncheck the checkbox after adding multiple
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach(cb => {
+        if (cb.parentElement && cb.parentElement.textContent.trim().startsWith(baseService)) {
+          cb.checked = false;
+        }
+      });
+    }
+
+    function handleCheckbox(checkbox, service, price) {
+      if (checkbox.checked) {
+        addToTotal(service, price);
+      } else {
+        // Remove from receipt and update total
+        if (selectedItems.hasOwnProperty(service)) {
+          const item = selectedItems[service];
+          if (item.listItem && item.listItem.parentNode) {
+            item.listItem.parentNode.removeChild(item.listItem);
+          }
+          grandTotal -= item.totalPrice;
+          document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+          delete selectedItems[service];
+        }
       }
     }
-    updateReceipt();
-  }
 
-  function addMultiple(label, price, qty) {
-    const labelQty = `${label} x${qty}`;
-    receipt.push({ label: labelQty, price: price * qty });
-    total += price * qty;
-    updateReceipt();
-  }
+    function isMultipleAllowed(service) {
+      const allowedItems = [
+        "InternalCondom", "Diaphragm", "DepoProvera", "MedroxyProgesterone",
+        "VCFFoam", "GynolII", "LilettaIUD", "ParagardIUD", "Xulane", "Chlamydia",
+        "Gonorrhea", "NuvaRing", "Nexplanon", "Alese", "Apri", "Aubra", "Aviane",
+        "Bicillin", "Camila", "Ceftriaxone", "Chateal", "Cryselle", "Cyred",
+        "Doxycycline", "Enpresse", "Jolivette", "Levora", "Lutera", "Lyza",
+        "Mononessa", "Nor QD", "Nordette", "Norethindrone", "Nortrel777",
+        "Orsythia", "Portia", "Reclipsen", "Sprintec", "Sronyx", "Tri-LoMarzia",
+        "Tri-LoSprintec", "TriNessaLo", "Triphasil", "Trivora", "Vilibra",
+        "BasalThermometer"
+      ];
+      return allowedItems.some(item => service.includes(item));
+    }
 
-function updateReceipt() {
-    const list = document.getElementById('itemizedList');
-    const totalDisplay = document.getElementById('grandTotal');
-    list.innerHTML = receipt.map(item => `<div>${item.label}: $${item.price.toFixed(2)}</div>`).join('');
-    totalDisplay.textContent = `$${total.toFixed(2)}`;
-  }
+    function addToTotal(service, price) {
+      if (selectedItems.hasOwnProperty(service)) {
+        const existingItem = selectedItems[service];
+        existingItem.quantity++;
+        existingItem.totalPrice = existingItem.price * existingItem.quantity;
+        existingItem.span.textContent = `${service} x${existingItem.quantity}: $${existingItem.totalPrice.toFixed(2)}`;
+        grandTotal += price;
+        document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+      } else {
+        const itemizedList = document.getElementById('itemizedList');
+        const listItem = document.createElement('div');
+        listItem.className = 'list-item';
 
-  function copyReceipt() {
-    const lines = receipt.map(item => `${item.label}: $${item.price.toFixed(2)}`);
-    lines.push(`Total: $${total.toFixed(2)}`);
-    const receiptText = lines.join('\n');
-    navigator.clipboard.writeText(receiptText)
-      .then(() => alert('Receipt copied to clipboard!'))
-      .catch(() => alert('Failed to copy receipt.'));
-  }
-</script>
+        let totalPrice = price;
+        let quantity = 1;
+
+        const serviceTextSpan = document.createElement('span');
+        serviceTextSpan.className = 'service-text';
+        serviceTextSpan.textContent = `${service} x${quantity}: $${totalPrice.toFixed(2)}`;
+        listItem.appendChild(serviceTextSpan);
+
+        if (isMultipleAllowed(service)) {
+          const multipleButton = document.createElement('button');
+          multipleButton.textContent = "Multiple";
+          multipleButton.className = 'multiple-button';
+          multipleButton.onclick = function () {
+            let newQuantity = parseInt(prompt("Enter quantity:", quantity), 10);
+            if (!isNaN(newQuantity) && newQuantity > 0) {
+              grandTotal -= totalPrice;
+              quantity = newQuantity;
+              totalPrice = price * quantity;
+              grandTotal += totalPrice;
+              serviceTextSpan.textContent = `${service} x${quantity}: $${totalPrice.toFixed(2)}`;
+              document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+              selectedItems[service] = {
+                quantity,
+                totalPrice,
+                span: serviceTextSpan,
+                price,
+                listItem
+              };
+            }
+          };
+          listItem.appendChild(multipleButton);
+        }
+
+        const removeButton = document.createElement('button');
+        removeButton.textContent = "X";
+        removeButton.className = 'remove-button';
+        removeButton.onclick = function () {
+          itemizedList.removeChild(listItem);
+          grandTotal -= totalPrice;
+          document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+          delete selectedItems[service];
+          // Uncheck the corresponding checkbox/radio if present
+          const checkboxes = document.querySelectorAll('input[type="checkbox"], input[type="radio"]');
+          checkboxes.forEach(cb => {
+            // Try to match by label text or value
+            if (cb.parentElement && cb.parentElement.textContent.trim().startsWith(service)) {
+              cb.checked = false;
+            }
+          });
+        };
+        listItem.appendChild(removeButton);
+
+        itemizedList.appendChild(listItem);
+        selectedItems[service] = {
+          quantity,
+          totalPrice,
+          span: serviceTextSpan,
+          price,
+          listItem
+        };
+        grandTotal += totalPrice;
+        document.getElementById('grandTotal').textContent = `$${grandTotal.toFixed(2)}`;
+      }
+    }
+
+    function copyReceipt() {
+      const listItems = document.querySelectorAll('#itemizedList .list-item');
+      let receiptLines = [];
+      listItems.forEach(li => {
+        let text = li.firstChild.textContent.trim();
+        text = text.replace(/\s*\d+%/, "");
+        text = text.replace(/\sx1\b/, "");
+        receiptLines.push(text);
+      });
+      const totalText = document.getElementById('grandTotal').innerText;
+      const receiptText = `Services:\n${receiptLines.join("\n")}\nTotal: ${totalText}`;
+      navigator.clipboard.writeText(receiptText)
+        .then(() => alert('Receipt copied to clipboard!'))
+        .catch(() => alert('Failed to copy receipt.'));
+    }
+
+    function updateVisibleColumn() {
+      const selectedPercent = parseFloat(document.getElementById('percentSelector').value) / 100;
+      const priceButtons = document.querySelectorAll('.price-button');
+
+      priceButtons.forEach(button => {
+        const fullPrice = parseFloat(button.getAttribute('data-price'));
+        if (!fullPrice) return;
+        const newPrice = (fullPrice * selectedPercent).toFixed(2);
+        button.textContent = `$${newPrice}`;
+        button.setAttribute('onclick', `addToTotal('${button.getAttribute('data-name')} ${selectedPercent * 100}%', ${newPrice})`);
+      });
+
+      const headerCells = document.querySelectorAll('th');
+      if (headerCells.length > 1) {
+        headerCells[1].textContent = `${selectedPercent * 100}% Fee`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateVisibleColumn();
+    });
+    </script>
+</body>
 </html>
