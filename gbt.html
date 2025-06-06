@@ -444,17 +444,21 @@
 
     function isMultipleAllowed(service) {
       const allowedItems = [
-        "InternalCondom", "Diaphragm", "DepoProvera", "MedroxyProgesterone",
-        "VCFFoam", "GynolII", "LilettaIUD", "ParagardIUD", "Xulane", "Chlamydia",
-        "Gonorrhea", "NuvaRing", "Nexplanon", "Alese", "Apri", "Aubra", "Aviane",
-        "Bicillin", "Camila", "Ceftriaxone", "Chateal", "Cryselle", "Cyred",
-        "Doxycycline", "Enpresse", "Jolivette", "Levora", "Lutera", "Lyza",
-        "Mononessa", "Nor QD", "Nordette", "Norethindrone", "Nortrel777",
-        "Orsythia", "Portia", "Reclipsen", "Sprintec", "Sronyx", "Tri-LoMarzia",
-        "Tri-LoSprintec", "TriNessaLo", "Triphasil", "Trivora", "Vilibra",
-        "BasalThermometer"
+        "APRI Z30.011 / Z30.41",
+        "CAMILA Z30.011 / Z30.41",
+        "DEPO Z30.013 / Z30.42",
+        "NUVA RING Z30.015 / Z30.44",
+        "NEXPLANON Z30.017 / (I&R)Z30.46",
+        "PARAGARD IUD Z30.430 / (I&R)Z30.46",
+        "IMPLANT INSERT Z30.017",
+        "IMPLANT REMOVAL Z30.46",
+        "DOXYCYCLINE",
+        "ROCEPHIN",
+        "BICILLIN",
+        "AZITHROMYCIN",
+        "SUPRAX"
       ];
-      return allowedItems.some(item => service.includes(item));
+      return allowedItems.some(item => service === item);
     }
 
     function addToTotal(service, price) {
@@ -483,8 +487,8 @@
           multipleButton.textContent = "Multiple";
           multipleButton.className = 'multiple-button';
           multipleButton.onclick = function () {
-            let newQuantity = parseInt(prompt("Enter quantity:", quantity), 10);
-            if (!isNaN(newQuantity) && newQuantity > 0) {
+            let newQuantity = parseInt(prompt("Enter quantity (1-13):", quantity), 10);
+            if (!isNaN(newQuantity) && newQuantity > 0 && newQuantity <= 13) {
               grandTotal -= totalPrice;
               quantity = newQuantity;
               totalPrice = price * quantity;
