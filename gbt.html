@@ -769,13 +769,22 @@ function addToTotal(service, price) {
       updateReceiptPrices();
     }
 
-    function updateReceiptPrices() {
+function updateReceiptPrices() {
   const percent = getSelectedPercent();
   Object.keys(selectedItems).forEach(service => {
     const item = selectedItems[service];
-    item.price = basePrices[service];
-    item.totalPrice = item.price * item.quantity * percent;
-    item.span.textContent = `${service} x${item.quantity}: $${item.totalPrice.toFixed(2)}`;
+    // Handle multiples like "CHL x2" or "GC x3"
+    let baseService = service;
+    let quantity = item.quantity;
+    const match = service.match(/^(.*)\sx(\d+)$/);
+    if (match) {
+      baseService = match[1].trim();
+      quantity = parseInt(match[2], 10);
+      item.quantity = quantity;
+    }
+    item.price = getBasePrice(baseService) * percent;
+    item.totalPrice = item.price * quantity;
+    item.span.textContent = `${baseService} x${quantity}: $${item.totalPrice.toFixed(2)}`;
   });
   // Update grand total
   grandTotal = Object.values(selectedItems).reduce((sum, item) => sum + item.totalPrice, 0);
