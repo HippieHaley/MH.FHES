@@ -3,234 +3,199 @@
 <head>
     <meta charset="UTF-8" />  
     <style>
-        /* Basic Reset */
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
-        /* General Body Style */
-        body {
-          font-family: Arial, sans-serif;
-          max-width: 1500px;
-          margin: 0 auto;
-          background-color: #acdbf9; /* Light blue background */
-          color: #333;
-          padding-top: 50px;
-        }
-        /* Back Home Button */
-        .back-home {
-          display: inline-block;
-          padding: 12px 24px;
-          background-color: #f8c9f9;
-          color: #333;
-          text-decoration: none;
-          font-size: 1rem;
-          font-weight: bold;
-          border-radius: 20px;
-          text-align: center;
-          border: 1px solid #000;
-          top: 20px;
-          left: 20px;
-          z-index: 999; /* Ensures it stays above other elements */
-          transition: background-color 0.2s ease;
-          position: absolute;
-        }
-        .back-home:hover {
-          background-color: #e8b3e8;
-        }
-    
-        /* Container for Left-Aligned Layout */
-        .container {
-          width: 100%;
-          max-width: 1500px;
-          background-color: #acdbf9; /* Light blue background */
-          border-radius: 10px;
-          padding: 20px;
-          box-shadow: 0 0 10px rgba(233, 208, 218, 0.1); /* Optional shadow */
-        }
-        /* Left Side - Price Sheet (2/3 of the screen) */
-        .left-side {
-          flex: 1;
-          padding-right: 20px;
-          margin-right: 35%; /* Pushes content left to make space for .right-side */
-        }
-        /* Right Side - Itemized List and Grand Total (Fixed Position) */
-        .right-side {
-          width: 30%;
-          padding: 20px;
-          border-radius: 10px;
-          background-color: #f8c9f9;
-          text-align: left;
-          font-size: 1rem;
-          color: #333;
-          position: fixed;
-          top: 20px;
-          right: 10px;
-        }
-    
-        /* Price Button Styling */
-        .price-button {
-          display: inline-block;
-          padding: 0.5rem 1.5rem;
-          background-color: #f8c9f9;
-          border: 1px solid #000;
-          border-radius: 20px;
-          text-decoration: none;
-          color: #333;
-          font-weight: bold;
-          font-size: 1rem;
-          cursor: pointer;
-          margin: 5px;
-        }
-        .price-button:hover {
-          background-color: #e8b8e8; /* Slightly darker pink */
-        }
-                  .block-group {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
-                flex: 1;
-          padding-right: 30px;
-          margin-right: 30%; /* Pushes content left to make space for .right-side */
-    }
-    .block-group h3 {
-      margin-bottom: 8px;
-      font-size: 1rem;
-      font-weight: bold;
-      background: #f8c9f9;
-      padding: 6px;
-      border-radius: 4px;
-    }
-    .code-option {
-      margin-bottom: 8px;
-    }
-    .code-option label {
-      display: flex;
-      align-items: center;
-    }
-    .code-option input[type="checkbox"],
-    .code-option input[type="radio"] {
-      margin-right: 8px;
-    }
-    .highlight-section {
-      font-weight: bold;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      margin-top: 15px;
-      margin-bottom: 8px;
-    }
-        /* Table Styling */
-        table {
-          width: 100%;
-          border-collapse: collapse;
-          background-color: #acdbf9; /* Light blue background */
-          border: 2px solid #333;    /* Solid border */
-          border-radius: 8px;        /* Rounded corners */
-          overflow: hidden;
-          margin: 20px 0;
-        }
-        /* Table Rows */
-        tr {
-          border: 2px solid #333;
-        }
-        /* Table Cells */
-        th,
-        td {
-          text-align: center;
-          padding: 15px;
-          background-color: #acdbf9;
-          color: #333;
-        }
-        /* Table Header */
-        th {
-          background-color: #f8c9f9;
-          font-weight: bold;
-          font-size: 1rem;
-          cursor: pointer;
-          margin: 5px;
-        }
-        th:first-child,
-        td:first-child {
-          background-color: #f8c9f9; /* Soft pink */
-          font-weight: bold;
-        }
-        /* CPT Code Styling */
-        .cpt-code {
-          font-size: 0.8rem;
-          color: #333;
-          margin-top: 0.3rem;
-          display: block;
-          font-style: italic;
-        }
-    
-        /* Itemized List Styling */
-        .itemized-list {
-          margin-bottom: 20px;
-          font-size: 1rem;
-          background-color: #f8c9f9;
-        }
-    
- .remove-button {
-          background-color: #f8c9f9;
-          border: 1px solid #000;
-          border-radius: 5px;
-          padding: 2px 5px;
-          cursor: pointer;
-          margin-left: 5px;
-          font-weight: bold;
-        }
-    
-        /* Multiple Button Styling */
-        .multiple-button {
-          background-color:#acdbf9;
-          border: 1px solid #000;
-          border-radius: 5px;
-          padding: 2px 5px;
-          cursor: pointer;
-          margin-left: 5px;
-          font-weight: bold;
-        }
-        .multiple-button:hover {
-          background-color: #f7bdf7;
-        }
-    
-        /* Copy Receipt Button (different from price buttons) */
-.copy-button{ 
-          margin-top: 10px;
-          padding: 0.5rem 1.5rem;
-          background-color: #acdbf9;
-          border: 1px solid #000;
-          border-radius: 20px;
-          text-decoration: none;
-          color: #333;
-          font-weight: bold;
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 1500px;
+        margin: 0 auto;
+        background-color: #acdbf9;
+        color: #333;
+        padding-top: 50px;
+      }
+      .back-home {
+        display: inline-block;
+        padding: 12px 24px;
+        background-color: #f8c9f9;
+        color: #333;
+        text-decoration: none;
         font-size: 1rem;
-        }
-            /* The Fee Selector */
-            select#percentSelector {
-              width: 100%;
-              max-width: 300px;
-              padding: 10px 15px;
-              margin: 10px 0;
-              border: 2px solid #f8c9f9; /* Soft pink border */
-              border-radius: 30px;       /* Rounded edges */
-              background-color: #f8c9f9; /* Soft pink background */
-              color: #333;
-              font-size: 1rem;
-              outline: none;
-              transition: background-color 0.3s ease, border-color 0.3s ease;
-              text-align: center;
-            }
-            select#percentSelector:hover {
-              background-color: #f0d4f0; /* Slightly lighter pink */
-            }
-            select#percentSelector:focus {
-              border-color: #e8b8e8;
-              background-color: #fff;
-              box-shadow: 0 0 5px rgba(232, 184, 232, 0.5);
-            }
+        font-weight: bold;
+        border-radius: 20px;
+        text-align: center;
+        border: 1px solid #000;
+        top: 20px;
+        left: 20px;
+        z-index: 999;
+        transition: background-color 0.2s ease;
+        position: absolute;
+      }
+      .back-home:hover {
+        background-color: #e8b3e8;
+      }
+      .right-side {
+        width: 30%;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #f8c9f9;
+        text-align: left;
+        font-size: 1rem;
+        color: #333;
+        position: fixed;
+        top: 20px;
+        right: 10px;
+      }
+      .price-button {
+        display: inline-block;
+        padding: 0.5rem 1.5rem;
+        background-color: #f8c9f9;
+        border: 1px solid #000;
+        border-radius: 20px;
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+        font-size: 1rem;
+        cursor: pointer;
+        margin: 5px;
+      }
+      .price-button:hover {
+        background-color: #e8b8e8;
+      }
+      .block-group {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-bottom: 20px;
+        flex: 1;
+        padding-right: 30px;
+        margin-right: 30%;
+      }
+      .block-group h3 {
+        margin-bottom: 8px;
+        font-size: 1rem;
+        font-weight: bold;
+        background: #f8c9f9;
+        padding: 6px;
+        border-radius: 4px;
+      }
+      .code-option {
+        margin-bottom: 8px;
+      }
+      .code-option label {
+        display: flex;
+        align-items: center;
+      }
+      .code-option input[type="checkbox"],
+      .code-option input[type="radio"] {
+        margin-right: 8px;
+      }
+      .highlight-section {
+        font-weight: bold;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        margin-top: 15px;
+        margin-bottom: 8px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #acdbf9;
+        border: 2px solid #333;
+        border-radius: 8px;
+        overflow: hidden;
+        margin: 20px 0;
+      }
+      tr {
+        border: 2px solid #333;
+      }
+      th,
+      td {
+        text-align: center;
+        padding: 15px;
+        background-color: #acdbf9;
+        color: #333;
+      }
+      th {
+        background-color: #f8c9f9;
+        font-weight: bold;
+        font-size: 1rem;
+        cursor: pointer;
+        margin: 5px;
+      }
+      th:first-child,
+      td:first-child {
+        background-color: #f8c9f9;
+        font-weight: bold;
+      }
+      .cpt-code {
+        font-size: 0.8rem;
+        color: #333;
+        margin-top: 0.3rem;
+        display: block;
+        font-style: italic;
+      }
+      .itemized-list {
+        margin-bottom: 20px;
+        font-size: 1rem;
+        background-color: #f8c9f9;
+      }
+      .remove-button {
+        background-color: #f8c9f9;
+        border: 1px solid #000;
+        border-radius: 5px;
+        padding: 2px 5px;
+        cursor: pointer;
+        margin-left: 5px;
+        font-weight: bold;
+      }
+      .multiple-button {
+        background-color:#acdbf9;
+        border: 1px solid #000;
+        border-radius: 5px;
+        padding: 2px 5px;
+        cursor: pointer;
+        margin-left: 5px;
+        font-weight: bold;
+      }
+      .multiple-button:hover {
+        background-color: #f7bdf7;
+      }
+      .copy-button{ 
+        margin-top: 10px;
+        padding: 0.5rem 1.5rem;
+        background-color: #acdbf9;
+        border: 1px solid #000;
+        border-radius: 20px;
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+        font-size: 1rem;
+      }
+      select#percentSelector {
+        width: 100%;
+        max-width: 300px;
+        padding: 10px 15px;
+        margin: 10px 0;
+        border: 2px solid #f8c9f9;
+        border-radius: 30px;
+        background-color: #f8c9f9;
+        color: #333;
+        font-size: 1rem;
+        outline: none;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+        text-align: center;
+      }
+      select#percentSelector:hover {
+        background-color: #f0d4f0;
+      }
+      select#percentSelector:focus {
+        border-color: #e8b8e8;
+        background-color: #fff;
+        box-shadow: 0 0 5px rgba(232, 184, 232, 0.5);
+      }
     </style>
 </head>
 <body>
@@ -310,16 +275,16 @@
     <div class="code-option">
       <label><input type="checkbox" onchange="handleCheckbox(this, 'WET MOUNT')"> WET MOUNT <span class="cpt-code">N898 <span class="cpt-code">87210</span></span></label>
     </div>
-    <div class="code-option">
-      <input type="checkbox" id="chl-checkbox" onchange="handleCheckbox(this, 'CHL')"> CHL <span class="cpt-code">Z11.3 87491</span> 
-      <button type="button" class="multiple-button" onclick="addMultiple('CHL', null, 2)">x2</button>
-      <button type="button" class="multiple-button" onclick="addMultiple('CHL', null, 3)">x3</button>
-    </div>
-    <div class="code-option">
-      <input type="checkbox" onchange="handleCheckbox(this, 'GC')"> GC <span class="cpt-code"> Z11.3 87591</span>
-      <button type="button" class="multiple-button" onclick="addMultiple('GC', null, 2)">x2</button>
-      <button type="button" class="multiple-button" onclick="addMultiple('GC', null, 3)">x3</button>
-    </div>
+             <div class="code-option">
+                <input type="checkbox" id="chl-checkbox" onchange="handleCheckbox(this, 'CHL', 25)"> CHL Z11.3 87491
+                <button type="button" class="multiple-button" onclick="addMultiple('CHL Z11.3 87491', 25, 2)">x2</button>
+                <button type="button" class="multiple-button" onclick="addMultiple('CHL Z11.3 87491', 25, 3)">x3</button>
+            </div>
+            <div class="code-option">
+                <input type="checkbox" onchange="handleCheckbox(this, 'GC ', 25)"> GC Z11.3 87591
+                <button type="button" class="multiple-button" onclick="addMultiple('GC Z11.3 87591', 25, 2)">x2</button>
+                <button type="button" class="multiple-button" onclick="addMultiple('GC Z11.3 87591', 25, 3)">x3</button>
+            </div>
     <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'Female GENITAL WART TX')"> Female GENITAL WART TX <span class="cpt-code">56501 A63.0</span> </label></div>
     <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'Male GENITAL WART TX')"> Male GENITAL WART TX <span class="cpt-code">54050 A63.0</span></label></div>
     <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'RAPID HIV')"> RAPID HIV<span class="cpt-code"> Z11.4/Z578 86703</span></label></div>
