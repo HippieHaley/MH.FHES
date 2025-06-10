@@ -48,22 +48,6 @@
         top: 20px;
         right: 10px;
       }
-      .price-button {
-        display: inline-block;
-        padding: 0.5rem 1.5rem;
-        background-color: #f8c9f9;
-        border: 1px solid #000;
-        border-radius: 20px;
-        text-decoration: none;
-        color: #333;
-        font-weight: bold;
-        font-size: 1rem;
-        cursor: pointer;
-        margin: 5px;
-      }
-      .price-button:hover {
-        background-color: #e8b8e8;
-      }
       .block-group {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -133,7 +117,6 @@
       .cpt-code {
         font-size: 0.8rem;
         color: #333;
-        margin-top: 0.3rem;
         display: block;
         font-style: italic;
       }
@@ -276,14 +259,15 @@
       <label><input type="checkbox" onchange="handleCheckbox(this, 'WET MOUNT')"> WET MOUNT <span class="cpt-code">N898 <span class="cpt-code">87210</span></span></label>
     </div>
              <div class="code-option">
-                <input type="checkbox" id="chl-checkbox" onchange="handleCheckbox(this, 'CHL', 25)"> CHL Z11.3 87491
-                <button type="button" class="multiple-button" onclick="addMultiple('CHL Z11.3 87491', 25, 2)">x2</button>
-                <button type="button" class="multiple-button" onclick="addMultiple('CHL Z11.3 87491', 25, 3)">x3</button>
+                <label>
+                  <input type="checkbox" id="chl-checkbox" onchange="handleCheckbox(this, 'CHL ',)">CHL <span style="font-size: 0.8rem; color: #333;; font-style: italic;">Z11.3 87491</span>
+                <button type="button" class="multiple-button" onclick="addMultiple('CHL Z11.3 87491')">x2</button>
+                <button type="button" class="multiple-button" onclick="addMultiple('CHL Z11.3 87491')">x3</button>
             </div>
             <div class="code-option">
-                <input type="checkbox" onchange="handleCheckbox(this, 'GC ', 25)"> GC Z11.3 87591
-                <button type="button" class="multiple-button" onclick="addMultiple('GC Z11.3 87591', 25, 2)">x2</button>
-                <button type="button" class="multiple-button" onclick="addMultiple('GC Z11.3 87591', 25, 3)">x3</button>
+                <input type="checkbox" onchange="handleCheckbox(this, 'GC ', 25)">GC <span style="font-size: 0.8rem; color: #333;; font-style: italic;">Z11.3 87591</span>
+                <button type="button" class="multiple-button" onclick="addMultiple('GC Z11.3 87591')">x2</button>
+                <button type="button" class="multiple-button" onclick="addMultiple('GC Z11.3 87591')">x3</button>
             </div>
     <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'Female GENITAL WART TX')"> Female GENITAL WART TX <span class="cpt-code">56501 A63.0</span> </label></div>
     <div class="code-option"><label><input type="checkbox" onchange="handleCheckbox(this, 'Male GENITAL WART TX')"> Male GENITAL WART TX <span class="cpt-code">54050 A63.0</span></label></div>
