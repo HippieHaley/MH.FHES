@@ -225,19 +225,20 @@ button:hover {
         <td><input type="email" class="sms-email-input" placeholder=""></td>
         <td><input type="date"></td>
         <td><input type="time"></td>
-        <td>
-        <button onclick="addRow()">+ Add Row</button>
+        <td>      
+          <button onclick="sendIncomeDocReminder(this)">Send Income Doc Reminder</button>
+          <button onclick="addRow()">+ Add Row</button>
           <button onclick="deleteRow(this)">Delete</button>
-      <button onclick="createDraft(this)">Create Draft</button>
-      <select class="template-selector">
-        <option value="default">Appt Reminder</option>
-        <option value="reschedule">Reschedule</option>
-        <option value="CallClinic">Call Clinic</option>
-        <option value="AEDue">AE Due</option>
-        <option value="MissedAppt">Missed Appt</option>
-        <option value="IncomeDocReminder">Income Doc Reminder </option>
-      </select>      
-   </td>
+          <button onclick="createDraft(this)">Create Draft</button>
+          <select class="template-selector">
+            <option value="default">Appt Reminder</option>
+            <option value="reschedule">Reschedule</option>
+            <option value="CallClinic">Call Clinic</option>
+            <option value="AEDue">AE Due</option>
+            <option value="MissedAppt">Missed Appt</option>
+            <option value="IncomeDocReminder">Income Doc Reminder </option>
+          </select>      
+        </td>
       </tr>
     </tbody>
   </table>
@@ -404,7 +405,7 @@ addRow = function () {
     CallClinic: `We called you on ${new Date().toLocaleDateString()}.\nIt's important you get in touch with the clinic.\nPlease call us at 605-717-8920. Thank you.`,
     AEDue: `Its about that time! Your annual exam is due ${date}.\nPlease call us at 605-717-8920 to schedule your appointment. Thank you.`,
     MissedAppt: `We missed you at your appointment on ${date} @ ${time}.\nPlease call us at 605-717-8920 to reschedule. Thank you.`,
-    IncomeDocReminder: `Please bring some sort of income documentation for your appointment on ${date}. this could be w-2s or a month of paystubs. Thank you.`,
+    IncomeDocReminder: `Please bring some sort of income documentation for your appointment on ${date}. This could be w-2s or a month of paystubs. Thank you.`,
   };
 
   const subject = 'SECUREMAIL From Monument Health FHES.';
@@ -445,7 +446,18 @@ window.addEventListener('DOMContentLoaded', () => {
   setupSmsAutocomplete();
   setupTemplateListeners(); // NEW!
 });
+function sendIncomeDocReminder(button) {
+  const row = button.closest('tr');
+  const inputs = row.getElementsByTagName('input');
+  const email = inputs[0].value;
+  const date = inputs[1].value;
 
+  const subject = 'SECUREMAIL From Monument Health FHES.';
+  const body = `Please bring some sort of income documentation for your appointment on ${date}. This could be w-2s or a month of paystubs. Thank you.`;
+
+  const mailto = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailto;
+}
   </script>
 </body>
 </html>
