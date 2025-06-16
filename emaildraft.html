@@ -447,7 +447,7 @@ function createDraft(button) {
   if (incomeDocCheckbox && incomeDocCheckbox.checked) {
     const inputs = row.getElementsByTagName('input');
     const date = inputs[1].value;
-    const incomeDocSubject = 'SECUREMAIL From Monument Health FHES.';
+    const incomeDocSubject = 'SECUREMAIL From Monument Health.';
     const incomeDocBody = `Please bring some sort of income documentation for your appointment on ${date}. This could be w-2s or a month of paystubs. Thank you.`;
     const incomeMailto = `mailto:${email}?subject=${encodeURIComponent(incomeDocSubject)}&body=${encodeURIComponent(incomeDocBody)}`;
     setTimeout(() => {
