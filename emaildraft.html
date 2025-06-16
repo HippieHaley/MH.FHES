@@ -225,8 +225,10 @@ button:hover {
         <td><input type="email" class="sms-email-input" placeholder=""></td>
         <td><input type="date"></td>
         <td><input type="time"></td>
-        <td>      
-          <button onclick="sendIncomeDocReminder(this)">Send Income Doc Reminder</button>
+        <td>
+          <label style="display:inline-flex;align-items:center;margin-bottom:4px;">
+            <input type="checkbox" class="income-doc-checkbox" style="margin-right:6px;"> Income Doc Reminder
+          </label>
           <button onclick="addRow()">+ Add Row</button>
           <button onclick="deleteRow(this)">Delete</button>
           <button onclick="createDraft(this)">Create Draft</button>
@@ -285,10 +287,8 @@ button:hover {
         clearSmsSuggestions();
       }
     }
-
     function showSmsSuggestions(input, number, providers) {
       clearSmsSuggestions();
-
       const container = document.createElement('div');
       container.setAttribute('id', 'smsSuggestionContainer');
       container.style.border = '1px solid #333';
@@ -390,7 +390,7 @@ addRow = function () {
         alert("You must have at least one row.");
       }
     }
-    function getEmailRowData(row) {
+function getEmailRowData(row) {
   const inputs = row.getElementsByTagName('input');
   const email = inputs[0].value;
   const date = inputs[1].value;
@@ -417,6 +417,17 @@ function createDraft(button) {
   const row = button.closest('tr');
   const { email, subject, body } = getEmailRowData(row);
   const mailto = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailto;
+  // Only create Income Doc Reminder draft if checkbox is checked
+  const incomeDocCheckbox = row.querySelector('.income-doc-checkbox');
+  if (incomeDocCheckbox && incomeDocCheckbox.checked) {
+    const inputs = row.getElementsByTagName('input');
+    const date = inputs[1].value;
+    const incomeDocSubject = 'SECUREMAIL From Monument Health FHES.';
+    const incomeDocBody = `Please bring some sort of income documentation for your appointment on ${date}. This could be w-2s or a month of paystubs. Thank you.`;
+    mailto = `mailto:${email}?subject=${encodeURIComponent(incomeDocSubject)}&body=${encodeURIComponent(incomeDocBody)}`;
+  }
+
   window.location.href = mailto;
 }
     function previewAll() {
@@ -446,18 +457,6 @@ window.addEventListener('DOMContentLoaded', () => {
   setupSmsAutocomplete();
   setupTemplateListeners(); // NEW!
 });
-function sendIncomeDocReminder(button) {
-  const row = button.closest('tr');
-  const inputs = row.getElementsByTagName('input');
-  const email = inputs[0].value;
-  const date = inputs[1].value;
-
-  const subject = 'SECUREMAIL From Monument Health FHES.';
-  const body = `Please bring some sort of income documentation for your appointment on ${date}. This could be w-2s or a month of paystubs. Thank you.`;
-
-  const mailto = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  window.location.href = mailto;
-}
   </script>
 </body>
 </html>
