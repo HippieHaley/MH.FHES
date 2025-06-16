@@ -254,75 +254,78 @@ button:hover {
       table.appendChild(newRow);
     }
     function setupSmsAutocomplete() {
-    const inputs = document.querySelectorAll('.sms-email-input');
-    inputs.forEach(input => {
-      // Avoid attaching twice
-      if (!input.dataset.bound) {
-        input.dataset.bound = 'true';
+      // Remove any existing listeners and rebind to all current .sms-email-input fields
+      document.querySelectorAll('.sms-email-input').forEach(input => {
+        // Remove previous event listener if any
+        input.removeEventListener('input', handleSmsAutocomplete);
         input.addEventListener('input', handleSmsAutocomplete);
-      }
-    });
-  }
-  function handleSmsAutocomplete(e) {
-    const input = e.target;
-    const sanitized = input.value.replace(/\D/g, '');
-
-    const providers = [
-      '@txt.att.net',
-      '@tmomail.net',
-      '@vtext.com',
-      '@messaging.sprintpcs.com',
-      '@vmobl.com',
-      '@mypixmessages.com',
-      '@mymetropcs.com',
-      '@sms.cricketwireless.net'
-    ];
-
-    if (sanitized.length >= 7) {
-      showSmsSuggestions(input, sanitized, providers);
-    } else {
-      clearSmsSuggestions();
+        input.dataset.bound = 'true';
+      });
     }
-  }
 
-  function showSmsSuggestions(input, number, providers) {
-    clearSmsSuggestions();
+    function handleSmsAutocomplete(e) {
+      const input = e.target;
+      const sanitized = input.value.replace(/\D/g, '');
 
-    const container = document.createElement('div');
-    container.setAttribute('id', 'smsSuggestionContainer');
-    container.style.border = '1px solid #333';
-    container.style.background = '#fff';
-    container.style.position = 'absolute';
-    container.style.zIndex = '9999';
-    container.style.width = `${input.offsetWidth}px`;
-    container.style.left = `${input.getBoundingClientRect().left}px`;
-    container.style.top = `${input.getBoundingClientRect().bottom + window.scrollY}px`;
-    const labeledProviders = [
-  { label: 'Verizon', domain: '@vtext.com' },
-  { label: 'AT&T', domain: '@txt.att.net' },
-  { label: 'T-Mobile', domain: '@tmomail.net' },
-  { label: 'Sprint', domain: '@messaging.sprintpcs.com' },
-  { label: 'Virgin', domain: '@vmobl.com' },
-  { label: 'MetroPCS', domain: '@mymetropcs.com' },
-  { label: 'Cricket', domain: '@sms.cricketwireless.net' },
-  { label: 'Pix Wireless', domain: '@mypixmessages.com' }
-];
+      const providers = [
+        '@txt.att.net',
+        '@tmomail.net',
+        '@vtext.com',
+        '@messaging.sprintpcs.com',
+        '@vmobl.com',
+        '@mypixmessages.com',
+        '@mymetropcs.com',
+        '@sms.cricketwireless.net'
+      ];
 
-labeledProviders.forEach(({ label, domain }) => {
-  const item = document.createElement('div');
-  const fullAddress = number + domain;
-  item.textContent = `(${label}) ${fullAddress}`;
-  item.style.padding = '8px';
-  item.style.cursor = 'pointer';
-  item.style.backgroundColor = '#f8c9f9';
-  item.addEventListener('click', () => {
-    input.value = fullAddress;
-    clearSmsSuggestions();
-  });
-  container.appendChild(item);
-});
-    document.body.appendChild(container);
-  }
+      if (sanitized.length >= 7) {
+        showSmsSuggestions(input, sanitized, providers);
+      } else {
+        clearSmsSuggestions();
+      }
+    }
+
+    function showSmsSuggestions(input, number, providers) {
+      clearSmsSuggestions();
+
+      const container = document.createElement('div');
+      container.setAttribute('id', 'smsSuggestionContainer');
+      container.style.border = '1px solid #333';
+      container.style.background = '#fff';
+      container.style.position = 'absolute';
+      container.style.zIndex = '9999';
+      container.style.width = `${input.offsetWidth}px`;
+      // Position relative to input field
+      const rect = input.getBoundingClientRect();
+      container.style.left = `${rect.left + window.scrollX}px`;
+      container.style.top = `${rect.bottom + window.scrollY}px`;
+
+      const labeledProviders = [
+        { label: 'Verizon', domain: '@vtext.com' },
+        { label: 'AT&T', domain: '@txt.att.net' },
+        { label: 'T-Mobile', domain: '@tmomail.net' },
+        { label: 'Sprint', domain: '@messaging.sprintpcs.com' },
+        { label: 'Virgin', domain: '@vmobl.com' },
+        { label: 'MetroPCS', domain: '@mymetropcs.com' },
+        { label: 'Cricket', domain: '@sms.cricketwireless.net' },
+        { label: 'Pix Wireless', domain: '@mypixmessages.com' }
+      ];
+
+      labeledProviders.forEach(({ label, domain }) => {
+        const item = document.createElement('div');
+        const fullAddress = number + domain;
+        item.textContent = `(${label}) ${fullAddress}`;
+        item.style.padding = '8px';
+        item.style.cursor = 'pointer';
+        item.style.backgroundColor = '#f8c9f9';
+        item.addEventListener('click', () => {
+          input.value = fullAddress;
+          clearSmsSuggestions();
+        });
+        container.appendChild(item);
+      });
+      document.body.appendChild(container);
+    }
 
   function clearSmsSuggestions() {
     const existing = document.getElementById('smsSuggestionContainer');
