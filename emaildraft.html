@@ -439,8 +439,9 @@ function getEmailRowData(row) {
 function createDraft(button) {
   const row = button.closest('tr');
   const { email, subject, body } = getEmailRowData(row);
-  const mailto = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  window.location.href = mailto;
+  let mailto = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.open(mailto, '_blank');
+
   // Only create Income Doc Reminder draft if checkbox is checked
   const incomeDocCheckbox = row.querySelector('.income-doc-checkbox');
   if (incomeDocCheckbox && incomeDocCheckbox.checked) {
@@ -448,10 +449,11 @@ function createDraft(button) {
     const date = inputs[1].value;
     const incomeDocSubject = 'SECUREMAIL From Monument Health FHES.';
     const incomeDocBody = `Please bring some sort of income documentation for your appointment on ${date}. This could be w-2s or a month of paystubs. Thank you.`;
-    mailto = `mailto:${email}?subject=${encodeURIComponent(incomeDocSubject)}&body=${encodeURIComponent(incomeDocBody)}`;
+    const incomeMailto = `mailto:${email}?subject=${encodeURIComponent(incomeDocSubject)}&body=${encodeURIComponent(incomeDocBody)}`;
+    setTimeout(() => {
+      window.open(incomeMailto, '_blank');
+    }, 500);
   }
-
-  window.location.href = mailto;
 }
     function previewAll() {
   const rows = document.getElementById('emailTable').getElementsByTagName('tbody')[0].rows;
