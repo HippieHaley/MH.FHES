@@ -117,80 +117,94 @@
   
     const wrappedLines = lines
       .filter(line => line.trim() !== '')
-      .map(line => {
-        let trimmed = line.trim();
-        let needsBold = false;
-  // Expanded: Normalize "Label due: Jan 7-21 2025" and similar
-const lower = trimmed.toLowerCase();
-const matchingLabel = labels.find(label => lower.includes(label.toLowerCase()));
-const hasDue = lower.includes('due');
-// Expanded regex for more date formats
-const dateRangeRegex = /\b(\w+)\s(\d{1,2})(?:st|nd|rd|th)?\s*-\s*(\w+)\s(\d{1,2})(?:st|nd|rd|th)?\s(\d{2,4})\b/;
-const dateMatchRange = trimmed.match(dateRangeRegex);
-if (!trimmed.includes('Due:') && matchingLabel && hasDue && dateMatchRange) {
-  // Normalize to "Depo Due: Mar 1st - Apr 2nd 2025 (10x12)"
-  const rest = trimmed.slice(dateMatchRange[0].length).trim();
-  trimmed = `${matchingLabel} Due: ${dateMatchRange[0]} ${rest}`;
-}
-// Normalize lines like "Pap is due 6/2025" → "Pap Due: 6/2025"
-const lower2 = trimmed.toLowerCase();
-const matchingLabel2 = labels.find(label => lower2.includes(label.toLowerCase()));
-const hasDue2 = lower2.includes('due');
-const dateMatch2 = trimmed.match(/(\d{1,2}\/\d{4}|\d{1,2}\/\d{1,2}\/\d{2,4}|\b\w+\s\d{4}\b)/);
-if (!trimmed.includes('Due:') && matchingLabel2 && hasDue2 && dateMatch2) {
-  const dateIndex2 = trimmed.indexOf(dateMatch2[1]);
-  const rest2 = trimmed.slice(dateIndex2 + dateMatch2[1].length).trim();
-  trimmed = `${matchingLabel2} Due: ${dateMatch2[1]} ${rest2}`;
-}
-        // Try to extract "Label Due:" and the rest
-        const parts = trimmed.split('Due:');
-        if (parts.length === 2) {
-          const labelPart = `${parts[0].trim()} Due:`;
-          let dateAndExtra = parts[1].trim();
-  
-          const dateTextMatch = dateAndExtra.match(/(\d{1,2}\/\d{4}|\d{1,2}\/\d{1,2}\/\d{2,4}|\b\w+\s\d{4}\b)/);
-          if (dateTextMatch) {
-            const dateText = dateTextMatch[1];
-            let parsedDate = null;
-  
-            if (/\d{1,2}\/\d{1,2}\/\d{2,4}/.test(dateText)) {
-              const parts = dateText.split('/');
-              const month = parseInt(parts[0]) - 1;
-              const day = parseInt(parts[1]);
-              let year = parseInt(parts[2]);
-              if (year < 100) year += 2000;
-              parsedDate = new Date(year, month, day);
-            } else if (/\d{1,2}\/\d{4}/.test(dateText)) {
-              const parts = dateText.split('/');
-              const month = parseInt(parts[0]) - 1;
-              const year = parseInt(parts[1]);
-              parsedDate = new Date(year, month, 1);
-            } else {
-              parsedDate = new Date(dateText);
-            }
-  
-            if (parsedDate instanceof Date && !isNaN(parsedDate)) {
-              const currentTotalMonths = today.getFullYear() * 12 + today.getMonth();
-              const dateTotalMonths = parsedDate.getFullYear() * 12 + parsedDate.getMonth();
-              const warningThreshold = currentTotalMonths + 3;
-  
-              if (dateTotalMonths < currentTotalMonths) {
-                dateAndExtra = dateAndExtra.replace(dateText, `<span style="color:red;">${dateText}</span>`);
-                needsBold = true;
-              } else if (dateTotalMonths <= warningThreshold) {
-                dateAndExtra = dateAndExtra.replace(dateText, `<span style="color:orange;">${dateText}</span>`);
-                needsBold = true;
-              }
-            }
-          }
-  
-          const fullLine = `${labelPart} ${dateAndExtra}`;
-          return needsBold ? `<p><b>${fullLine}</b></p>` : `<p>${fullLine}</p>`;
-        } else {
-          return `<p>${trimmed}</p>`;
+.map(line => {
+  let trimmed = line.trim();
+  let needsBold = false;
+
+  // Normalize punctuation
+  trimmed = trimmed.replace(/[–—]/g, '-');
+  trimmed = trimmed.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
+
+  const lower = trimmed.toLowerCase();
+  const matchingLabel = labels.find(label => lower.includes(label.toLowerCase()));
+  const hasDue = lower.includes('due');
+
+  // Comprehensive regex for MM/YYYY, MM/DD/YYYY, full month names, and date ranges
+  const fullDateRegex = /(\d{1,2}\/\d{4}|\d{1,2}\/\d{1,2}\/\d{2,4}|\b\w+\s\d{4}\b|\b\w+\s\d{1,2}(?:st|nd|rd|th)?(?:\s*-\s*(?:\w+\s)?\d{1,2}(?:st|nd|rd|th)?)?\s\d{4})/i;
+
+  const dateMatch = trimmed.match(fullDateRegex);
+  if (!trimmed.includes('Due:') && matchingLabel && hasDue && dateMatch) {
+    const rest = trimmed.slice(trimmed.indexOf(dateMatch[0]) + dateMatch[0].length).trim();
+    trimmed = `${matchingLabel} Due: ${dateMatch[0]} ${rest}`;
+  }
+
+  const parts = trimmed.split(/Due:/i);
+  if (parts.length === 2) {
+    const labelPart = `${parts[0].trim()} Due:`;
+    let dateAndExtra = parts[1].trim();
+
+    const dateTextMatch = dateAndExtra.match(fullDateRegex);
+    if (dateTextMatch) {
+      const dateText = dateTextMatch[0];
+      let parsedDate = null;
+
+      // Handle ranges like "Oct 29th - Nov 12th 2024"
+      const rangeRegex = /\b(\w+)\s(\d{1,2})(?:st|nd|rd|th)?\s*-\s*(?:(\w+)\s)?(\d{1,2})(?:st|nd|rd|th)?\s(\d{2,4})\b/i;
+      const singleDateRegex = /\b(\w+)\s(\d{1,2})(?:st|nd|rd|th)?\s(\d{2,4})\b/i;
+
+      if (rangeRegex.test(dateText)) {
+        const match = dateText.match(rangeRegex);
+        if (match) {
+          const month = match[1];
+          const day = match[2];
+          let year = parseInt(match[5]);
+          if (year < 100) year += 2000;
+          parsedDate = new Date(`${month} ${day}, ${year}`);
         }
-      });
-  
+      } else if (singleDateRegex.test(dateText)) {
+        const match = dateText.match(singleDateRegex);
+        if (match) {
+          const month = match[1];
+          const day = match[2];
+          let year = parseInt(match[3]);
+          if (year < 100) year += 2000;
+          parsedDate = new Date(`${month} ${day}, ${year}`);
+        }
+      } else if (/\d{1,2}\/\d{1,2}\/\d{2,4}/.test(dateText)) {
+        const [month, day, yearRaw] = dateText.split('/');
+        let year = parseInt(yearRaw);
+        if (year < 100) year += 2000;
+        parsedDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+      } else if (/\d{1,2}\/\d{4}/.test(dateText)) {
+        const [month, year] = dateText.split('/');
+        parsedDate = new Date(parseInt(year), parseInt(month) - 1, 1);
+      } else {
+        parsedDate = new Date(dateText);
+      }
+
+      if (parsedDate instanceof Date && !isNaN(parsedDate)) {
+        const currentTotalMonths = today.getFullYear() * 12 + today.getMonth();
+        const dateTotalMonths = parsedDate.getFullYear() * 12 + parsedDate.getMonth();
+        const warningThreshold = currentTotalMonths + 3;
+
+        if (!dateAndExtra.includes('<span') && dateAndExtra.includes(dateText)) {
+          const color = dateTotalMonths < currentTotalMonths ? "red" :
+                        dateTotalMonths <= warningThreshold ? "orange" : null;
+
+          if (color) {
+            dateAndExtra = dateAndExtra.replace(dateText, `<span style="color:${color};">${dateText}</span>`);
+            needsBold = true;
+          }
+        }
+      }
+    }
+
+    const fullLine = `${labelPart} ${dateAndExtra}`;
+    return needsBold ? `<p><b>${fullLine}</b></p>` : `<p>${fullLine}</p>`;
+  } else {
+    return `<p>${trimmed}</p>`;
+  }
+});
       let result;
 if (wrappedLines.length === 0) {
   const defaultLabels = ['ARU', 'AE', 'Pap', 'Mammo', 'Depo'];
