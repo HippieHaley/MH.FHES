@@ -125,12 +125,12 @@ const lower = trimmed.toLowerCase();
 const matchingLabel = labels.find(label => lower.includes(label.toLowerCase()));
 const hasDue = lower.includes('due');
 // Expanded regex for more date formats
-const dateMatch = trimmed.match(/(\d{1,2}\/\d{4}|\d{1,2}\/\d{1,2}\/\d{2,4}|\b\w+\s\d{1,2}-\d{1,2}\s\d{2,4}\b|\b\w+\s\d{1,2}\s\d{2,4}\b|\b\w+\s\d{4}\b)/);
-// Normalize lines like "Depo due: Jan 7-21 2025 (10x12 wks)" → "Depo Due: Jan 7-21 2025 (10x12 wks)"
-if (!trimmed.includes('Due:') && matchingLabel && hasDue && dateMatch) {
-  const dateIndex = trimmed.indexOf(dateMatch[1]);
-  const rest = trimmed.slice(dateIndex + dateMatch[1].length).trim();
-  trimmed = `${matchingLabel} Due: ${dateMatch[1]} ${rest}`;
+const dateRangeRegex = /\b(\w+)\s(\d{1,2})(?:st|nd|rd|th)?\s*-\s*(\w+)\s(\d{1,2})(?:st|nd|rd|th)?\s(\d{2,4})\b/;
+const dateMatchRange = trimmed.match(dateRangeRegex);
+if (!trimmed.includes('Due:') && matchingLabel && hasDue && dateMatchRange) {
+  // Normalize to "Depo Due: Mar 1st - Apr 2nd 2025 (10x12)"
+  const rest = trimmed.slice(dateMatchRange[0].length).trim();
+  trimmed = `${matchingLabel} Due: ${dateMatchRange[0]} ${rest}`;
 }
 // Normalize lines like "Pap is due 6/2025" → "Pap Due: 6/2025"
 const lower2 = trimmed.toLowerCase();
