@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>CPT Locator</title>
+  <style>
+    .mh-searchbar {
+      margin: 2.5rem auto 2rem auto;
+      padding: 1.2rem 2rem 1.2rem 2rem;
+      background: #f8c9f9;
+      border: 1.5px solid #f8c9f9;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(190, 190, 190, 0.13);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-family: 'Nunito Sans', Arial, sans-serif;
+      width: fit-content;
+    }
+    .mh-searchbar label {
+      font-weight: 600;
+      color: #333;
+      margin-right: 1rem;
+    }
+    .mh-searchbar input[type="text"] {
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 0.3em 0.9em;
+      border: 1px solid #f8c9f9;
+      border-radius: 7px;
+      background: #f8c9f9;
+      color: #222;
+      margin-right: 0.5rem;
+      outline: none;
+      transition: border 0.2s;
+    }
+    .mh-searchbar input[type="text"]:focus {
+      border-color: #37a3a5;
+      background: #fff;
+    }
+  .back-home {
+      display: inline-block;  
+      padding: 10px 20px;
+      background-color: #f8c9f9; 
+      color: #333;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 30px;
+      text-align: center;
+      border: 1px solid #000;
+      position: absolute; 
+      top: 20px;
+      left: 20px;
+    }
+    .back-home:hover {
+      background-color: #e8b3e8;
+    }
+    h1
+    {
+      text-align: center;
+      font-size: 2rem;
+      color: #333;
+      margin-top: 80px;
+    }
+    body {
+            font-family: Arial, sans-serif;
+            background-color: #acdbf9; /* Light blue background */
+            color: #333;
+            min-height: 100vh;
+            text-align: center;
+        }
+        .mh-searchbar
+        {
+            margin: 2.5rem auto 2rem auto;
+            padding: 1.2rem 2rem;
+            background: #acdbf9;
+            border: 1.5px solid #acdbf9;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(190, 190, 190, 0.13);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-family: 'Nunito Sans', Arial, sans-serif;
+            width: fit-content;
+        }
+        .search-name,
+        .search-cpt,
+        .search-hcpcs,
+        .search-icd10 {
+            font-family: inherit;
+            font-size: 1rem;
+            padding: 0.3em 0.9em;
+            border: 1px solid #e8b3e8;
+            border-radius: 7px;
+            background: #e8b3e8;
+            color: #222;
+        }
+  </style>
+</head>
+<a href="index.html" class="back-home">Back to Home</a>
+<h1>Note Reformatter</h1>
+<body>
+  <div class="mh-searchbar">
+    <label>Search by:</label>
+    <input type="text" id="search-name" placeholder="Name">
+    <input type="text" id="search-cpt" placeholder="CPT">
+    <input type="text" id="search-hcpcs" placeholder="HCPCS">
+    <input type="text" id="search-icd10" placeholder="ICD-10">
+  </div>
+</body>
+</html>
