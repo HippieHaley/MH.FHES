@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head> <title>Receipt</title> </head>
     <meta charset="UTF-8" />  
     <style>
       * {
@@ -735,19 +735,20 @@ function addToTotal(service, price) {
     }
 
     function copyReceipt() {
+      const percent = document.getElementById('percentSelector').value;
       const listItems = document.querySelectorAll('#itemizedList .list-item');
       let receiptLines = [];
       listItems.forEach(li => {
-        let text = li.firstChild.textContent.trim();
-        text = text.replace(/\s*\d+%/, "");
-        text = text.replace(/\sx1\b/, "");
-        receiptLines.push(text);
+      let text = li.firstChild.textContent.trim();
+      text = text.replace(/\s*\d+%/, "");
+      text = text.replace(/\sx1\b/, "");
+      receiptLines.push(text);
       });
       const totalText = document.getElementById('grandTotal').innerText;
-      const receiptText = `Services:\n${receiptLines.join("\n")}\nTotal: ${totalText}`;
+      const receiptText = `Fee Percentage: ${percent}%\nServices:\n${receiptLines.join("\n")}\nTotal: ${totalText}`;
       navigator.clipboard.writeText(receiptText)
-        .then(() => alert('Receipt copied to clipboard!'))
-        .catch(() => alert('Failed to copy receipt.'));
+      .then(() => alert('Receipt copied to clipboard!'))
+      .catch(() => alert('Failed to copy receipt.'));
     }
 
     function updateVisibleColumn() {
