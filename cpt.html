@@ -76,8 +76,8 @@
   border-radius: 16px;
   padding: 1rem;
   box-shadow: 0 2px 16px #bbb4;
-  min-width: 750px;
-  max-width: 750px;
+  min-width: 950px;
+  max-width: 950px;
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
@@ -115,13 +115,14 @@
 </head>
 <body>
   <a href="index.html" class="back-home">Back to Home</a>
-  <h1>Note Reformatter</h1>
+  <h1>CPT Locator</h1>
   <div class="mh-searchbar">
     <label>Search by:</label>
     <input type="text" id="search-name" placeholder="Name">
     <input type="text" id="search-cpt" placeholder="CPT">
     <input type="text" id="search-hcpcs" placeholder="HCPCS">
     <input type="text" id="search-icd10" placeholder="ICD-10">
+    <input type="text" id="search-modifier" placeholder="Modifier">
   </div>
   <div id="results"></div>
 </body>
@@ -146,6 +147,7 @@
     icd10: "Z30.46",
     keywords: [
       "implant removal",
+      "nexplanon",
       "remove implant"
     ]
   },
@@ -157,6 +159,7 @@
     keywords: [
       "implant insert/ reinsert",
       "implant reinsertion",
+      "nexplanon",
       "implant removal and insertion"
     ]
   },
@@ -165,6 +168,7 @@
     cpt: "58300",
     hcpcs: "J7297, J7296, J7300",
     icd10: "Z30.430",
+    notes: "Modifier 51 when both a insert and removal happen same visit",
     keywords: [
       "iud insert",
       "iud insertion",
@@ -182,6 +186,10 @@
     icd10: "Z30.432",
     keywords: [
       "iud removal",
+      "liletta",
+      "paragard",
+      "mirena",
+      "bayer",
       "remove iud"
     ]
   },
@@ -199,14 +207,15 @@
     ]
   },
   {
-    name: "NuvaRing",
-    cpt: "",
-    hcpcs: "S4993",
-    icd10: "Z30.011",
-    keywords: [
-      "nuva ring",
-      "nuvaring"
-    ]
+  name: "NuvaRing",
+  cpt: "",
+  hcpcs: "S4993",
+  icd10: "Z30.011",
+  notes: "For initial prescription/counseling, use Z30.011. For surveillance/follow-up, use Z30.44.",
+  keywords: [
+    "nuva ring",
+    "nuvaring"
+  ]
   },
   {
     name: "Xulane Patch",
@@ -294,12 +303,12 @@
     ]
   },
   {
-    name: "Ibuprofen Injection",
+    name: "Ibuprofen",
     cpt: "",
-    hcpcs: "J1745",
+    hcpcs: "J1745- INJ?",
     icd10: "R52",
     keywords: [
-      "ibuprofen- inj?",
+      "ibuprofen",
       "ibuprofen injection"
     ]
   },
@@ -328,6 +337,7 @@
     icd10: "Z12.4",
     keywords: [
       "liquid based pap",
+      "pap",
       "liquid pap"
     ]
   },
@@ -338,6 +348,7 @@
     icd10: "Z12.4",
     keywords: [
       "conventional pap",
+      "pap",
       "conv pap"
     ]
   },
@@ -395,6 +406,7 @@
     icd10: "Z32.01",
     keywords: [
       "preg - pos hcg",
+      "pregnancy test",
       "pregnancy test positive"
     ]
   },
@@ -405,6 +417,7 @@
     icd10: "Z32.02",
     keywords: [
       "preg - neg hcg",
+      "pregnancy test",
       "pregnancy test negative"
     ]
   },
@@ -445,7 +458,6 @@
     keywords: [
       "genital wart tx",
       "genital wart treatment",
-      "cryo"
     ]
   },
   {
@@ -455,7 +467,8 @@
     icd10: "Z11.4",
     keywords: [
       "rapid hiv",
-      "hiv rapid"
+      "hiv rapid",
+      "hiv"
     ]
   },
   {
@@ -465,7 +478,8 @@
     icd10: "Z11.4",
     keywords: [
       "serum hiv",
-      "hiv serum"
+      "hiv serum",
+      "hiv"
     ]
   },
   {
@@ -498,21 +512,14 @@
     ]
   },
   {
-    name: "HSV Serum hiv1",
+    name: "HSV Serum ",
     cpt: "86695",
     hcpcs: "",
     icd10: "A60.00",
     keywords: [
-      "hsv serum hiv1"
-    ]
-  },
-  {
-    name: "HSV Serum hiv2",
-    cpt: "86696",
-    hcpcs: "",
-    icd10: "A60.00",
-    keywords: [
-      "hsv serum hiv2"
+      "hsv serum ",
+      "hsv",
+      "serum"
     ]
   },
   {
@@ -532,7 +539,8 @@
         const name = document.getElementById('search-name').value.toLowerCase();
         const cpt = document.getElementById('search-cpt').value.toLowerCase();
         const hcpcs = document.getElementById('search-hcpcs').value.toLowerCase();
-        const icd10 = document.getElementById('search-icd10').value.toLowerCase();          
+        const icd10 = document.getElementById('search-icd10').value.toLowerCase();    
+        const modifier = document.getElementById('search-modifier').value.toLowerCase();      
         const results = procedures.filter(row =>
           (!name   || row.name.toLowerCase().includes(name)) &&
           (!cpt    || row.cpt.toLowerCase().includes(cpt)) &&
@@ -556,6 +564,7 @@
           <td>${row.cpt}</td>
           <td>${row.hcpcs}</td>
           <td>${row.icd10}</td>
+            <td>${row.modifier || ''}</td>
         </tr>`;
       });
       html += "</tbody></table>";
@@ -567,12 +576,14 @@
       const cpt = document.getElementById('search-cpt').value.toLowerCase();
       const hcpcs = document.getElementById('search-hcpcs').value.toLowerCase();
       const icd10 = document.getElementById('search-icd10').value.toLowerCase();
+        const modifier = document.getElementById('search-modifier').value.toLowerCase();
 
       const results = procedures.filter(row =>
         (!name   || row.name.toLowerCase().includes(name)) &&
         (!cpt    || row.cpt.toLowerCase().includes(cpt)) &&
         (!hcpcs  || row.hcpcs.toLowerCase().includes(hcpcs)) &&
         (!icd10  || row.icd10.toLowerCase().includes(icd10))
+        && (!modifier || (row.notes && row.notes.toLowerCase().includes(modifier)))
       );
       displayResults(results);
     }
@@ -581,7 +592,7 @@
     document.getElementById('search-cpt').addEventListener('input', searchProcedures);
     document.getElementById('search-hcpcs').addEventListener('input', searchProcedures);
     document.getElementById('search-icd10').addEventListener('input', searchProcedures);
-
+    document.getElementById('search-modifier').addEventListener('input', searchProcedures);
     // Show all results on load
     displayResults(procedures);
     const results = procedures.filter(row => {
@@ -595,6 +606,7 @@
     (!cpt    || row.cpt.toLowerCase().includes(cpt)) &&
     (!hcpcs  || row.hcpcs.toLowerCase().includes(hcpcs)) &&
     (!icd10  || row.icd10.toLowerCase().includes(icd10))
+    && (!modifier || (row.notes && row.notes.toLowerCase().includes(modifier)))
   );
 });
     function displayResults(results) {
@@ -611,6 +623,7 @@
           <th>CPT</th>
           <th>HCPCS</th>
           <th>ICD-10</th>
+            <th>Notes</th>
         </tr>
       </thead>
       <tbody>
@@ -622,6 +635,7 @@
         <td>${row.cpt}</td>
         <td>${row.hcpcs}</td>
         <td>${row.icd10}</td>
+        <td>${row.notes || ''}</td>
       </tr>
     `;
   });
