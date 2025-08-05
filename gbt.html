@@ -742,16 +742,18 @@ function addToTotal(service, price) {
       const listItems = document.querySelectorAll('#itemizedList .list-item');
       let receiptLines = [];
       listItems.forEach(li => {
-      let text = li.firstChild.textContent.trim();
-      text = text.replace(/\s*\d+%/, "");
-      text = text.replace(/\sx1\b/, "");
-      receiptLines.push(text);
+        let text = li.firstChild.textContent.trim();
+        text = text.replace(/\s*\d+%/, "");
+        text = text.replace(/\sx1\b/, "");
+        receiptLines.push(text);
       });
       const totalText = document.getElementById('grandTotal').innerText;
-      const receiptText = `Fee Percentage: ${percent}%\nServices:\n${receiptLines.join("\n")}\nTotal: ${totalText}`;
+      const header = "=== Family Health Education Services ===";
+      const date = `${new Date().toLocaleDateString([], { year: 'numeric', month: '2-digit', day: '2-digit' })}`;
+      const receiptText = `${header}\nDate: ${date}\nFee Percentage: ${percent}%\nServices:\n${receiptLines.join("\n")}\nTotal: ${totalText}`;
       navigator.clipboard.writeText(receiptText)
-      .then(() => alert('Receipt copied to clipboard!'))
-      .catch(() => alert('Failed to copy receipt.'));
+        .then(() => alert('Receipt copied to clipboard!'))
+        .catch(() => alert('Failed to copy receipt.'));
     }
 
     function updateVisibleColumn() {
