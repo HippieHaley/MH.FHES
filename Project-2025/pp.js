@@ -1,5 +1,109 @@
 const procedures = [
   {
+    service: "99202 - New Pt Limited",
+    cpt: "99202",
+    hcpcs: "",
+    icd10: "",
+    fullprice: 0,
+    keywords: ["limited-new", "new pt", "99202"]
+  },
+  {
+    service: "99203 - New Pt Intermediate",
+    cpt: "99203",
+    hcpcs: "",
+    icd10: "",
+    fullprice: 0,
+    keywords: ["intermediate-new", "new pt", "99203"]
+  },
+  {
+    service: "99204 - New Pt Comprehensive",
+    cpt: "99204",
+    hcpcs: "",
+    icd10: "",
+    fullprice: 0,
+    keywords: ["comprehensive-new", "new pt", "99204"]
+  },
+  {
+    service: "99211 - Est Pt Minimal (RN)",
+    cpt: "99211",
+    hcpcs: "",
+    icd10: "",
+    fullprice: 0,
+    keywords: ["minimal-established", "est pt", "99211"]
+  },
+  {
+    service: "99212 - Est Pt Limited",
+    cpt: "99212",
+    hcpcs: "",
+    icd10: "",
+    fullprice: 0,
+    keywords: ["limited-established", "est pt", "99212"]
+  },
+  {
+    service: "99213 - Est Pt Intermediate",
+    cpt: "99213",
+    hcpcs: "",
+    icd10: "",
+    fullprice: 0,
+    keywords: ["intermediate-established", "est pt", "99213"]
+  },
+  {
+    service: "99214 - Est Pt Comprehensive",
+    cpt: "99214",
+    hcpcs: "",
+    icd10: "",
+    fullprice: 0,
+    keywords: ["comprehensive-established", "est pt", "99214"]
+  },
+  {
+    service: "99384 - Preventive New 12–17",
+    cpt: "99384",
+    hcpcs: "",
+    icd10: "",
+    fullprice: 0,
+    keywords: ["preventive new", "99384", "12–17", "ie"]
+  },
+  {
+    service: "99385 - Preventive New 18–39",
+    cpt: "99385",
+    hcpcs: "",
+    icd10: "",
+    fullprice: 0,
+    keywords: ["preventive new", "99385", "18–39", "ie"]
+  },
+  {
+    service: "99386 - Preventive New 40–64",
+    cpt: "99386",
+    hcpcs: "",
+    icd10: "",
+    fullprice: 0,
+    keywords: ["preventive new", "99386", "40–64", "ie"]
+  },
+  {
+    service: "99394 - Preventive Est 12–17",
+    cpt: "99394",
+    hcpcs: "",
+    icd10: "",
+    fullprice: 0,
+    keywords: ["preventive established", "99394", "12–17", "ae"]
+  },
+  {
+    service: "99395 - Preventive Est 18–39",
+    cpt: "99395",
+    hcpcs: "",
+    icd10: "",
+    fullprice: 0,
+    keywords: ["preventive established", "99395", "18–39", "ae"]
+  },
+  {
+    service: "99396 - Preventive Est 40–64",
+    cpt: "99396",
+    hcpcs: "",
+    icd10: "",
+    fullprice: 0,
+    keywords: ["preventive established", "99396", "40–64", "ae"]
+  },
+  { 
     service: "Implant Insertion (e.g., Nexplanon)",
     cpt: "11981",
     hcpcs: "J7307",

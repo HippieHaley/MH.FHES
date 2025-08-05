@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FrontEnd</title>
+  <style>
+    .services-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .service-section {
+      background: #f8c9f9;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .service-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .code-info {
+      font-size: 0.8rem;
+      color: #666;
+      font-style: italic;
+    }
+
+    .receipt-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 300px;
+      background: #f8c9f9;
+      padding: 15px;
+      border-radius: 10px;
+      z-index: 999;
+    }
+
+    .receipt-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 5px 0;
+    }
+
+    .remove-button {
+      background: #acdbf9;
+      border: none;
+      border-radius: 5px;
+      padding: 2px 8px;
+      cursor: pointer;
+    }
+
+    .copy-button {
+      background-color: #acdbf9;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .back-home {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #f8c9f9;
+      color: #333;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 30px;
+      text-align: center;
+      border: 1px solid #000;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+
+    .back-home:hover {
+      background-color: #e8b3e8;
+    }
+  </style>
+</head>
+<body>
+  <a href="/" class="back-home">← Home</a>
+
+  <div style="margin: 20px;">
+    <label for="percentSelector">Select Fee Percentage:</label>
+    <select id="percentSelector">
+      <option value="100">100%</option>
+      <option value="75">75%</option>
+      <option value="50">50%</option>
+      <option value="25">25%</option>
+    </select>
+  </div>
+
+  <div id="services-list"></div>
+
+  <div class="receipt-container">
+    <h2>Receipt</h2>
+    <div id="receipt-items"></div>
+    <hr />
+    <h3>Total: <span id="grand-total">$0.00</span></h3>
+    <button id="copy-receipt" class="copy-button">Copy Receipt</button>
+  </div>
+
+  <!-- Module script -->
+  <script type="module" src="./fe.js"></script>
+</body>
+</html>
