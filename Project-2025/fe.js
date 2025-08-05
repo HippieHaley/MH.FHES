@@ -69,14 +69,20 @@ function initializePriceList() {
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.id = item.service.replace(/\s+/g, '-').toLowerCase();
+      console.log(checkbox)
 
       const label = document.createElement('label');
-      label.htmlFor = checkbox.id;
-      label.textContent = item.service;
+    label.htmlFor = checkbox.id;
 
-      const codeSpan = document.createElement('span');
-      codeSpan.className = 'code-info';
-      codeSpan.textContent = `${item.cpt || ''} ${item.hcpcs || ''} ${item.icd10 || ''}`.trim();
+    const line1 = document.createElement('div');
+    line1.textContent = item.cpt;  // This is the CPT code
+
+    const line2 = document.createElement('div');
+    line2.textContent = item.service.replace(item.cpt, '').trim();  // This is the service name without the CPT
+
+    label.appendChild(line1);
+    label.appendChild(line2);
+
 
       checkbox.addEventListener('change', () => {
         handleServiceSelection(item, checkbox.checked);
@@ -84,7 +90,6 @@ function initializePriceList() {
 
       serviceDiv.appendChild(checkbox);
       serviceDiv.appendChild(label);
-      serviceDiv.appendChild(codeSpan);
       section.appendChild(serviceDiv);
     });
 
