@@ -11,8 +11,8 @@ function initializePriceList() {
   const container = document.createElement('div');
   container.className = 'services-container';
 
-  const categories = {
-    'Visit Type': procedures.filter(p =>
+  // Extract Visit Type items only once
+  const visitItems = procedures.filter(p =>
     p.keywords.some(k =>
       [
         'limited-new',
@@ -26,7 +26,73 @@ function initializePriceList() {
         'preventive established'
       ].includes(k.toLowerCase())
     )
-  ),
+  );
+
+  // Custom labeled visit chunks
+  const visitChunks = [
+    {
+      title: 'New Office Visits',
+      items: visitItems.filter(p =>
+        ['99202', '99203', '99204'].includes(p.cpt)
+      )
+    },
+    {
+      title: 'Established Visits',
+      items: visitItems.filter(p =>
+        ['99211', '99212', '99213', '99214'].includes(p.cpt)
+      )
+    },
+    {
+      title: 'Preventive New',
+      items: visitItems.filter(p =>
+        ['99384', '99385', '99386'].includes(p.cpt)
+      )
+    },
+    {
+      title: 'Preventive Established',
+      items: visitItems.filter(p =>
+        ['99394', '99395', '99396'].includes(p.cpt)
+      )
+    }
+  ];
+
+  // Render visit chunks
+  visitChunks.forEach(({ title, items }) => {
+    const section = document.createElement('div');
+    section.className = 'service-section';
+    section.innerHTML = `<h3>${title}</h3>`;
+
+    items.forEach(item => {
+      const serviceDiv = document.createElement('div');
+      serviceDiv.className = 'service-item';
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.id = item.service.replace(/\s+/g, '-').toLowerCase();
+
+      const label = document.createElement('label');
+      label.htmlFor = checkbox.id;
+      label.textContent = item.service;
+
+      const codeSpan = document.createElement('span');
+      codeSpan.className = 'code-info';
+      codeSpan.textContent = `${item.cpt || ''} ${item.hcpcs || ''} ${item.icd10 || ''}`.trim();
+
+      checkbox.addEventListener('change', () => {
+        handleServiceSelection(item, checkbox.checked);
+      });
+
+      serviceDiv.appendChild(checkbox);
+      serviceDiv.appendChild(label);
+      serviceDiv.appendChild(codeSpan);
+      section.appendChild(serviceDiv);
+    });
+
+    container.appendChild(section);
+  });
+
+  // Remaining categories
+  const categories = {
     'Contraception': procedures.filter(p =>
       p.keywords.some(k =>
         ['implant', 'iud', 'depo', 'nuva ring', 'patch'].includes(k.toLowerCase())
@@ -39,17 +105,30 @@ function initializePriceList() {
     ),
     'Medications': procedures.filter(p =>
       p.keywords.some(k =>
-        ['doxycycline', 'rocephin', 'bicillin', 'azithromycin', 'acyclovir', 'metronidazole', 'fluconazole'].includes(k.toLowerCase())
+        [
+          'doxycycline',
+          'rocephin',
+          'bicillin',
+          'azithromycin',
+          'acyclovir',
+          'metronidazole',
+          'fluconazole',
+          'clindamycin cream',
+          'clotrimazole cream',
+          'ibuprofen'
+        ].includes(k.toLowerCase())
       )
     ),
     'Services': procedures.filter(p =>
       p.keywords.some(k =>
-        ['injection', 'venipuncture', 'wart', 'urine dip'].includes(k.toLowerCase())
+        ['injection', 'venipuncture', 'wart', 'urine dip', 'pathology fee', 'wet mount'].includes(k.toLowerCase())
       )
     )
   };
 
   for (const [category, items] of Object.entries(categories)) {
+    if (items.length === 0) continue;
+
     const section = document.createElement('div');
     section.className = 'service-section';
     section.innerHTML = `<h3>${category}</h3>`;

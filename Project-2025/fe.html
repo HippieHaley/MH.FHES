@@ -4,9 +4,16 @@
   <meta charset="UTF-8" />
   <title>FrontEnd</title>
   <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff;
+      margin: 0;
+      padding-bottom: 120px;
+    }
+
     .services-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(4, 1fr); /* Force 4 equal columns */
       gap: 20px;
       padding: 20px;
     }
@@ -15,6 +22,12 @@
       background: #f8c9f9;
       padding: 15px;
       border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .service-section h3 {
+      margin-top: 0;
     }
 
     .service-item {
@@ -38,7 +51,8 @@
       background: #f8c9f9;
       padding: 15px;
       border-radius: 10px;
-      z-index: 999;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      z-index: 1000;
     }
 
     .receipt-item {
@@ -84,12 +98,39 @@
     .back-home:hover {
       background-color: #e8b3e8;
     }
+
+    #percentSelector {
+      margin-left: 10px;
+    }
+
+    .header-controls {
+      margin: 20px;
+    }
+
+    /* Responsive fallback (optional) */
+    @media (max-width: 1000px) {
+      .services-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .services-container {
+        grid-template-columns: 1fr;
+      }
+
+      .receipt-container {
+        position: static;
+        width: 90%;
+        margin: 20px auto;
+      }
+    }
   </style>
 </head>
 <body>
   <a href="/" class="back-home">← Home</a>
 
-  <div style="margin: 20px;">
+  <div class="header-controls">
     <label for="percentSelector">Select Fee Percentage:</label>
     <select id="percentSelector">
       <option value="100">100%</option>
@@ -99,7 +140,7 @@
     </select>
   </div>
 
-  <div id="services-list"></div>
+  <div id="services-list" class="services-container"></div>
 
   <div class="receipt-container">
     <h2>Receipt</h2>
@@ -109,7 +150,6 @@
     <button id="copy-receipt" class="copy-button">Copy Receipt</button>
   </div>
 
-  <!-- Module script -->
   <script type="module" src="./fe.js"></script>
 </body>
 </html>
