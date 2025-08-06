@@ -9,52 +9,15 @@ function getSelectedPercent() {
 
 function isMultipleAllowed(serviceName) {
   const multipleItems = [
-    'Chlamydia (CHL)',
-    'Gonorrhea (GC)',
-    'NuvaRing',
-    'Xulane Patch',
-    'Doxycycline',
-    'Rocephin (ceftriaxone inj)',
-    'Bicillin L-A',
-    'Azithromycin',
-    'Acyclovir',
-    'Metronidazole',
-    'Fluconazole',
-    'Ibuprofen',
-    'Clindamycin Cream',
-    'Clotrimazole Cream',
-    'Alese',
-'Apri',
-'Aubra',
-'Aviane',
-'Bicillin',
-'Camila',
-'Ceftriaxone',
-'Chateal',
-'Cryselle',
-'Cyred',
-'Doxycycline',
-'Enpresse',
-'Jolivette',
-'Levora',
-'Lutera',
-'Lyza',
-'Mononessa',
-'Nor QD',
-'Nordette',
-'Norethindrone',
-'Nortrel 777',
-'Orsythia',
-'Portia',
-'Reclipsen',
-'Sprintec',
-'Sronyx',
-'Tri-LoMarzia',
-'Tri-Lo Sprintec',
-'TriNessa Lo',
-'Triphasil',
-'Trivora',
-'Vilbra'
+    'Chlamydia (CHL)', 'Gonorrhea (GC)', 'NuvaRing', 'Xulane Patch',
+    'Doxycycline', 'Rocephin (ceftriaxone inj)', 'Bicillin L-A', 'Azithromycin',
+    'Acyclovir', 'Metronidazole', 'Fluconazole', 'Ibuprofen',
+    'Clindamycin Cream', 'Clotrimazole Cream',
+    'Alese', 'Apri', 'Aubra', 'Aviane', 'Bicillin', 'Camila', 'Ceftriaxone',
+    'Chateal', 'Cryselle', 'Cyred', 'Doxycycline', 'Enpresse', 'Jolivette',
+    'Levora', 'Lutera', 'Lyza', 'Mononessa', 'Nor QD', 'Nordette', 'Norethindrone',
+    'Nortrel 777', 'Orsythia', 'Portia', 'Reclipsen', 'Sprintec', 'Sronyx',
+    'Tri-LoMarzia', 'Tri-Lo Sprintec', 'TriNessa Lo', 'Triphasil', 'Trivora', 'Vilbra'
   ];
 
   const isOralContraceptive = procedures.some(p =>
@@ -82,7 +45,6 @@ function initializePriceList() {
     const section = document.createElement('div');
     section.className = 'service-section';
     section.innerHTML = `<h3>${title}</h3>`;
-
     items.forEach(item => addServiceCheckbox(section, item));
     container.appendChild(section);
   });
@@ -110,7 +72,6 @@ function initializePriceList() {
   chunks.forEach(({ items, includeOralDropdown }) => {
     const section = document.createElement('div');
     section.className = 'service-section';
-
     items.forEach(item => addServiceCheckbox(section, item));
 
     if (includeOralDropdown) {
@@ -121,10 +82,9 @@ function initializePriceList() {
       );
 
       const dropdownLabel = document.createElement('label');
-      dropdownLabel.textContent = "Oral Contraceptives:";
-
+      dropdownLabel.textContent = 'Oral Contraceptives:';
       const select = document.createElement('select');
-      select.innerHTML = `<option value="">-- Select Pill --</option>`;
+      select.innerHTML = '<option value="">-- Select Pill --</option>';
 
       oralOptions.forEach(pill => {
         const option = document.createElement('option');
@@ -137,7 +97,10 @@ function initializePriceList() {
         const selected = oralOptions.find(p => p.service === select.value);
         if (selected) {
           const price = (selected.fullprice || 0) * getSelectedPercent();
-          addToReceipt(selected.service, price);
+          const quantity = isMultipleAllowed(selected.service) ? parseInt(prompt('Enter quantity (1–13):', 1), 10) : 1;
+          if (!isNaN(quantity) && quantity > 0 && quantity <= 13) {
+            addToReceipt(selected.service, price * quantity, quantity);
+          }
         }
         select.selectedIndex = 0;
       });
@@ -182,7 +145,7 @@ function handleServiceSelection(service, isChecked) {
   const price = (service.fullprice || 0) * getSelectedPercent();
   if (isChecked) {
     if (isMultipleAllowed(service.service)) {
-      const quantity = parseInt(prompt("Enter quantity (1–13):", 1), 10);
+      const quantity = parseInt(prompt('Enter quantity (1–13):', 1), 10);
       if (!isNaN(quantity) && quantity > 0 && quantity <= 13) {
         addToReceipt(service.service, price * quantity, quantity);
       }
@@ -220,7 +183,6 @@ function removeFromReceipt(serviceName) {
     selectedItems[serviceName].element.remove();
     delete selectedItems[serviceName];
     updateGrandTotal();
-
     const checkbox = document.querySelector(`#${serviceName.replace(/\s+/g, '-').toLowerCase()}`);
     if (checkbox) checkbox.checked = false;
   }
@@ -257,9 +219,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('percentSelector').value = 100;
 });
-// This code initializes the service list, handles checkbox selections, calculates prices based on selected percentage,
-// and allows copying the receipt to the clipboard. It also includes functionality for handling multiple items and
-// updating the grand total dynamically. The service list is divided into sections for better organization, and
-// oral contraceptives are provided in a dropdown for easy selection. The code ensures that the
-// user can select multiple items where applicable and that the receipt reflects the correct prices based on the
-// selected percentage. The receipt can be copied to the clipboard in a formatted manner for easy sharing
