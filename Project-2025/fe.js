@@ -70,70 +70,49 @@ function initializePriceList() {
   const chunks = [
     {
       title: null,
-      items: procedures.filter(p => [
-        'Liquid Based PAP',
-        'Conventional PAP',
-        'HPV',
-        'Pathology Fee',
-        'Wet Mount',
-         'Chlamydia (CHL)',
-        'Gonorrhea (GC)',
-        'Pregnancy Test Urine',
-      ].includes(p.service))
+      items: procedures.filter(p =>
+        [
+          'Liquid Based PAP', 'Conventional PAP', 'HPV', 'Pathology Fee',
+          'Wet Mount', 'Chlamydia (CHL)', 'Gonorrhea (GC)', 'Pregnancy Test Urine'
+        ].includes(p.service)
+      )
     },
     {
       title: null,
-      items: procedures.filter(p => [
-        'Injection Fee',
-        'Venipuncture',
-        'Genital Wart Treatment Male',
-        'Genital Wart Treatment Female',
-        'HIV Rapid',
-        'HIV Serum',
-        'RPR (Syphilis)',
-        'TPPA (Syphilis)',
-        'HSV PCR',
-        'HSV Serum',
-        'Urine Dipstick (non-automated)',
-        'Urine Dipstick'
-      ].includes(p.service))
+      items: procedures.filter(p =>
+        [
+          'Injection Fee', 'Venipuncture', 'Genital Wart Treatment Male',
+          'Genital Wart Treatment Female', 'HIV Rapid', 'HIV Serum',
+          'RPR (Syphilis)', 'TPPA (Syphilis)', 'HSV PCR', 'HSV Serum',
+          'Urine Dipstick (non-automated)', 'Urine Dipstick'
+        ].includes(p.service)
+      )
     },
     {
       title: null,
-      items: procedures.filter(p => [
-        'Implant Insertion',
-        'Implant Removal',
-        'Implant Removal and Insertion',
-        'Nexplanon',
-        'IUD Insertion',
-        'IUD Removal',
-        'IUD Removal and Insertion',
-        'Liletta IUD',
-        'Paragard IUD',
-        'Bayer IUD',
-        'Mirena IUD',
-        'Depo-Provera',
-        'NuvaRing',
-        'Xulane Patch'
-      ].includes(p.service))
+      items: procedures.filter(p =>
+        [
+          'Implant Insertion', 'Implant Removal', 'Implant Removal and Insertion',
+          'Nexplanon', 'IUD Insertion', 'IUD Removal', 'IUD Removal and Insertion',
+          'Liletta IUD', 'Paragard IUD', 'Bayer IUD', 'Mirena IUD',
+          'Depo-Provera', 'NuvaRing', 'Xulane Patch'
+        ].includes(p.service)
+      ),
+      includeOralDropdown: true
     },
     {
       title: null,
-      items: procedures.filter(p => [
-        'Doxycycline',
-        'Rocephin (ceftriaxone inj)',
-        'Bicillin L-A',
-        'Azithromycin',
-        'Acyclovir',
-        'Metronidazole',
-        'Fluconazole',
-        'Ibuprofen',
-        'Clindamycin Cream',
-        'Clotrimazole Cream',
-      ].includes(p.service))
+      items: procedures.filter(p =>
+        [
+          'Doxycycline', 'Rocephin (ceftriaxone inj)', 'Bicillin L-A',
+          'Azithromycin', 'Acyclovir', 'Metronidazole', 'Fluconazole',
+          'Ibuprofen', 'Clindamycin Cream', 'Clotrimazole Cream'
+        ].includes(p.service)
+      )
     }
   ];
-  chunks.forEach(({ items }) => {
+
+  chunks.forEach(({ items, includeOralDropdown }) => {
     const section = document.createElement('div');
     section.className = 'service-section';
 
@@ -162,6 +141,40 @@ function initializePriceList() {
       serviceDiv.appendChild(codeSpan);
       section.appendChild(serviceDiv);
     });
+
+    // Add Oral Contraceptive dropdown to 3rd column
+    if (includeOralDropdown) {
+      const oralOptions = procedures.filter(p =>
+        p.service.toLowerCase().includes('oral contraceptive') ||
+        p.service.toLowerCase().includes('progestin-only pill') ||
+        p.service.toLowerCase().includes('pop') ||
+        p.service.toLowerCase().includes('pill')
+      );
+
+      const dropdownLabel = document.createElement('label');
+      dropdownLabel.textContent = "Oral Contraceptives:";
+
+      const select = document.createElement('select');
+      select.innerHTML = `<option value="">-- Select Pill --</option>`;
+
+      oralOptions.forEach(pill => {
+        const option = document.createElement('option');
+        option.value = pill.service;
+        option.textContent = pill.service;
+        select.appendChild(option);
+      });
+
+      select.addEventListener('change', () => {
+        const selected = oralOptions.find(p => p.service === select.value);
+        if (selected) {
+          addToReceipt(selected.service, selected.fullprice || 0);
+        }
+        select.selectedIndex = 0; // reset dropdown
+      });
+
+      section.appendChild(dropdownLabel);
+      section.appendChild(select);
+    }
 
     container.appendChild(section);
   });
@@ -250,3 +263,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('copy-receipt').addEventListener('click', copyReceipt);
 });
+document.getElementById('percentSelector').value = 100; // Default to 100%

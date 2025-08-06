@@ -580,7 +580,7 @@ const procedures = [
   hcpcs: "J7304",
   icd10: "Z30.011",
   fullprice: 75,
-  keywords: ["xulane", "patch", "j7304"]
+  keywords: ["xulane", "patch", "j7304", "birth control"]
 },
 {
   service: "NuvaRing",
@@ -588,7 +588,7 @@ const procedures = [
   hcpcs: "J7303",
   icd10: "Z30.011",
   fullprice: 8,
-  keywords: ["nuvaring", "nuva ring", "j7303"]
+  keywords: ["nuvaring", "nuva ring", "j7303", "birth control"]
 },
 {
   service: "Nexplanon",
