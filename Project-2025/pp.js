@@ -104,7 +104,7 @@ const procedures = [
     keywords: ["preventive established", "99396", "40–64", "ae"]
   },
   { 
-    service: "Implant Insertion (e.g., Nexplanon)",
+    service: "Implant Insertion",
     cpt: "11981",
     hcpcs: "J7307",
     icd10: "Z30.017",
@@ -143,7 +143,7 @@ const procedures = [
     ]
   },
   {
-    service: "IUD Insertion (e.g., Liletta, Paragard, Mirena)",
+    service: "IUD Insertion",
     cpt: "58300",
     hcpcs: "J7297, J7296, J7300",
     icd10: "Z30.430",
@@ -175,7 +175,7 @@ const procedures = [
     ]
   },
   {
-    service: "Doxycycline (oral)",
+    service: "Doxycycline",
     cpt: "",
     hcpcs: "",
     icd10: "A56.01, A54.01",
@@ -216,13 +216,22 @@ const procedures = [
     ]
   },
   {
-    service: "Suprax (cefixime)",
+    service: "Suprax",
     cpt: "J3490?",
     hcpcs: "",
     icd10: "A54.00",
     fullprice: 0,
     keywords: [
-      "suprax",
+      "suprax"
+    ]
+  },
+    {
+    service: "Cefixime",
+    cpt: "J3490?",
+    hcpcs: "",
+    icd10: "A54.00",
+    fullprice: 0,
+    keywords: [
       "cefixime"
     ]
   },
@@ -380,7 +389,7 @@ const procedures = [
     service: "Injection Fee",
     cpt: "96372",
     hcpcs: "",
-       icd10: "",
+    icd10: "",
     fullprice: 38,
     keywords: [
       "inj. fee",
@@ -391,7 +400,7 @@ const procedures = [
     service: "Venipuncture",
     cpt: "36415",
     hcpcs: "",
-       icd10: "",
+    icd10: "",
     fullprice: 7,
     keywords: [
       "venipuncture"
@@ -582,7 +591,7 @@ const procedures = [
   keywords: ["nuvaring", "nuva ring", "j7303"]
 },
 {
-  service: "Nexplanon Implant",
+  service: "Nexplanon",
   cpt: "",
   hcpcs: "J7307",
   icd10: "Z30.017",
@@ -620,14 +629,6 @@ const procedures = [
   icd10: "Z30.011",
   fullprice: 5,
   keywords: ["aviane", "birth control", "pill", "s4993"]
-},
-{
-  service: "Bicillin",
-  cpt: "",
-  hcpcs: "S4993",
-  icd10: "A51.0",
-  fullprice: 30,
-  keywords: ["bicillin", "penicillin", "injection", "s4993"]
 },
 {
   service: "Camila (Progestin-Only Pill)",

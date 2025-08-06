@@ -101,17 +101,18 @@ function initializePriceList() {
     {
       title: null,
       items: procedures.filter(p => [
-        'Implant Insertion (e.g., Nexplanon)',
-        'Implant Removal (e.g., Nexplanon)',
-        'Implant Removal and Insertion (e.g., Nexplanon)',
-        'IUD Insertion (e.g., Liletta, Paragard, Mirena)',
-        'IUD Removal (e.g., Liletta, Paragard, Mirena)',
-        'IUD Removal and Insertion (e.g., Liletta, Paragard, Mirena)',
+        'Implant Insertion',
+        'Implant Removal',
+        'Implant Removal and Insertion',
         'Nexplanon',
+        'IUD Insertion',
+        'IUD Removal',
+        'IUD Removal and Insertion',
         'Liletta IUD',
         'Paragard IUD',
         'Bayer IUD',
-        'Depo-Provera (Medroxyprogesterone)',
+        'Mirena IUD',
+        'Depo-Provera',
         'NuvaRing',
         'Xulane Patch'
       ].includes(p.service))
@@ -119,7 +120,7 @@ function initializePriceList() {
     {
       title: null,
       items: procedures.filter(p => [
-        'Doxycycline (oral)',
+        'Doxycycline',
         'Rocephin (ceftriaxone inj)',
         'Bicillin L-A',
         'Azithromycin',
@@ -129,8 +130,6 @@ function initializePriceList() {
         'Ibuprofen',
         'Clindamycin Cream',
         'Clotrimazole Cream',
-        'Bicillin',
-        'Doxycycline (Oral)'
       ].includes(p.service))
     }
   ];
