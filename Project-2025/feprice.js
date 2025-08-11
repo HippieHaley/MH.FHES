@@ -76,9 +76,9 @@ function initializePriceList() {
 
     if (includeOralDropdown) {
       const oralOptions = procedures.filter(p =>
-        p.service.toLowerCase().includes('oral contraceptive') ||
-        p.service.toLowerCase().includes('pill') ||
-        p.service.toLowerCase().includes('pop')
+        Array.isArray(p.keywords) &&
+        (p.keywords.some(k => k.toLowerCase().includes('pill')) ||
+         p.keywords.some(k => k.toLowerCase().includes('pop')))
       );
 
       const dropdownLabel = document.createElement('label');

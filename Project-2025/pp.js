@@ -599,7 +599,7 @@ const procedures = [
   keywords: ["nexplanon", "implant", "j7307"]
 },
 {
-  service: "Alese (Oral Contraceptive)",
+  service: "Alese",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -607,7 +607,7 @@ const procedures = [
   keywords: ["alese", "birth control", "pill", "s4993"]
 },
 {
-  service: "Apri (Oral Contraceptive)",
+  service: "Apri",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -615,7 +615,7 @@ const procedures = [
   keywords: ["apri", "birth control", "pill", "s4993"]
 },
 {
-  service: "Aubra (Oral Contraceptive)",
+  service: "Aubra",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -623,7 +623,7 @@ const procedures = [
   keywords: ["aubra", "birth control", "pill", "s4993"]
 },
 {
-  service: "Aviane (Oral Contraceptive)",
+  service: "Aviane",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -631,7 +631,7 @@ const procedures = [
   keywords: ["aviane", "birth control", "pill", "s4993"]
 },
 {
-  service: "Camila (Progestin-Only Pill)",
+  service: "Camila",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -639,7 +639,7 @@ const procedures = [
   keywords: ["camila", "birth control", "pop", "progestin", "s4993"]
 },
 {
-  service: "Chateal (Oral Contraceptive)",
+  service: "Chateal",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -647,7 +647,7 @@ const procedures = [
   keywords: ["chateal", "birth control", "pill", "s4993"]
 },
 {
-  service: "Cryselle (Oral Contraceptive)",
+  service: "Cryselle",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -655,7 +655,7 @@ const procedures = [
   keywords: ["cryselle", "birth control", "pill", "s4993"]
 },
 {
-  service: "Cyred (Oral Contraceptive)",
+  service: "Cyred",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -663,15 +663,15 @@ const procedures = [
   keywords: ["cyred", "birth control", "pill", "s4993"]
 },
 {
-  service: "Doxycycline (Oral)",
+  service: "Doxycycline",
   cpt: "",
   hcpcs: "S4993",
   icd10: "A56.01",
   fullprice: 1,
-  keywords: ["doxycycline", "sti treatment", "oral antibiotic", "s4993"]
+  keywords: ["doxycycline", "sti treatment", "antibiotic", "s4993"]
 },
 {
-  service: "Enpresse (Oral Contraceptive)",
+  service: "Enpresse",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -679,7 +679,7 @@ const procedures = [
   keywords: ["enpresse", "birth control", "pill", "s4993"]
 },
 {
-  service: "Jolivette (Progestin-Only Pill)",
+  service: "Jolivette",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -687,7 +687,7 @@ const procedures = [
   keywords: ["jolivette", "birth control", "pop", "progestin", "s4993"]
 },
 {
-  service: "Levora (Oral Contraceptive)",
+  service: "Levora",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -695,7 +695,7 @@ const procedures = [
   keywords: ["levora", "birth control", "pill", "s4993"]
 },
 {
-  service: "Lutera (Oral Contraceptive)",
+  service: "Lutera",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -703,7 +703,7 @@ const procedures = [
   keywords: ["lutera", "birth control", "pill", "s4993"]
 },
 {
-  service: "Lyza (Progestin-Only Pill)",
+  service: "Lyza",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -711,7 +711,7 @@ const procedures = [
   keywords: ["lyza", "birth control", "pop", "s4993"]
 },
 {
-  service: "Mononessa (Oral Contraceptive)",
+  service: "Mononessa",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -719,7 +719,7 @@ const procedures = [
   keywords: ["mononessa", "birth control", "pill", "s4993"]
 },
 {
-  service: "Nor QD (Progestin-Only Pill)",
+  service: "Nor QD",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -727,7 +727,7 @@ const procedures = [
   keywords: ["nor qd", "birth control", "pop", "s4993"]
 },
 {
-  service: "Nordette (Oral Contraceptive)",
+  service: "Nordette",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -735,7 +735,7 @@ const procedures = [
   keywords: ["nordette", "birth control", "pill", "s4993"]
 },
 {
-  service: "Norethindrone (Generic POP)",
+  service: "Norethindrone",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -743,7 +743,7 @@ const procedures = [
   keywords: ["norethindrone", "birth control", "pop", "progestin", "s4993"]
 },
 {
-  service: "Nortrel 777 (Oral Contraceptive)",
+  service: "Nortrel 777",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -751,7 +751,7 @@ const procedures = [
   keywords: ["nortrel", "nortrel 777", "birth control", "pill", "s4993"]
 },
 {
-  service: "Orsythia (Oral Contraceptive)",
+  service: "Orsythia",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -759,7 +759,7 @@ const procedures = [
   keywords: ["orsythia", "birth control", "pill", "s4993"]
 },
 {
-  service: "Portia (Oral Contraceptive)",
+  service: "Portia",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -767,7 +767,7 @@ const procedures = [
   keywords: ["portia", "birth control", "pill", "s4993"]
 },
 {
-  service: "Reclipsen (Oral Contraceptive)",
+  service: "Reclipsen",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -775,7 +775,7 @@ const procedures = [
   keywords: ["reclipsen", "birth control", "pill", "s4993"]
 },
 {
-  service: "Sprintec (Oral Contraceptive)",
+  service: "Sprintec",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -783,7 +783,7 @@ const procedures = [
   keywords: ["sprintec", "birth control", "pill", "s4993"]
 },
 {
-  service: "Sronyx (Oral Contraceptive)",
+  service: "Sronyx",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -791,7 +791,7 @@ const procedures = [
   keywords: ["sronyx", "birth control", "pill", "s4993"]
 },
 {
-  service: "Tri-Lo Marzia (Oral Contraceptive)",
+  service: "Tri-Lo Marzia",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -799,7 +799,7 @@ const procedures = [
   keywords: ["tri-lo marzia", "birth control", "pill", "s4993"]
 },
 {
-  service: "Tri-Lo Sprintec (Oral Contraceptive)",
+  service: "Tri-Lo Sprintec",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -807,7 +807,7 @@ const procedures = [
   keywords: ["tri-lo sprintec", "birth control", "pill", "s4993"]
 },
 {
-  service: "TriNessa Lo (Oral Contraceptive)",
+  service: "TriNessa Lo",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -815,7 +815,7 @@ const procedures = [
   keywords: ["trinessa lo", "birth control", "pill", "s4993"]
 },
 {
-  service: "Triphasil (Oral Contraceptive)",
+  service: "Triphasil",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -823,7 +823,7 @@ const procedures = [
   keywords: ["triphasil", "birth control", "pill", "s4993"]
 },
 {
-  service: "Trivora (Oral Contraceptive)",
+  service: "Trivora",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
@@ -831,7 +831,7 @@ const procedures = [
   keywords: ["trivora", "birth control", "pill", "s4993"]
 },
 {
-  service: "Vilbra (Oral Contraceptive)",
+  service: "Vilbra",
   cpt: "",
   hcpcs: "S4993",
   icd10: "Z30.011",
