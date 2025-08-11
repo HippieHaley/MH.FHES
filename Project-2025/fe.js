@@ -60,7 +60,7 @@ function initializePriceList() {
     },
     {
       title: null,
-      items: procedures.filter(p => ['Implant Insertion', 'Implant Removal', 'Implant Removal and Insertion', 'Nexplanon', 'IUD Insertion', 'IUD Removal', 'IUD Removal and Insertion', 'Liletta IUD', 'Paragard IUD', 'Bayer IUD', 'Mirena IUD', 'NuvaRing', 'Xulane Patch'].includes(p.service)),
+      items: procedures.filter(p => ['Implant Insertion', 'Implant Removal', 'Implant Removal and Insertion', 'Nexplanon', 'IUD Insertion', 'IUD Removal', 'IUD Removal and Insertion', 'Liletta IUD', 'Paragard IUD', 'Bayer IUD', 'Mirena IUD', 'NuvaRing', 'Xulane Patch', 'Depo'].includes(p.service)),
       includeOralDropdown: true
     },
     {
