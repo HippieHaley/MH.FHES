@@ -25,6 +25,7 @@ h1{ margin-bottom:8px; }
   padding:20px; border:2px solid #333; border-radius:30px;
   background:#acdbf9;
 }
+.space2{ margin-top:7px; }
 .example{ margin-top:15px; }
 .space{ margin-top:30px; }
 .hidden{ visibility:hidden; }
@@ -100,224 +101,228 @@ th{ background:#f2f2f2; }
 </head>
 
 <body>
-<a href="index.html" class="back-home">Back to Home</a>
-<h1>Income Calculator</h1>
+  <a href="index.html" class="back-home">Back to Home</a>
+  <h1>Income Calculator</h1>
 
-<div style="margin:20px 0;">
-  <label for="incomeType"><strong>Income Type:</strong></label>
-  <select id="incomeType" style="padding:6px 10px; border-radius:10px; margin-left:10px;">
-    <option value="" selected disabled hidden>Select one...</option>
-    <option value="W2">W2</option>
-    <option value="Paycheck">Paycheck</option>
-    <option value="NEED INCOME DOCS">NEED INCOME DOCS-VERBAL INCOME</option>
-  </select>
+  <div style="margin:20px 0;">
+    <label for="incomeType"><strong>Income Type:</strong></label>
+    <select id="incomeType" style="padding:6px 10px; border-radius:10px; margin-left:10px;">
+      <option value="" selected disabled hidden>Select one...</option>
+      <option value="W2">W2</option>
+      <option value="Paycheck">Paycheck</option>
+      <option value="NEED INCOME DOCS">NEED INCOME DOCS-VERBAL INCOME</option>
+    </select>
 
-  <label for="workingAt" style="margin-left:20px;">Working @</label>
-  <input type="text" id="workingAt" placeholder="Where?" style="padding:8px; border-radius:10px; border:1px solid #f8c9f9;" />
+    <label for="workingAt" style="margin-left:20px;">Working @</label>
+    <input type="text" id="workingAt" placeholder="Where?" style="padding:8px; border-radius:10px; border:1px solid #f8c9f9;" />
 
-  <button class="toggleNotes">+ Add Notes</button>
-</div>
-
-<div class="container">
-  <!-- Column 1 -->
-  <div class="column">
-    <div class="section">
-      <h2>Biweekly Income</h2>
-      <div class="example"></div>
-      <p>Example: Every other Friday</p>
-      <div class="example"></div>
-
-      <label>Paystub one: $<input type="number" id="paystub1" value="0" onchange="calculateIncome('biweekly')"></label><br>
-      <div class="space"></div>
-      <label>Paystub two: $<input type="number" id="paystub2" value="0" onchange="calculateIncome('biweekly')"></label><br>
-
-      <div class="hidden"><p>Total: $<span id="biweeklyTotal">0</span></p></div>
-      <p>Average: $<span id="biweeklyAverage">0</span></p>
-      <div class="space"></div>
-      <p>Annual: $<span id="biweeklyAnnual">0</span></p>
-    </div>
-
-    <div class="section">
-      <h2>Weekly Income</h2>
-      <div class="example"></div>
-      <p>Example: Every Friday</p>
-      <div class="example"></div>
-
-      <label>Paystub one: $<input type="number" id="weeklyPaystub1" value="0" onchange="calculateIncome('weekly')"></label><br>
-      <div class="space"></div>
-      <label>Paystub two: $<input type="number" id="weeklyPaystub2" value="0" onchange="calculateIncome('weekly')"></label><br>
-
-      <div class="hidden"><p>Total: $<span id="weeklyTotal">0</span></p></div>
-      <p>Average: $<span id="weeklyAverage">0</span></p>
-      <div class="space"></div>
-      <p>Annual: $<span id="weeklyAnnual">0</span></p>
-    </div>
+    <button class="toggleNotes">+ Add Notes</button>
   </div>
 
-  <!-- Column 2 -->
-  <div class="column">
-    <div class="section">
-      <h2>Twice a Month Income</h2>
-      <div class="example"></div>
-      <p>Example: 1st and 15th</p>
-      <div class="example"></div>
+  <div class="container">
+    <!-- Column 1 -->
+    <div class="column">
+      <div class="section">
+        <h2>Biweekly Income</h2>
+        <div class="example"></div>
+        <p>Example: Every other Friday</p>
+        <div class="example"></div>
 
-      <label>Paystub one: $<input type="number" id="twiceMonthPaystub1" value="0" onchange="calculateIncome('twiceMonth')"></label><br>
-      <div class="space"></div>
-      <label>Paystub two: $<input type="number" id="twiceMonthPaystub2" value="0" onchange="calculateIncome('twiceMonth')"></label><br>
+        <label>Paystub one: $<input type="number" id="paystub1" value="0" onchange="calculateIncome('biweekly')"></label><br>
+        <div class="example"></div>
+        <label>Paystub two: $<input type="number" id="paystub2" value="0" onchange="calculateIncome('biweekly')"></label><br>
 
-      <div class="hidden"><p>Total: $<span id="twiceMonthTotal">0</span></p></div>
-      <p>Average: $<span id="twiceMonthAverage">0</span></p>
-      <div class="space"></div>
-      <p>Annual: $<span id="twiceMonthAnnual">0</span></p>
+        <div class="hidden"><p>Total: $<span id="biweeklyTotal">0</span></p></div>
+        <p>Average: $<span id="biweeklyAverage">0</span></p>
+        <div class="example"></div>
+        <p>Annual: $<span id="biweeklyAnnual">0</span></p>
+      </div>
+
+      <div class="section">
+        <h2>Weekly Income</h2>
+        <div class="example"></div>
+        <p>Example: Every Friday</p>
+        <div class="example"></div>
+
+        <label>Paystub one: $<input type="number" id="weeklyPaystub1" value="0" onchange="calculateIncome('weekly')"></label><br>
+        <div class="example"></div>
+        <label>Paystub two: $<input type="number" id="weeklyPaystub2" value="0" onchange="calculateIncome('weekly')"></label><br>
+
+        <div class="hidden"><p>Total: $<span id="weeklyTotal">0</span></p></div>
+        <p>Average: $<span id="weeklyAverage">0</span></p>
+        <div class="example"></div>
+        <p>Annual: $<span id="weeklyAnnual">0</span></p>
+      </div>
     </div>
 
-    <div class="section">
-      <h2>Weekly Verbal Income</h2>
-      <div class="example"></div>
-      <p>Example: Freelance or hourly work</p>
-      <div class="example"></div>
+    <!-- Column 2 -->
+    <div class="column">
+      <div class="section">
+        <h2>Twice a Month Income</h2>
+        <div class="example"></div>
+        <p>Example: 1st and 15th</p>
+        <div class="example"></div>
+        <label>Paystub one: $<input type="number" id="twiceMonthPaystub1" value="0" onchange="calculateIncome('twiceMonth')"></label><br>
+        <div class="example"></div>
+        <label>Paystub two: $<input type="number" id="twiceMonthPaystub2" value="0" onchange="calculateIncome('twiceMonth')"></label><br>
 
-      <label>Hours worked: <input type="number" id="verbalHours" value="0" onchange="calculateIncome('verbal')"></label><br>
-      <div class="space"></div>
-      <label>Hourly Pay: $<input type="number" id="verbalRate" value="0" onchange="calculateIncome('verbal')"></label><br>
+        <div class="hidden"><p>Total: $<span id="twiceMonthTotal">0</span></p></div>
+        <p>Average: $<span id="twiceMonthAverage">0</span></p>
+        <div class="example"></div>
+        <p>Annual: $<span id="twiceMonthAnnual">0</span></p>
+      </div>
 
-      <div class="hidden"><p>Total: $<span id="verbalTotal">0</span></p></div>
-      <p>Average: $<span id="verbalAverage">0</span></p>
-      <div class="space"></div>
-      <p>Annual: $<span id="verbalAnnual">0</span></p>
+      <div class="section">
+        <h2>Weekly Verbal Income</h2>
+        <div class="example"></div>
+        <p>Example: Freelance or hourly work</p>
+        <div class="example"></div>
+
+        <label>Hours worked: <input type="number" id="verbalHours" value="0" onchange="calculateIncome('verbal')"></label><br>
+        <div class="example"></div>
+        <label>Hourly Pay: $<input type="number" id="verbalRate" value="0" onchange="calculateIncome('verbal')"></label><br>
+
+        <div class="hidden"><p>Total: $<span id="verbalTotal">0</span></p></div>
+        <p>Average: $<span id="verbalAverage">0</span></p>
+        <div class="example"></div>
+        <p>Annual: $<span id="verbalAnnual">0</span></p>
+      </div>
     </div>
-  </div>
 
-  <!-- Column 3 -->
-  <div class="column">
-    <div class="section">
-      <h2>Extra Income Sources</h2>
-      <div class="example"></div>
+    <!-- Column 3 -->
+    <div class="column">
+      <div class="section">
+        <h2>Extra Income Sources</h2>
+        <div class="example"></div>
 
-      <label>Tips per week: $<input type="number" id="AnnualTips" value="0" onchange="calculateGrandTotal()"></label><br>
-      <div class="space"></div>
-      <label>Other Income per month: $<input type="number" id="AnnualOtherMonthly" value="0" onchange="calculateGrandTotal()"></label><br>
-      <div class="space"></div>
-      <label>Other Income by year: $<input type="number" id="OtherAnnual" value="0" onchange="calculateGrandTotal()"></label><br>
-      <div class="space"></div>
-    </div>
+        <label>Tips per week: $<input type="number" id="AnnualTips" value="0" onchange="calculateGrandTotal()"></label><br>
+        <div class="example"></div>
+        <label>Other Income per month: $<input type="number" id="AnnualOtherMonthly" value="0" onchange="calculateGrandTotal()"></label><br>
+        <div class="example"></div>
+        <label>Other Income by year: $<input type="number" id="OtherAnnual" value="0" onchange="calculateGrandTotal()"></label><br>
+        <div class="space2"></div>
+      </div>
 
-    <div class="section">
-      <div><h2>Household Info</h2></div>
-      <div class="example"></div>
-
-      <p>People per Household:</p>
-      <input type="number" id="householdSize" min="1" value="1" onchange="updateHouseholdIncome()"><br>
-
-      <div class="income-card" style="margin-top:12px;">
-        <div><h2>Household Income</h2></div>
-        <div class="space"></div>
-        <!-- corner copy button -->
-        <button class="button icon-button" onclick="copyIncomeInfo()" aria-label="Copy Household Info">
-          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
-        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-        </button>
-        <div class="space"></div>
-        <p><strong>Total Income: $<span id="grandTotal">0</span></strong></p>
-        <div class="space"></div>
-        <p>
-          <strong>Client Pay: <span id="coverageLevel">N/A</span></strong>
-          <button type="button" class="modal-trigger" id="triggerModal1" aria-haspopup="dialog" aria-controls="modalOverlay1" style="margin-left:10px;">
-        <img src="images/heart.png" class="heart" alt="Heart icon">
+      <div class="section">
+        <h2>Household Info</h2>
+        <div class="example"></div>
+        <p>People per Household:</p>
+        <input type="number" id="householdSize" min="1" value="1" onchange="updateHouseholdIncome()"><br>
+        <div class="income-card" style="margin-top:12px;">
+          <h2>Household Income</h2>
+          <!-- corner copy button -->
+          <button class="button icon-button" onclick="copyIncomeInfo()" aria-label="Copy Household Info">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
           </button>
-        </p>
-        <div class="space"></div></button>
-        <!-- Modal 1 -->
-        <div class="modal-overlay" id="modalOverlay1" aria-hidden="true">
-          <div class="modal" role="dialog" aria-modal="true" aria-labelledby="coverageChartTitle">
-            <button type="button" class="modal-close" data-close="modalOverlay1" aria-label="Close">×</button>
-            <section class="coverage-chart">
-              <h3 id="coverageChartTitle">Coverage Income Eligibility Chart</h3>
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Household Size</th>
-                      <th>0%</th>
-                      <th>25%</th>
-                      <th>50%</th>
-                      <th>75%</th>
-                      <th>100%</th>
-                    </tr>
-                  </thead>
-                  <tbody id="coverageTableBody"></tbody>
-                </table>
-              </div>
-            </section>
-          </div>
-        </div>
 
-        <div class="space"></div>
+          <div class="space"></div>
+          <p><strong>Total Income: $<span id="grandTotal">0</span></strong></p>
+          <div class="space"></div>
 
-        <p>
-          <strong>AWC! qualification: <span id="awcQualification">N/A</span></strong>
-          <button type="button" class="modal-trigger" id="triggerModal2" aria-haspopup="dialog" aria-controls="modalOverlay2">
-            <img src="images/heart.png" class="heart" alt="Heart icon">
-          </button>
-        </p>
+          <p>
+            <strong>Client Pay: <span id="coverageLevel">N/A</span></strong>
+            <!-- Coverage modal trigger -->
+            <button type="button" class="modal-trigger" id="triggerModal1" aria-haspopup="dialog" aria-controls="modalOverlay1" style="margin-left:10px;">
+              <img src="images/heart.png" class="heart" alt="Heart icon">
+            </button>
+            <div class="space"></div>
+            <strong>AWC/WCN: <span id="awcQualification">N/A</span></strong>
 
-        <!-- Modal 2 -->
-        <div class="modal-overlay" id="modalOverlay2" aria-hidden="true">
-          <div class="modal" role="dialog" aria-modal="true" aria-labelledby="awcTitle">
-            <button type="button" class="modal-close" data-close="modalOverlay2" aria-label="Close">×</button>
-            <h2 id="awcTitle">AWC! Program Eligibility</h2>
-            <div class="awc-chart">
-              <h3>AWC! Income Eligibility</h3>
-              <p>Family Size: <span id="awcFamilySize">N/A</span></p>
-              <p>Max Annual Income: $<span id="awcMaxIncome">0</span></p>
+            <!-- AWC modal trigger -->
+            <button type="button" class="modal-trigger" id="triggerModal2" aria-haspopup="dialog" aria-controls="modalOverlay2" style="margin-left:10px;">
+              <img src="images/heart.png" class="heart" alt="Heart icon">
+            </button>
+          </p>
+
+          <!-- Coverage Modal -->
+          <div class="modal-overlay" id="modalOverlay1" aria-hidden="true">
+            <div class="modal" role="dialog" aria-modal="true" aria-labelledby="coverageChartTitle">
+              <button type="button" class="modal-close" data-close="modalOverlay1" aria-label="Close">×</button>
+              <section class="coverage-chart">
+                <h3 id="coverageChartTitle">Coverage Income Eligibility Chart</h3>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Household Size</th>
+                        <th>0%</th>
+                        <th>25%</th>
+                        <th>50%</th>
+                        <th>75%</th>
+                        <th>100%</th>
+                      </tr>
+                    </thead>
+                    <tbody id="coverageTableBody"></tbody>
+                  </table>
+                </div>
+              </section>
             </div>
           </div>
-        </div>
-      </div><!-- /.income-card -->
-      <div class="example"></div>
+
+          <!-- AWC Modal -->
+          <div class="modal-overlay" id="modalOverlay2" aria-hidden="true">
+            <div class="modal" role="dialog" aria-modal="true" aria-labelledby="awcTitle">
+              <button type="button" class="modal-close" data-close="modalOverlay2" aria-label="Close">×</button>
+              <section class="coverage-chart awc-chart">
+                <h3 id="awcTitle">AWC! Program Eligibility</h3>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Household Size</th>
+                        <th>Max Annual Income</th>
+                        <th>Your Income</th>
+                        <th>Eligible?</th>
+                      </tr>
+                    </thead>
+                    <tbody id="awcTableBody"></tbody>
+                  </table>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div><!-- /.income-card -->
+        <div class="example"></div>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Household Members -->
-<div id="householdMembersSection" class="section" style="margin-top:20px;">
-  <h2>Other Household Members</h2>
-  <div id="householdMembersContainer"></div>
-</div>
+  <!-- Household Members -->
+  <div id="householdMembersSection" class="section" style="margin-top:20px;">
+    <h2>Other Household Members</h2>
+    <div id="householdMembersContainer"></div>
+  </div>
 
-<!-- Notes -->
-<div id="notesContainer">
-  <label for="userNotes">Notes:</label><br>
-  <textarea id="userNotes" placeholder="Enter any additional notes..." rows="8"></textarea>
-</div>
-
+  <!-- Notes -->
+  <div id="notesContainer">
+    <label for="userNotes">Notes:</label><br>
+    <textarea id="userNotes" placeholder="Enter any additional notes..." rows="8"></textarea>
+  </div>
 <script type="module">
 import Scale from './scale.js';
-const coverageChart = Scale.coverageChart;
-const awcChart = Scale.awcChart;
-const coverageLevels = ["0%", "25%", "50%", "75%", "100%"];
 
-/* ---------- Helpers ---------- */
-function currency(n){ return `$${Number(n).toLocaleString(undefined,{maximumFractionDigits:0})}`; }
+const { coverageChart, awcChart } = Scale;
 
-/* ---------- Coverage & AWC logic ---------- */
-function determineCoverageLevel(householdSize, yearlyIncome){
-  if (!coverageChart[householdSize]) return "N/A";
+/* ========= Helpers ========= */
+const currency = (n) => `$${Number(n).toLocaleString(undefined,{ maximumFractionDigits: 0 })}`;
+
+/* ========= Coverage & AWC logic ========= */
+const determineCoverageLevel = (householdSize, yearlyIncome) => {
   const brackets = coverageChart[householdSize];
-  for (let i=0;i<brackets.length;i++){
+  if (!brackets) return "N/A";
+  for (let i = 0; i < brackets.length; i++) {
     if (yearlyIncome <= brackets[i]) return coverageLevels[i];
   }
   return "100%";
-}
-function determineAWCQualification(householdSize, yearlyIncome){
-  if (!awcChart[householdSize]) return "N/A";
-  return (yearlyIncome <= awcChart[householdSize]) ? "Yes" : "No";
-}
+};
 
-/* ---------- Income calcs ---------- */
+const determineAWCQualification = (householdSize, yearlyIncome) =>
+  !awcChart[householdSize] ? "N/A" : (yearlyIncome <= awcChart[householdSize] ? "Yes" : "No");
+
+/* ========= Income calcs ========= */
 function calculateIncome(type){
   let paystub1, paystub2, verbalHours, verbalRate, total, average, annual;
   switch(type){
@@ -344,9 +349,9 @@ function calculateIncome(type){
   document.getElementById(`${type}Annual`).textContent  = annual.toFixed(2);
   calculateGrandTotal();
 }
-window.calculateIncome = calculateIncome; // expose for inline onchange
+window.calculateIncome = calculateIncome; // needed for inline onchange
 
-/* ---------- Grand total ---------- */
+/* ========= Grand total ========= */
 function calculateGrandTotal(){
   const biweeklyAnnual    = parseFloat(document.getElementById('biweeklyAnnual').textContent)||0;
   const weeklyAnnual      = parseFloat(document.getElementById('weeklyAnnual').textContent)||0;
@@ -361,7 +366,7 @@ function calculateGrandTotal(){
 
   let grandTotal = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + annualTips + annualMonthly + otherAnnual;
 
-  // Add incomes from household members
+  // Household members
   const memberDivs = document.querySelectorAll('#householdMembersContainer > div');
   memberDivs.forEach(div=>{
     const incomeInput = div.querySelector('input[name^="memberIncome"]');
@@ -380,19 +385,25 @@ function calculateGrandTotal(){
   });
 
   document.getElementById('grandTotal').textContent = grandTotal.toFixed(2);
-  updateHouseholdIncome();
+  updateHouseholdIncome(); // also refreshes AWC panel
 }
 
-/* ---------- Household display ---------- */
+/* ========= Household display ========= */
 function updateHouseholdIncome(){
   const householdSize = parseInt(document.getElementById('householdSize').value)||0;
   const yearlyIncome  = parseFloat(document.getElementById('grandTotal').textContent)||0;
 
+  // Coverage text
   const coverageLevel = determineCoverageLevel(householdSize, yearlyIncome);
   document.getElementById('coverageLevel').textContent = coverageLevel;
 
+  // AWC text
   const awcQualification = determineAWCQualification(householdSize, yearlyIncome);
-  document.getElementById('awcQualification').textContent = awcQualification;
+  const awcNode = document.getElementById('awcQualification');
+  if (awcNode) awcNode.textContent = awcQualification;
+
+  // Also update the AWC modal panel if present
+  renderAWCChart(householdSize, yearlyIncome);
 }
 
 function updateHouseholdMemberFields(){
@@ -464,12 +475,22 @@ function updateHouseholdMemberFields(){
   }
 }
 
-/* ---------- Modals ---------- */
+/* ========= Modals ========= */
 function openModal(id){ const el=document.getElementById(id); if(!el) return; el.style.display='flex'; el.setAttribute('aria-hidden','false'); }
 function closeModal(id){ const el=document.getElementById(id); if(!el) return; el.style.display='none'; el.setAttribute('aria-hidden','true'); }
 
-document.getElementById('triggerModal1').addEventListener('click', ()=>openModal('modalOverlay1'));
-document.getElementById('triggerModal2').addEventListener('click', ()=>openModal('modalOverlay2'));
+document.getElementById('triggerModal1').addEventListener('click', ()=>{
+  // ensure table is fresh at open
+  renderCoverageChart(document.getElementById('householdSize').value);
+  openModal('modalOverlay1');
+});
+document.getElementById('triggerModal2').addEventListener('click', ()=>{
+  // ensure AWC panel is fresh at open
+  const size = parseInt(document.getElementById('householdSize').value)||0;
+  const income = parseFloat(document.getElementById('grandTotal').textContent)||0;
+  renderAWCChart(size, income);
+  openModal('modalOverlay2');
+});
 
 ['modalOverlay1','modalOverlay2'].forEach(id=>{
   const overlay=document.getElementById(id);
@@ -477,14 +498,14 @@ document.getElementById('triggerModal2').addEventListener('click', ()=>openModal
   overlay.querySelector('.modal-close').addEventListener('click', ()=>closeModal(id));
 });
 
-/* ---------- Coverage table render ---------- */
+/* ========= Coverage table render (5 columns) ========= */
 function renderCoverageChart(selectedSize){
   const tbody = document.getElementById('coverageTableBody');
   if(!tbody) return;
   tbody.innerHTML='';
 
   Object.keys(coverageChart).sort((a,b)=>Number(a)-Number(b)).forEach(size=>{
-    const vals = coverageChart[size]; // [0,25,50,75,100]
+    const vals = coverageChart[size]; // [0%,25%,50%,75%,100%]
     const tr = document.createElement('tr');
     if (Number(size)===Number(selectedSize)) tr.classList.add('coverage-row--highlight');
     tr.innerHTML = `
@@ -497,8 +518,31 @@ function renderCoverageChart(selectedSize){
     tbody.appendChild(tr);
   });
 }
+/* ========= AWC! table render (2 columns) ========= */
+function renderAWCChart(selectedSize) {
+  const tbody = document.getElementById('awcTableBody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
 
-/* ---------- Copy to clipboard ---------- */
+  Object.keys(awcChart)
+    .sort((a, b) => Number(a) - Number(b))
+    .forEach(size => {
+      const threshold = awcChart[size]; // Single value for max income
+      const tr = document.createElement('tr');
+
+      if (Number(size) === Number(selectedSize)) {
+        tr.classList.add('coverage-row--highlight');
+      }
+
+      tr.innerHTML = `
+        <td>${size}</td>
+        <td>${currency(threshold)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+}
+
+/* ========= Copy to clipboard ========= */
 function copyIncomeInfo(){
   const householdSize   = document.getElementById('householdSize').value || "1";
   const yearlyIncome    = document.getElementById('grandTotal').textContent || "0";
@@ -534,7 +578,6 @@ function copyIncomeInfo(){
   });
   infoToCopy += "\n";
 
-  // Include sections only if non-zero
   const pushIf = (label, totalId, parts)=> {
     const annual = parseFloat(document.getElementById(totalId).textContent)||0;
     if(!annual) return;
@@ -591,13 +634,21 @@ function copyIncomeInfo(){
 }
 window.copyIncomeInfo = copyIncomeInfo;
 
-/* ---------- Init ---------- */
+/* ========= Init ========= */
 calculateGrandTotal();
 renderCoverageChart(document.getElementById('householdSize').value);
+renderAWCChart(
+  parseInt(document.getElementById('householdSize').value)||0,
+  parseFloat(document.getElementById('grandTotal').textContent)||0
+);
 
 document.getElementById('householdSize').addEventListener('change', ()=>{
   updateHouseholdMemberFields();
   renderCoverageChart(document.getElementById('householdSize').value);
+  renderAWCChart(
+    parseInt(document.getElementById('householdSize').value)||0,
+    parseFloat(document.getElementById('grandTotal').textContent)||0
+  );
 });
 
 document.querySelectorAll('.toggleNotes').forEach(btn=>{
