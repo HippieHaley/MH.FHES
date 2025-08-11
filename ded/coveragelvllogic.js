@@ -1,4 +1,4 @@
-import Scale from './scale.js';
+import Scale from '../Project-2025/scale.js';
 const { coverageChart, awcChart } = Scale;
 
 const coverageLevels = ["0%", "25%", "50%", "75%", "100%"];
