@@ -1,4 +1,4 @@
-import procedures from './pp.js';
+import procedures from './agrandpp.js';
 
 let grandTotal = 0;
 const selectedItems = {};
