@@ -98,20 +98,6 @@ body {
 .button:hover {
   background-color: #e8b8e8; /* Slightly darker pink */
 }
-
-.toggle-notes-button {
-  margin-left: 10px;
-  padding: 6px 12px;
-  border-radius: 10px;
-  border: 2px solid #f8c9f9; /* Soft pink border */
-      border-radius: 30px; /* Rounded edges */
-      background-color: #f8c9f9; /* Soft pink background */
-}
-
-#toggleNotes:hover {
-  background-color: #e8b8e8;  /* Slightly darker pink on hover */
-}
-
     input[type="number"] {
       width: 100%;
       max-width: 300px;
@@ -255,28 +241,7 @@ select:focus {
     .hidden {
       visibility: hidden;
     }
-    #notesContainer {
-  position: absolute;
-  top: 120px;      /* Adjust to align with top of your form */
-  right: 40px;     /* Adjust spacing from right side */
-  width: 300px;
-  display: none;
-  padding: 15px;
-  background-color: #f8c9f9;
-  border: 2px solid #000;
-  border-radius: 20px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
 
-#notesContainer textarea {
-  width: 100%;
-  border-radius: 10px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  resize: vertical;
-  background-color: #ffffff;
-  color: #333;
-}
   </style>
 </head>
 <body>
@@ -288,15 +253,8 @@ select:focus {
         <option value="" selected disabled hidden>Select one...</option>
         <option value="W2">W2</option>
         <option value="Paycheck">Paycheck</option>
-        <option value="NEED INCOME DOCS">NEED INCOME DOCS-VERBAL INCOME</option>
+        <option value="NEED INCOME DOCS">NEED INCOME DOCS</option>
       </select>
-      <label for="workingAt" style="margin-left: 20px;">Working @</label>
-<input type="text" id="workingAt" placeholder="Where?" style="padding: 8px; border-radius: 10px; border: 1px solid #f8c9f9;" />
-<button style="padding: 8px; border-radius: 10px;  width: 130px;
-height: 40px;
-border: 2px solid #f8c9f9;
-border-radius: 30px; /* Rounded edges */
-background-color: #f8c9f9; /* Soft pink background */" class="toggleNotes">+ Add Notes</button>
     </div>      
     <div class="container">
       <!-- Column 1: Biweekly and Weekly Income Sections -->
@@ -585,14 +543,11 @@ background-color: #f8c9f9; /* Soft pink background */" class="toggleNotes">+ Add
       </div>
     </div>
     <div class=" space"></div>
-    </div>  
+  
+    </div>    
   <div id="householdMembersSection" class="section" style="margin-top: 20px;">
       <h2>Other Household Members</h2>
       <div id="householdMembersContainer"></div></div>
-      <div id="notesContainer">
-        <label for="userNotes">Notes:</label><br>
-        <textarea id="userNotes" placeholder="Enter any additional notes..." rows="8"></textarea>
-      </div>      
   <script>
     /***************************************************
      * 1) Coverage Chart & Coverage Level Logic
@@ -615,6 +570,7 @@ background-color: #f8c9f9; /* Soft pink background */" class="toggleNotes">+ Add
       15: [92650, 138974, 185299, 231624, 231625]
     };
     const coverageLevels = ["0%", "25%", "50%", "75%", "100%"];
+
     function determineCoverageLevel(householdSize, yearlyIncome) {
       if (!coverageChart[householdSize]) {
         return "N/A";
@@ -714,38 +670,124 @@ background-color: #f8c9f9; /* Soft pink background */" class="toggleNotes">+ Add
 
   const otherAnnualIncome = parseFloat(document.getElementById('OtherAnnual').value) || 0;
 
-  // ✅ Use 'let' so we can add to it later
-  let grandTotal = biweeklyAnnual + weeklyAnnual + twiceMonthAnnual + verbalAnnual + annualTips + annualOtherMonthlyIncome + otherAnnualIncome;
+  // 🔥 NEW: Add income from household members
+  let householdMembersIncome = 0;
+  const membersSection = document.getElementById('householdMembersContainer');
+  const members = membersSection.querySelectorAll('div');
 
-  // ✅ Add incomes from household members
-  const memberDivs = document.querySelectorAll('#householdMembersContainer > div');
-  memberDivs.forEach((div, index) => {
-    const incomeInput = div.querySelector('input[name^="memberIncome"]');
-const freqSelect = div.querySelector('select[name^="memberFrequency"]');
-
-    if (incomeInput && freqSelect && incomeInput.value) {
-      const amount = parseFloat(incomeInput.value) || 0;
-      let annual = 0;
-      switch (freqSelect.value) {
-        case 'weekly': annual = amount * 52; break;
-        case 'biweekly': annual = amount * 26; break;
-        case 'monthly': annual = amount * 12; break;
-        case 'annually': annual = amount; break;
-      }
-      grandTotal += annual;
-    }
+  members.forEach(member => {
+    const incomeInputs = member.querySelectorAll('input[type=number]');
+    const income = incomeInputs[incomeInputs.length - 1]; // the hidden field
+    const incomeVal = parseFloat(income?.value) || 0;
+    householdMembersIncome += incomeVal;
   });
+
+  const grandTotal =
+    biweeklyAnnual +
+    weeklyAnnual +
+    twiceMonthAnnual +
+    verbalAnnual +
+    annualTips +
+    annualOtherMonthlyIncome +
+    otherAnnualIncome +
+    householdMembersIncome;
 
   document.getElementById('grandTotal').textContent = grandTotal.toFixed(2);
 
-  // ✅ Trigger updates
+  // ✅ Don't forget this
   updateHouseholdIncome();
 }
+
+ 
 
     /***************************************************
      * 5) Household Info (Coverage + AWC) Display
      ***************************************************/
      function updateHouseholdIncome() {
+  const householdSize = parseInt(document.getElementById('householdSize').value) || 0;
+  const yearlyIncome = parseFloat(document.getElementById('grandTotal').textContent) || 0;
+     }
+function updateHouseholdMemberFields() {
+  const container = document.getElementById('householdMembersContainer');
+  const size = parseInt(document.getElementById('householdSize').value || 1);
+
+  if (size <= 1) return; // Skip if only 1 person
+
+  for (let i = 2; i <= size; i++) {
+    const wrapper = document.createElement('div');
+    wrapper.style.display = 'flex';
+    wrapper.style.gap = '10px';
+    wrapper.style.marginBottom = '10px';
+    wrapper.style.alignItems = 'center';
+
+    const select = document.createElement('select');
+    select.name = `relationship${i}`;
+    select.innerHTML = `
+      <option value="">Select Relationship</option>
+      <option>Son</option>
+      <option>Daughter</option>
+      <option>Fiancé</option>
+      <option>Fiancée</option>
+      <option>Spouse</option>
+      <option>Brother</option>
+      <option>Sister</option>
+      <option>Parent</option>
+      <option>Friend</option>
+      <option>Roommate</option>
+      <option>Other</option>
+    `;
+    select.style.flex = '1';
+    select.style.padding = '8px';
+    select.style.borderRadius = '10px';
+    select.style.backgroundColor = '#f8c9f9';
+    select.style.border = '2px solid #f8c9f9';
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.name = `name${i}`;
+    input.placeholder = `Name of person ${i}`;
+    input.style.flex = '2';
+    input.style.padding = '8px';
+    input.style.borderRadius = '10px';
+    input.style.backgroundColor = '#f8c9f9';
+    input.style.border = '2px solid #f8c9f9';
+
+    const plusBtn = document.createElement('button');
+    plusBtn.textContent = '+';
+    plusBtn.type = 'button';
+    plusBtn.style.padding = '6px 12px';
+    plusBtn.style.borderRadius = '10px';
+    plusBtn.style.border = '1px solid #333';
+    plusBtn.style.backgroundColor = '#f8c9f9';
+    plusBtn.style.cursor = 'pointer';
+    plusBtn.style.fontWeight = 'bold';
+
+    const incomeInput = document.createElement('input');
+    incomeInput.type = 'number';
+    incomeInput.name = `income${i}`;
+    incomeInput.placeholder = `Annual income`;
+    incomeInput.style.flex = '1';
+    incomeInput.style.padding = '8px';
+    incomeInput.style.borderRadius = '10px';
+    incomeInput.style.backgroundColor = '#f8c9f9';
+    incomeInput.style.border = '2px solid #f8c9f9';
+    incomeInput.style.display = 'none';
+
+    // Show/hide income input
+    plusBtn.addEventListener('click', () => {
+      incomeInput.style.display = (incomeInput.style.display === 'none') ? 'block' : 'none';
+    });
+
+    // Recalculate when user adds income
+    incomeInput.addEventListener('input', calculateGrandTotal);
+    wrapper.appendChild(select);
+    wrapper.appendChild(input);
+    wrapper.appendChild(plusBtn);
+    wrapper.appendChild(incomeInput);
+    container.appendChild(wrapper);
+  }
+}
+function updateHouseholdIncome() {
   const householdSize = parseInt(document.getElementById('householdSize').value) || 0;
   const yearlyIncome = parseFloat(document.getElementById('grandTotal').textContent) || 0;
 
@@ -755,107 +797,12 @@ const freqSelect = div.querySelector('select[name^="memberFrequency"]');
   const awcQualification = determineAWCQualification(householdSize, yearlyIncome);
   document.getElementById('awcQualification').textContent = awcQualification;
 
-  // ✅ Do NOT call updateHouseholdMemberFields() here to avoid infinite loop
+  // ✅ Correct: call updateHouseholdMemberFields separately
+  updateHouseholdMemberFields();
 }
-function updateHouseholdMemberFields() {
-  const container = document.getElementById('householdMembersContainer');
-  const size = parseInt(document.getElementById('householdSize').value || 1);
-
-  container.innerHTML = '';
-  if (size <= 1) return;
-
-  for (let i = 2; i <= size; i++) {
-    const wrapper = document.createElement('div');
-    wrapper.style.display = 'flex';
-    wrapper.style.flexDirection = 'column';
-    wrapper.style.gap = '10px';
-    wrapper.style.marginBottom = '10px';
-
-    const topRow = document.createElement('div');
-    topRow.style.display = 'flex';
-    topRow.style.gap = '10px';
-
-    const select = document.createElement('select');
-    select.name = `relationship${i}`;
-    select.innerHTML = `
-      <option value="">Select Relationship</option>
-      <option>Child</option>
-      <option>Grandchild</option>
-      <option>Significant Other</option>
-      <option>Fiancé</option>
-      <option>Spouse</option>
-      <option>Sibling</option>
-      <option>Parent</option>      
-      <option>Grandparent</option>
-      <option>Friend</option>
-      <option>Roommate</option>
-      <option>Other</option>
-    `;
-    select.style.flex = '1';
-    select.style.padding = '8px';
-    select.style.borderRadius = '10px';
-
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.name = `name${i}`;
-    input.placeholder = `Name of person ${i}`;
-    input.style.flex = '2';
-    input.style.padding = '8px';
-    input.style.borderRadius = '10px';
-
-    const plusBtn = document.createElement('button');
-    plusBtn.type = 'button';
-    plusBtn.textContent = '+';
-    plusBtn.style.flex = '0 0 40px';
-    plusBtn.style.borderRadius = '10px';
-    plusBtn.style.backgroundColor = '#f8c9f9';
-    plusBtn.style.border = '2px solid #f8c9f9';
-    plusBtn.style.width = '130px';
-    plusBtn.style.height = '40px';
-
-
-    topRow.appendChild(select);
-    topRow.appendChild(input);
-    topRow.appendChild(plusBtn);
-
-    const incomeSection = document.createElement('div');
-    incomeSection.style.display = 'none';
-    incomeSection.style.marginTop = '10px';
-    incomeSection.innerHTML = `
-      <label>Income Amount: <input type="number" step="0.01" name="memberIncome${i}" /></label>
-      <label>Frequency:
-        <select name="memberFrequency${i}">
-          <option value="weekly">Weekly</option>
-          <option value="biweekly">Biweekly</option>
-          <option value="monthly">Monthly</option>
-          <option value="annually">Annually</option>
-        </select>
-      </label>
-    `;
-// Add event listeners to recalculate when user changes inputs
-const incomeInput = incomeSection.querySelector(`input[name="memberIncome${i}"]`);
-const freqSelect = incomeSection.querySelector(`select[name="memberFrequency${i}"]`);
-
-incomeInput.addEventListener('input', calculateGrandTotal);
-freqSelect.addEventListener('change', calculateGrandTotal);
-
-    incomeSection.querySelectorAll('input, select').forEach(el => {
-      el.style.marginLeft = '10px';
-      el.style.marginRight = '20px';
-    });
-
-    plusBtn.addEventListener('click', () => {
-  incomeSection.style.display = (incomeSection.style.display === 'none') ? 'block' : 'none';
-  calculateGrandTotal(); // Recalculate after revealing the field
-});
-
-
-    wrapper.appendChild(topRow);
-    wrapper.appendChild(incomeSection);
-    container.appendChild(wrapper);
-  }
-}
-
+    /***************************************************
+     * 5) Modal Functionality
+     ***************************************************/
 // Modal 1 functionality
 const triggerModal1 = document.getElementById('triggerModal1');
 const modalOverlay1 = document.getElementById('modalOverlay1');
@@ -891,54 +838,47 @@ modalOverlay2.addEventListener('click', function(e) {
      ***************************************************/
      function copyIncomeInfo() {
   const householdSize = document.getElementById('householdSize').value || "1";
-  const yearlyIncome = document.getElementById('grandTotal').textContent || "0";
+  const yearlyIncome = parseFloat(document.getElementById('grandTotal').textContent) || 0;
   const coverageLevel = document.getElementById('coverageLevel').textContent || "N/A";
   const awcQualification = document.getElementById('awcQualification').textContent || "N/A";
-  const workingAt = document.getElementById('workingAt').value || "Unemployed";
+  const incomeType = document.getElementById('incomeType').value;       
 
-  const incomeType = document.getElementById('incomeType').value;
+
   if (!incomeType) {
     alert("❌ Please select an Income Type before copying.");
     return;
   }
 
-  let infoToCopy = `Income Type: ${incomeType}\nWorking @: ${workingAt}\nPeople in Household: ${householdSize}\n\n`;
+  let infoToCopy = `Income Type: ${incomeType}\n`;
+  infoToCopy += `People in Household: ${householdSize}\n\n`;
 
   const membersSection = document.getElementById('householdMembersContainer');
-const members = membersSection.children; // ✅ Only top-level divs
+  const members = membersSection.querySelectorAll('div');
 
-infoToCopy += "\n";
-infoToCopy += "Members of Household (besides client):\n";
-Array.from(members).forEach((member) => {
-  const relationship = member.querySelector('select[name^="relationship"]')?.value || "N/A";
-  const name = member.querySelector('input[name^="name"]')?.value || "N/A";
-  const income = member.querySelector('input[name^="memberIncome"]')?.value || "";
-  const freq = member.querySelector('select[name^="memberFrequency"]')?.value || "";
+  let additionalHouseholdIncome = 0;
 
-  infoToCopy += `- ${relationship}: ${name}\n`;
+  if (members.length > 0) {
+    infoToCopy += "Members of Household (besides client):\n";
+    members.forEach((member, index) => {
+      const relationship = member.querySelector('select')?.value || "N/A";
+      const name = member.querySelector('input[type="text"]')?.value || "N/A";
 
-  if (income) {
-    const val = parseFloat(income);
-    let annual = 0;
-    switch (freq.toLowerCase()) {
-      case 'weekly': annual = val * 52; break;
-      case 'biweekly': annual = val * 26; break;
-      case 'monthly': annual = val * 12; break;
-      case 'annually': annual = val; break;
-      default: annual = val;
-    }
+      const incomeInputs = member.querySelectorAll('input[type=number]');
+      const income = incomeInputs[incomeInputs.length - 1]; // assumes optional income field is last
+      const incomeVal = parseFloat(income?.value) || 0;
 
-    const formattedVal = `$${val.toLocaleString()}`;
-    const formattedAnnual = `$${annual.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+      if (incomeVal) {
+        additionalHouseholdIncome += incomeVal;
+        infoToCopy += `  ${index + 1}. ${relationship}: ${name} (Income: $${incomeVal.toFixed(2)})\n`;
+      } else {
+        infoToCopy += `  ${index + 1}. ${relationship}: ${name}\n`;
+      } 
 
-    if (freq.toLowerCase() === 'annually') {
-      infoToCopy += `   • Income: ${formattedAnnual} annually\n`;
-    } else {
-      infoToCopy += `   • Income: ${formattedVal} ${freq} (Annual: ${formattedAnnual})\n`;
-    }
+
+    });
+    infoToCopy
   }
-});
-infoToCopy += "\n";
+
   // Biweekly Income
   const biweeklyAnnual = parseFloat(document.getElementById('biweeklyAnnual').textContent) || 0;
   if (biweeklyAnnual !== 0) {
@@ -1020,52 +960,59 @@ infoToCopy += "\n";
   const otherAnnual = parseFloat(otherAnnualValue) || 0;
 
   if (tips !== 0 || otherMonthly !== 0 || otherAnnual !== 0) {
-    infoToCopy += "Extra Income:\n";
-    if (tips !== 0) {
-      let annualTips = tips * 52;
-      infoToCopy += `  Tips per week: $${tips} (Annualized: $${annualTips.toFixed(2)})\n`;
-    }
-    if (otherMonthly !== 0) {
-      let annualOtherMonthly = otherMonthly * 12;
-      infoToCopy += `  Other Income per Month: $${otherMonthly} (Annualized: $${annualOtherMonthly.toFixed(2)})\n`;
-    }
-    if (otherAnnual !== 0) {
-      infoToCopy += `  Other Annual Income: $${otherAnnual}\n`;
-    }
-  } // Close the "Extra Income Section" block properly
-
-  infoToCopy += 
-    `Yearly Income: $${yearlyIncome}\n` +
-    `Client Pay: ${coverageLevel}\n` +
-    `AWC! qualification: ${awcQualification} -If Applicable\n` +
-    `Insurance:\n` +
-    `${new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit', year: 'numeric', month: '2-digit', day: '2-digit' })}\n` +
-    `Staff: H\n`;
-    const notes = document.getElementById('userNotes').value.trim();
-if (notes) {
-  infoToCopy += `\nAdditional Notes:\n${notes}\n`;
+  infoToCopy += "Extra Income:\n";
+  if (tips !== 0) {
+    let annualTips = tips * 52;
+    infoToCopy += `  Tips per week: $${tips} (Annualized: $${annualTips.toFixed(2)})\n`;
+  }
+  if (otherMonthly !== 0) {
+    let annualOtherMonthly = otherMonthly * 12;
+    infoToCopy += `  Other Income per Month: $${otherMonthly} (Annualized: $${annualOtherMonthly.toFixed(2)})\n`;
+  }
+  if (otherAnnual !== 0) {
+    infoToCopy += `  Other Annual Income: $${otherAnnual}\n`;
+  }
+  infoToCopy += "\n";
 }
 
+  // If no income details were added, indicate that no data was entered.
+  if (
+      infoToCopy.indexOf("Biweekly Income:") === -1 &&
+      infoToCopy.indexOf("Weekly Income:") === -1 &&
+      infoToCopy.indexOf("Twice a Month Income:") === -1 &&
+      infoToCopy.indexOf("Weekly Verbal Income:") === -1 &&
+      infoToCopy.indexOf("Extra Income:") === -1
+        // Add Other Household Members (if any)
+  ) {
+    infoToCopy += "No income data entered.\n";
+  }
+
+  // Append additional household information and timestamp
+  infoToCopy += 
+`Yearly Income: $${yearlyIncome}\n` +
+`Client Pay: ${coverageLevel}\n` +
+`AWC! qualification:  -If Applicable - ${awcQualification}\n` +
+`Insurance:\n` +
+`${new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit', year: 'numeric', month: '2-digit', day: '2-digit' })}\n` +
+`Staff: H\n`;
+
+  // Debugging: Log the final info to copy
+  console.log("Info to Copy:", infoToCopy);
+
+  // Copy the text to the clipboard using the Clipboard API
   navigator.clipboard.writeText(infoToCopy)
-    .then(() => alert("Household info copied to clipboard!"))
+    .then(() => {
+      alert("Household info copied to clipboard!");
+    })
     .catch(err => {
       console.error("Failed to copy text:", err);
       alert("Unable to copy info.");
     });
-} // ✅ Correct closing of copyIncomeInfo()
 
     // Initialize everything on page load
+    updateHouseholdMemberFields(); 
     calculateGrandTotal();
-document.getElementById('householdSize').addEventListener('change', () => {
-  updateHouseholdMemberFields();
-});
-
-document.querySelectorAll('.toggleNotes').forEach(button => {
-    button.addEventListener('click', () => {
-        const notes = document.getElementById('notesContainer');
-        notes.style.display = (notes.style.display === 'none' || notes.style.display === '') ? 'block' : 'none';
-    });
-});
+     }
   </script>
 </body>
 </html>
