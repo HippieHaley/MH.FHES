@@ -527,12 +527,12 @@ const procedures = [
   keywords: ["basal thermometer", "thermometer", "a4931"]
 },
 {
-  service: "Depo-Provera (Medroxyprogesterone)",
+  service: "Depo",
   cpt: "",
   hcpcs: "J1050",
   icd10: "Z30.42",
   fullprice: 27,
-  keywords: ["depo", "medroxyprogesterone", "depo-provera", "j1050"]
+  keywords: ["Depo", "medroxyprogesterone", "depo-provera", "j1050"]
 },
 {
   service: "VCF Foam",
